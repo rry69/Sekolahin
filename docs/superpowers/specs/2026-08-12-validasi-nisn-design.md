@@ -140,9 +140,11 @@ Semua request body dienkripsi **AES-256-CBC** (key/IV ditemukan dari JS bundle s
 **`resources/views/applicant/review.blade.php`**
 - Tampilkan status verifikasi NISN (verified/unavailable) di halaman review
 
-**Panel Admin (rekomendasi):**
+**Panel Admin:**
 - Tampilkan kolom status verifikasi NISN di daftar registrasi
   (`admin/partials/registrations-index.blade.php`)
+- Tampilkan status verifikasi NISN di halaman detail registrasi
+  (`admin/registrations/show.blade.php`)
 
 ### 4.3 Diagram alur data
 
@@ -191,9 +193,7 @@ Semua request body dienkripsi **AES-256-CBC** (key/IV ditemukan dari JS bundle s
   - Link bukan domain NISN → ditolak
 - **Update test existing** `ApplicantProfileValidationTest` — payload perlu `nisn_link`
 
-## 6. Pertanyaan Terbuka (untuk implementasi)
+## 6. Pertanyaan Terbuka (sudah diputuskan)
 
-1. Apakah perlu panduan visual (screenshot/langkah bergambar) di form untuk siswa SMP?
-   (Rekomendasi: teks sederhana cukup untuk MVP)
-2. Admin melihat status verifikasi di panel admin — konfirmasi cakupan (daftar registrasi saja,
-   atau juga detail registrasi).
+1. Panduan di form: **teks sederhana** (bukan visual bergambar) — collapsible "Cara mendapatkannya".
+2. Admin melihat status verifikasi: **daftar registrasi DAN halaman detail registrasi**.
