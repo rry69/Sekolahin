@@ -74,10 +74,19 @@ class ApplicantController extends Controller
 
         $verification = NisnVerificationService::verify($validated['nisn_link'], $validated['nisn']);
 
+        // Cek duplikat NIK (bukan validasi): opsional, hanya bila NIK sudah diisi.
+        $nikDuplicate = false;
+        if ($request->filled('nik')) {
+            $nikDuplicate = Applicant::where('nik', $request->input('nik'))
+                ->where('user_id', '!=', auth()->id())
+                ->exists();
+        }
+
         return response()->json([
             'status' => $verification['status'],
             'message' => $verification['message'],
             'data' => $verification['data'] ?? null,
+            'nik_duplicate' => $nikDuplicate,
         ]);
     }
 

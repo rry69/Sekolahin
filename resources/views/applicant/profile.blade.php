@@ -49,7 +49,7 @@
                                         placeholder="https://nisn.data.kemendikdasmen.go.id/search-result?id=0x...">
                                     <button type="button" id="cek-nisn-btn"
                                         class="shrink-0 bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 text-sm font-medium">
-                                        Cek NISN
+                                        Cek NISN & NIK
                                     </button>
                                 </div>
                                 <div id="nisn-check-result" class="hidden mt-2 px-4 py-3 rounded text-sm"></div>
@@ -338,6 +338,7 @@
     const result = document.getElementById('nisn-check-result');
     const nisnInput = document.querySelector('input[name="nisn"]');
     const linkInput = document.querySelector('input[name="nisn_link"]');
+    const nikInput = document.querySelector('input[name="nik"]');
     const KINDS = ['green', 'red', 'yellow'];
 
     function show(msg, kind) {
@@ -352,6 +353,7 @@
     btn.addEventListener('click', async function () {
         const nisn = nisnInput.value.trim();
         const link = linkInput.value.trim();
+        const nik = nikInput ? nikInput.value.trim() : '';
         if (!nisn || !link) {
             show('Isi NISN dan link hasil pencarian terlebih dahulu.', 'yellow');
             return;
@@ -366,27 +368,41 @@
                     'Accept': 'application/json',
                     'X-CSRF-TOKEN': '{{ csrf_token() }}',
                 },
-                body: JSON.stringify({ nisn: nisn, nisn_link: link }),
+                body: JSON.stringify({ nisn: nisn, nisn_link: link, nik: nik }),
             });
             let body = {};
             try { body = await res.json(); } catch (e) { /* abai error parse */ }
+
+            const lines = [];
+            let kind = 'green';
+
+            if (body.nik_duplicate) {
+                lines.push('\u2717 NIK sudah terdaftar atas nama pendaftar lain. Jangan gunakan NIK yang sama.');
+                kind = 'red';
+            }
+
             if (res.ok && body.status === 'valid') {
                 const nama = body.data && body.data.nama ? ' atas nama ' + body.data.nama : '';
-                show('\u2713 NISN valid dan terdaftar di Kemendikdasmen' + nama + '.', 'green');
+                lines.push('\u2713 NISN valid dan terdaftar di Kemendikdasmen' + nama + '.');
             } else if (res.ok && body.status === 'invalid') {
-                show('\u2717 ' + (body.message || 'NISN tidak valid.'), 'red');
+                lines.push('\u2717 ' + (body.message || 'NISN tidak valid.'));
+                kind = 'red';
             } else if (res.ok) {
-                show('! ' + (body.message || 'Server NISN sedang tidak dapat diakses. Anda tetap bisa melanjutkan; verifikasi dilakukan admin.'), 'yellow');
+                lines.push('! ' + (body.message || 'Server NISN sedang tidak dapat diakses. Anda tetap bisa melanjutkan; verifikasi dilakukan admin.'));
+                if (kind === 'green') kind = 'yellow';
             } else {
                 const errs = body.errors || {};
                 const msg = (errs.nisn_link || errs.nisn || [body.message || 'Terjadi kesalahan saat memeriksa NISN.']).join(' ');
-                show('\u2717 ' + msg, 'red');
+                lines.push('\u2717 ' + msg);
+                kind = 'red';
             }
+
+            show(lines.join('\n') || 'Tidak ada hasil.', kind);
         } catch (e) {
             show('! Gagal terhubung ke server. Coba lagi.', 'yellow');
         } finally {
             btn.disabled = false;
-            btn.textContent = 'Cek NISN';
+            btn.textContent = 'Cek NISN & NIK';
         }
     });
 })();

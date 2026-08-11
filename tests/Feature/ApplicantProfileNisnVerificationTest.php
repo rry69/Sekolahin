@@ -234,4 +234,51 @@ class ApplicantProfileNisnVerificationTest extends TestCase
             ->assertStatus(422)
             ->assertJsonValidationErrors('nisn');
     }
+
+    public function test_check_nisn_endpoint_flags_duplicate_nik(): void
+    {
+        $this->mockNisnApi([
+            'status_code' => 200,
+            'message' => 'Data berhasil ditemukan.',
+            'data' => ['nisn' => '9990204713', 'nama' => 'BUDI SANTOSO'],
+        ]);
+
+        $first = $this->makeSiswa();
+        $this->actingAs($first)
+            ->patch('/applicant/profile', $this->validPayload())
+            ->assertRedirect('/applicant/profile/review');
+        $this->actingAs($first)
+            ->post('/applicant/profile/confirm');
+
+        $second = $this->makeSiswa();
+        $this->actingAs($second)
+            ->postJson('/applicant/profile/check-nisn', $this->checkPayload([
+                'nik' => '3201234567890005',
+            ]))
+            ->assertOk()
+            ->assertJson(['status' => 'valid', 'nik_duplicate' => true]);
+    }
+
+    public function test_check_nisn_endpoint_own_nik_not_flagged_duplicate(): void
+    {
+        $this->mockNisnApi([
+            'status_code' => 200,
+            'message' => 'Data berhasil ditemukan.',
+            'data' => ['nisn' => '9990204713', 'nama' => 'BUDI SANTOSO'],
+        ]);
+
+        $siswa = $this->makeSiswa();
+        $this->actingAs($siswa)
+            ->patch('/applicant/profile', $this->validPayload())
+            ->assertRedirect('/applicant/profile/review');
+        $this->actingAs($siswa)
+            ->post('/applicant/profile/confirm');
+
+        $this->actingAs($siswa)
+            ->postJson('/applicant/profile/check-nisn', $this->checkPayload([
+                'nik' => '3201234567890005',
+            ]))
+            ->assertOk()
+            ->assertJson(['nik_duplicate' => false]);
+    }
 }
