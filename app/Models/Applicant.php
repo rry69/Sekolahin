@@ -55,6 +55,7 @@ class Applicant extends Model
     {
         return [
             'birth_date' => 'date',
+            'nisn_verified_at' => 'datetime',
         ];
     }
 
