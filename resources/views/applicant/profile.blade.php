@@ -43,9 +43,16 @@
 
                             <div class="md:col-span-2">
                                 <label class="block text-sm font-medium text-gray-700">Link Hasil Pencarian NISN *</label>
-                                <input type="text" name="nisn_link" value="{{ old('nisn_link', $applicant?->nisn_link) }}" required
-                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                                    placeholder="https://nisn.data.kemendikdasmen.go.id/search-result?id=0x...">
+                                <div class="mt-1 flex gap-2">
+                                    <input type="text" name="nisn_link" value="{{ old('nisn_link', $applicant?->nisn_link) }}" required
+                                        class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                                        placeholder="https://nisn.data.kemendikdasmen.go.id/search-result?id=0x...">
+                                    <button type="button" id="cek-nisn-btn"
+                                        class="shrink-0 bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 text-sm font-medium">
+                                        Cek NISN
+                                    </button>
+                                </div>
+                                <div id="nisn-check-result" class="hidden mt-2 px-4 py-3 rounded text-sm"></div>
                                 @error('nisn_link')<span class="text-red-500 text-sm">{{ $message }}</span>@enderror
                                 <p class="mt-1 text-xs text-gray-500">
                                     Tempel link hasil pencarian NISN dari situs resmi Kemendikdasmen.
@@ -320,6 +327,67 @@
         resetSel($vill, 'Kelurahan/Desa');
         const id = selectedId(e.target);
         if (id) loadVillages(id);
+    });
+})();
+</script>
+
+<script>
+(function () {
+    const btn = document.getElementById('cek-nisn-btn');
+    if (!btn) return;
+    const result = document.getElementById('nisn-check-result');
+    const nisnInput = document.querySelector('input[name="nisn"]');
+    const linkInput = document.querySelector('input[name="nisn_link"]');
+    const KINDS = ['green', 'red', 'yellow'];
+
+    function show(msg, kind) {
+        KINDS.forEach(function (k) {
+            result.classList.remove('bg-' + k + '-100', 'border-' + k + '-400', 'text-' + k + '-700');
+        });
+        result.classList.add('border', 'bg-' + kind + '-100', 'border-' + kind + '-400', 'text-' + kind + '-700');
+        result.textContent = msg;
+        result.classList.remove('hidden');
+    }
+
+    btn.addEventListener('click', async function () {
+        const nisn = nisnInput.value.trim();
+        const link = linkInput.value.trim();
+        if (!nisn || !link) {
+            show('Isi NISN dan link hasil pencarian terlebih dahulu.', 'yellow');
+            return;
+        }
+        btn.disabled = true;
+        btn.textContent = 'Memeriksa...';
+        try {
+            const res = await fetch('{{ route('applicant.profile.check-nisn') }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                },
+                body: JSON.stringify({ nisn: nisn, nisn_link: link }),
+            });
+            let body = {};
+            try { body = await res.json(); } catch (e) { /* abai error parse */ }
+            if (res.ok && body.status === 'valid') {
+                const nama = body.data && body.data.nama ? ' atas nama ' + body.data.nama : '';
+                show('\u2713 NISN valid dan terdaftar di Kemendikdasmen' + nama + '.', 'green');
+            } else if (res.ok && body.status === 'invalid') {
+                show('\u2717 ' + (body.message || 'NISN tidak valid.'), 'red');
+            } else if (res.ok) {
+                show('! ' + (body.message || 'Server NISN sedang tidak dapat diakses. Anda tetap bisa melanjutkan; verifikasi dilakukan admin.'), 'yellow');
+            } else {
+                const errs = body.errors || {};
+                const msg = (errs.nisn_link || errs.nisn || [body.message || 'Terjadi kesalahan saat memeriksa NISN.']).join(' ');
+                show('\u2717 ' + msg, 'red');
+            }
+        } catch (e) {
+            show('! Gagal terhubung ke server. Coba lagi.', 'yellow');
+        } finally {
+            btn.disabled = false;
+            btn.textContent = 'Cek NISN';
+        }
     });
 })();
 </script>

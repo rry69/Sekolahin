@@ -27,7 +27,7 @@ class RegistrationReviewFlowTest extends TestCase
             $mock->shouldReceive('verify')->andReturn([
                 'status' => 'valid',
                 'message' => 'NISN valid',
-                'data' => ['nisn' => '1234567890', 'nama' => 'BUDI SANTOSO'],
+                'data' => ['nisn' => '9990204713', 'nama' => 'BUDI SANTOSO'],
             ]);
         });
 
@@ -39,7 +39,7 @@ class RegistrationReviewFlowTest extends TestCase
             $mock->shouldReceive('pencarianDetail')->andReturn([
                 'status_code' => 200,
                 'message' => 'Data berhasil ditemukan.',
-                'data' => ['nisn' => '1234567890', 'nama' => 'BUDI SANTOSO'],
+                'data' => ['nisn' => '9990204713', 'nama' => 'BUDI SANTOSO'],
             ]);
         });
     }
@@ -100,7 +100,7 @@ class RegistrationReviewFlowTest extends TestCase
             'user_id' => $siswa->id,
             'full_name' => 'Test Siswa Full Name',
             'nik' => '3201234567890005',
-            'nisn' => '1234567890',
+            'nisn' => '9990204713',
             'nisn_link' => 'https://nisn.data.kemendikdasmen.go.id/search-result?id=0x0200000023803CA179D3028980A2347374A163E83F16A4DA0B12AED13A901BCDF54302BE656464C3D833E3FF40EAA8C5641F50D13A584383B01C4A4A9731741FDAE093E5',
             'birth_place' => 'Jakarta',
             'birth_date' => '2010-01-01',
@@ -125,7 +125,7 @@ class RegistrationReviewFlowTest extends TestCase
         $payload = [
             'full_name' => 'Nama Baru',
             'nik' => '3201234567890005',
-            'nisn' => '1234567890',
+            'nisn' => '9990204713',
             'nisn_link' => 'https://nisn.data.kemendikdasmen.go.id/search-result?id=0x0200000023803CA179D3028980A2347374A163E83F16A4DA0B12AED13A901BCDF54302BE656464C3D833E3FF40EAA8C5641F50D13A584383B01C4A4A9731741FDAE093E5',
             'birth_place' => 'Jakarta',
             'birth_date' => '2010-01-01',

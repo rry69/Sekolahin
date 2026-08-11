@@ -37,7 +37,7 @@ class ApplicantProfileNisnVerificationTest extends TestCase
         return array_merge([
             'full_name' => 'Budi Santoso',
             'nik' => '3201234567890005',
-            'nisn' => '1234567890',
+            'nisn' => '9990204713',
             'nisn_link' => 'https://nisn.data.kemendikdasmen.go.id/search-result?id=0x0200000023803CA179D3028980A2347374A163E83F16A4DA0B12AED13A901BCDF54302BE656464C3D833E3FF40EAA8C5641F50D13A584383B01C4A4A9731741FDAE093E5',
             'birth_place' => 'Jakarta',
             'birth_date' => '2010-05-17',
@@ -61,12 +61,20 @@ class ApplicantProfileNisnVerificationTest extends TestCase
         });
     }
 
+    private function checkPayload(array $overrides = []): array
+    {
+        return array_merge([
+            'nisn' => '9990204713',
+            'nisn_link' => 'https://nisn.data.kemendikdasmen.go.id/search-result?id=0xabc12345',
+        ], $overrides);
+    }
+
     public function test_profile_submit_with_valid_nisn_link_succeeds(): void
     {
         $this->mockNisnApi([
             'status_code' => 200,
             'message' => 'Data berhasil ditemukan.',
-            'data' => ['nisn' => '1234567890', 'nama' => 'BUDI SANTOSO'],
+            'data' => ['nisn' => '9990204713', 'nama' => 'BUDI SANTOSO'],
         ]);
 
         $siswa = $this->makeSiswa();
@@ -130,7 +138,7 @@ class ApplicantProfileNisnVerificationTest extends TestCase
         $this->mockNisnApi([
             'status_code' => 200,
             'message' => 'Data berhasil ditemukan.',
-            'data' => ['nisn' => '1234567890', 'nama' => 'BUDI SANTOSO'],
+            'data' => ['nisn' => '9990204713', 'nama' => 'BUDI SANTOSO'],
         ]);
 
         $siswa = $this->makeSiswa();
@@ -150,5 +158,80 @@ class ApplicantProfileNisnVerificationTest extends TestCase
         $this->assertNotNull($applicant->nisn_verified_at);
         $this->assertSame('BUDI SANTOSO', $applicant->nisn_verified_name);
         $this->assertStringContainsString('nisn.data.kemendikdasmen.go.id', $applicant->nisn_link);
+    }
+
+    public function test_check_nisn_endpoint_reports_valid(): void
+    {
+        $this->mockNisnApi([
+            'status_code' => 200,
+            'message' => 'Data berhasil ditemukan.',
+            'data' => ['nisn' => '9990204713', 'nama' => 'BUDI SANTOSO'],
+        ]);
+
+        $siswa = $this->makeSiswa();
+
+        $this->actingAs($siswa)
+            ->postJson('/applicant/profile/check-nisn', $this->checkPayload())
+            ->assertOk()
+            ->assertJson([
+                'status' => 'valid',
+                'data' => ['nisn' => '9990204713', 'nama' => 'BUDI SANTOSO'],
+            ]);
+    }
+
+    public function test_check_nisn_endpoint_reports_invalid_when_data_empty(): void
+    {
+        $this->mockNisnApi([
+            'status_code' => 200,
+            'message' => 'Data berhasil ditemukan.',
+            'data' => [],
+        ]);
+
+        $siswa = $this->makeSiswa();
+
+        $this->actingAs($siswa)
+            ->postJson('/applicant/profile/check-nisn', $this->checkPayload())
+            ->assertOk()
+            ->assertJson(['status' => 'invalid']);
+    }
+
+    public function test_check_nisn_endpoint_reports_unavailable_when_server_down(): void
+    {
+        $this->mockNisnApi(['error' => 'HTTP 500']);
+
+        $siswa = $this->makeSiswa();
+
+        $this->actingAs($siswa)
+            ->postJson('/applicant/profile/check-nisn', $this->checkPayload())
+            ->assertOk()
+            ->assertJson(['status' => 'unavailable']);
+    }
+
+    public function test_check_nisn_endpoint_rejects_link_outside_nisn_domain(): void
+    {
+        $this->mock(\App\Support\NisnApiClient::class, function ($mock) {
+            $mock->shouldReceive('pencarianDetail')->never();
+        });
+
+        $siswa = $this->makeSiswa();
+
+        $this->actingAs($siswa)
+            ->postJson('/applicant/profile/check-nisn', $this->checkPayload([
+                'nisn_link' => 'https://example.com/?id=0xabc',
+            ]))
+            ->assertStatus(422)
+            ->assertJsonValidationErrors('nisn_link');
+    }
+
+    public function test_check_nisn_endpoint_rejects_checksum_invalid_nisn(): void
+    {
+        $siswa = $this->makeSiswa();
+
+        $this->actingAs($siswa)
+            ->postJson('/applicant/profile/check-nisn', $this->checkPayload([
+                'nisn' => '1234567891',
+            ]))
+            ->assertStatus(422)
+            ->assertJsonValidationErrors('nisn');
     }
 }

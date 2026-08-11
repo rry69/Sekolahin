@@ -62,6 +62,26 @@ class ApplicantController extends Controller
         return view('applicant.profile', compact('applicant'));
     }
 
+    public function checkNisn(Request $request)
+    {
+        $validated = $request->validate([
+            'nisn' => ['required', 'string', 'valid_nisn'],
+            'nisn_link' => [
+                'required',
+                'url',
+                'regex:/^https:\/\/nisn\.data\.kemendikdasmen\.go\.id\/search-result\?id=[0-9a-fA-Fx]+/',
+            ],
+        ], $this->messages());
+
+        $verification = NisnVerificationService::verify($validated['nisn_link'], $validated['nisn']);
+
+        return response()->json([
+            'status' => $verification['status'],
+            'message' => $verification['message'],
+            'data' => $verification['data'] ?? null,
+        ]);
+    }
+
     public function update(Request $request)
     {
         $validated = $request->validate($this->rules(), $this->messages());
