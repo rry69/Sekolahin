@@ -40,6 +40,16 @@ class NisnVerificationService
             $data = $result['data'] ?? [];
             $nisnFromApi = (string) ($data['nisn'] ?? '');
 
+            // API nyata mengembalikan status 200 dengan data kosong untuk id yang tidak ditemukan
+            // (status 203 tidak pernah muncul), jadi data kosong harus dianggap tidak ditemukan.
+            if ($nisnFromApi === '') {
+                return [
+                    'status' => 'invalid',
+                    'message' => 'NISN tidak ditemukan di database Kemendikdasmen. Periksa kembali link hasil pencarian.',
+                    'data' => $data,
+                ];
+            }
+
             if ($nisnFromApi === $nisn) {
                 return [
                     'status' => 'valid',

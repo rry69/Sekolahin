@@ -30,7 +30,7 @@ class ApplicantController extends Controller
             'nisn_link' => [
                 'required',
                 'url',
-                'regex:/nisn\.data\.kemendikdasmen\.go\.id\/search-result\?id=/',
+                'regex:/^https:\/\/nisn\.data\.kemendikdasmen\.go\.id\/search-result\?id=[0-9a-fA-Fx]+/',
             ],
             'birth_place' => 'required|string|max:255',
             'birth_date' => 'required|date',

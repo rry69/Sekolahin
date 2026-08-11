@@ -77,6 +77,27 @@ class NisnVerificationServiceTest extends TestCase
         $this->assertSame('invalid', $result['status']);
     }
 
+    public function test_verify_returns_invalid_with_not_found_message_when_data_empty(): void
+    {
+        // API nyata mengembalikan status 200 dengan data kosong untuk id tidak ditemukan,
+        // bukan status 203 — pastikan ini menghasilkan pesan "tidak ditemukan".
+        $mock = $this->createMock(NisnApiClient::class);
+        $mock->method('pencarianDetail')->willReturn([
+            'status_code' => 200,
+            'message' => 'Data berhasil ditemukan.',
+            'data' => [],
+        ]);
+        app()->instance(NisnApiClient::class, $mock);
+
+        $result = NisnVerificationService::verify(
+            'https://nisn.data.kemendikdasmen.go.id/search-result?id=0xDEADBEEF',
+            '1234567890'
+        );
+
+        $this->assertSame('invalid', $result['status']);
+        $this->assertStringContainsString('tidak ditemukan', $result['message']);
+    }
+
     public function test_verify_returns_unavailable_on_network_error(): void
     {
         $mock = $this->createMock(NisnApiClient::class);
