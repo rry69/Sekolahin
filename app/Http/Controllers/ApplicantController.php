@@ -11,7 +11,6 @@ class ApplicantController extends Controller
     protected function messages(): array
     {
         return [
-            'nik.valid_nik' => 'Nomor Induk Kependudukan (NIK) tidak valid. Periksa kembali 16 digitnya.',
             'nik.unique' => 'NIK sudah terdaftar atas nama pendaftar lain.',
             'nisn.valid_nisn' => 'Nomor Induk Siswa Nasional (NISN) tidak valid. Periksa kembali 10 digitnya.',
             'nisn.unique' => 'NISN sudah terdaftar atas nama pendaftar lain.',
@@ -25,7 +24,7 @@ class ApplicantController extends Controller
     {
         return [
             'full_name' => 'required|string|max:255',
-            'nik' => ['required', 'string', 'valid_nik', 'unique:applicants,nik,' . (auth()->user()->applicant?->id ?? 'NULL')],
+            'nik' => ['required', 'string', 'unique:applicants,nik,' . (auth()->user()->applicant?->id ?? 'NULL')],
             'nisn' => ['required', 'string', 'valid_nisn', 'unique:applicants,nisn,' . (auth()->user()->applicant?->id ?? 'NULL')],
             'nisn_link' => [
                 'required',

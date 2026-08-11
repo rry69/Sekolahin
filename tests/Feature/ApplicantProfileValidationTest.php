@@ -82,13 +82,14 @@ class ApplicantProfileValidationTest extends TestCase
         $this->assertNull($siswa->applicant);
     }
 
-    public function test_profile_rejected_on_invalid_nik_checksum(): void
+    public function test_profile_accepted_with_non_luhn_nik(): void
     {
+        // Checksum NIK tidak lagi divalidasi (keputusan produk); hanya duplikat yang ditolak.
         $siswa = $this->makeSiswa();
 
         $this->actingAs($siswa)
             ->patch('/applicant/profile', $this->validPayload(['nik' => '3201234567890004']))
-            ->assertSessionHasErrors('nik');
+            ->assertRedirect('/applicant/profile/review');
 
         $this->assertNull($siswa->applicant);
     }
