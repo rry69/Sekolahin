@@ -73,8 +73,17 @@ Route::middleware(['auth', 'role:Siswa'])->group(function () {
 Route::middleware(['auth', 'role:Admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     
-    Route::get('/school', [AdminSchoolController::class, 'edit'])->name('school.edit');
-    Route::post('/school', [AdminSchoolController::class, 'update'])->name('school.update');
+    Route::get('/schools', [AdminSchoolController::class, 'index'])->name('schools.index');
+    Route::get('/schools/create', [AdminSchoolController::class, 'create'])->name('schools.create');
+    Route::post('/schools', [AdminSchoolController::class, 'store'])->name('schools.store');
+    Route::get('/schools/{school}', [AdminSchoolController::class, 'edit'])->name('schools.edit');
+    Route::patch('/schools/{school}', [AdminSchoolController::class, 'update'])->name('schools.update');
+    Route::delete('/schools/{school}', [AdminSchoolController::class, 'destroy'])->name('schools.destroy');
+    Route::post('/schools/levels', [AdminSchoolController::class, 'updateLevels'])->name('schools.levels.update');
+
+    // Alias lama agar tautan & tes lama tetap berfungsi.
+    Route::get('/school', [AdminSchoolController::class, 'index'])->name('school.edit');
+    Route::post('/school', [AdminSchoolController::class, 'store'])->name('school.update');
     Route::post('/school/levels', [AdminSchoolController::class, 'updateLevels'])->name('school.levels.update');
     
     Route::get('/registrations', [AdminRegistrationController::class, 'index'])->name('registrations.index');

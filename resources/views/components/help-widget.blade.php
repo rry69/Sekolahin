@@ -178,14 +178,14 @@
                 'Gunakan untuk laporan dan penentuan kuota tahun depan.',
             ],
         ],
-        'admin.school.edit' => [
+        'admin.schools.index' => [
             'title' => 'Data Sekolah',
             'icon' => 'fa-school',
             'intro' => 'Kelola identitas sekolah & jenjang aktif:',
             'steps' => [
-                'Isi nama sekolah, alamat, NPSN, dan logo/kop.',
-                'Centang <strong>jenjang yang aktif</strong> (TK/SD/SMP/SMA/SMK) — jenjang nonaktif tidak bisa dipilih siswa.',
-                'Simpan perubahan — langsung berlaku di form pendaftaran.',
+                'Kelola beberapa sekolah sekaligus, dikelompokkan per jenjang pendidikan.',
+                'Tambah/edit sekolah, centang <strong>jenjang yang dilayani</strong> (TK/SD/SMP/SMA/SMK).',
+                'Jenjang nonaktif tidak bisa dipilih siswa di form pendaftaran.',
             ],
         ],
         'admin.settings.edit' => [
@@ -221,7 +221,7 @@
     if (!$current) {
         // coba prefix match untuk admin.*
         if ($isAdmin) {
-            foreach (['admin.registrations.index','admin.dashboard','admin.payments.index','admin.settings.edit','admin.school.edit'] as $k) {
+            foreach (['admin.registrations.index','admin.dashboard','admin.payments.index','admin.settings.edit','admin.schools.index'] as $k) {
                 if (str_starts_with($route, explode('.', $k)[0].'.'.explode('.', $k)[1])) { $current = $helps[$k] ?? null; break; }
             }
         }

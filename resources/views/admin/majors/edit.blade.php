@@ -12,10 +12,20 @@
                     @method('PATCH')
 
                     <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Jenjang</label>
+                        <select name="school_level_id" id="school_level_id" required class="w-full border-gray-300 rounded-md shadow-sm" onchange="filterSchools()">
+                            @foreach($levels as $level)
+                                <option value="{{ $level->id }}" {{ old('school_level_id', $major->school_level_id) == $level->id ? 'selected' : '' }}>{{ $level->name }}</option>
+                            @endforeach
+                        </select>
+                        @error('school_level_id')<p class="text-red-600 text-sm mt-1">{{ $message }}</p>@enderror
+                    </div>
+
+                    <div class="mb-4">
                         <label class="block text-sm font-medium text-gray-700 mb-2">Sekolah</label>
-                        <select name="school_id" required class="w-full border-gray-300 rounded-md shadow-sm">
+                        <select name="school_id" id="school_id" required class="w-full border-gray-300 rounded-md shadow-sm">
                             @foreach($schools as $school)
-                                <option value="{{ $school->id }}" {{ old('school_id', $major->school_id) == $school->id ? 'selected' : '' }}>{{ $school->name }}</option>
+                                <option value="{{ $school->id }}" data-levels="{{ $school->schoolLevels->pluck('id')->join(',') }}" {{ old('school_id', $major->school_id) == $school->id ? 'selected' : '' }}>{{ $school->name }}</option>
                             @endforeach
                         </select>
                         @error('school_id')<p class="text-red-600 text-sm mt-1">{{ $message }}</p>@enderror
@@ -84,4 +94,21 @@
         </div>
     </div>
 </div>
+
+<script>
+    function filterSchools() {
+        const levelId = document.getElementById('school_level_id').value;
+        const schoolSelect = document.getElementById('school_id');
+        const options = schoolSelect.querySelectorAll('option[data-levels]');
+        options.forEach(opt => {
+            const levels = (opt.dataset.levels || '').split(',').map(v => v.trim());
+            opt.style.display = (!levelId || levels.includes(levelId)) ? '' : 'none';
+        });
+        const selected = schoolSelect.options[schoolSelect.selectedIndex];
+        if (selected && selected.hasAttribute('data-levels') && !selected.dataset.levels.split(',').includes(levelId)) {
+            schoolSelect.value = '';
+        }
+    }
+    window.addEventListener('DOMContentLoaded', filterSchools);
+</script>
 @endsection

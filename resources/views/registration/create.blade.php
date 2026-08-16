@@ -50,7 +50,7 @@
                         <x-help-steps title="Cara memilih pendaftaran" icon="fa-file-circle-plus" :steps="[
                             'Pilih <strong>Jenjang &amp; Periode</strong> — hanya periode yang <strong>sedang dibuka</strong> yang bisa dipilih. Periode yang belum dibuka atau sudah ditutup terkunci otomatis.',
                             'Pilih <strong>Jalur</strong> sesuai kondisi (Reguler/Prestasi/Beasiswa).',
-                            'Pilih <strong>Jurusan</strong> — perhatikan sisa kuota, lalu klik <strong>Lanjut ke Review</strong>.',
+                            'Pilih <strong>Sekolah</strong> yang tersedia untuk jenjang terpilih, lalu <strong>Jurusan</strong> sesuai sekolah — perhatikan sisa kuota, lalu klik <strong>Lanjut ke Review</strong>.',
                         ]" />
                         <form method="POST" action="{{ route('registration.store') }}">
                             @csrf
@@ -83,7 +83,7 @@
                                         @endphp
                                         <label class="flex items-center p-4 border rounded-lg {{ $isDisabled ? 'bg-gray-50 border-gray-200 opacity-70 cursor-not-allowed' : ($blockedByAge ? 'bg-red-50 border-red-200' : 'hover:bg-gray-50 cursor-pointer') }}">
                                             <input type="radio" name="registration_period_id" value="{{ $period->id }}" required {{ $isDisabled ? 'disabled' : '' }}
-                                                class="h-4 w-4 text-indigo-600 focus:ring-indigo-500" data-status="{{ $pStatus }}" data-start="{{ $period->start_date->format('Y-m-d') }}" data-end="{{ $period->end_date->format('Y-m-d') }}">
+                                                class="h-4 w-4 text-indigo-600 focus:ring-indigo-500" data-status="{{ $pStatus }}" data-start="{{ $period->start_date->format('Y-m-d') }}" data-end="{{ $period->end_date->format('Y-m-d') }}" data-level="{{ $period->school_level_id }}">
                                             <span class="ml-3 flex-1">
                                                 <span class="font-medium">{{ $period->schoolLevel->name }}</span>
                                                 <span class="text-gray-600">- {{ $period->name }}</span>
@@ -133,32 +133,26 @@
                             </div>
 
                             <div class="mb-6">
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Sekolah</label>
-                                <div class="p-4 border rounded-lg bg-gray-50">
-                                    <p class="font-medium text-gray-900">{{ $school->name }}</p>
-                                    @if($school->address)
-                                        <p class="text-sm text-gray-600">{{ $school->address }}</p>
-                                    @endif
-                                </div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Pilih Sekolah * <span class="text-gray-400 font-normal">(otomatis sesuai jenjang)</span></label>
+                                <select id="school-select" name="school_id" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>
+                                    <option value="">-- Pilih Sekolah --</option>
+                                    @foreach ($schools as $sc)
+                                        <option value="{{ $sc->id }}" data-levels="{{ $sc->schoolLevels->pluck('id')->join(',') }}"
+                                            {{ old('school_id') == $sc->id ? 'selected' : '' }}>
+                                            {{ $sc->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                <p id="school-hint" class="text-xs mt-1 text-gray-500">Pilih jenjang dulu untuk melihat sekolah yang tersedia.</p>
+                                @error('school_id')<span class="text-red-500 text-sm">{{ $message }}</span>@enderror
                             </div>
-
-                            @php $majors = $school->majors; @endphp
 
                             <div class="mb-6">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Jurusan Pilihan * <span class="text-gray-400 font-normal">(wajib)</span></label>
                                 <select id="major-select" name="major_id" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>
                                     <option value="">-- Pilih Jurusan --</option>
-                                    @foreach ($majors as $major)
-                                        @php
-                                            $fallbackUsed = $acceptedCounts[$major->id] ?? 0;
-                                            $fallbackQuota = (int) $major->quota;
-                                        @endphp
-                                        <option value="{{ $major->id }}" data-fallback-quota="{{ $fallbackQuota }}" data-fallback-used="{{ $fallbackUsed }}" {{ old('major_id') == $major->id ? 'selected' : '' }}>
-                                            {{ $major->name }}
-                                        </option>
-                                    @endforeach
                                 </select>
-                                <p id="major-quota-hint" class="text-xs mt-1 text-gray-500">Pilih jalur dulu untuk melihat sisa kuota jalur tersebut.</p>
+                                <p id="major-quota-hint" class="text-xs mt-1 text-gray-500">Pilih sekolah dan jalur untuk melihat sisa kuota.</p>
                                 @error('major_id')<span class="text-red-500 text-sm">{{ $message }}</span>@enderror
                             </div>
 
@@ -217,22 +211,62 @@
     sync();
   }
   document.querySelectorAll('input[name="registration_period_id"]').forEach(r=>{ r.addEventListener('change', syncPeriodHint); r.addEventListener('change', sync); });
-  syncPeriodHint();
-  sync();
 
-  // Kuota per jalur (revisi.md) + fee hint — dinamis terhadap jalur terpilih
+  // Sekolah & jurusan dinamis berdasarkan jenjang terpilih
+  const schools = @json($schoolOptionsJson);
+  const majorsByLevel = @json($majorOptionsJson);
   const quotaMap = @json($quotaMap ?? []);
   const acceptedByMajorTrack = @json($acceptedByMajorTrack ?? []);
   const tracks = @json($tracks->keyBy('id')->map(fn($t)=>$t->name) ?? []);
+
+  const schoolSelect = document.getElementById('school-select');
   const majorSelect = document.getElementById('major-select');
+  const schoolHint = document.getElementById('school-hint');
   const quotaHint = document.getElementById('major-quota-hint');
   const feeHint = document.getElementById('track-fee-hint');
+
+  function getLevelId(){
+    const el = document.querySelector('input[name="registration_period_id"]:checked');
+    return el ? el.getAttribute('data-level') : null;
+  }
   function getTrackId(){ const el=document.querySelector('input[name="registration_track_id"]:checked'); return el?el.value:null; }
+
+  function syncSchools(){
+    const levelId = getLevelId();
+    Array.from(schoolSelect.options).forEach(opt=>{
+      if(!opt.value) return;
+      const levels = (opt.getAttribute('data-levels')||'').split(',').map(v=>v.trim());
+      opt.style.display = (!levelId || levels.includes(levelId)) ? '' : 'none';
+    });
+    const sel = schoolSelect.options[schoolSelect.selectedIndex];
+    if(sel && sel.value && sel.getAttribute('data-levels') && !sel.getAttribute('data-levels').split(',').includes(levelId)){
+      schoolSelect.value = '';
+    }
+    syncMajors();
+  }
+  function syncMajors(){
+    const levelId = getLevelId();
+    const schoolId = schoolSelect.value;
+    majorSelect.innerHTML = '<option value="">-- Pilih Jurusan --</option>';
+    const majors = levelId ? (majorsByLevel[levelId] || []) : [];
+    const options = schoolId
+      ? majors.filter(m => String(m.school_id) === String(schoolId))
+      : majors;
+    options.forEach(m=>{
+      const opt = document.createElement('option');
+      opt.value = m.id;
+      opt.textContent = m.name;
+      opt.dataset.fallbackQuota = m.quota;
+      opt.dataset.fallbackUsed = m.used;
+      majorSelect.appendChild(opt);
+    });
+    if(schoolHint) schoolHint.textContent = schoolId ? '' : 'Pilih jenjang dulu untuk melihat sekolah yang tersedia.';
+    syncQuota();
+  }
   function syncQuota(){
     if(!majorSelect || !quotaHint) return;
     const tid = getTrackId();
     const mid = majorSelect.value;
-    // fee hint — semua jalur biaya baru muncul setelah Terverifikasi
     if(feeHint){
       if(!tid){ feeHint.textContent=''; }
       else {
@@ -270,7 +304,12 @@
     });
   }
   document.querySelectorAll('input[name="registration_track_id"]').forEach(r=>r.addEventListener('change', syncQuota));
+  if(schoolSelect) schoolSelect.addEventListener('change', syncMajors);
   if(majorSelect) majorSelect.addEventListener('change', syncQuota);
+  document.querySelectorAll('input[name="registration_period_id"]').forEach(r=>r.addEventListener('change', syncSchools));
+  syncPeriodHint();
+  sync();
+  syncSchools();
   syncQuota();
 })();
 </script>

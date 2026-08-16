@@ -15,13 +15,19 @@
             </div>
         @endif
 
+        <div class="flex justify-between items-center mb-6">
+            <h3 class="text-2xl font-bold text-gray-900">Edit Sekolah</h3>
+            <a href="{{ route('admin.schools.index') }}" class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">Kembali</a>
+        </div>
+
         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
             <div class="p-6">
-                <h3 class="text-2xl font-bold text-gray-900 mb-2">Data Sekolah</h3>
+                <h4 class="text-xl font-bold text-gray-900 mb-2">{{ $school->name }}</h4>
                 <p class="text-sm text-gray-500 mb-6">Kelola profil sekolah yang ditampilkan pada form pendaftaran siswa.</p>
 
-                <form action="{{ route('admin.school.update') }}" method="POST">
+                <form action="{{ route('admin.schools.update', $school) }}" method="POST">
                     @csrf
+                    @method('PATCH')
 
                     <div class="grid grid-cols-2 gap-4 mb-4">
                         <div class="col-span-2">
@@ -81,7 +87,7 @@
                 <h3 class="text-2xl font-bold text-gray-900 mb-2">Status Pendaftaran per Jenjang</h3>
                 <p class="text-sm text-gray-500 mb-6">Matikan jenjang yang tidak menerima pendaftaran. Jenjang yang nonaktif tidak akan muncul di form pendaftaran siswa.</p>
 
-                <form action="{{ route('admin.school.levels.update') }}" method="POST">
+                <form action="{{ route('admin.schools.levels.update') }}" method="POST">
                     @csrf
 
                     <div class="space-y-3">

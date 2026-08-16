@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Major;
 use App\Models\School;
+use App\Models\SchoolLevel;
 use App\Models\Registration;
 use Illuminate\Http\Request;
 
@@ -13,7 +14,7 @@ class MajorController extends Controller
     public function index()
     {
         $tracks = \App\Models\RegistrationTrack::orderBy('id')->get();
-        $majors = Major::with(['school', 'trackQuotas'])
+        $majors = Major::with(['school.schoolLevels', 'schoolLevel', 'trackQuotas'])
             ->withCount([
                 'registrations as total_applicants',
                 'registrations as pending_count' => function($query) {
@@ -29,10 +30,15 @@ class MajorController extends Controller
                     $query->where('status', 'rejected');
                 },
             ])
+            ->orderBy('school_level_id')
             ->orderBy('school_id')
             ->orderBy('name')
             ->get()
             ->map(function($major) use ($tracks) {
+                // Legacy major tanpa school_level_id: fallback ke jenjang pertama sekolah.
+                if (! $major->school_level_id) {
+                    $major->school_level_id = $major->school->schoolLevels->sortBy('id')->first()?->id;
+                }
                 $major->available_quota = $major->totalQuotaByTracks() ?: ($major->quota - $major->accepted_count);
                 // accepted per jalur (termasuk terdaftar)
                 $byTrack = Registration::where('major_id', $major->id)->whereIn('status', ['accepted', 're_registration_complete'])
@@ -49,15 +55,20 @@ class MajorController extends Controller
                 return $major;
             });
 
-        return view('admin.majors.index', compact('majors', 'tracks'));
+        $levels = SchoolLevel::whereIn('id', $majors->pluck('school_level_id')->unique()->filter())
+            ->orderBy('id')->get();
+        $grouped = $majors->groupBy('school_level_id');
+
+        return view('admin.majors.index', compact('majors', 'tracks', 'levels', 'grouped'));
     }
 
     public function create()
     {
-        $schools = School::orderBy('name')->get();
+        $schools = School::with('schoolLevels')->orderBy('name')->get();
+        $levels = SchoolLevel::orderBy('id')->get();
         $tracks = \App\Models\RegistrationTrack::orderBy('id')->get();
 
-        return view('admin.majors.create', compact('schools', 'tracks'));
+        return view('admin.majors.create', compact('schools', 'levels', 'tracks'));
     }
 
     public function store(Request $request)
@@ -65,6 +76,7 @@ class MajorController extends Controller
         $tracks = \App\Models\RegistrationTrack::orderBy('id')->get();
         $rules = [
             'school_id' => 'required|exists:schools,id',
+            'school_level_id' => 'required|exists:school_levels,id',
             'name' => 'required|string|max:255',
             'code' => 'required|string|max:50',
             'quota' => 'nullable|integer|min:0',
@@ -78,8 +90,13 @@ class MajorController extends Controller
         }
         $validated = $request->validate($rules);
 
+        // Pastikan sekolah benar-benar melayani jenjang yang dipilih.
+        $school = School::with('schoolLevels')->findOrFail($validated['school_id']);
+        abort_unless($school->schoolLevels->contains('id', $validated['school_level_id']), 422, 'Sekolah tidak melayani jenjang yang dipilih');
+
         $major = Major::create([
             'school_id' => $validated['school_id'],
+            'school_level_id' => $validated['school_level_id'],
             'name' => $validated['name'],
             'code' => strtoupper($validated['code']),
             'quota' => $validated['quota'] ?? 0,
@@ -117,11 +134,12 @@ class MajorController extends Controller
 
     public function edit(Major $major)
     {
-        $major->load(['school', 'trackQuotas']);
-        $schools = School::orderBy('name')->get();
+        $major->load(['school', 'schoolLevel', 'trackQuotas']);
+        $schools = School::with('schoolLevels')->orderBy('name')->get();
+        $levels = SchoolLevel::orderBy('id')->get();
         $tracks = \App\Models\RegistrationTrack::orderBy('id')->get();
 
-        return view('admin.majors.edit', compact('major', 'schools', 'tracks'));
+        return view('admin.majors.edit', compact('major', 'schools', 'levels', 'tracks'));
     }
 
     public function update(Request $request, Major $major)
@@ -129,6 +147,7 @@ class MajorController extends Controller
         $tracks = \App\Models\RegistrationTrack::orderBy('id')->get();
         $rules = [
             'school_id' => 'required|exists:schools,id',
+            'school_level_id' => 'required|exists:school_levels,id',
             'name' => 'required|string|max:255',
             'code' => 'required|string|max:50',
             'quota' => 'required|integer|min:1',
@@ -142,7 +161,11 @@ class MajorController extends Controller
         }
         $validated = $request->validate($rules);
 
-        $major->update(collect($validated)->only(['school_id', 'name', 'code', 'quota', 'description', 'requires_health_test', 'requires_interview', 'requires_skill_test'])->toArray());
+        // Pastikan sekolah benar-benar melayani jenjang yang dipilih.
+        $school = School::with('schoolLevels')->findOrFail($validated['school_id']);
+        abort_unless($school->schoolLevels->contains('id', $validated['school_level_id']), 422, 'Sekolah tidak melayani jenjang yang dipilih');
+
+        $major->update(collect($validated)->only(['school_id', 'school_level_id', 'name', 'code', 'quota', 'description', 'requires_health_test', 'requires_interview', 'requires_skill_test'])->toArray());
 
         foreach ($tracks as $t) {
             $key = "quota_track_{$t->id}";

@@ -62,22 +62,24 @@ class RegistrationController extends Controller
             $raw = \App\Models\Setting::get("age_min_{$p->school_level_id}");
             $ageMins[$p->id] = ($raw !== null && $raw !== '' && is_numeric($raw)) ? (int) $raw : null;
         }
-        $school = School::with(['majors.trackQuotas' => function($q) { $q->orderBy('registration_track_id'); }, 'majors' => function($query) {
-            $query->orderBy('name');
-        }])->first();
+        // Semua sekolah (dengan jenjang & jurusan) untuk dropdown dinamis.
+        $schools = School::with([
+            'schoolLevels',
+            'majors' => function($query) { $query->orderBy('name'); },
+        ])->orderBy('name')->get();
 
-        if (!$school) {
+        if ($schools->isEmpty()) {
             return redirect()->route('registration.index')->with('error', 'Belum ada sekolah yang menampung pendaftaran');
         }
 
-        $acceptedCounts = Registration::whereIn('major_id', $school->majors->pluck('id'))
+        $acceptedCounts = Registration::whereIn('major_id', $schools->pluck('majors')->flatten()->pluck('id')->unique())
             ->whereIn('status', ['accepted', 're_registration_complete'])
             ->selectRaw('major_id, COUNT(*) as total')
             ->groupBy('major_id')
             ->pluck('total', 'major_id');
 
         // Kuota per jurusan-per jalur (revisi.md)
-        $acceptedByMajorTrack = Registration::whereIn('major_id', $school->majors->pluck('id'))
+        $acceptedByMajorTrack = Registration::whereIn('major_id', $schools->pluck('majors')->flatten()->pluck('id')->unique())
             ->whereIn('status', ['accepted', 're_registration_complete'])
             ->selectRaw('major_id, registration_track_id, COUNT(*) as total')
             ->groupBy('major_id', 'registration_track_id')
@@ -86,15 +88,48 @@ class RegistrationController extends Controller
             ->map(fn($g) => $g->pluck('total', 'registration_track_id'));
 
         $quotaMap = [];
-        foreach ($school->majors as $m) {
-            foreach ($tracks as $t) {
-                $q = $m->quotaForTrack($t->id);
-                // fallback ke kolom quota lama jika belum ada baris per-jalur
-                $quotaMap[$m->id][$t->id] = $q !== null ? $q : (int) $m->quota;
+        $majorsByLevel = [];
+        foreach ($schools as $sc) {
+            foreach ($sc->majors as $m) {
+                $majorsByLevel[$m->school_level_id ?? $sc->schoolLevels->first()?->id][] = $m;
+                foreach ($tracks as $t) {
+                    $q = $m->quotaForTrack($t->id);
+                    // fallback ke kolom quota lama jika belum ada baris per-jalur
+                    $quotaMap[$m->id][$t->id] = $q !== null ? $q : (int) $m->quota;
+                }
             }
         }
 
-        return view('registration.create', compact('periods', 'tracks', 'school', 'acceptedCounts', 'acceptedByMajorTrack', 'quotaMap', 'applicantAge', 'ageMins'));
+        // Sekolah per jenjang (dari pivot).
+        $schoolsByLevel = [];
+        foreach ($schools as $sc) {
+            foreach ($sc->schoolLevels as $level) {
+                $schoolsByLevel[$level->id][] = $sc;
+            }
+        }
+
+        // Data JSON-friendly untuk JS dropdown dinamis (hindari closure di @json).
+        $schoolOptionsJson = $schools->map(function ($sc) {
+            return [
+                'id' => $sc->id,
+                'name' => $sc->name,
+                'levels' => $sc->schoolLevels->pluck('id')->all(),
+            ];
+        })->values();
+
+        $majorOptionsJson = collect($majorsByLevel)->map(function ($list) use ($acceptedCounts) {
+            return collect($list)->map(function ($m) use ($acceptedCounts) {
+                return [
+                    'id' => $m->id,
+                    'name' => $m->name,
+                    'school_id' => $m->school_id,
+                    'quota' => (int) $m->quota,
+                    'used' => $acceptedCounts[$m->id] ?? 0,
+                ];
+            });
+        });
+
+        return view('registration.create', compact('periods', 'tracks', 'schools', 'schoolsByLevel', 'majorsByLevel', 'acceptedCounts', 'acceptedByMajorTrack', 'quotaMap', 'applicantAge', 'ageMins', 'schoolOptionsJson', 'majorOptionsJson'));
     }
 
     public function store(Request $request)
@@ -107,6 +142,7 @@ class RegistrationController extends Controller
             'registration_period_id' => 'required|exists:registration_periods,id',
             'registration_track_id' => 'required|exists:registration_tracks,id',
             'major_id' => 'required|exists:majors,id',
+            'school_id' => 'required|exists:schools,id',
         ]);
 
         $period = RegistrationPeriod::with('schoolLevel')->find($validated['registration_period_id']);
@@ -136,7 +172,48 @@ class RegistrationController extends Controller
             }
         }
 
+        $validationError = $this->validateSchoolMajor(
+            (int) $validated['school_id'],
+            (int) $validated['major_id'],
+            (int) $validated['registration_period_id']
+        );
+        if ($validationError) {
+            return $validationError;
+        }
+
         return redirect()->route('registration.review', $validated);
+    }
+
+    /**
+     * Validasi konsistensi: sekolah harus melayani jenjang periode,
+     * dan jurusan harus milik sekolah tersebut & jenjang yang sama.
+     */
+    private function validateSchoolMajor(int $schoolId, int $majorId, int $periodId): ?\Illuminate\Http\RedirectResponse
+    {
+        $school = School::with('schoolLevels')->find($schoolId);
+        if (! $school) {
+            return back()->with('error', 'Sekolah yang dipilih tidak valid')->withInput();
+        }
+
+        $period = RegistrationPeriod::with('schoolLevel')->find($periodId);
+        if (! $period) {
+            return back()->with('error', 'Periode tidak valid')->withInput();
+        }
+
+        if (! $school->schoolLevels->contains('id', $period->school_level_id)) {
+            return back()->with('error', 'Sekolah yang dipilih tidak melayani jenjang ' . $period->schoolLevel->name)->withInput();
+        }
+
+        $major = Major::find($majorId);
+        if (! $major || $major->school_id !== $school->id) {
+            return back()->with('error', 'Jurusan yang dipilih tidak tersedia di sekolah ini')->withInput();
+        }
+
+        if ($major->school_level_id && $major->school_level_id !== $period->school_level_id) {
+            return back()->with('error', 'Jurusan yang dipilih tidak sesuai dengan jenjang yang dipilih')->withInput();
+        }
+
+        return null;
     }
 
     public function review(Request $request)
@@ -149,11 +226,13 @@ class RegistrationController extends Controller
             'registration_period_id' => 'required|exists:registration_periods,id',
             'registration_track_id' => 'required|exists:registration_tracks,id',
             'major_id' => 'required|exists:majors,id',
+            'school_id' => 'required|exists:schools,id',
         ]);
 
         $period = RegistrationPeriod::with('schoolLevel')->findOrFail($validated['registration_period_id']);
         $track = RegistrationTrack::findOrFail($validated['registration_track_id']);
         $major = Major::with('school')->findOrFail($validated['major_id']);
+        $school = School::with('schoolLevels')->findOrFail($validated['school_id']);
         $applicant = auth()->user()->applicant;
 
         $pStatus = $period->registrationStatus();
@@ -179,7 +258,7 @@ class RegistrationController extends Controller
             }
         }
 
-        return view('registration.review', compact('period', 'track', 'major', 'applicant', 'validated'));
+        return view('registration.review', compact('period', 'track', 'major', 'school', 'applicant', 'validated'));
     }
 
     public function confirm(Request $request)
@@ -192,18 +271,29 @@ class RegistrationController extends Controller
             'registration_period_id' => 'required|exists:registration_periods,id',
             'registration_track_id' => 'required|exists:registration_tracks,id',
             'major_id' => 'required|exists:majors,id',
+            'school_id' => 'required|exists:schools,id',
         ]);
 
-        $school = School::first();
+        $school = School::with('schoolLevels')->find($validated['school_id']);
 
         if (!$school) {
-            return back()->with('error', 'Belum ada sekolah yang menampung pendaftaran')->withInput();
+            return back()->with('error', 'Sekolah yang dipilih tidak valid')->withInput();
+        }
+
+        $period = RegistrationPeriod::with('schoolLevel')->findOrFail($validated['registration_period_id']);
+
+        if (! $school->schoolLevels->contains('id', $period->school_level_id)) {
+            return back()->with('error', 'Sekolah yang dipilih tidak melayani jenjang ' . $period->schoolLevel->name)->withInput();
         }
 
         $major = Major::findOrFail($validated['major_id']);
 
         if ($major->school_id !== $school->id) {
             return back()->with('error', 'Jurusan yang dipilih tidak tersedia di sekolah ini');
+        }
+
+        if ($major->school_level_id && $major->school_level_id !== $period->school_level_id) {
+            return back()->with('error', 'Jurusan yang dipilih tidak sesuai dengan jenjang yang dipilih');
         }
 
         // Kuota per jurusan-per jalur (revisi.md): jalur tidak saling mempengaruhi
@@ -219,8 +309,6 @@ class RegistrationController extends Controller
                 return back()->with('error', 'Kuota jalur ' . $track->name . ' untuk jurusan ' . $major->name . ' sudah penuh');
             }
         }
-
-        $period = RegistrationPeriod::with('schoolLevel')->findOrFail($validated['registration_period_id']);
 
         $pStatusConfirm = $period->registrationStatus();
         if ($pStatusConfirm === 'inactive') {

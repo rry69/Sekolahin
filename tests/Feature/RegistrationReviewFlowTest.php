@@ -179,11 +179,12 @@ class RegistrationReviewFlowTest extends TestCase
             'registration_period_id' => $period->id,
             'registration_track_id' => $track->id,
             'major_id' => $major->id,
+            'school_id' => $major->school_id,
         ];
 
         $this->actingAs($siswa)
             ->post('/registrations', $payload)
-            ->assertRedirect('/registrations/review?registration_period_id=' . $period->id . '&registration_track_id=' . $track->id . '&major_id=' . $major->id);
+            ->assertRedirect('/registrations/review?registration_period_id=' . $period->id . '&registration_track_id=' . $track->id . '&major_id=' . $major->id . '&school_id=' . $major->school_id);
 
         $this->actingAs($siswa)
             ->get('/registrations/review?' . http_build_query($payload))

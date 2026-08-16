@@ -116,13 +116,20 @@ class SchoolSettingsFlowTest extends TestCase
     public function test_admin_can_see_school_page_and_update_school_name()
     {
         [$admin] = $this->seedBase();
+        $school = School::first();
 
-        $response = $this->actingAs($admin)->get('/admin/school');
+        $response = $this->actingAs($admin)->get(route('admin.schools.index'));
         $response->assertStatus(200);
         $response->assertSee('Data Sekolah');
         $response->assertSee('SMK Negeri 1 Jakarta');
 
-        $response = $this->actingAs($admin)->post('/admin/school', [
+        // Edit page shows school data
+        $editResponse = $this->actingAs($admin)->get(route('admin.schools.edit', $school));
+        $editResponse->assertStatus(200);
+        $editResponse->assertSee('Edit Sekolah');
+        $editResponse->assertSee('SMK Negeri 1 Jakarta');
+
+        $response = $this->actingAs($admin)->patch(route('admin.schools.update', $school), [
             'name' => 'SMK Negeri 1 Jakarta Baru',
             'address' => 'Jl. Baru No. 1',
             'phone' => '021-000',
@@ -132,8 +139,7 @@ class SchoolSettingsFlowTest extends TestCase
         ]);
 
         $response->assertSessionHas('success');
-        $school = School::first();
-        $this->assertSame('SMK Negeri 1 Jakarta Baru', $school->name);
+        $this->assertSame('SMK Negeri 1 Jakarta Baru', $school->refresh()->name);
         $this->assertEquals([4, 5], $school->schoolLevels->pluck('id')->sort()->values()->all());
     }
 
@@ -162,6 +168,7 @@ class SchoolSettingsFlowTest extends TestCase
             'registration_period_id' => $periodSd->id,
             'registration_track_id' => $track->id,
             'major_id' => $major->id,
+            'school_id' => $major->school_id,
         ]);
         $response->assertSessionHas('error');
         $this->assertStringContainsString('ditutup', (string) session('error'));
@@ -172,16 +179,19 @@ class SchoolSettingsFlowTest extends TestCase
             'registration_period_id' => $periodSmk->id,
             'registration_track_id' => $track->id,
             'major_id' => $major->id,
+            'school_id' => $major->school_id,
         ]);
         $respStore->assertRedirect(route('registration.review', [
             'registration_period_id' => $periodSmk->id,
             'registration_track_id' => $track->id,
             'major_id' => $major->id,
+            'school_id' => $major->school_id,
         ]));
         $this->actingAs($siswa)->post('/registrations/confirm', [
             'registration_period_id' => $periodSmk->id,
             'registration_track_id' => $track->id,
             'major_id' => $major->id,
+            'school_id' => $major->school_id,
         ]);
         $this->assertDatabaseHas('registrations', [
             'school_id' => 1,
@@ -202,6 +212,7 @@ class SchoolSettingsFlowTest extends TestCase
             'registration_period_id' => $periodSmk->id,
             'registration_track_id' => $track->id,
             'major_id' => $major->id,
+            'school_id' => $major->school_id,
         ]);
 
         $response = $this->actingAs($admin)->get('/admin/majors');

@@ -141,7 +141,7 @@
   </div>
   <nav class="sidebar-nav">
     <a href="{{ route('admin.dashboard') }}" class="nav-item {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}"><i class="fa-solid fa-grip"></i> Dashboard</a>
-    <a href="{{ route('admin.school.edit') }}" class="nav-item {{ request()->routeIs('admin.school.*') ? 'active' : '' }}"><i class="fa-solid fa-school"></i> Sekolah</a>
+    <a href="{{ route('admin.schools.index') }}" class="nav-item {{ request()->routeIs('admin.schools.*') ? 'active' : '' }}"><i class="fa-solid fa-school"></i> Sekolah</a>
     <a href="{{ route('admin.registrations.index') }}" class="nav-item {{ request()->routeIs('admin.registrations.*') ? 'active' : '' }}"><i class="fa-solid fa-users"></i> Pendaftaran</a>
     <a href="{{ route('admin.accounts.index') }}" class="nav-item {{ request()->routeIs('admin.accounts.*') ? 'active' : '' }}"><i class="fa-solid fa-user-slash"></i> Akun Siswa</a>
     <a href="{{ route('admin.majors.index') }}" class="nav-item {{ request()->routeIs('admin.majors.*') ? 'active' : '' }}"><i class="fa-solid fa-graduation-cap"></i> Jurusan</a>

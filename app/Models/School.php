@@ -28,4 +28,9 @@ class School extends Model
     {
         return $this->hasMany(Registration::class);
     }
+
+    public function levelsName(): string
+    {
+        return $this->schoolLevels->pluck('name')->implode(', ');
+    }
 }

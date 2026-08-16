@@ -8,6 +8,7 @@ class Major extends Model
 {
     protected $fillable = [
         'school_id',
+        'school_level_id',
         'name',
         'code',
         'quota',
@@ -29,6 +30,16 @@ class Major extends Model
     public function school()
     {
         return $this->belongsTo(School::class);
+    }
+
+    public function schoolLevel()
+    {
+        return $this->belongsTo(SchoolLevel::class);
+    }
+
+    public function levelName(): string
+    {
+        return $this->schoolLevel?->name ?? ($this->school->schoolLevels->first()->name ?? '-');
     }
 
     public function registrations()

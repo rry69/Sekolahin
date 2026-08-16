@@ -176,6 +176,7 @@ class FullRegistrationFlowTest extends TestCase
                 'registration_period_id' => $period->id,
                 'registration_track_id' => $track->id,
                 'major_id' => $major->id,
+                'school_id' => $school->id,
             ];
 
             // 1. Daftar -> review
@@ -305,6 +306,7 @@ class FullRegistrationFlowTest extends TestCase
             'registration_period_id' => $period->id,
             'registration_track_id' => $track->id,
             'major_id' => $major->id,
+            'school_id' => $major->school_id,
         ]);
         $registration = Registration::where('applicant_id', $siswa->applicant->id)->firstOrFail();
 
@@ -333,6 +335,7 @@ class FullRegistrationFlowTest extends TestCase
             'registration_period_id' => $period->id,
             'registration_track_id' => $track->id,
             'major_id' => $major->id,
+            'school_id' => $major->school_id,
         ]);
         $registration = Registration::where('applicant_id', $siswa->applicant->id)->firstOrFail();
 
@@ -367,6 +370,7 @@ class FullRegistrationFlowTest extends TestCase
             'registration_period_id' => $period->id,
             'registration_track_id' => $track->id,
             'major_id' => $major->id,
+            'school_id' => $major->school_id,
         ]);
         $registration = Registration::where('applicant_id', $siswa->applicant->id)->firstOrFail();
         // status masih pending
@@ -392,6 +396,7 @@ class FullRegistrationFlowTest extends TestCase
             'registration_period_id' => $period->id,
             'registration_track_id' => $track->id,
             'major_id' => $major->id,
+            'school_id' => $major->school_id,
         ]);
         $registration = Registration::where('applicant_id', $siswa->applicant->id)->firstOrFail();
         // paksa jadi accepted agar lewat guard status
@@ -457,6 +462,7 @@ class FullRegistrationFlowTest extends TestCase
             'registration_period_id' => RegistrationPeriod::first()->id,
             'registration_track_id' => $reguler->id,
             'major_id' => $major->id,
+            'school_id' => $major->school_id,
         ]);
         $resp->assertRedirect(); // kembali dengan error kuota penuh (bukan buat registrasi)
         $this->assertNull(Registration::where('applicant_id', $siswa2->applicant->id)->first(), 'Reguler ke-2 diblokir (kuota penuh)');
@@ -467,6 +473,7 @@ class FullRegistrationFlowTest extends TestCase
             'registration_period_id' => RegistrationPeriod::first()->id,
             'registration_track_id' => $prestasi->id,
             'major_id' => $major->id,
+            'school_id' => $major->school_id,
         ])->assertRedirect();
         $this->assertNotNull(Registration::where('applicant_id', $siswa3->applicant->id)->first(), 'Prestasi tetap bisa (kuota terisolasi)');
     }
@@ -482,7 +489,7 @@ class FullRegistrationFlowTest extends TestCase
         // Kasus A: gratis (biaya 0) -> langsung DITERIMA, siswa TIDAK perlu bayar
         $siswaA = $this->createSiswa('gratis@spmb.test', 999020810);
         $this->actingAs($siswaA)->post('/registrations/confirm', [
-            'registration_period_id' => $period->id, 'registration_track_id' => $prestasi->id, 'major_id' => $major->id,
+            'registration_period_id' => $period->id, 'registration_track_id' => $prestasi->id, 'major_id' => $major->id, 'school_id' => $major->school_id,
         ])->assertRedirect();
         $regA = Registration::where('applicant_id', $siswaA->applicant->id)->firstOrFail();
         $this->uploadRequiredDocs($siswaA, $regA, 'Prestasi');
@@ -502,7 +509,7 @@ class FullRegistrationFlowTest extends TestCase
         // Kasus B: berbayar (350000) -> siswa TETAP harus bayar nominal tsb
         $siswaB = $this->createSiswa('bayar@spmb.test', 999020811);
         $this->actingAs($siswaB)->post('/registrations/confirm', [
-            'registration_period_id' => $period->id, 'registration_track_id' => $prestasi->id, 'major_id' => $major->id,
+            'registration_period_id' => $period->id, 'registration_track_id' => $prestasi->id, 'major_id' => $major->id, 'school_id' => $major->school_id,
         ])->assertRedirect();
         $regB = Registration::where('applicant_id', $siswaB->applicant->id)->firstOrFail();
         $this->uploadRequiredDocs($siswaB, $regB, 'Prestasi');

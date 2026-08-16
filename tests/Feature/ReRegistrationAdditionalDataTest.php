@@ -141,12 +141,14 @@ class ReRegistrationAdditionalDataTest extends TestCase
                 'registration_period_id' => $period->id,
                 'registration_track_id' => RegistrationTrack::first()->id,
                 'major_id' => $major->id,
+                'school_id' => $major->school_id,
             ])
             ->assertRedirect();
         $this->actingAs($siswa)->post('/registrations/confirm', [
             'registration_period_id' => $period->id,
             'registration_track_id' => RegistrationTrack::first()->id,
             'major_id' => $major->id,
+            'school_id' => $major->school_id,
         ]);
 
         $registration = Registration::where('applicant_id', $siswa->applicant->id)->firstOrFail();
@@ -261,6 +263,7 @@ class ReRegistrationAdditionalDataTest extends TestCase
                 'registration_period_id' => $period->id,
                 'registration_track_id' => RegistrationTrack::first()->id,
                 'major_id' => $major->id,
+                'school_id' => $major->school_id,
             ]);
         $registration = Registration::where('applicant_id', $siswa->applicant->id)->firstOrFail();
         $this->assertSame('pending', $registration->status);

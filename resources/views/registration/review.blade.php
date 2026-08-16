@@ -43,7 +43,7 @@
                                 <p><span class="font-medium">Jenjang:</span> {{ $period->schoolLevel->name }}</p>
                                 <p><span class="font-medium">Periode:</span> {{ $period->name }}</p>
                                 <p><span class="font-medium">Jalur:</span> {{ $track->name }}</p>
-                                <p><span class="font-medium">Sekolah:</span> {{ $major->school?->name }}</p>
+                                <p><span class="font-medium">Sekolah:</span> {{ $school->name ?? $major->school?->name }}</p>
                                 <p><span class="font-medium">Jurusan Pilihan:</span> {{ $major->name }}</p>
                                 <div class="mt-3 rounded border p-3 bg-amber-50 border-amber-200">
                                     <p class="text-sm font-medium text-amber-800">Biaya Pendaftaran</p>
@@ -64,6 +64,7 @@
                                 <input type="hidden" name="registration_period_id" value="{{ $validated['registration_period_id'] }}">
                                 <input type="hidden" name="registration_track_id" value="{{ $validated['registration_track_id'] }}">
                                 <input type="hidden" name="major_id" value="{{ $validated['major_id'] }}">
+                                <input type="hidden" name="school_id" value="{{ $validated['school_id'] }}">
                                 <button type="submit" class="bg-indigo-600 text-white px-6 py-2 rounded-md hover:bg-indigo-700">
                                     Konfirmasi & Daftar
                                 </button>
