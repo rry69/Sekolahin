@@ -4,7 +4,6 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ApplicantController;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\PaymentController;
-use App\Http\Controllers\ReRegistrationController;
 use App\Http\Controllers\XenditWebhookController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DocumentController;
@@ -12,10 +11,12 @@ use App\Http\Controllers\Admin\PaymentController as AdminPaymentController;
 use App\Http\Controllers\Admin\ReRegistrationController as AdminReRegistrationController;
 use App\Http\Controllers\Admin\RegistrationController as AdminRegistrationController;
 use App\Http\Controllers\Admin\AccountController as AdminAccountController;
+use App\Http\Controllers\Admin\ActivityLogController as AdminActivityLogController;
 use App\Http\Controllers\Admin\RekapController as AdminRekapController;
 use App\Http\Controllers\Admin\MajorController as AdminMajorController;
 use App\Http\Controllers\Admin\SchoolController as AdminSchoolController;
 use App\Http\Controllers\Admin\SettingController as AdminSettingController;
+use App\Http\Controllers\Admin\RegistrationPeriodController as AdminRegistrationPeriodController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/webhooks/xendit', [XenditWebhookController::class, 'handle'])->name('webhooks.xendit');
@@ -40,6 +41,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    // Invoice & detail pembayaran bisa dilihat pemilik maupun admin
+    Route::get('/payments/{payment}', [PaymentController::class, 'show'])->name('payments.show');
+    Route::get('/payments/{payment}/invoice', [PaymentController::class, 'invoice'])->name('payments.invoice');
+    Route::get('/payments/{payment}/invoice/view', [PaymentController::class, 'invoiceView'])->name('payments.invoice.view');
 });
 
 Route::middleware(['auth', 'role:Siswa'])->group(function () {
@@ -62,10 +68,6 @@ Route::middleware(['auth', 'role:Siswa'])->group(function () {
     Route::delete('/registrations/{registration}/documents/{document}', [RegistrationController::class, 'deleteDocument'])->name('registration.documents.delete');
     
     Route::post('/payments', [PaymentController::class, 'store'])->name('payments.store');
-    Route::get('/payments/{payment}', [PaymentController::class, 'show'])->name('payments.show');
-    
-    Route::get('/registrations/{registration}/re-registration', [ReRegistrationController::class, 'create'])->name('re-registration.create');
-    Route::post('/registrations/{registration}/re-registration', [ReRegistrationController::class, 'store'])->name('re-registration.store');
 });
 
 Route::middleware(['auth', 'role:Admin'])->prefix('admin')->name('admin.')->group(function () {
@@ -80,6 +82,7 @@ Route::middleware(['auth', 'role:Admin'])->prefix('admin')->name('admin.')->grou
     Route::post('/registrations/{registration}/verify', [AdminRegistrationController::class, 'verify'])->name('registrations.verify');
     Route::post('/registrations/{registration}/update-payment', [AdminRegistrationController::class, 'updatePayment'])->name('registrations.update-payment');
     Route::post('/registrations/{registration}/delete-account', [AdminRegistrationController::class, 'destroyAccount'])->name('registrations.delete-account');
+    Route::post('/registrations/{registration}/reset', [AdminRegistrationController::class, 'reset'])->name('registrations.reset');
     
     Route::get('/accounts', [AdminAccountController::class, 'index'])->name('accounts.index');
     Route::delete('/accounts/{user}', [AdminAccountController::class, 'destroy'])->name('accounts.destroy');
@@ -95,6 +98,13 @@ Route::middleware(['auth', 'role:Admin'])->prefix('admin')->name('admin.')->grou
     Route::get('/majors/{major}', [AdminMajorController::class, 'show'])->name('majors.show');
     Route::get('/majors/{major}/edit', [AdminMajorController::class, 'edit'])->name('majors.edit');
     Route::patch('/majors/{major}', [AdminMajorController::class, 'update'])->name('majors.update');
+
+    Route::get('/periods', [AdminRegistrationPeriodController::class, 'index'])->name('periods.index');
+    Route::get('/periods/create', [AdminRegistrationPeriodController::class, 'create'])->name('periods.create');
+    Route::post('/periods', [AdminRegistrationPeriodController::class, 'store'])->name('periods.store');
+    Route::get('/periods/{registrationPeriod}/edit', [AdminRegistrationPeriodController::class, 'edit'])->name('periods.edit');
+    Route::patch('/periods/{registrationPeriod}', [AdminRegistrationPeriodController::class, 'update'])->name('periods.update');
+    Route::delete('/periods/{registrationPeriod}', [AdminRegistrationPeriodController::class, 'destroy'])->name('periods.destroy');
     
     Route::get('/payments', [AdminPaymentController::class, 'index'])->name('payments.index');
     Route::post('/payments/{payment}/verify', [AdminPaymentController::class, 'verify'])->name('payments.verify');
@@ -102,11 +112,15 @@ Route::middleware(['auth', 'role:Admin'])->prefix('admin')->name('admin.')->grou
     Route::post('/payments/{payment}/reset', [AdminPaymentController::class, 'reset'])->name('payments.reset');
     
     Route::patch('/documents/{document}/verify', [DocumentController::class, 'verify'])->name('documents.verify');
+    Route::patch('/documents/{document}/unverify', [DocumentController::class, 'unverify'])->name('documents.unverify');
     Route::patch('/documents/{document}/reject', [DocumentController::class, 'reject'])->name('documents.reject');
     
+    Route::post('/re-registrations/verify-code', [AdminReRegistrationController::class, 'verifyByCode'])->name('re-registrations.verify-code');
     Route::get('/re-registrations', [AdminReRegistrationController::class, 'index'])->name('re-registrations.index');
     Route::get('/re-registrations/{reRegistration}', [AdminReRegistrationController::class, 'show'])->name('re-registrations.show');
     Route::post('/re-registrations/{reRegistration}/verify', [AdminReRegistrationController::class, 'verify'])->name('re-registrations.verify');
+
+    Route::get('/activity-logs', [AdminActivityLogController::class, 'index'])->name('activity-logs.index');
 });
 
 require __DIR__.'/auth.php';

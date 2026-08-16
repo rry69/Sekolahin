@@ -21,6 +21,14 @@
                         </div>
                     @endif
 
+                    <x-help-steps title="Panduan melengkapi profil" icon="fa-user-pen" :steps="[
+                        'Isi <strong>Nama, NISN (10 digit) dan NIK (16 digit)</strong> sesuai rapor/KK.',
+                        'Buka <strong>nisn.data.kemendikdasmen.go.id</strong>, cari NISN + nama ibu kandung, salin link hasil pencarian dan tempel di kolom <em>Link Hasil Pencarian NISN</em>, lalu klik <strong>Cek NISN &amp; NIK</strong>.',
+                        'Isi <strong>tanggal lahir</strong> — usia &amp; hint tahun lulus akan muncul otomatis (3–40 th).',
+                        'Lengkapi alamat (provinsi → desa), orang tua/wali, dan sekolah asal.',
+                        'Klik <strong>Lanjut ke Review</strong> → cek kembali → <strong>Konfirmasi &amp; Simpan</strong>.',
+                    ]" />
+
                     <form method="POST" action="{{ route('applicant.profile.update') }}">
                         @csrf
                         @method('PATCH')
@@ -83,9 +91,11 @@
                             </div>
 
                             <div>
-                                <label class="block text-sm font-medium text-gray-700">Tanggal Lahir *</label>
-                                <input type="date" name="birth_date" value="{{ old('birth_date', $applicant?->birth_date?->format('Y-m-d')) }}" required
-                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                <label for="birth_date" class="block text-sm font-medium text-gray-700">Tanggal Lahir *</label>
+                                <div class="mt-1">
+                                    <x-date-picker name="birth_date" id="birth_date" :value="$applicant?->birth_date?->format('Y-m-d')" :required="true" :max="date('Y-m-d')" label="Tanggal" placeholder="Pilih tanggal" />
+                                </div>
+                                <p id="age-hint" class="mt-1 text-xs text-gray-500"></p>
                                 @error('birth_date')<span class="text-red-500 text-sm">{{ $message }}</span>@enderror
                             </div>
 
@@ -212,8 +222,11 @@
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700">Tahun Lulus</label>
-                                    <input type="text" name="graduation_year" maxlength="4" value="{{ old('graduation_year', $applicant?->graduation_year) }}"
+                                    <input type="text" name="graduation_year" id="graduation_year" inputmode="numeric" maxlength="4" placeholder="Contoh: 2024" value="{{ old('graduation_year', $applicant?->graduation_year) }}"
                                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                    <p id="grad-hint" class="mt-1 text-xs"></p>
+                                    @error('graduation_year')<span class="text-red-500 text-sm">{{ $message }}</span>@enderror
+                                    <p class="text-xs text-gray-500">Diisi 4 digit (1990–{{ date('Y') }}). Divalidasi silang dengan tanggal lahir.</p>
                                 </div>
                             </div>
                         </div>
@@ -328,6 +341,47 @@
         const id = selectedId(e.target);
         if (id) loadVillages(id);
     });
+})();
+</script>
+
+<script>
+(function () {
+    const bd = document.getElementById('birth_date');
+    const gy = document.getElementById('graduation_year');
+    const ah = document.getElementById('age-hint');
+    const gh = document.getElementById('grad-hint');
+    function syncHints() {
+        const curY = new Date().getFullYear();
+        if (bd && bd.value && ah) {
+            const birth = new Date(bd.value);
+            if (!isNaN(birth)) {
+                const age = Math.floor((Date.now() - birth) / 31557600000);
+                ah.textContent = 'Usia sekarang: ' + age + ' tahun';
+                ah.className = 'mt-1 text-xs ' + (age < 3 ? 'text-red-600' : age > 40 ? 'text-amber-600' : 'text-gray-500');
+            }
+        } else if (ah) { ah.textContent = ''; }
+        if (bd && gy && gh) {
+            const gv = (gy.value || '').trim();
+            if (!gv) { gh.textContent = ''; gh.className = 'mt-1 text-xs'; return; }
+            if (!/^\d{4}$/.test(gv)) { gh.textContent = 'Tahun lulus harus 4 digit.'; gh.className='mt-1 text-xs text-amber-600'; return; }
+            const g = parseInt(gv,10);
+            if (g < 1990 || g > curY) { gh.textContent = 'Tahun lulus harus 1990–' + curY + '.'; gh.className='mt-1 text-xs text-red-600'; return; }
+            if (!bd.value) { gh.textContent = 'Isi tanggal lahir untuk cek konsistensi.'; gh.className='mt-1 text-xs text-gray-500'; return; }
+            const birth = new Date(bd.value);
+            if (isNaN(birth)) { gh.textContent=''; return; }
+            const by = birth.getFullYear();
+            const atGrad = g - by;
+            if (g < by) { gh.textContent='Tidak boleh sebelum tahun lahir ('+by+').'; gh.className='mt-1 text-xs text-red-600'; return; }
+            if (atGrad < 5) { gh.textContent='Usia saat lulus hanya ' + atGrad + ' tahun — periksa kembali.'; gh.className='mt-1 text-xs text-red-600'; return; }
+            if (atGrad > 30) { gh.textContent='Usia saat lulus ' + atGrad + ' tahun — tidak wajar, periksa kembali.'; gh.className='mt-1 text-xs text-amber-600'; return; }
+            gh.textContent='✓ Konsisten (usia saat lulus ±' + atGrad + ' tahun).'; gh.className='mt-1 text-xs text-green-600';
+        }
+    }
+    if (bd) bd.addEventListener('change', syncHints);
+    if (bd) bd.addEventListener('input', syncHints);
+    if (gy) gy.addEventListener('input', syncHints);
+    if (gy) gy.addEventListener('change', syncHints);
+    syncHints();
 })();
 </script>
 

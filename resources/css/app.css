@@ -1,0 +1,49 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Date Picker — exact replica of datepicker-compact.html */
+
+/* Force-disable native date UI on real <input type="date"> elements so the custom picker is the only visible surface */
+input.native-date-hidden,
+input[type='date'].native-date-hidden {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+}
+
+.dp-mono { font-family: 'JetBrains Mono', monospace; }
+.dp-picker { font-family: 'Inter', sans-serif; }
+
+@keyframes dp-pickerIn { from { opacity: 0; transform: translateY(-10px) scale(0.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
+@keyframes dp-pickerOut { from { opacity: 1; transform: translateY(0) scale(1); } to { opacity: 0; transform: translateY(-8px) scale(0.97); } }
+.dp-animate-in { animation: dp-pickerIn 180ms cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+.dp-animate-out { animation: dp-pickerOut 140ms ease-in forwards; }
+
+@keyframes dp-gridIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+.dp-grid-animate { animation: dp-gridIn 160ms ease-out; }
+
+@keyframes dp-headerIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+.dp-header-animate { animation: dp-headerIn 160ms ease-out; }
+
+@keyframes dp-popSelect { 0% { transform: scale(0.85); } 60% { transform: scale(1.06); } 100% { transform: scale(1); } }
+.dp-pop-select { animation: dp-popSelect 260ms cubic-bezier(0.34, 1.56, 0.64, 1); }
+
+.dp-chevron { transition: transform 220ms cubic-bezier(0.16, 1, 0.3, 1); }
+.dp-chevron-open { transform: rotate(180deg); }
+
+@media (prefers-reduced-motion: reduce) {
+    .dp-animate-in,
+    .dp-animate-out,
+    .dp-grid-animate,
+    .dp-header-animate,
+    .dp-pop-select {
+        animation: none !important;
+    }
+}

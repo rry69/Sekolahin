@@ -1,0 +1,184 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Registration extends Model
+{
+    protected $fillable = [
+        'applicant_id',
+        'registration_period_id',
+        'registration_track_id',
+        'school_id',
+        'major_id',
+        'final_major_id',
+        'registration_number',
+        'status',
+        'payment_status',
+        'payment_amount',
+        'documents_verified_at',
+        'verified_by',
+        'verified_notes',
+        'test_score',
+        'academic_score',
+        'achievement_score',
+        'total_score',
+        'ranking',
+        'notes',
+        'deadline_at',
+        'canceled_at',
+    ];
+
+    protected function casts(): array
+    {
+        return [
+            'documents_verified_at' => 'datetime',
+            'payment_amount' => 'decimal:2',
+            'test_score' => 'decimal:2',
+            'academic_score' => 'decimal:2',
+            'achievement_score' => 'decimal:2',
+            'total_score' => 'decimal:2',
+            'deadline_at' => 'datetime',
+            'canceled_at' => 'datetime',
+        ];
+    }
+
+    public function applicant()
+    {
+        return $this->belongsTo(Applicant::class);
+    }
+
+    public function registrationPeriod()
+    {
+        return $this->belongsTo(RegistrationPeriod::class);
+    }
+
+    public function registrationTrack()
+    {
+        return $this->belongsTo(RegistrationTrack::class);
+    }
+
+    public function school()
+    {
+        return $this->belongsTo(School::class);
+    }
+
+    public function major()
+    {
+        return $this->belongsTo(Major::class);
+    }
+
+    public function finalMajor()
+    {
+        return $this->belongsTo(Major::class, 'final_major_id');
+    }
+
+    public function verifiedBy()
+    {
+        return $this->belongsTo(User::class, 'verified_by');
+    }
+
+    public function documents()
+    {
+        return $this->hasMany(RegistrationDocument::class);
+    }
+
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
+    }
+
+    public function reRegistration()
+    {
+        return $this->hasOne(ReRegistration::class);
+    }
+
+    public function isDeadlineExpired(): bool
+    {
+        return $this->deadline_at && now()->gt($this->deadline_at);
+    }
+
+    public function isCanceled(): bool
+    {
+        return $this->status === 'canceled';
+    }
+
+    public function getDeadlineHoursRemaining(): ?int
+    {
+        if (!$this->deadline_at) {
+            return null;
+        }
+
+        $diff = now()->diffInHours($this->deadline_at);
+
+        return $diff > 0 ? $diff : 0;
+    }
+
+    public function getDeadlineLabel(): string
+    {
+        if (!$this->deadline_at) {
+            return '-';
+        }
+
+        $hours = $this->getDeadlineHoursRemaining();
+
+        if ($hours === null) {
+            return '-';
+        }
+
+        if ($hours > 24) {
+            $days = floor($hours / 24);
+            return $days . ' hari';
+        }
+
+        return $hours . ' jam';
+    }
+
+    public function scopeActive($query)
+    {
+        return $query->whereNotIn('status', ['canceled', 'accepted', 're_registration_complete']);
+    }
+
+    /**
+     * Jenis dokumen wajib sesuai jenjang & jalur (revisi.md).
+     */
+    public function requiredDocumentTypes(): array
+    {
+        $required = ['foto', 'kartu_keluarga', 'akta_lahir', 'rapor'];
+
+        $levelName = $this->registrationPeriod?->schoolLevel?->name ?? '';
+        if ($levelName === 'SMK') {
+            $required[] = 'ijazah_skl';
+        }
+
+        $trackName = $this->registrationTrack?->name ?? '';
+        if (strtolower($trackName) === 'prestasi') {
+            $required[] = 'sertifikat_prestasi';
+        } elseif (strtolower($trackName) === 'beasiswa') {
+            $required[] = 'surat_keterangan_tidak_mampu';
+        }
+
+        return $required;
+    }
+
+    /**
+     * Semua dokumen wajib sudah diupload DAN diverifikasi panitia?
+     */
+    public function hasAllDocumentsVerified(): bool
+    {
+        $required = $this->requiredDocumentTypes();
+        if (empty($required)) {
+            return false;
+        }
+
+        $verifiedTypes = $this->documents()
+            ->whereIn('document_type', $required)
+            ->whereNotNull('verified_at')
+            ->distinct()
+            ->pluck('document_type')
+            ->all();
+
+        return count(array_diff($required, $verifiedTypes)) === 0;
+    }
+}

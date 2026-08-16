@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Applicant;
+use App\Services\ActivityLogger;
 use App\Services\NisnVerificationService;
 use Illuminate\Http\Request;
 
@@ -17,11 +18,21 @@ class ApplicantController extends Controller
             'nisn_link.required' => 'Link hasil pencarian NISN wajib diisi.',
             'nisn_link.url' => 'Link hasil pencarian NISN tidak valid.',
             'nisn_link.regex' => 'Link harus berisi id hasil pencarian NISN (https://nisn.data.kemendikdasmen.go.id/search-result?id=...).',
+            'birth_date.required' => 'Tanggal lahir wajib diisi.',
+            'birth_date.date' => 'Tanggal lahir tidak valid.',
+            'birth_date.before' => 'Tanggal lahir harus sebelum hari ini.',
+            'birth_date.after' => 'Tanggal lahir tidak wajar.',
+            'graduation_year.digits' => 'Tahun lulus harus 4 digit.',
+            'graduation_year.integer' => 'Tahun lulus harus berupa angka.',
+            'graduation_year.min' => 'Tahun lulus minimal 1990.',
+            'graduation_year.max' => 'Tahun lulus tidak boleh melebihi tahun sekarang.',
         ];
     }
 
     protected function rules(): array
     {
+        $currentYear = (int) date('Y');
+
         return [
             'full_name' => 'required|string|max:255',
             'nik' => ['required', 'string', 'unique:applicants,nik,' . (auth()->user()->applicant?->id ?? 'NULL')],
@@ -32,7 +43,7 @@ class ApplicantController extends Controller
                 'regex:/^https:\/\/nisn\.data\.kemendikdasmen\.go\.id\/search-result\?id=[0-9a-fA-Fx]+/',
             ],
             'birth_place' => 'required|string|max:255',
-            'birth_date' => 'required|date',
+            'birth_date' => ['required', 'date', 'before:today', 'after:1950-01-01'],
             'gender' => 'required|in:L,P',
             'religion' => 'required|string|max:50',
             'address' => 'required|string',
@@ -51,8 +62,64 @@ class ApplicantController extends Controller
             'parent_name' => 'nullable|string|max:255',
             'parent_phone' => 'nullable|string|max:20',
             'previous_school' => 'required|string|max:255',
-            'graduation_year' => 'nullable|string|max:4',
+            'graduation_year' => ['nullable', 'digits:4', 'integer', 'min:1990', 'max:' . $currentYear],
         ];
+    }
+
+    /**
+     * Validasi silang: usia saat lulus harus 5..30 tahun dan tidak sebelum tahun lahir.
+     * Juga usia sekarang 3..40 tahun. Melempar ValidationException bila tidak konsisten.
+     */
+    protected function assertBirthGraduationConsistent(array $data): void
+    {
+        $birthRaw = $data['birth_date'] ?? null;
+        $gradRaw = $data['graduation_year'] ?? null;
+
+        if (blank($birthRaw)) {
+            return;
+        }
+
+        try {
+            $birth = \Carbon\Carbon::parse($birthRaw);
+        } catch (\Exception $e) {
+            return;
+        }
+
+        $ageNow = $birth->diffInYears(now());
+        if ($ageNow < 3) {
+            throw \Illuminate\Validation\ValidationException::withMessages([
+                'birth_date' => 'Usia minimal pendaftar adalah 3 tahun (usia sekarang ' . $ageNow . ' tahun).',
+            ]);
+        }
+        if ($ageNow > 40) {
+            throw \Illuminate\Validation\ValidationException::withMessages([
+                'birth_date' => 'Tanggal lahir tidak wajar (usia ' . $ageNow . ' tahun). Periksa kembali.',
+            ]);
+        }
+
+        if (blank($gradRaw)) {
+            return;
+        }
+
+        $grad = (int) $gradRaw;
+        $birthYear = (int) $birth->format('Y');
+        $ageAtGrad = $grad - $birthYear;
+
+        if ($grad < $birthYear) {
+            throw \Illuminate\Validation\ValidationException::withMessages([
+                'graduation_year' => 'Tahun lulus tidak boleh sebelum tahun lahir (' . $birthYear . ').',
+            ]);
+        }
+        if ($ageAtGrad < 5) {
+            throw \Illuminate\Validation\ValidationException::withMessages([
+                'graduation_year' => 'Tahun lulus tidak konsisten dengan tanggal lahir. Usia saat lulus hanya ' . $ageAtGrad . ' tahun (minimal 5 tahun).',
+            ]);
+        }
+        if ($ageAtGrad > 30) {
+            throw \Illuminate\Validation\ValidationException::withMessages([
+                'graduation_year' => 'Tahun lulus tidak konsisten dengan tanggal lahir. Usia saat lulus ' . $ageAtGrad . ' tahun tidak wajar (maksimal 30 tahun).',
+            ]);
+        }
     }
 
     public function edit()
@@ -93,6 +160,7 @@ class ApplicantController extends Controller
     public function update(Request $request)
     {
         $validated = $request->validate($this->rules(), $this->messages());
+        $this->assertBirthGraduationConsistent($validated);
 
         $verification = NisnVerificationService::verify($validated['nisn_link'], $validated['nisn']);
 
@@ -131,6 +199,7 @@ class ApplicantController extends Controller
         }
 
         $validated = validator($data, $this->rules(), $this->messages())->validate();
+        $this->assertBirthGraduationConsistent($validated);
 
         // Kembalikan field verifikasi NISN (tidak ada di rules tapi disimpan dari update())
         $verificationFields = ['nisn_verification_status', 'nisn_verified_at', 'nisn_verified_name', 'nisn_link'];
@@ -141,10 +210,15 @@ class ApplicantController extends Controller
         if ($applicant) {
             $applicant->update($validated);
         } else {
-            Applicant::create(array_merge($validated, [
+            $applicant = Applicant::create(array_merge($validated, [
                 'user_id' => auth()->id(),
             ]));
         }
+
+        ActivityLogger::log('applicant.profile_update', 'Profil diperbarui: ' . $validated['full_name'], $applicant, [
+            'full_name' => $validated['full_name'],
+            'nisn' => $validated['nisn'] ?? null,
+        ]);
 
         return redirect()->route('dashboard')->with('success', 'Profil berhasil diperbarui');
     }

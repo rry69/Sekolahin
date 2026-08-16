@@ -99,7 +99,10 @@
           <span class="status-badge status-{{ $pm[$reg->payment_status] ?? 'pending' }}">{{ ucfirst($reg->payment_status) }}</span>
         </td>
         <td>
-          <a href="{{ route('admin.registrations.show', $reg) }}" class="btn btn-outline" style="padding:4px 10px;font-size:11px;text-decoration:none;">Detail</a>
+          <div style="display:flex;gap:6px;flex-wrap:wrap">
+            <a href="{{ route('admin.registrations.show', $reg) }}" class="btn btn-outline" style="padding:4px 10px;font-size:11px;text-decoration:none;">Detail</a>
+            <button type="button" onclick="openResetModal({{ $reg->id }}, '{{ addslashes($reg->registration_number) }}', '{{ addslashes($reg->applicant->full_name ?? '-') }}')" class="btn" style="padding:4px 10px;font-size:11px;background:#d97706;color:#fff;border:none;">Reset</button>
+          </div>
         </td>
       </tr>
       @endforeach
@@ -109,4 +112,5 @@
   <div style="margin-top:16px;">
     {{ $registrations->appends(request()->query())->links() }}
   </div>
+
 @endif

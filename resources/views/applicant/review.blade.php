@@ -15,6 +15,12 @@
 
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
+                    <x-help-steps title="Cek sebelum simpan" icon="fa-clipboard-check" :steps="[
+                        'Periksa Nama, NISN/NIK, tempat &amp; tanggal lahir, dan kontak.',
+                        'Pastikan status NISN ✓ Terverifikasi (atau Menunggu jika server sedang gangguan).',
+                        'Jika ada yang salah, klik <strong>Kembali</strong> untuk memperbaiki.',
+                        'Jika sudah yakin, klik <strong>Konfirmasi &amp; Simpan</strong>.',
+                    ]" />
                     <h3 class="text-lg font-semibold mb-4">Periksa kembali data diri Anda sebelum menyimpan.</h3>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
@@ -70,7 +76,12 @@
                             <h4 class="text-sm font-medium text-gray-500 uppercase mb-2">Pendidikan</h4>
                             <div class="space-y-2">
                                 <p><span class="font-medium">Sekolah Asal:</span> {{ $data['previous_school'] }}</p>
-                                <p><span class="font-medium">Tahun Lulus:</span> {{ $data['graduation_year'] ?? '-' }}</p>
+                                <p><span class="font-medium">Tahun Lulus:</span> {{ $data['graduation_year'] ?? '-' }}
+                                    @if(!empty($data['birth_date']) && !empty($data['graduation_year']))
+                                        @php $by=(int)\Carbon\Carbon::parse($data['birth_date'])->format('Y'); $ag=(int)$data['graduation_year']-$by; @endphp
+                                        <span class="text-xs {{ $ag<5||$ag>30?'text-red-600':'text-green-600' }}">(usia saat lulus ±{{ $ag }} th)</span>
+                                    @endif
+                                </p>
                             </div>
                         </div>
                     </div>
