@@ -346,7 +346,10 @@
             ->where('payment_method', '!=', 'online')
             ->exists();
         $trackNameForPay = $registration->registrationTrack->name ?? '';
-        $payLocked = $registration->status !== 'verified' || $registration->payment_amount === null;
+        $hasPaidPayment = $registration->payments()
+            ->whereIn('status', ['verified', 'paid'])
+            ->exists();
+        $payLocked = ($registration->status !== 'verified' || $registration->payment_amount === null) && !$hasPaidPayment;
     @endphp
     @if($payLocked)
         <div class="mb-6">

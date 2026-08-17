@@ -383,7 +383,7 @@ class FullRegistrationFlowTest extends TestCase
         $this->assertSame('pending', $registration->status);
     }
 
-    public function test_daftar_ulang_jendela_tutup_diblokir(): void
+    public function test_kartu_masih_bisa_diunduh_saat_jendela_daftar_ulang_tutup(): void
     {
         ['admin' => $admin, 'period' => $period] = $this->seedBase();
         // tutup jendela daftar ulang jenjang pendaftaran (end di masa lalu)
@@ -402,11 +402,12 @@ class FullRegistrationFlowTest extends TestCase
         // paksa jadi accepted agar lewat guard status
         $registration->update(['status' => 'accepted']);
 
+        // Kartu tetap bisa diunduh meskipun periode daftar ulang sudah berakhir.
         $this->actingAs($siswa)
             ->get('/registrations/' . $registration->id . '/proof')
-            ->assertSessionHas('error')
-            ->assertRedirect();
-        $this->assertNull($registration->refresh()->reRegistration);
+            ->assertOk()
+            ->assertHeader('content-type', 'application/pdf');
+        $this->assertNotNull($registration->refresh()->reRegistration, 'stub re-registration dibuat saat kartu diunduh');
     }
 
     public function test_jadwal_daftar_ulang_ditolak_saat_periode_pendaftaran_aktif(): void

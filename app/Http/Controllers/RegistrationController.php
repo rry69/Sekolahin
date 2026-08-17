@@ -596,23 +596,9 @@ class RegistrationController extends Controller
             return back()->with('error', 'Bukti daftar ulang hanya tersedia setelah siswa diterima');
         }
 
-        // Kartu hanya bisa diunduh selama jendela daftar ulang jenjang pendaftaran ini terbuka.
-        $levelId = $registration->registrationPeriod?->school_level_id
-            ?? $registration->registration_period_id;
-        if ($registration->relationLoaded('registrationPeriod') || $registration->registrationPeriod) {
-            $levelId = $registration->registrationPeriod->school_level_id;
-        } else {
-            $levelId = \App\Models\RegistrationPeriod::whereKey($registration->registration_period_id)->value('school_level_id');
-        }
-        $start = $levelId ? \App\Models\Setting::reRegistrationStartForLevel((int) $levelId) : null;
-        $end = $levelId ? \App\Models\Setting::reRegistrationEndForLevel((int) $levelId) : null;
-        $today = now()->toDateString();
-        if ($start && $today < $start) {
-            return back()->with('error', 'Periode daftar ulang belum dibuka');
-        }
-        if ($end && $today > $end) {
-            return back()->with('error', 'Periode daftar ulang sudah berakhir');
-        }
+        // Kartu daftar ulang bisa diunduh kapan saja setelah siswa diterima,
+        // tanpa bergantung pada jendela periode daftar ulang. Validasi periode
+        // tetap berlaku untuk proses daftar ulang itu sendiri.
 
         $registration->load([
             'registrationPeriod.schoolLevel',
