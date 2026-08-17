@@ -90,7 +90,7 @@
       <span class="flabel theme-label">{{ app()->getLocale() === 'id' ? 'Mode Terang/Gelap' : 'Light/Dark Mode' }}</span>
     </button>
 
-    <a href="{{ route('profile.edit') }}" class="mi" data-action="select" data-label="Pengaturan Profil" data-tip="Pengaturan Profil">
+    <a href="{{ route('profile.edit') }}" class="mi {{ request()->routeIs('profile.*') ? 'active' : '' }}" data-menu-item data-action="select" data-label="Pengaturan Profil" data-tip="Pengaturan Profil">
       <span class="ic">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
           <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>

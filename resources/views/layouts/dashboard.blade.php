@@ -1058,8 +1058,14 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function updateSidebar(url) {
-    document.querySelectorAll('.sb-nav .mi, .sb-nav .si').forEach(function (item) { item.classList.remove('active'); });
+    document.querySelectorAll('.sb-nav .mi, .sb-nav .si, .sb-foot [data-menu-item]').forEach(function (item) { item.classList.remove('active'); });
     document.querySelectorAll('.sb-nav .section').forEach(function (s) { s.classList.remove('open'); });
+    // Profile (di luar /admin) — aktifkan item footer profile.
+    if (url.indexOf('/profile') !== -1) {
+      var prof = document.querySelector('.sb-foot [data-menu-item][href*="/profile"]');
+      if (prof) prof.classList.add('active');
+      return;
+    }
     var m = url.match(/\/admin\/([a-z-]+)/);
     if (!m) return;
     var seg = m[1];
