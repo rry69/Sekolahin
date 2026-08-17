@@ -18,11 +18,13 @@
 @endif
 
 <div class="doc-tabs">
-  <a href="{{ route('admin.registrations.index') }}" class="doc-tab {{ !request('status') && !request('payment_status') ? 'active' : '' }}">Semua</a>
+  <a href="{{ route('admin.registrations.index') }}" class="doc-tab {{ !request('status') && !request('payment_status') && !request('deadline') ? 'active' : '' }}">Semua</a>
   <a href="{{ route('admin.registrations.index', ['status' => 'pending']) }}" class="doc-tab {{ request('status') == 'pending' ? 'active' : '' }}">Pending</a>
   <a href="{{ route('admin.registrations.index', ['status' => 'verified']) }}" class="doc-tab {{ request('status') == 'verified' ? 'active' : '' }}">Terverifikasi</a>
   <a href="{{ route('admin.registrations.index', ['status' => 'accepted']) }}" class="doc-tab {{ request('status') == 'accepted' ? 'active' : '' }}">Diterima</a>
   <a href="{{ route('admin.registrations.index', ['status' => 'rejected']) }}" class="doc-tab {{ request('status') == 'rejected' ? 'active' : '' }}">Ditolak</a>
+  <a href="{{ route('admin.registrations.index', ['status' => 're_registration_complete']) }}" class="doc-tab {{ request('status') == 're_registration_complete' ? 'active' : '' }}">Daftar Ulang</a>
+  <a href="{{ route('admin.registrations.index', ['deadline' => 1]) }}" class="doc-tab {{ request('deadline') ? 'active' : '' }}">Deadline</a>
   <div class="doc-actions">
     <button class="doc-action-btn" onclick="toggleFilterForm()"><i class="fa-solid fa-filter" style="font-size:10px"></i> Filter</button>
   </div>
@@ -38,6 +40,7 @@
         <option value="verified" {{ request('status') == 'verified' ? 'selected' : '' }}>Terverifikasi</option>
         <option value="rejected" {{ request('status') == 'rejected' ? 'selected' : '' }}>Ditolak</option>
         <option value="accepted" {{ request('status') == 'accepted' ? 'selected' : '' }}>Diterima</option>
+        <option value="re_registration_complete" {{ request('status') == 're_registration_complete' ? 'selected' : '' }}>Daftar Ulang Selesai</option>
       </select>
     </div>
     <div>
@@ -48,6 +51,13 @@
         <option value="pending" {{ request('payment_status') == 'pending' ? 'selected' : '' }}>Menunggu Konfirmasi</option>
         <option value="paid" {{ request('payment_status') == 'paid' ? 'selected' : '' }}>Lunas</option>
         <option value="failed" {{ request('payment_status') == 'failed' ? 'selected' : '' }}>Gagal</option>
+      </select>
+    </div>
+    <div>
+      <label style="display:block;font-size:11px;color:var(--tx3);margin-bottom:4px;">Deadline</label>
+      <select name="deadline" style="padding:6px 12px;border:1px solid var(--input-border);border-radius:6px;font-size:13px;background:var(--input-bg);color:var(--tx-body);">
+        <option value="">Semua</option>
+        <option value="1" {{ request('deadline') == '1' ? 'selected' : '' }}>Ada Batas Waktu</option>
       </select>
     </div>
     <button type="submit" class="btn btn-primary">Filter</button>

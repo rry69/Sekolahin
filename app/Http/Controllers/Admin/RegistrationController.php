@@ -29,7 +29,17 @@ class RegistrationController extends Controller
         ]);
 
         if ($request->filled('status')) {
-            $query->where('status', $request->status);
+            $status = $request->status;
+            // "Diterima" mencakup yang sudah daftar ulang (re_registration_complete adalah subset diterima)
+            if ($status === 'accepted') {
+                $query->whereIn('status', ['accepted', 're_registration_complete']);
+            } else {
+                $query->where('status', $status);
+            }
+        }
+
+        if ($request->filled('payment_status')) {
+            $query->where('payment_status', $request->payment_status);
         }
 
         if ($request->filled('period_id')) {
@@ -46,6 +56,10 @@ class RegistrationController extends Controller
 
         if ($request->filled('school_id')) {
             $query->where('school_id', $request->school_id);
+        }
+
+        if ($request->filled('deadline')) {
+            $query->whereNotNull('deadline_at');
         }
 
         if ($request->filled('search')) {

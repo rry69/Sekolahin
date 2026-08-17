@@ -15,29 +15,33 @@
 </div>
 
 <div class="summary-cards">
-  <div class="summary-card">
+  <a class="summary-card" href="{{ route('admin.registrations.index') }}">
     <div class="label"><i class="fa-regular fa-file-alt"></i> Total Pendaftaran</div>
     <div class="value">{{ $stats['total'] }}</div>
-  </div>
-  <div class="summary-card">
+  </a>
+  <a class="summary-card" href="{{ route('admin.registrations.index', ['status' => 'pending']) }}">
     <div class="label"><i class="fa-regular fa-clock"></i> Menunggu Verifikasi</div>
     <div class="value">{{ $stats['pending'] }}</div>
-  </div>
-  <div class="summary-card">
+  </a>
+  <a class="summary-card" href="{{ route('admin.registrations.index', ['status' => 'accepted']) }}">
     <div class="label"><i class="fa-solid fa-check"></i> Diterima</div>
-    <div class="value">{{ $stats['accepted'] }} @if(($stats['registered'] ?? 0) > 0)<small style="display:block;font-size:11px;color:var(--tx3);margin-top:2px;">termasuk {{ $stats['registered'] }} terdaftar</small>@endif</div>
-  </div>
-  <div class="summary-card">
+    <div class="value">{{ $stats['accepted'] }}</div>
+  </a>
+  <a class="summary-card" href="{{ route('admin.payments.index', ['status' => 'verified']) }}">
     <div class="label"><i class="fa-solid fa-money-bill"></i> Pembayaran Lunas</div>
     <div class="value">{{ $stats['payment_paid'] }}</div>
-  </div>
-  <div class="summary-card">
+  </a>
+  <a class="summary-card" href="{{ route('admin.registrations.index', ['status' => 're_registration_complete']) }}">
+    <div class="label"><i class="fa-solid fa-user-check"></i> Daftar Ulang</div>
+    <div class="value">{{ $stats['registered'] }}</div>
+  </a>
+  <a class="summary-card" href="{{ route('admin.registrations.index', ['deadline' => 1]) }}">
     <div class="label"><i class="fa-solid fa-triangle-exclamation"></i> Deadline</div>
     <div class="value">
       {{ $deadlineTotal }}
       <small>dengan batas waktu</small>
     </div>
-  </div>
+  </a>
 </div>
 
 @if ($expiredRegistrations->isNotEmpty() || $nearDeadlineRegistrations->isNotEmpty() || $upcomingDeadlineRegistrations->isNotEmpty())
@@ -122,7 +126,18 @@
         <div class="doc-meta">{{ $reg->registration_number }} <span>&middot;</span> {{ $reg->registrationPeriod->schoolLevel->name ?? '-' }} <span>&middot;</span> {{ $reg->created_at->format('d M Y') }}</div>
       </div>
       <div class="doc-status">
-        <span class="status-badge status-{{ $reg->status }}">{{ ucfirst($reg->status) }}</span>
+        @php
+          $smap = [
+            'pending' => ['label' => 'Menunggu Verifikasi', 'cls' => 'status-pending'],
+            'verified' => ['label' => 'Terverifikasi', 'cls' => 'status-verified'],
+            'rejected' => ['label' => 'Ditolak', 'cls' => 'status-rejected'],
+            'accepted' => ['label' => 'Diterima', 'cls' => 'status-accepted'],
+            're_registration_complete' => ['label' => 'Daftar Ulang Selesai', 'cls' => 'status-accepted'],
+            'canceled' => ['label' => 'Dibatalkan', 'cls' => 'status-rejected'],
+          ];
+          $s = $smap[$reg->status] ?? ['label' => ucfirst(str_replace('_',' ',$reg->status)), 'cls' => 'status-pending'];
+        @endphp
+        <span class="status-badge {{ $s['cls'] }}">{{ $s['label'] }}</span>
       </div>
     </div>
     @endforeach

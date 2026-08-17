@@ -435,7 +435,8 @@
   .tab .tab-badge { background: var(--tx1); color: var(--page); font-size: 10px; border-radius: 10px; padding: 1px 6px; margin-left: 4px; }
 
   .summary-cards { display: flex; gap: 16px; margin-bottom: 20px; flex-wrap: wrap; }
-  .summary-card { flex: 1; min-width: 180px; background: var(--panel-2); border: 1px solid var(--border); border-radius: 10px; padding: 16px; }
+  .summary-card { flex: 1; min-width: 180px; background: var(--panel-2); border: 1px solid var(--border); border-radius: 10px; padding: 16px; color: inherit; text-decoration: none; transition: border-color .15s, transform .15s; }
+  a.summary-card:hover { border-color: var(--accent, var(--tx3)); transform: translateY(-2px); }
   .summary-card .label { font-size: 12px; color: var(--tx3); display: flex; align-items: center; gap: 4px; margin-bottom: 6px; }
   .summary-card .label i { font-size: 11px; }
   .summary-card .value { font-size: 30px; font-weight: 700; color: var(--tx1); }
@@ -912,7 +913,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // ================= CONTENT AREA DELEGATION =================
   contentArea.addEventListener('click', function (e) {
-    var tab = e.target.closest('a.tab, a.doc-tab, a.go-to-deals');
+    var tab = e.target.closest('a.tab, a.doc-tab, a.go-to-deals, a.summary-card');
     if (tab) {
       e.preventDefault();
       loadContent(tab.getAttribute('href'));
