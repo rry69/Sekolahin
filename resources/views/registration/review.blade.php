@@ -45,10 +45,6 @@
                                 <p><span class="font-medium">Jalur:</span> {{ $track->name }}</p>
                                 <p><span class="font-medium">Sekolah:</span> {{ $school->name ?? $major->school?->name }}</p>
                                 <p><span class="font-medium">Jurusan Pilihan:</span> {{ $major->name }}</p>
-                                <div class="mt-3 rounded border p-3 bg-amber-50 border-amber-200">
-                                    <p class="text-sm font-medium text-amber-800">Biaya Pendaftaran</p>
-                                    <p class="text-sm text-amber-700">Belum ditentukan — lengkapi biodata, pendaftaran & berkas dulu. Setelah Terverifikasi, sistem tampilkan nominal (Reguler Rp 500.000; Prestasi/Beasiswa bisa potongan/gratis).</p>
-                                </div>
                             </div>
                         </div>
                     </div>

@@ -199,7 +199,7 @@
                         @endphp
                         @if(!$docsVerified)
                             <div id="docVerifyLock" class="mb-3 bg-amber-50 border border-amber-200 rounded p-3 text-sm text-amber-800">
-                                ⚠ Verifikasi pendaftaran terkunci sampai <span class="font-semibold">semua dokumen wajib</span> diverifikasi ({{ count($requiredDocs) }} jenis: {{ implode(', ', $requiredDocs) }}). Dokumen diverifikasi satu per satu di bagian Verifikasi Dokumen di atas.
+                                ⚠ Verifikasi pendaftaran terkunci sampai <span class="font-semibold">semua dokumen wajib</span> diverifikasi. Dokumen diverifikasi satu per satu di bagian Verifikasi Dokumen di atas.
                             </div>
                         @else
                             <div id="docVerifyLock" class="hidden mb-3 bg-amber-50 border border-amber-200 rounded p-3 text-sm text-amber-800">⚠ Verifikasi pendaftaran terkunci sampai semua dokumen wajib diverifikasi.</div>

@@ -113,7 +113,7 @@
                                     'foto', 'kartu_keluarga', 'akta_lahir', 'rapor',
                                 ];
                                 $trackName = $registration->registrationTrack->name ?? '';
-                                if ($registration->registrationPeriod->schoolLevel->name === 'SMK') {
+                                if (in_array($registration->registrationPeriod->schoolLevel->name, ['SMA', 'SMK'])) {
                                     $requiredDocs[] = 'ijazah_skl';
                                 }
                                 if ($trackName === 'Prestasi') {
@@ -248,7 +248,7 @@
                                 ];
 
                                 $trackName = $registration->registrationTrack->name ?? '';
-                                $isSMK = $registration->registrationPeriod->schoolLevel->name === 'SMK';
+                                $isSMK = in_array($registration->registrationPeriod->schoolLevel->name, ['SMA', 'SMK']);
 
                                 if ($isSMK) {
                                     $documentTypes['ijazah_skl'] = 'Ijazah / SKL';
@@ -353,7 +353,7 @@
             <h4 class="text-sm font-medium text-gray-500 uppercase mb-2">Pembayaran</h4>
             <div class="bg-amber-50 border border-amber-200 rounded-lg p-4">
                 <p class="text-sm font-medium text-amber-800">Pembayaran jalur {{ $trackNameForPay }} belum tersedia</p>
-                <p class="text-sm text-amber-700 mt-1">Lengkapi berkas lalu tunggu panitia memverifikasi. Setelah status berkas <span class="font-semibold">Terverifikasi</span>, nominal biaya akan muncul di sini (Reguler Rp 500.000; Prestasi/Beasiswa bisa potongan/gratis sesuai penilaian).</p>
+                <p class="text-sm text-amber-700 mt-1">Lengkapi berkas lalu tunggu panitia memverifikasi. Setelah status berkas <span class="font-semibold">Terverifikasi</span>, nominal biaya akan muncul di sini.</p>
             </div>
         </div>
     @elseif(in_array($registration->payment_status, ['unpaid', 'failed', 'pending']) && !$hasPendingPayment)

@@ -148,7 +148,7 @@ class Registration extends Model
         $required = ['foto', 'kartu_keluarga', 'akta_lahir', 'rapor'];
 
         $levelName = $this->registrationPeriod?->schoolLevel?->name ?? '';
-        if ($levelName === 'SMK') {
+        if (in_array($levelName, ['SMA', 'SMK'])) {
             $required[] = 'ijazah_skl';
         }
 
