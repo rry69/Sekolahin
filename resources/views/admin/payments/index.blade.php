@@ -4,13 +4,13 @@
 <div class="py-12">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         @if (session('success'))
-            <div class="mb-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded">
+            <div class="alert alert-success">
                 {{ session('success') }}
             </div>
         @endif
 
         @if (session('error'))
-            <div class="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+            <div class="alert alert-error">
                 {{ session('error') }}
             </div>
         @endif
@@ -114,14 +114,19 @@
     </div>
 </div>
 
-<div id="rejectModal" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.4);z-index:1000;align-items:center;justify-content:center;">
-    <div style="background:#fff;padding:24px;border-radius:10px;width:400px;max-width:90%;">
-        <h3 style="font-size:16px;font-weight:600;margin-bottom:16px;">Tolak Pembayaran</h3>
+<div id="rejectModal" class="modal-overlay" style="display:none;">
+    <div class="modal-card">
+        <div class="modal-head">
+            <div class="modal-icon modal-icon-amber">!</div>
+            <div style="flex:1;">
+                <h3 class="modal-title">Tolak Pembayaran</h3>
+            </div>
+        </div>
         <form id="rejectForm" method="POST">
             @csrf
             <div style="margin-bottom:16px;">
-                <label style="display:block;font-size:12px;font-weight:500;margin-bottom:6px;">Alasan Penolakan</label>
-                <textarea name="rejection_reason" rows="4" style="width:100%;padding:8px 12px;border:1px solid #e0e0e0;border-radius:6px;font-size:13px;font-family:inherit;" required></textarea>
+                <label style="display:block;font-size:12px;font-weight:500;margin-bottom:6px;color:var(--tx2);">Alasan Penolakan</label>
+                <textarea name="rejection_reason" rows="4" style="width:100%;padding:8px 12px;border:1px solid var(--input-border);border-radius:6px;font-size:13px;font-family:inherit;background:var(--input-bg);color:var(--tx-body);" required></textarea>
             </div>
             <div style="display:flex;gap:8px;justify-content:flex-end;">
                 <button type="button" onclick="hideRejectModal()" class="btn btn-outline">Batal</button>

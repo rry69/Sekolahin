@@ -25,7 +25,7 @@
   </div>
   <div class="summary-card">
     <div class="label"><i class="fa-solid fa-check"></i> Diterima</div>
-    <div class="value">{{ $stats['accepted'] }} @if(($stats['registered'] ?? 0) > 0)<small style="display:block;font-size:11px;color:#6b7280;margin-top:2px;">termasuk {{ $stats['registered'] }} terdaftar</small>@endif</div>
+    <div class="value">{{ $stats['accepted'] }} @if(($stats['registered'] ?? 0) > 0)<small style="display:block;font-size:11px;color:var(--tx3);margin-top:2px;">termasuk {{ $stats['registered'] }} terdaftar</small>@endif</div>
   </div>
   <div class="summary-card">
     <div class="label"><i class="fa-solid fa-money-bill"></i> Pembayaran Lunas</div>
@@ -83,23 +83,23 @@
 <div class="section-header" style="margin-top:24px;">
   <h3><i class="fa-solid fa-qrcode"></i> Verifikasi Kode Daftar Ulang (Offline)</h3>
 </div>
-<div style="background:#fff;border:1px solid #e8e8e8;border-radius:10px;padding:16px;margin-bottom:24px;">
+<div style="background:var(--card-bg);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:24px;">
   @if (session('success'))
-    <div style="background:#dcfce7;border:1px solid #86efac;color:#16a34a;padding:8px 12px;border-radius:6px;margin-bottom:12px;font-size:13px;">{{ session('success') }}</div>
+    <div class="alert alert-success" style="margin-bottom:12px;">{{ session('success') }}</div>
   @endif
   @if (session('error'))
-    <div style="background:#fee2e2;border:1px solid #fecaca;color:#dc2626;padding:8px 12px;border-radius:6px;margin-bottom:12px;font-size:13px;">{{ session('error') }}</div>
+    <div class="alert alert-error" style="margin-bottom:12px;">{{ session('error') }}</div>
   @endif
   @if (session('info'))
-    <div style="background:#dbeafe;border:1px solid #93c5fd;color:#1d4ed8;padding:8px 12px;border-radius:6px;margin-bottom:12px;font-size:13px;">{{ session('info') }}</div>
+    <div class="alert alert-info" style="margin-bottom:12px;">{{ session('info') }}</div>
   @endif
-  <p style="font-size:13px;color:#666;margin-bottom:10px;">Masukkan kode verifikasi yang tertera pada kartu daftar ulang siswa. Setelah diverifikasi, status siswa otomatis menjadi terdaftar.</p>
+  <p style="font-size:13px;color:var(--tx2);margin-bottom:10px;">Masukkan kode verifikasi yang tertera pada kartu daftar ulang siswa. Setelah diverifikasi, status siswa otomatis menjadi terdaftar.</p>
   <form method="POST" action="{{ route('admin.re-registrations.verify-code') }}" style="display:flex;gap:8px;align-items:flex-end;flex-wrap:wrap;">
     @csrf
     <div style="flex:1;min-width:200px;">
-      <label for="verification_code" style="font-size:12px;color:#666;">Kode Verifikasi</label>
-      <input id="verification_code" name="verification_code" type="text" required maxlength="20" placeholder="Mis. K7QZ2LMX" value="{{ old('verification_code') }}" style="width:100%;margin-top:4px;padding:8px 10px;border:1px solid #d1d5db;border-radius:6px;font-family:monospace;letter-spacing:1px;text-transform:uppercase;">
-      @error('verification_code')<div style="font-size:12px;color:#dc2626;margin-top:4px;">{{ $message }}</div>@enderror
+      <label for="verification_code" style="font-size:12px;color:var(--tx2);">Kode Verifikasi</label>
+      <input id="verification_code" name="verification_code" type="text" required maxlength="20" placeholder="Mis. K7QZ2LMX" value="{{ old('verification_code') }}" style="width:100%;margin-top:4px;padding:8px 10px;border:1px solid var(--input-border);border-radius:6px;background:var(--input-bg);color:var(--tx-body);font-family:monospace;letter-spacing:1px;text-transform:uppercase;">
+      @error('verification_code')<div style="font-size:12px;color:var(--danger);margin-top:4px;">{{ $message }}</div>@enderror
     </div>
     <button type="submit" class="btn btn-primary">Verifikasi</button>
   </form>

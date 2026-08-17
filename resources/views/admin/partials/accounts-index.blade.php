@@ -6,13 +6,13 @@
 <h1 class="page-title">Daftar Akun Siswa</h1>
 
 @if (session('success'))
-<div class="ajax-success" style="background:#dcfce7;border:1px solid #86efac;color:#16a34a;padding:10px 16px;border-radius:8px;margin-bottom:16px;font-size:13px;">
+<div class="ajax-success alert alert-success">
   {{ session('success') }}
 </div>
 @endif
 
 @if (session('error'))
-<div class="ajax-success" style="background:#fee2e2;border:1px solid #fca5a5;color:#dc2626;padding:10px 16px;border-radius:8px;margin-bottom:16px;font-size:13px;">
+<div class="ajax-success alert alert-error">
   {{ session('error') }}
 </div>
 @endif
@@ -29,14 +29,14 @@
 </div>
 
 <form id="filterForm" method="GET" action="{{ route('admin.accounts.index') }}" style="display:none;margin-bottom:16px;">
-  <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end;background:#f8f9fb;padding:16px;border-radius:10px;">
+  <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end;background:var(--panel-2);padding:16px;border-radius:10px;">
     <div>
-      <label style="display:block;font-size:11px;color:#999;margin-bottom:4px;">Cari</label>
-      <input type="text" name="search" value="{{ request('search') }}" placeholder="Nama / Email / NIK / NISN" style="padding:6px 12px;border:1px solid #e0e0e0;border-radius:6px;font-size:13px;width:200px;">
+      <label style="display:block;font-size:11px;color:var(--tx3);margin-bottom:4px;">Cari</label>
+      <input type="text" name="search" value="{{ request('search') }}" placeholder="Nama / Email / NIK / NISN" style="padding:6px 12px;border:1px solid var(--input-border);border-radius:6px;font-size:13px;width:200px;background:var(--input-bg);color:var(--tx-body);">
     </div>
     <div>
-      <label style="display:block;font-size:11px;color:#999;margin-bottom:4px;">Status Pendaftaran</label>
-      <select name="registration_status" style="padding:6px 12px;border:1px solid #e0e0e0;border-radius:6px;font-size:13px;">
+      <label style="display:block;font-size:11px;color:var(--tx3);margin-bottom:4px;">Status Pendaftaran</label>
+      <select name="registration_status" style="padding:6px 12px;border:1px solid var(--input-border);border-radius:6px;font-size:13px;background:var(--input-bg);color:var(--tx-body);">
         <option value="">Semua Status</option>
         <option value="pending" {{ request('registration_status') == 'pending' ? 'selected' : '' }}>Pending</option>
         <option value="verified" {{ request('registration_status') == 'verified' ? 'selected' : '' }}>Terverifikasi</option>
@@ -45,8 +45,8 @@
       </select>
     </div>
     <div>
-      <label style="display:block;font-size:11px;color:#999;margin-bottom:4px;">Jurusan</label>
-      <select name="major_id" style="padding:6px 12px;border:1px solid #e0e0e0;border-radius:6px;font-size:13px;">
+      <label style="display:block;font-size:11px;color:var(--tx3);margin-bottom:4px;">Jurusan</label>
+      <select name="major_id" style="padding:6px 12px;border:1px solid var(--input-border);border-radius:6px;font-size:13px;background:var(--input-bg);color:var(--tx-body);">
         <option value="">Semua Jurusan</option>
         @foreach ($majors as $major)
           <option value="{{ $major->id }}" {{ request('major_id') == $major->id ? 'selected' : '' }}>{{ $major->name }}</option>
@@ -79,12 +79,12 @@
         <td>{{ $account->email }}</td>
         <td>
           <div>{{ $account->applicant->nik ?? '-' }}</div>
-          <div style="font-size:11px;color:#aaa;">NISN: {{ $account->applicant->nisn ?? '-' }}</div>
+          <div style="font-size:11px;color:var(--tx4);">NISN: {{ $account->applicant->nisn ?? '-' }}</div>
         </td>
         <td>
           <span class="status-badge status-accepted">{{ $account->applicant->registrations_count ?? 0 }}</span>
         </td>
-        <td style="font-size:12px;color:#666;">{{ $account->created_at->format('d M Y') }}</td>
+        <td style="font-size:12px;color:var(--tx2);">{{ $account->created_at->format('d M Y') }}</td>
         <td>
           <form action="{{ route('admin.accounts.destroy', $account) }}" method="POST"
                 onsubmit="return confirm('Hapus akun siswa {{ $account->applicant->full_name ?? $account->name }}? Seluruh data pendaftaran, ujian, dan pembayarannya akan ikut terhapus permanen.')" style="display:inline;">

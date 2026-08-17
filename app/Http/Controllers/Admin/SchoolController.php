@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 
 class SchoolController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $levels = SchoolLevel::orderBy('id')->get();
         $schools = School::with(['schoolLevels', 'majors'])->withCount('majors')->orderBy('name')->get();
@@ -17,6 +17,12 @@ class SchoolController extends Controller
         $grouped = $schools->flatMap(fn ($school) => $school->schoolLevels
             ->map(fn ($level) => ['level_id' => $level->id, 'school' => $school])
         )->groupBy('level_id');
+
+        if ($request->ajax()) {
+            $html = view('admin.partials.schools-index', compact('levels', 'schools', 'grouped'))->render();
+
+            return response()->json(['html' => $html]);
+        }
 
         return view('admin.school.index', compact('levels', 'schools', 'grouped'));
     }

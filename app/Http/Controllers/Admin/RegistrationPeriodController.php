@@ -10,12 +10,18 @@ use Illuminate\Http\Request;
 
 class RegistrationPeriodController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $periods = RegistrationPeriod::with('schoolLevel')
             ->withCount('registrations')
             ->orderByDesc('start_date')
             ->get();
+
+        if ($request->ajax()) {
+            $html = view('admin.partials.periods-index', compact('periods'))->render();
+
+            return response()->json(['html' => $html]);
+        }
 
         return view('admin.periods.index', compact('periods'));
     }

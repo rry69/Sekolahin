@@ -9,7 +9,7 @@
 <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;">
   <div>
     <h1 class="page-title">Detail Daftar Ulang</h1>
-    <p style="font-size:13px;color:#666;margin-top:4px;">No. Registrasi: {{ $reRegistration->registration->registration_number }}</p>
+    <p style="font-size:13px;color:var(--tx2);margin-top:4px;">No. Registrasi: {{ $reRegistration->registration->registration_number }}</p>
   </div>
   @php
     $statusMap = [
@@ -21,87 +21,87 @@
 </div>
 
 @if (session('success'))
-<div class="ajax-success" style="background:#dcfce7;border:1px solid #86efac;color:#16a34a;padding:10px 16px;border-radius:8px;margin-bottom:16px;font-size:13px;">
+<div class="ajax-success alert alert-success">
   {{ session('success') }}
 </div>
 @endif
 
-<div style="border-bottom:1px solid #e8e8e8;padding-bottom:20px;margin-bottom:20px;">
-  <h4 style="font-size:11px;font-weight:600;color:#999;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:12px;">Informasi Pendaftar</h4>
+<div style="border-bottom:1px solid var(--border);padding-bottom:20px;margin-bottom:20px;">
+  <h4 style="font-size:11px;font-weight:600;color:var(--tx3);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:12px;">Informasi Pendaftar</h4>
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
     <div>
-      <p style="font-size:12px;color:#666;margin-bottom:4px;">Nama Lengkap</p>
+      <p style="font-size:12px;color:var(--tx2);margin-bottom:4px;">Nama Lengkap</p>
       <p style="font-weight:500;">{{ $reRegistration->registration->applicant->full_name }}</p>
     </div>
     <div>
-      <p style="font-size:12px;color:#666;margin-bottom:4px;">Email</p>
+      <p style="font-size:12px;color:var(--tx2);margin-bottom:4px;">Email</p>
       <p style="font-weight:500;">{{ $reRegistration->registration->applicant->user->email }}</p>
     </div>
     <div>
-      <p style="font-size:12px;color:#666;margin-bottom:4px;">Jenjang</p>
+      <p style="font-size:12px;color:var(--tx2);margin-bottom:4px;">Jenjang</p>
       <p style="font-weight:500;">{{ $reRegistration->registration->registrationPeriod->schoolLevel->name }}</p>
     </div>
     <div>
-      <p style="font-size:12px;color:#666;margin-bottom:4px;">Jalur Pendaftaran</p>
+      <p style="font-size:12px;color:var(--tx2);margin-bottom:4px;">Jalur Pendaftaran</p>
       <p style="font-weight:500;">{{ $reRegistration->registration->registrationTrack->name }}</p>
     </div>
   </div>
 </div>
 
-<div style="border-bottom:1px solid #e8e8e8;padding-bottom:20px;margin-bottom:20px;">
-  <h4 style="font-size:11px;font-weight:600;color:#999;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:12px;">Data Seragam &amp; Fisik</h4>
+<div style="border-bottom:1px solid var(--border);padding-bottom:20px;margin-bottom:20px;">
+  <h4 style="font-size:11px;font-weight:600;color:var(--tx3);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:12px;">Data Seragam &amp; Fisik</h4>
   <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;">
     <div>
-      <p style="font-size:12px;color:#666;margin-bottom:4px;">Ukuran Baju</p>
+      <p style="font-size:12px;color:var(--tx2);margin-bottom:4px;">Ukuran Baju</p>
       <p style="font-weight:500;">{{ $reRegistration->uniform_shirt_size ?? '-' }}</p>
     </div>
     <div>
-      <p style="font-size:12px;color:#666;margin-bottom:4px;">Ukuran Celana</p>
+      <p style="font-size:12px;color:var(--tx2);margin-bottom:4px;">Ukuran Celana</p>
       <p style="font-weight:500;">{{ $reRegistration->uniform_pants_size ?? '-' }}</p>
     </div>
     <div>
-      <p style="font-size:12px;color:#666;margin-bottom:4px;">Golongan Darah</p>
+      <p style="font-size:12px;color:var(--tx2);margin-bottom:4px;">Golongan Darah</p>
       <p style="font-weight:500;">{{ $reRegistration->blood_type ?? '-' }}</p>
     </div>
     <div>
-      <p style="font-size:12px;color:#666;margin-bottom:4px;">Tinggi Badan</p>
+      <p style="font-size:12px;color:var(--tx2);margin-bottom:4px;">Tinggi Badan</p>
       <p style="font-weight:500;">{{ $reRegistration->height_cm ? $reRegistration->height_cm . ' cm' : '-' }}</p>
     </div>
     <div>
-      <p style="font-size:12px;color:#666;margin-bottom:4px;">Berat Badan</p>
+      <p style="font-size:12px;color:var(--tx2);margin-bottom:4px;">Berat Badan</p>
       <p style="font-weight:500;">{{ $reRegistration->weight_kg ? $reRegistration->weight_kg . ' kg' : '-' }}</p>
     </div>
   </div>
 </div>
 
 @if($reRegistration->verification_code)
-<div style="border-bottom:1px solid #e8e8e8;padding-bottom:20px;margin-bottom:20px;">
-  <h4 style="font-size:11px;font-weight:600;color:#999;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:12px;">Kode Verifikasi</h4>
+<div style="border-bottom:1px solid var(--border);padding-bottom:20px;margin-bottom:20px;">
+  <h4 style="font-size:11px;font-weight:600;color:var(--tx3);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:12px;">Kode Verifikasi</h4>
   <p style="font-family:monospace;letter-spacing:2px;font-size:18px;font-weight:bold;">{{ $reRegistration->verification_code }}</p>
-  <p style="font-size:12px;color:#888;margin-top:4px;">Kode pada kartu daftar ulang</p>
+  <p style="font-size:12px;color:var(--tx3);margin-top:4px;">Kode pada kartu daftar ulang</p>
 </div>
 @endif
 
-<div style="border-bottom:1px solid #e8e8e8;padding-bottom:20px;margin-bottom:20px;">
-  <h4 style="font-size:11px;font-weight:600;color:#999;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:12px;">Status Verifikasi</h4>
+<div style="border-bottom:1px solid var(--border);padding-bottom:20px;margin-bottom:20px;">
+  <h4 style="font-size:11px;font-weight:600;color:var(--tx3);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:12px;">Status Verifikasi</h4>
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
     <div>
-      <p style="font-size:12px;color:#666;margin-bottom:4px;">Tanggal Submit</p>
+      <p style="font-size:12px;color:var(--tx2);margin-bottom:4px;">Tanggal Submit</p>
       <p style="font-weight:500;">{{ $reRegistration->submitted_at ? $reRegistration->submitted_at->format('d M Y H:i') : '-' }}</p>
     </div>
     @if ($reRegistration->verified_at)
       <div>
-        <p style="font-size:12px;color:#666;margin-bottom:4px;">Tanggal Verifikasi</p>
+        <p style="font-size:12px;color:var(--tx2);margin-bottom:4px;">Tanggal Verifikasi</p>
         <p style="font-weight:500;">{{ $reRegistration->verified_at->format('d M Y H:i') }}</p>
       </div>
       <div>
-        <p style="font-size:12px;color:#666;margin-bottom:4px;">Diverifikasi Oleh</p>
+        <p style="font-size:12px;color:var(--tx2);margin-bottom:4px;">Diverifikasi Oleh</p>
         <p style="font-weight:500;">{{ $reRegistration->verifier->name ?? '-' }}</p>
       </div>
     @endif
     @if ($reRegistration->notes)
       <div style="grid-column:1/-1;">
-        <p style="font-size:12px;color:#666;margin-bottom:4px;">Catatan</p>
+        <p style="font-size:12px;color:var(--tx2);margin-bottom:4px;">Catatan</p>
         <p style="font-weight:500;">{{ $reRegistration->notes }}</p>
       </div>
     @endif

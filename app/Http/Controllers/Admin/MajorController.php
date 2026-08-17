@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 
 class MajorController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $tracks = \App\Models\RegistrationTrack::orderBy('id')->get();
         $majors = Major::with(['school.schoolLevels', 'schoolLevel', 'trackQuotas'])
@@ -58,6 +58,12 @@ class MajorController extends Controller
         $levels = SchoolLevel::whereIn('id', $majors->pluck('school_level_id')->unique()->filter())
             ->orderBy('id')->get();
         $grouped = $majors->groupBy('school_level_id');
+
+        if ($request->ajax()) {
+            $html = view('admin.partials.majors-index', compact('majors', 'tracks', 'levels', 'grouped'))->render();
+
+            return response()->json(['html' => $html]);
+        }
 
         return view('admin.majors.index', compact('majors', 'tracks', 'levels', 'grouped'));
     }
