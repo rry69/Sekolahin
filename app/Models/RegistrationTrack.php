@@ -12,4 +12,9 @@ class RegistrationTrack extends Model
     {
         return $this->hasMany(Registration::class);
     }
+
+    public function levelStatuses()
+    {
+        return $this->hasMany(RegistrationTrackSchoolLevel::class);
+    }
 }

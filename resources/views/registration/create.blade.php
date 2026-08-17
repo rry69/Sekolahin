@@ -115,10 +115,10 @@
 
                             <div class="mb-6">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Pilih Jalur Pendaftaran *</label>
-                                <div class="space-y-2">
+                                <div class="space-y-2" id="track-list">
                                     @foreach ($tracks as $track)
                                         @php $isReguler = strtolower($track->name) === 'reguler'; @endphp
-                                        <label class="flex items-center p-4 border rounded-lg hover:bg-gray-50 cursor-pointer">
+                                        <label class="track-item flex items-center p-4 border rounded-lg hover:bg-gray-50 cursor-pointer" data-track-id="{{ $track->id }}">
                                             <input type="radio" name="registration_track_id" value="{{ $track->id }}" required
                                                 class="h-4 w-4 text-indigo-600 focus:ring-indigo-500">
                                             <span class="ml-3">
@@ -218,6 +218,7 @@
   const quotaMap = @json($quotaMap ?? []);
   const acceptedByMajorTrack = @json($acceptedByMajorTrack ?? []);
   const tracks = @json($tracks->keyBy('id')->map(fn($t)=>$t->name) ?? []);
+  const trackStatusMap = @json($trackStatusMap ?? []);
 
   const schoolSelect = document.getElementById('school-select');
   const majorSelect = document.getElementById('major-select');
@@ -230,6 +231,22 @@
     return el ? el.getAttribute('data-level') : null;
   }
   function getTrackId(){ const el=document.querySelector('input[name="registration_track_id"]:checked'); return el?el.value:null; }
+
+  function syncTracks(){
+    const levelId = getLevelId();
+    document.querySelectorAll('.track-item').forEach(item=>{
+      const trackId = item.getAttribute('data-track-id');
+      const active = levelId ? (trackStatusMap[levelId] ? !!trackStatusMap[levelId][trackId] : true) : true;
+      const radio = item.querySelector('input[name="registration_track_id"]');
+      if(!active){
+        item.style.display = 'none';
+        if(radio && radio.checked) radio.checked = false;
+      } else {
+        item.style.display = '';
+      }
+    });
+    syncQuota();
+  }
 
   function syncSchools(){
     const levelId = getLevelId();
@@ -307,9 +324,11 @@
   if(schoolSelect) schoolSelect.addEventListener('change', syncMajors);
   if(majorSelect) majorSelect.addEventListener('change', syncQuota);
   document.querySelectorAll('input[name="registration_period_id"]').forEach(r=>r.addEventListener('change', syncSchools));
+  document.querySelectorAll('input[name="registration_period_id"]').forEach(r=>r.addEventListener('change', syncTracks));
   syncPeriodHint();
   sync();
   syncSchools();
+  syncTracks();
   syncQuota();
 })();
 </script>

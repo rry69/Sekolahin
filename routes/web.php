@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\MajorController as AdminMajorController;
 use App\Http\Controllers\Admin\SchoolController as AdminSchoolController;
 use App\Http\Controllers\Admin\SettingController as AdminSettingController;
 use App\Http\Controllers\Admin\RegistrationPeriodController as AdminRegistrationPeriodController;
+use App\Http\Controllers\Admin\TrackSettingController as AdminTrackSettingController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/webhooks/xendit', [XenditWebhookController::class, 'handle'])->name('webhooks.xendit');
@@ -130,6 +131,9 @@ Route::middleware(['auth', 'role:Admin'])->prefix('admin')->name('admin.')->grou
     Route::post('/re-registrations/{reRegistration}/verify', [AdminReRegistrationController::class, 'verify'])->name('re-registrations.verify');
 
     Route::get('/activity-logs', [AdminActivityLogController::class, 'index'])->name('activity-logs.index');
+
+    Route::get('/tracks', [AdminTrackSettingController::class, 'index'])->name('tracks.index');
+    Route::patch('/tracks/{track}/level/{level}', [AdminTrackSettingController::class, 'update'])->name('tracks.update');
 });
 
 require __DIR__.'/auth.php';

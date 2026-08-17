@@ -275,7 +275,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 
-  // Filter form
+  // Filter form & track toggles
   contentArea.addEventListener('submit', function(e) {
     // Status/Payment update modals
     if (e.target.id === 'statusForm' || e.target.id === 'paymentForm') {
@@ -308,6 +308,64 @@ document.addEventListener('DOMContentLoaded', function() {
       }
       loadContent(url.pathname + url.search);
     }
+  });
+
+  // Track status toggles (delegated — konten di-inject via AJAX)
+  contentArea.addEventListener('change', function(e) {
+    var el = e.target;
+    if (!el.classList || !el.classList.contains('track-toggle')) return;
+    var trackId = el.getAttribute('data-track');
+    var levelId = el.getAttribute('data-level');
+    var trackName = el.getAttribute('data-track-name');
+    var levelName = el.getAttribute('data-level-name');
+    var isActive = el.checked;
+    var row = el.closest('.track-row');
+
+    el.disabled = true;
+
+    fetch('/admin/tracks/' + trackId + '/level/' + levelId, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'X-Requested-With': 'XMLHttpRequest',
+        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+      },
+      body: JSON.stringify({ is_active: isActive ? 1 : 0 })
+    })
+    .then(function(r) { return r.json().then(function(j) { return { ok: r.ok, body: j }; }); })
+    .then(function(res) {
+      el.disabled = false;
+      if (!res.ok || !res.body.success) {
+        el.checked = !isActive;
+        showToast(res.body.message || 'Gagal menyimpan perubahan');
+        return;
+      }
+      el.checked = !!res.body.is_active;
+      if (row) {
+        var badge = row.querySelector('.track-badge');
+        if (badge) {
+          var on = !!res.body.is_active;
+          badge.textContent = on ? 'Aktif' : 'Nonaktif';
+          badge.className = 'status-badge track-badge ' + (on ? 'status-accepted' : 'status-rejected');
+          if (!on) badge.setAttribute('style', 'background:#fee2e2;color:#dc2626;');
+          else badge.removeAttribute('style');
+        }
+      }
+      // Update toggle pill visuals
+      var pill = el.nextElementSibling;
+      if (pill) {
+        pill.style.background = res.body.is_active ? '#4f6ef7' : '#d1d5db';
+        var knob = pill.firstElementChild;
+        if (knob) knob.style.left = res.body.is_active ? '22px' : '2px';
+      }
+      showToast(res.body.message || (trackName + ' untuk ' + levelName + ' diperbarui'));
+    })
+    .catch(function() {
+      el.disabled = false;
+      el.checked = !isActive;
+      showToast('Gagal terhubung ke server');
+    });
   });
 
   function loadContent(url, pushState) {

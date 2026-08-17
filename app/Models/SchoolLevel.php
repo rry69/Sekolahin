@@ -25,6 +25,11 @@ class SchoolLevel extends Model
         return $this->belongsToMany(School::class, 'school_level_school');
     }
 
+    public function trackStatuses()
+    {
+        return $this->hasMany(RegistrationTrackSchoolLevel::class);
+    }
+
     public function scopeActive($query)
     {
         return $query->where('is_active', true);

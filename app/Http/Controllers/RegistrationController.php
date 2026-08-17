@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Registration;
 use App\Models\RegistrationPeriod;
 use App\Models\RegistrationTrack;
+use App\Models\RegistrationTrackSchoolLevel;
 use App\Models\RegistrationDocument;
 use App\Models\School;
 use App\Models\Major;
@@ -54,6 +55,7 @@ class RegistrationController extends Controller
             ->with('schoolLevel')
             ->get();
         $tracks = RegistrationTrack::all();
+        $trackStatusMap = RegistrationTrackSchoolLevel::statusMap();
         // Kirim pemetaan usia minimal dan umur pendaftar untuk hint FE
         $applicantForHint = auth()->user()->applicant;
         $applicantAge = $applicantForHint?->birth_date ? \Carbon\Carbon::parse($applicantForHint->birth_date)->diffInYears(now()) : null;
@@ -129,7 +131,7 @@ class RegistrationController extends Controller
             });
         });
 
-        return view('registration.create', compact('periods', 'tracks', 'schools', 'schoolsByLevel', 'majorsByLevel', 'acceptedCounts', 'acceptedByMajorTrack', 'quotaMap', 'applicantAge', 'ageMins', 'schoolOptionsJson', 'majorOptionsJson'));
+        return view('registration.create', compact('periods', 'tracks', 'schools', 'schoolsByLevel', 'majorsByLevel', 'acceptedCounts', 'acceptedByMajorTrack', 'quotaMap', 'applicantAge', 'ageMins', 'schoolOptionsJson', 'majorOptionsJson', 'trackStatusMap'));
     }
 
     public function store(Request $request)
@@ -159,6 +161,10 @@ class RegistrationController extends Controller
                 $tgl = $period->end_date instanceof \Carbon\CarbonInterface ? $period->end_date->format('d M Y') : $period->end_date;
                 return back()->with('error', "Pendaftaran untuk jenjang {$period->schoolLevel->name} sudah ditutup. Periode telah berakhir pada {$tgl}.")->withInput();
             }
+        }
+        if ($period && ! RegistrationTrackSchoolLevel::isActive((int) $validated['registration_track_id'], (int) $period->school_level_id)) {
+            $track = RegistrationTrack::find($validated['registration_track_id']);
+            return back()->with('error', 'Jalur ' . ($track->name ?? '') . ' sedang ditutup untuk jenjang ' . $period->schoolLevel->name . '. Silakan pilih jalur lain.')->withInput();
         }
         $applicantForAge = auth()->user()->applicant;
         if ($period && $applicantForAge?->birth_date) {
@@ -235,6 +241,10 @@ class RegistrationController extends Controller
         $school = School::with('schoolLevels')->findOrFail($validated['school_id']);
         $applicant = auth()->user()->applicant;
 
+        if (! RegistrationTrackSchoolLevel::isActive((int) $track->id, (int) $period->school_level_id)) {
+            return back()->with('error', 'Jalur ' . $track->name . ' sedang ditutup untuk jenjang ' . $period->schoolLevel->name . '. Silakan pilih jalur lain.')->withInput();
+        }
+
         $pStatus = $period->registrationStatus();
         if ($pStatus === 'inactive') {
             return back()->with('error', 'Pendaftaran untuk jenjang ini sedang ditutup')->withInput();
@@ -284,6 +294,11 @@ class RegistrationController extends Controller
 
         if (! $school->schoolLevels->contains('id', $period->school_level_id)) {
             return back()->with('error', 'Sekolah yang dipilih tidak melayani jenjang ' . $period->schoolLevel->name)->withInput();
+        }
+
+        if (! RegistrationTrackSchoolLevel::isActive((int) $validated['registration_track_id'], (int) $period->school_level_id)) {
+            $trackName = RegistrationTrack::whereKey($validated['registration_track_id'])->value('name') ?? '';
+            return back()->with('error', 'Jalur ' . $trackName . ' sedang ditutup untuk jenjang ' . $period->schoolLevel->name . '. Silakan pilih jalur lain.')->withInput();
         }
 
         $major = Major::findOrFail($validated['major_id']);

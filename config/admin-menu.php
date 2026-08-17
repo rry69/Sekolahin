@@ -56,6 +56,12 @@ return [
                     'route'   => 'admin.rekap.index',
                     'routeIs' => 'admin.rekap.*',
                 ],
+                [
+                    'label'   => 'Pengaturan Jalur',
+                    'icon'    => 'fa-solid fa-route',
+                    'route'   => 'admin.tracks.index',
+                    'routeIs' => 'admin.tracks.*',
+                ],
             ],
         ],
 
