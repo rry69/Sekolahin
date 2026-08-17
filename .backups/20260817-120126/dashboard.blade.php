@@ -26,18 +26,6 @@
   .nav-item:hover { background: #f5f6fa; }
   .nav-item.active { color: #1a1a2e; font-weight: 600; background: #f0f0ff; }
   .nav-item i { width: 18px; text-align: center; font-size: 13px; }
-
-  /* === NAV GROUPS === */
-  .nav-group { }
-  .nav-group-header { display: flex; align-items: center; gap: 10px; width: 100%; padding: 9px 16px; background: none; border: none; cursor: pointer; color: #888; font-size: 11px; font-weight: 700; letter-spacing: .8px; text-transform: uppercase; transition: color .15s; font-family: inherit; text-align: left; }
-  .nav-group-header:hover { color: #1a1a2e; }
-  .nav-group-header > i:first-child { width: 18px; text-align: center; font-size: 13px; }
-  .nav-group-chevron { margin-left: auto; font-size: 11px; transition: transform .2s; }
-  .nav-group.collapsed .nav-group-chevron { transform: rotate(-90deg); }
-  .nav-group.collapsed .nav-group-body { display: none; }
-  .nav-group-body { padding-bottom: 4px; }
-  .nav-item-child { padding-left: 36px; }
-  .nav-item-child i { width: 18px; text-align: center; font-size: 13px; }
   .sidebar-bottom { padding: 10px 16px; border-top: 1px solid #e8e8e8; }
   .sidebar-bottom .nav-item { padding: 9px 0; }
 
@@ -145,7 +133,32 @@
 <body>
 
 <!-- SIDEBAR -->
-@include('layouts.partials.sidebar')
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="avatar"><img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=4f6ef7&color=fff&size=112" alt="{{ Auth::user()->name }}"></div>
+    <h2>{{ Auth::user()->name }}</h2>
+    <div class="subtitle">{{ Auth::user()->email }}</div>
+  </div>
+  <nav class="sidebar-nav">
+    <a href="{{ route('admin.dashboard') }}" class="nav-item {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}"><i class="fa-solid fa-grip"></i> Dashboard</a>
+    <a href="{{ route('admin.schools.index') }}" class="nav-item {{ request()->routeIs('admin.schools.*') ? 'active' : '' }}"><i class="fa-solid fa-school"></i> Sekolah</a>
+    <a href="{{ route('admin.registrations.index') }}" class="nav-item {{ request()->routeIs('admin.registrations.*') ? 'active' : '' }}"><i class="fa-solid fa-users"></i> Pendaftaran</a>
+    <a href="{{ route('admin.accounts.index') }}" class="nav-item {{ request()->routeIs('admin.accounts.*') ? 'active' : '' }}"><i class="fa-solid fa-user-slash"></i> Akun Siswa</a>
+    <a href="{{ route('admin.majors.index') }}" class="nav-item {{ request()->routeIs('admin.majors.*') ? 'active' : '' }}"><i class="fa-solid fa-graduation-cap"></i> Jurusan</a>
+    <a href="{{ route('admin.periods.index') }}" class="nav-item {{ request()->routeIs('admin.periods.*') ? 'active' : '' }}"><i class="fa-solid fa-calendar-day"></i> Periode Pendaftaran</a>
+    <a href="{{ route('admin.rekap.index') }}" class="nav-item {{ request()->routeIs('admin.rekap.*') ? 'active' : '' }}"><i class="fa-solid fa-clipboard-check"></i> Rekap Diterima</a>
+    <a href="{{ route('admin.payments.index') }}" class="nav-item {{ request()->routeIs('admin.payments.*') ? 'active' : '' }}"><i class="fa-solid fa-money-check-dollar"></i> Pembayaran</a>
+    <a href="{{ route('admin.activity-logs.index') }}" class="nav-item {{ request()->routeIs('admin.activity-logs.*') ? 'active' : '' }}"><i class="fa-solid fa-clock-rotate-left"></i> Log Aktivitas</a>
+    <a href="{{ route('admin.settings.edit') }}" class="nav-item {{ request()->routeIs('admin.settings.*') ? 'active' : '' }}"><i class="fa-solid fa-gear"></i> Pengaturan</a>
+  </nav>
+  <div class="sidebar-bottom">
+    <a href="{{ route('profile.edit') }}" class="nav-item"><i class="fa-solid fa-gear"></i> Settings</a>
+    <form method="POST" action="{{ route('logout') }}">
+      @csrf
+      <button type="submit" class="nav-item" style="width:100%;background:none;border:none;text-align:left;font-family:inherit;"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+    </form>
+  </div>
+</aside>
 
 <div class="main">
 
@@ -238,17 +251,10 @@ document.addEventListener('DOMContentLoaded', function() {
   var isLoading = false;
 
   // Sidebar menu clicks: load in-place via AJAX, no page navigation
-  document.querySelectorAll('.sidebar-nav [data-menu-item]').forEach(function(navLink) {
+  document.querySelectorAll('.sidebar-nav .nav-item').forEach(function(navLink) {
     navLink.addEventListener('click', function(e) {
       e.preventDefault();
       loadContent(navLink.getAttribute('href'));
-    });
-  });
-
-  // Collapsible group toggles
-  document.querySelectorAll('.nav-group-header[data-group-toggle]').forEach(function(header) {
-    header.addEventListener('click', function() {
-      header.closest('.nav-group').classList.toggle('collapsed');
     });
   });
 
@@ -348,11 +354,7 @@ document.addEventListener('DOMContentLoaded', function() {
     var m = url.match(/\/admin\/([a-z-]+)/);
     if (m) {
       var target = document.querySelector('.sidebar-nav .nav-item[href*="/admin/' + m[1] + '"]');
-      if (target) {
-        target.classList.add('active');
-        var group = target.closest('.nav-group');
-        if (group) group.classList.remove('collapsed');
-      }
+      if (target) target.classList.add('active');
       else document.querySelector('.nav-item[href*="dashboard"]').classList.add('active');
     }
   }
