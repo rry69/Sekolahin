@@ -97,7 +97,9 @@
                                 <p><span class="font-medium">Periode:</span> {{ $registration->registrationPeriod->name }}</p>
                                 <p><span class="font-medium">Jalur:</span> {{ $registration->registrationTrack->name }}</p>
                                 <p><span class="font-medium">Sekolah:</span> {{ $registration->school->name }}</p>
+                                @if($registration->major)
                                 <p><span class="font-medium">Jurusan Pilihan:</span> {{ $registration->major->name }}</p>
+                                @endif
                                 @if($registration->finalMajor)
                                     <p><span class="font-medium">Jurusan Diterima:</span> {{ $registration->finalMajor->name }}</p>
                                 @endif

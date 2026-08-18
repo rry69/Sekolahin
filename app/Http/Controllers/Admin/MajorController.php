@@ -70,8 +70,11 @@ class MajorController extends Controller
 
     public function create()
     {
-        $schools = School::with('schoolLevels')->orderBy('name')->get();
-        $levels = SchoolLevel::orderBy('id')->get();
+        $allowedLevelIds = SchoolLevel::whereIn('name', ['SMA', 'SMK'])->pluck('id');
+        $schools = School::whereHas('schoolLevels', function ($q) use ($allowedLevelIds) {
+            $q->whereIn('school_levels.id', $allowedLevelIds);
+        })->with('schoolLevels')->orderBy('name')->get();
+        $levels = SchoolLevel::whereIn('name', ['SMA', 'SMK'])->orderBy('id')->get();
         $tracks = \App\Models\RegistrationTrack::orderBy('id')->get();
 
         return view('admin.majors.create', compact('schools', 'levels', 'tracks'));
@@ -95,6 +98,10 @@ class MajorController extends Controller
             $rules["quota_track_{$t->id}"] = 'nullable|integer|min:0';
         }
         $validated = $request->validate($rules);
+
+        // Pastikan jenjang yang dipilih adalah SMA atau SMK
+        $allowedLevels = SchoolLevel::whereIn('name', ['SMA', 'SMK'])->pluck('id')->toArray();
+        abort_unless(in_array($validated['school_level_id'], $allowedLevels), 422, 'Jenjang harus SMA atau SMK');
 
         // Pastikan sekolah benar-benar melayani jenjang yang dipilih.
         $school = School::with('schoolLevels')->findOrFail($validated['school_id']);
@@ -141,8 +148,11 @@ class MajorController extends Controller
     public function edit(Major $major)
     {
         $major->load(['school', 'schoolLevel', 'trackQuotas']);
-        $schools = School::with('schoolLevels')->orderBy('name')->get();
-        $levels = SchoolLevel::orderBy('id')->get();
+        $allowedLevelIds = SchoolLevel::whereIn('name', ['SMA', 'SMK'])->pluck('id');
+        $schools = School::whereHas('schoolLevels', function ($q) use ($allowedLevelIds) {
+            $q->whereIn('school_levels.id', $allowedLevelIds);
+        })->with('schoolLevels')->orderBy('name')->get();
+        $levels = SchoolLevel::whereIn('name', ['SMA', 'SMK'])->orderBy('id')->get();
         $tracks = \App\Models\RegistrationTrack::orderBy('id')->get();
 
         return view('admin.majors.edit', compact('major', 'schools', 'levels', 'tracks'));
@@ -166,6 +176,10 @@ class MajorController extends Controller
             $rules["quota_track_{$t->id}"] = 'nullable|integer|min:0';
         }
         $validated = $request->validate($rules);
+
+        // Pastikan jenjang yang dipilih adalah SMA atau SMK
+        $allowedLevels = SchoolLevel::whereIn('name', ['SMA', 'SMK'])->pluck('id')->toArray();
+        abort_unless(in_array($validated['school_level_id'], $allowedLevels), 422, 'Jenjang harus SMA atau SMK');
 
         // Pastikan sekolah benar-benar melayani jenjang yang dipilih.
         $school = School::with('schoolLevels')->findOrFail($validated['school_id']);

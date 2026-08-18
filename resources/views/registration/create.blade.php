@@ -147,9 +147,9 @@
                                 @error('school_id')<span class="text-red-500 text-sm">{{ $message }}</span>@enderror
                             </div>
 
-                            <div class="mb-6">
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Jurusan Pilihan * <span class="text-gray-400 font-normal">(wajib)</span></label>
-                                <select id="major-select" name="major_id" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>
+                            <div id="major-section" class="mb-6">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Jurusan Pilihan <span id="major-required-label"><span class="text-gray-400 font-normal">(wajib)</span></span></label>
+                                <select id="major-select" name="major_id" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
                                     <option value="">-- Pilih Jurusan --</option>
                                 </select>
                                 <p id="major-quota-hint" class="text-xs mt-1 text-gray-500">Pilih sekolah dan jalur untuk melihat sisa kuota.</p>
@@ -222,15 +222,19 @@
 
   const schoolSelect = document.getElementById('school-select');
   const majorSelect = document.getElementById('major-select');
+  const majorSection = document.getElementById('major-section');
   const schoolHint = document.getElementById('school-hint');
   const quotaHint = document.getElementById('major-quota-hint');
   const feeHint = document.getElementById('track-fee-hint');
+
+  const NO_MAJOR_LEVELS = ['1', '2', '3'];
 
   function getLevelId(){
     const el = document.querySelector('input[name="registration_period_id"]:checked');
     return el ? el.getAttribute('data-level') : null;
   }
   function getTrackId(){ const el=document.querySelector('input[name="registration_track_id"]:checked'); return el?el.value:null; }
+  function levelNeedsMajor(){ const l=getLevelId(); return l && !NO_MAJOR_LEVELS.includes(l); }
 
   function syncTracks(){
     const levelId = getLevelId();
@@ -248,6 +252,14 @@
     syncQuota();
   }
 
+  function syncMajorSection(){
+    const need = levelNeedsMajor();
+    if(majorSection) majorSection.style.display = need ? '' : 'none';
+    if(majorSelect){
+      if(need){ majorSelect.setAttribute('required','required'); }
+      else { majorSelect.removeAttribute('required'); majorSelect.value=''; }
+    }
+  }
   function syncSchools(){
     const levelId = getLevelId();
     Array.from(schoolSelect.options).forEach(opt=>{
@@ -259,12 +271,14 @@
     if(sel && sel.value && sel.getAttribute('data-levels') && !sel.getAttribute('data-levels').split(',').includes(levelId)){
       schoolSelect.value = '';
     }
+    syncMajorSection();
     syncMajors();
   }
   function syncMajors(){
     const levelId = getLevelId();
     const schoolId = schoolSelect.value;
     majorSelect.innerHTML = '<option value="">-- Pilih Jurusan --</option>';
+    if(!levelNeedsMajor()){ syncQuota(); return; }
     const majors = levelId ? (majorsByLevel[levelId] || []) : [];
     const options = schoolId
       ? majors.filter(m => String(m.school_id) === String(schoolId))
@@ -282,6 +296,11 @@
   }
   function syncQuota(){
     if(!majorSelect || !quotaHint) return;
+    if(!levelNeedsMajor()){
+      quotaHint.textContent='Jenjang ini tidak memerlukan pemilihan jurusan.';
+      quotaHint.className='text-xs mt-1 text-gray-500';
+      return;
+    }
     const tid = getTrackId();
     const mid = majorSelect.value;
     if(feeHint){
@@ -328,6 +347,7 @@
   syncPeriodHint();
   sync();
   syncSchools();
+  syncMajorSection();
   syncTracks();
   syncQuota();
 })();

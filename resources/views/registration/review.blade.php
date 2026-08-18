@@ -43,8 +43,10 @@
                                 <p><span class="font-medium">Jenjang:</span> {{ $period->schoolLevel->name }}</p>
                                 <p><span class="font-medium">Periode:</span> {{ $period->name }}</p>
                                 <p><span class="font-medium">Jalur:</span> {{ $track->name }}</p>
-                                <p><span class="font-medium">Sekolah:</span> {{ $school->name ?? $major->school?->name }}</p>
+                                <p><span class="font-medium">Sekolah:</span> {{ $school->name }}</p>
+                                @if($major)
                                 <p><span class="font-medium">Jurusan Pilihan:</span> {{ $major->name }}</p>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -59,7 +61,7 @@
                                 @csrf
                                 <input type="hidden" name="registration_period_id" value="{{ $validated['registration_period_id'] }}">
                                 <input type="hidden" name="registration_track_id" value="{{ $validated['registration_track_id'] }}">
-                                <input type="hidden" name="major_id" value="{{ $validated['major_id'] }}">
+                                <input type="hidden" name="major_id" value="{{ $validated['major_id'] ?? '' }}">
                                 <input type="hidden" name="school_id" value="{{ $validated['school_id'] }}">
                                 <button type="submit" class="bg-indigo-600 text-white px-6 py-2 rounded-md hover:bg-indigo-700">
                                     Konfirmasi & Daftar

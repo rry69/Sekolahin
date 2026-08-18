@@ -24,6 +24,9 @@ class RegistrationController extends Controller
 
     protected $xenditService;
 
+    /** Jenjang yang tidak memerlukan pemilihan jurusan (TK, SD, SMP). */
+    protected const NO_MAJOR_LEVEL_IDS = [1, 2, 3];
+
     public function __construct(XenditService $xenditService)
     {
         $this->xenditService = $xenditService;
@@ -143,11 +146,15 @@ class RegistrationController extends Controller
         $validated = $request->validate([
             'registration_period_id' => 'required|exists:registration_periods,id',
             'registration_track_id' => 'required|exists:registration_tracks,id',
-            'major_id' => 'required|exists:majors,id',
+            'major_id' => 'nullable|exists:majors,id',
             'school_id' => 'required|exists:schools,id',
         ]);
 
         $period = RegistrationPeriod::with('schoolLevel')->find($validated['registration_period_id']);
+        $needsMajor = $period && !in_array((int) $period->school_level_id, self::NO_MAJOR_LEVEL_IDS);
+        if ($needsMajor && empty($validated['major_id'])) {
+            return back()->with('error', 'Jenjang ini wajib memilih jurusan')->withInput();
+        }
         if ($period) {
             $status = $period->registrationStatus();
             if ($status === 'inactive') {
@@ -178,13 +185,23 @@ class RegistrationController extends Controller
             }
         }
 
-        $validationError = $this->validateSchoolMajor(
-            (int) $validated['school_id'],
-            (int) $validated['major_id'],
-            (int) $validated['registration_period_id']
-        );
-        if ($validationError) {
-            return $validationError;
+        if ($needsMajor) {
+            $validationError = $this->validateSchoolMajor(
+                (int) $validated['school_id'],
+                (int) $validated['major_id'],
+                (int) $validated['registration_period_id']
+            );
+            if ($validationError) {
+                return $validationError;
+            }
+        } else {
+            $school = School::with('schoolLevels')->find($validated['school_id']);
+            if (! $school) {
+                return back()->with('error', 'Sekolah yang dipilih tidak valid')->withInput();
+            }
+            if (! $school->schoolLevels->contains('id', $period->school_level_id)) {
+                return back()->with('error', 'Sekolah yang dipilih tidak melayani jenjang ' . $period->schoolLevel->name)->withInput();
+            }
         }
 
         return redirect()->route('registration.review', $validated);
@@ -231,13 +248,14 @@ class RegistrationController extends Controller
         $validated = $request->validate([
             'registration_period_id' => 'required|exists:registration_periods,id',
             'registration_track_id' => 'required|exists:registration_tracks,id',
-            'major_id' => 'required|exists:majors,id',
+            'major_id' => 'nullable|exists:majors,id',
             'school_id' => 'required|exists:schools,id',
         ]);
 
         $period = RegistrationPeriod::with('schoolLevel')->findOrFail($validated['registration_period_id']);
         $track = RegistrationTrack::findOrFail($validated['registration_track_id']);
-        $major = Major::with('school')->findOrFail($validated['major_id']);
+        $needsMajor = !in_array((int) $period->school_level_id, self::NO_MAJOR_LEVEL_IDS);
+        $major = $needsMajor ? Major::with('school')->findOrFail($validated['major_id']) : null;
         $school = School::with('schoolLevels')->findOrFail($validated['school_id']);
         $applicant = auth()->user()->applicant;
 
@@ -280,7 +298,7 @@ class RegistrationController extends Controller
         $validated = $request->validate([
             'registration_period_id' => 'required|exists:registration_periods,id',
             'registration_track_id' => 'required|exists:registration_tracks,id',
-            'major_id' => 'required|exists:majors,id',
+            'major_id' => 'nullable|exists:majors,id',
             'school_id' => 'required|exists:schools,id',
         ]);
 
@@ -291,6 +309,11 @@ class RegistrationController extends Controller
         }
 
         $period = RegistrationPeriod::with('schoolLevel')->findOrFail($validated['registration_period_id']);
+        $needsMajor = !in_array((int) $period->school_level_id, self::NO_MAJOR_LEVEL_IDS);
+
+        if ($needsMajor && empty($validated['major_id'])) {
+            return back()->with('error', 'Jenjang ini wajib memilih jurusan')->withInput();
+        }
 
         if (! $school->schoolLevels->contains('id', $period->school_level_id)) {
             return back()->with('error', 'Sekolah yang dipilih tidak melayani jenjang ' . $period->schoolLevel->name)->withInput();
@@ -301,28 +324,32 @@ class RegistrationController extends Controller
             return back()->with('error', 'Jalur ' . $trackName . ' sedang ditutup untuk jenjang ' . $period->schoolLevel->name . '. Silakan pilih jalur lain.')->withInput();
         }
 
-        $major = Major::findOrFail($validated['major_id']);
+        if ($needsMajor) {
+            $major = Major::findOrFail($validated['major_id']);
 
-        if ($major->school_id !== $school->id) {
-            return back()->with('error', 'Jurusan yang dipilih tidak tersedia di sekolah ini');
-        }
-
-        if ($major->school_level_id && $major->school_level_id !== $period->school_level_id) {
-            return back()->with('error', 'Jurusan yang dipilih tidak sesuai dengan jenjang yang dipilih');
-        }
-
-        // Kuota per jurusan-per jalur (revisi.md): jalur tidak saling mempengaruhi
-        $track = RegistrationTrack::findOrFail($validated['registration_track_id']);
-        $quotaForTrack = $major->quotaForTrack($track->id);
-        $quotaForTrack = $quotaForTrack !== null ? $quotaForTrack : (int) $major->quota;
-        if ($quotaForTrack > 0) {
-            $acceptedForTrack = Registration::where('major_id', $validated['major_id'])
-                ->where('registration_track_id', $track->id)
-                ->whereIn('status', ['accepted', 're_registration_complete'])
-                ->count();
-            if ($acceptedForTrack >= $quotaForTrack) {
-                return back()->with('error', 'Kuota jalur ' . $track->name . ' untuk jurusan ' . $major->name . ' sudah penuh');
+            if ($major->school_id !== $school->id) {
+                return back()->with('error', 'Jurusan yang dipilih tidak tersedia di sekolah ini');
             }
+
+            if ($major->school_level_id && $major->school_level_id !== $period->school_level_id) {
+                return back()->with('error', 'Jurusan yang dipilih tidak sesuai dengan jenjang yang dipilih');
+            }
+
+            // Kuota per jurusan-per jalur (revisi.md): jalur tidak saling mempengaruhi
+            $track = RegistrationTrack::findOrFail($validated['registration_track_id']);
+            $quotaForTrack = $major->quotaForTrack($track->id);
+            $quotaForTrack = $quotaForTrack !== null ? $quotaForTrack : (int) $major->quota;
+            if ($quotaForTrack > 0) {
+                $acceptedForTrack = Registration::where('major_id', $validated['major_id'])
+                    ->where('registration_track_id', $track->id)
+                    ->whereIn('status', ['accepted', 're_registration_complete'])
+                    ->count();
+                if ($acceptedForTrack >= $quotaForTrack) {
+                    return back()->with('error', 'Kuota jalur ' . $track->name . ' untuk jurusan ' . $major->name . ' sudah penuh');
+                }
+            }
+        } else {
+            $track = RegistrationTrack::findOrFail($validated['registration_track_id']);
         }
 
         $pStatusConfirm = $period->registrationStatus();
@@ -376,7 +403,7 @@ class RegistrationController extends Controller
                     'registration_period_id' => $validated['registration_period_id'],
                     'registration_track_id' => $validated['registration_track_id'],
                     'school_id' => $school->id,
-                    'major_id' => $validated['major_id'],
+                    'major_id' => $validated['major_id'] ?? null,
                     'registration_number' => $registrationNumber,
                     'status' => 'pending',
                     'payment_status' => 'unpaid',
