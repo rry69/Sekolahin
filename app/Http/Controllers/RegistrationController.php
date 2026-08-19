@@ -155,6 +155,9 @@ class RegistrationController extends Controller
         if ($needsMajor && empty($validated['major_id'])) {
             return back()->with('error', 'Jenjang ini wajib memilih jurusan')->withInput();
         }
+        if (! $needsMajor) {
+            $validated['major_id'] = null;
+        }
         if ($period) {
             $status = $period->registrationStatus();
             if ($status === 'inactive') {
@@ -313,6 +316,10 @@ class RegistrationController extends Controller
 
         if ($needsMajor && empty($validated['major_id'])) {
             return back()->with('error', 'Jenjang ini wajib memilih jurusan')->withInput();
+        }
+
+        if (! $needsMajor) {
+            $validated['major_id'] = null;
         }
 
         if (! $school->schoolLevels->contains('id', $period->school_level_id)) {
