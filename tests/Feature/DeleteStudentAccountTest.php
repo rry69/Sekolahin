@@ -126,11 +126,13 @@ class DeleteStudentAccountTest extends TestCase
 
     public function test_index_has_delete_button()
     {
-        [$admin] = $this->seedBase();
+        [$admin, $siswa, $registration] = $this->seedBase();
 
-        $response = $this->actingAs($admin)->get('/admin/registrations');
+        // Tombol Hapus Akun ada di halaman DETAIL, bukan index (index memakai
+        // tombol Status/Bayar via modal). Periksa di detail.
+        $response = $this->actingAs($admin)->get('/admin/registrations/' . $registration->id);
         $response->assertStatus(200);
-        $response->assertSee('Hapus');
-        $response->assertSee('Detail');
+        $response->assertSee('Detail Pendaftaran');
+        $response->assertSee('Hapus Akun');
     }
 }

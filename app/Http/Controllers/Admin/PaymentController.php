@@ -37,7 +37,12 @@ class PaymentController extends Controller
         }
 
         $registration = $payment->registration;
-        if ($registration->payment_status === 'paid' || $registration->payments()->where('status', 'verified')->exists()) {
+        $isReRegFee = ($payment->payment_type === 're_registration_fee');
+
+        // Untuk biaya daftar ulang: tidak ada kaitan dengan payment_status biaya pendaftaran.
+        // Untuk biaya pendaftaran: cegah duplikasi pembayaran sukses.
+        if (!$isReRegFee
+            && ($registration->payment_status === 'paid' || $registration->payments()->where('status', 'verified')->exists())) {
             return back()->with('error', 'Sudah ada pembayaran sukses untuk pendaftaran ini');
         }
 
@@ -47,21 +52,26 @@ class PaymentController extends Controller
             'verified_at' => now(),
         ]);
 
-        $registration->update(['payment_status' => 'paid']);
-        $registration->payments()
-            ->where('id', '!=', $payment->id)
-            ->whereIn('status', ['pending', 'rejected'])
-            ->where('payment_method', 'online')
-            ->whereNull('xendit_paid_at')
-            ->whereNull('proof_file')
-            ->delete();
+        if (!$isReRegFee) {
+            $registration->update(['payment_status' => 'paid']);
+            $registration->payments()
+                ->where('id', '!=', $payment->id)
+                ->whereIn('status', ['pending', 'rejected'])
+                ->where('payment_method', 'online')
+                ->whereNull('xendit_paid_at')
+                ->whereNull('proof_file')
+                ->delete();
+        }
 
         ActivityLogger::log('payment.verify', 'Pembayaran diverifikasi: ' . $payment->registration->registration_number, $payment, [
             'registration_number' => $payment->registration->registration_number,
             'amount' => $payment->amount,
+            'payment_type' => $payment->payment_type,
         ]);
 
-        $this->enrollIfReady($payment->registration);
+        if (!$isReRegFee) {
+            $this->enrollIfReady($payment->registration);
+        }
 
         if (request()->ajax()) {
             return response()->json(['success' => true, 'message' => 'Pembayaran berhasil diverifikasi']);
@@ -87,7 +97,10 @@ class PaymentController extends Controller
             'rejection_reason' => $validated['rejection_reason'],
         ]);
 
-        $payment->registration->update(['payment_status' => 'failed']);
+        // Biaya daftar ulang TIDAK mengubah payment_status biaya pendaftaran.
+        if ($payment->payment_type !== 're_registration_fee') {
+            $payment->registration->update(['payment_status' => 'failed']);
+        }
 
         ActivityLogger::log('payment.reject', 'Pembayaran ditolak: ' . $payment->registration->registration_number, $payment, [
             'registration_number' => $payment->registration->registration_number,

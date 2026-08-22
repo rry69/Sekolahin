@@ -42,15 +42,34 @@ class PaymentController extends Controller
             abort(403, 'Unauthorized');
         }
 
-        if ($registration->payment_status === 'paid') {
+        $isReRegFee = ($validated['payment_type'] === 're_registration_fee');
+
+        if ($isReRegFee) {
+            // Biaya daftar ulang terpisah dari biaya pendaftaran:
+            // hanya relevan setelah siswa DITERIMA (accepted) dan belum lunas.
+            if ($registration->status !== 'accepted') {
+                return back()->with('error', 'Pembayaran biaya daftar ulang hanya tersedia setelah Anda dinyatakan DITERIMA.');
+            }
+            $hasPaidReRegFee = $registration->payments()
+                ->where('payment_type', 're_registration_fee')
+                ->where('status', 'verified')
+                ->exists();
+            if ($hasPaidReRegFee) {
+                return back()->with('error', 'Biaya daftar ulang sudah lunas.');
+            }
+        } elseif ($registration->payment_status === 'paid') {
             return back()->with('error', 'Pembayaran untuk pendaftaran ini sudah lunas');
         }
 
-        // Semua jalur (termasuk Reguler): biaya baru tampil setelah berkas Terverifikasi
-        $registration->loadMissing('registrationTrack');
-        if ($registration->status !== 'verified' || $registration->payment_amount === null) {
-            $trackName = $registration->registrationTrack->name ?? 'ini';
-            return back()->with('error', 'Pembayaran jalur ' . $trackName . ' hanya tersedia setelah berkas Terverifikasi oleh panitia.');
+        // Semua jalur (termasuk Reguler): biaya baru tampil setelah berkas Terverifikasi.
+        // Khusus biaya daftar ulang (re_registration_fee), syaratnya sudah DITERIMA
+        // (status accepted) — dilewati dari guard ini.
+        if (!$isReRegFee) {
+            $registration->loadMissing('registrationTrack');
+            if ($registration->status !== 'verified' || $registration->payment_amount === null) {
+                $trackName = $registration->registrationTrack->name ?? 'ini';
+                return back()->with('error', 'Pembayaran jalur ' . $trackName . ' hanya tersedia setelah berkas Terverifikasi oleh panitia.');
+            }
         }
 
         $paymentDeadlineHours = (int) \App\Models\Setting::get('payment_deadline_hours', 72);
@@ -61,6 +80,12 @@ class PaymentController extends Controller
         if ($request->payment_method !== 'online'
             && $registration->payments()->where('status', 'pending')->where('payment_method', '!=', 'online')->exists()) {
             return back()->with('error', 'Terdapat pembayaran yang masih menunggu verifikasi. Selesaikan atau tunggu verifikasi pembayaran yang sudah dibuat.');
+        }
+
+        // Biaya daftar ulang via online tidak didukung: Xendit callback hanya
+        // memahami payment_status biaya pendaftaran. Gunakan transfer manual.
+        if ($isReRegFee && $request->payment_method === 'online') {
+            return back()->with('error', 'Pembayaran biaya daftar ulang dilakukan via transfer manual. Silakan upload bukti transfer.');
         }
 
         if ($request->payment_method === 'online') {
@@ -140,10 +165,14 @@ class PaymentController extends Controller
 
         $this->invoiceService->issue($payment);
 
-        $registration->update([
-            'payment_status' => 'pending',
-            'deadline_at' => $paymentDeadline,
-        ]);
+        // Biaya daftar ulang TIDAK menyentuh payment_status/deadline_at pendaftaran
+        // (itu milik biaya pendaftaran). Hanya biaya pendaftaran yang menggeser status.
+        if (!$isReRegFee) {
+            $registration->update([
+                'payment_status' => 'pending',
+                'deadline_at' => $paymentDeadline,
+            ]);
+        }
 
         ActivityLogger::log('payment.upload_proof', 'Bukti bayar diupload untuk ' . $registration->registration_number, $payment, [
             'registration_number' => $registration->registration_number,
@@ -163,24 +192,33 @@ class PaymentController extends Controller
         return back()->with('success', 'Bukti pembayaran berhasil diunggah');
     }
 
-    public function show(Payment $payment)
+    /**
+     * Otorisasi akses payment/invoice: hanya pemilik pendaftaran atau Admin.
+     * (Sebelumnya: `&& !auth()->user()->role_id` — semua user ber-role termasuk
+     * Siswa lolos → IDOR. Sekarang cek role eksplisit.)
+     */
+    private function authorizePaymentAccess(Payment $payment): void
     {
         $registration = $payment->registration;
-        
-        if ($registration->applicant->user_id !== auth()->id() && !auth()->user()->role_id) {
+
+        $isOwner = $registration->applicant && $registration->applicant->user_id === auth()->id();
+        $isAdmin = auth()->user()->role?->name === 'Admin';
+
+        if (! $isOwner && ! $isAdmin) {
             abort(403, 'Unauthorized');
         }
+    }
+
+    public function show(Payment $payment)
+    {
+        $this->authorizePaymentAccess($payment);
 
         return view('payments.show', compact('payment'));
     }
 
     public function invoice(Payment $payment)
     {
-        $registration = $payment->registration;
-
-        if ($registration->applicant->user_id !== auth()->id() && !auth()->user()->role_id) {
-            abort(403, 'Unauthorized');
-        }
+        $this->authorizePaymentAccess($payment);
 
         if (!$payment->invoice_pdf) {
             abort(404, 'Invoice belum tersedia');
@@ -195,11 +233,9 @@ class PaymentController extends Controller
      */
     public function invoiceView(Payment $payment)
     {
-        $registration = $payment->registration;
+        $this->authorizePaymentAccess($payment);
 
-        if ($registration->applicant->user_id !== auth()->id() && !auth()->user()->role_id) {
-            abort(403, 'Unauthorized');
-        }
+        $registration = $payment->registration;
 
         $canPayOnline = $payment->payment_method === 'online'
             && $payment->status === 'pending'

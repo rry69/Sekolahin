@@ -81,38 +81,6 @@
                 </form>
             </div>
         </div>
-
-        <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mt-6">
-            <div class="p-6">
-                <h3 class="text-2xl font-bold text-gray-900 mb-2">Status Pendaftaran per Jenjang</h3>
-                <p class="text-sm text-gray-500 mb-6">Matikan jenjang yang tidak menerima pendaftaran. Jenjang yang nonaktif tidak akan muncul di form pendaftaran siswa.</p>
-
-                <form action="{{ route('admin.schools.levels.update') }}" method="POST">
-                    @csrf
-
-                    <div class="space-y-3">
-                        @foreach ($levels as $level)
-                            <div class="flex items-center justify-between border rounded-lg px-4 py-3">
-                                <div>
-                                    <p class="font-medium text-gray-900">{{ $level->name }}</p>
-                                    <p class="text-sm text-gray-500">{{ $level->description }}</p>
-                                </div>
-                                <label class="flex items-center gap-2 cursor-pointer">
-                                    <input type="checkbox" name="is_active[{{ $level->id }}]" value="1"
-                                        {{ $level->is_active ? 'checked' : '' }}
-                                        class="h-4 w-4 text-green-600 focus:ring-green-500 rounded">
-                                    <span class="text-sm font-medium {{ $level->is_active ? 'text-green-600' : 'text-red-500' }}">
-                                        {{ $level->is_active ? 'Aktif' : 'Nonaktif' }}
-                                    </span>
-                                </label>
-                            </div>
-                        @endforeach
-                    </div>
-
-                    <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 mt-6">Simpan Status Pendaftaran</button>
-                </form>
-            </div>
-        </div>
     </div>
 </div>
 @endsection

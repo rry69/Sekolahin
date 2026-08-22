@@ -70,40 +70,4 @@ class DashboardController extends Controller
 
         return view('admin.registrations', compact('registrations'));
     }
-
-    public function updateStatus(Request $request, Registration $registration)
-    {
-        $validated = $request->validate([
-            'status' => 'required|in:pending,verified,rejected,accepted,re_registration_complete',
-            'notes' => 'nullable|string',
-        ]);
-
-        $registration->update($validated);
-
-        if ($validated['status'] === 'verified') {
-            $registration->update(['documents_verified_at' => now()]);
-        }
-
-        if ($request->ajax()) {
-            return response()->json(['success' => true, 'message' => 'Status pendaftaran diperbarui']);
-        }
-
-        return back()->with('success', 'Status pendaftaran diperbarui');
-    }
-
-    public function updatePayment(Request $request, Registration $registration)
-    {
-        $validated = $request->validate([
-            'payment_status' => 'required|in:unpaid,pending,paid,failed',
-            'payment_amount' => 'nullable|numeric|min:0',
-        ]);
-
-        $registration->update($validated);
-
-        if ($request->ajax()) {
-            return response()->json(['success' => true, 'message' => 'Status pembayaran diperbarui']);
-        }
-
-        return back()->with('success', 'Status pembayaran diperbarui');
-    }
 }

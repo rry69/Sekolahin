@@ -540,6 +540,42 @@
                 @if($reReg && $reReg->verification_code)
                     <p class="text-sm text-green-800 mt-2">Kode verifikasi: <span class="font-mono font-bold tracking-widest text-base text-gray-900">{{ $reReg->verification_code }}</span> — tunjukkan kepada panitia di sekolah.</p>
                 @endif
+
+                @php
+                    $reRegFee = (float) (\App\Models\Setting::get('re_registration_fee', 0) ?: 0);
+                    $reRegFeePaid = $registration->payments()
+                        ->where('payment_type', 're_registration_fee')
+                        ->where('status', 'verified')
+                        ->exists();
+                    $reRegFeePending = $registration->payments()
+                        ->where('payment_type', 're_registration_fee')
+                        ->where('status', 'pending')
+                        ->exists();
+                @endphp
+                @if($reRegFee > 0 && !$reRegFeePaid)
+                    <div class="mt-4 border-t border-green-200 pt-4">
+                        <p class="text-green-900 font-semibold">Biaya Daftar Ulang: <span class="font-bold">Rp {{ number_format($reRegFee, 0, ',', '.') }}</span></p>
+                        <p class="text-sm text-green-800 mt-1">Selesaikan pembayaran biaya daftar ulang sebelum/bersamaan dengan daftar ulang di sekolah.</p>
+                        @if($reRegFeePending)
+                            <p class="text-sm text-amber-700 mt-2">Bukti pembayaran biaya daftar ulang Anda sedang <strong>menunggu verifikasi</strong> panitia.</p>
+                        @else
+                            <form action="{{ route('payments.store') }}" method="POST" enctype="multipart/form-data" class="mt-3">
+                                @csrf
+                                <input type="hidden" name="registration_id" value="{{ $registration->id }}">
+                                <input type="hidden" name="payment_type" value="re_registration_fee">
+                                <input type="hidden" name="amount" value="{{ $reRegFee }}">
+                                <input type="hidden" name="payment_method" value="bank_transfer">
+                                <div class="mb-2">
+                                    <label class="block text-sm font-medium text-green-800 mb-1">Bukti Transfer Biaya Daftar Ulang</label>
+                                    <input type="file" name="proof_file" accept=".pdf,.jpg,.jpeg,.png" required class="w-full text-sm border border-gray-300 rounded px-3 py-2">
+                                </div>
+                                <button type="submit" class="inline-block px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 font-medium">Upload Bukti Bayar Daftar Ulang</button>
+                            </form>
+                        @endif
+                    </div>
+                @elseif($reRegFeePaid)
+                    <p class="text-sm text-green-800 mt-2">✓ Biaya daftar ulang <strong>lunas</strong>.</p>
+                @endif
             @endif
         </div>
     @endif
