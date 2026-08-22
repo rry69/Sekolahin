@@ -41,7 +41,6 @@ class SettingController extends Controller
             'bank_account_number'        => 'required|string|max:50',
             'bank_account_name'          => 'required|string|max:255',
             'payment_note'               => 'nullable|string',
-            'emergency_shortcut'         => 'nullable|string|max:50',
             'registration_deadline_hours'=> 'required|integer|min:1|max:720',
             'payment_deadline_hours'     => 'required|integer|min:1|max:720',
             're_registration_type'       => 'required|in:online,offline',
@@ -143,11 +142,6 @@ class SettingController extends Controller
             Setting::updateOrCreate(['key' => $key], ['value' => $data[$key] ?? null]);
         }
         Setting::updateOrCreate(['key' => 'rereg_notif_h2'], ['value' => $data['rereg_notif_h2'] ?? null]);
-
-        Setting::updateOrCreate(
-            ['key' => 'emergency_shortcut'],
-            ['value' => $data['emergency_shortcut'] ?? null]
-        );
 
         Setting::updateOrCreate(
             ['key' => 'registration_deadline_hours'],

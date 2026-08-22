@@ -422,7 +422,6 @@ class FullRegistrationFlowTest extends TestCase
                 'bank_account_number' => '1234567890',
                 'bank_account_name' => 'SPMB',
                 'payment_note' => '',
-                'emergency_shortcut' => '',
                 'registration_deadline_hours' => '72',
                 'payment_deadline_hours' => '72',
                 're_registration_type' => 'offline',
