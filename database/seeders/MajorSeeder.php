@@ -224,6 +224,8 @@ class MajorSeeder extends Seeder
             $levelId = \DB::table('school_levels')->where('name', $major['level'])->value('id');
             $schoolId = $schools[$major['school']] ?? null;
             unset($major['school'], $major['level']);
+            // Kolom tes dihapus dari schema (SPMB tidak menggunakan ujian tes).
+            unset($major['requires_health_test'], $major['requires_interview'], $major['requires_skill_test']);
 
             if (! $schoolId || ! $levelId) {
                 continue;

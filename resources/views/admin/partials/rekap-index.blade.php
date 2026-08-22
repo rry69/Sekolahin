@@ -27,6 +27,8 @@
   @endforeach
   <div class="doc-actions">
     <button class="doc-action-btn" onclick="toggleFilterForm()"><i class="fa-solid fa-filter" style="font-size:10px"></i> Filter</button>
+    <a href="{{ route('admin.rekap.export.xlsx', request()->only(['major_id','period_id','search'])) }}" class="doc-action-btn" title="Export Excel"><i class="fa-solid fa-file-excel" style="font-size:10px"></i> Export Excel</a>
+    <a href="{{ route('admin.rekap.export.pdf', request()->only(['major_id','period_id','search'])) }}" class="doc-action-btn" title="Export PDF"><i class="fa-solid fa-file-pdf" style="font-size:10px"></i> Export PDF</a>
   </div>
 </div>
 

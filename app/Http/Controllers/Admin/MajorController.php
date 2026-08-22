@@ -90,9 +90,6 @@ class MajorController extends Controller
             'code' => 'required|string|max:50',
             'quota' => 'nullable|integer|min:0',
             'description' => 'nullable|string',
-            'requires_health_test' => 'nullable|boolean',
-            'requires_interview' => 'nullable|boolean',
-            'requires_skill_test' => 'nullable|boolean',
         ];
         foreach ($tracks as $t) {
             $rules["quota_track_{$t->id}"] = 'nullable|integer|min:0';
@@ -114,9 +111,6 @@ class MajorController extends Controller
             'code' => strtoupper($validated['code']),
             'quota' => $validated['quota'] ?? 0,
             'description' => $validated['description'] ?? null,
-            'requires_health_test' => array_key_exists('requires_health_test', $validated),
-            'requires_interview' => array_key_exists('requires_interview', $validated),
-            'requires_skill_test' => array_key_exists('requires_skill_test', $validated),
         ]);
 
         foreach ($tracks as $t) {
@@ -168,9 +162,6 @@ class MajorController extends Controller
             'code' => 'required|string|max:50',
             'quota' => 'required|integer|min:1',
             'description' => 'nullable|string',
-            'requires_health_test' => 'boolean',
-            'requires_interview' => 'boolean',
-            'requires_skill_test' => 'boolean',
         ];
         foreach ($tracks as $t) {
             $rules["quota_track_{$t->id}"] = 'nullable|integer|min:0';
@@ -185,7 +176,7 @@ class MajorController extends Controller
         $school = School::with('schoolLevels')->findOrFail($validated['school_id']);
         abort_unless($school->schoolLevels->contains('id', $validated['school_level_id']), 422, 'Sekolah tidak melayani jenjang yang dipilih');
 
-        $major->update(collect($validated)->only(['school_id', 'school_level_id', 'name', 'code', 'quota', 'description', 'requires_health_test', 'requires_interview', 'requires_skill_test'])->toArray());
+        $major->update(collect($validated)->only(['school_id', 'school_level_id', 'name', 'code', 'quota', 'description'])->toArray());
 
         foreach ($tracks as $t) {
             $key = "quota_track_{$t->id}";
@@ -225,8 +216,7 @@ class MajorController extends Controller
 
         $registrations = $major->registrations()
             ->with(['applicant.user', 'registrationTrack'])
-            ->whereNotNull('total_score')
-            ->orderBy('ranking')
+            ->latest()
             ->paginate(20);
 
         return view('admin.majors.show', compact('major', 'statistics', 'registrations'));

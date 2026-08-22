@@ -60,42 +60,33 @@
                 </div>
                 @endif
 
+                @if($major->description)
                 <div class="border-b pb-6 mb-6">
-                    <h4 class="text-sm font-medium text-gray-500 uppercase mb-3">Kebutuhan Tes</h4>
-                    <ul class="text-sm text-gray-700 space-y-1">
-                        <li>Tes Kesehatan: {{ $major->requires_health_test ? 'Ya' : 'Tidak' }}</li>
-                        <li>Tes Wawancara: {{ $major->requires_interview ? 'Ya' : 'Tidak' }}</li>
-                        <li>Tes Keterampilan: {{ $major->requires_skill_test ? 'Ya' : 'Tidak' }}</li>
-                    </ul>
-                    @if($major->description)
-                        <p class="text-sm text-gray-600 mt-3">{{ $major->description }}</p>
-                    @endif
+                    <h4 class="text-sm font-medium text-gray-500 uppercase mb-3">Deskripsi</h4>
+                    <p class="text-sm text-gray-700">{{ $major->description }}</p>
                 </div>
+                @endif
 
-                <h4 class="text-sm font-medium text-gray-500 uppercase mb-3">Peringkat Pendaftar (Ber-Nilai)</h4>
+                <h4 class="text-sm font-medium text-gray-500 uppercase mb-3">Daftar Pendaftar</h4>
                 <div class="overflow-x-auto">
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
                             <tr>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Ranking</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nama</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Jalur</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Total Nilai</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
-                            @forelse ($registrations as $index => $registration)
+                            @forelse ($registrations as $registration)
                                 <tr>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm">{{ $registration->ranking ?? $index + 1 }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $registration->applicant->full_name ?? '-' }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm">{{ $registration->registrationTrack->name ?? '-' }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm">{{ $registration->total_score }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm">{{ ucfirst($registration->status) }}</td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="5" class="px-6 py-4 text-center text-gray-500">Belum ada data ranking</td>
+                                    <td colspan="3" class="px-6 py-4 text-center text-gray-500">Belum ada pendaftar</td>
                                 </tr>
                             @endforelse
                         </tbody>

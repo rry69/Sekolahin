@@ -20,11 +20,6 @@ class Registration extends Model
         'documents_verified_at',
         'verified_by',
         'verified_notes',
-        'test_score',
-        'academic_score',
-        'achievement_score',
-        'total_score',
-        'ranking',
         'notes',
         'deadline_at',
         'canceled_at',
@@ -35,10 +30,6 @@ class Registration extends Model
         return [
             'documents_verified_at' => 'datetime',
             'payment_amount' => 'decimal:2',
-            'test_score' => 'decimal:2',
-            'academic_score' => 'decimal:2',
-            'achievement_score' => 'decimal:2',
-            'total_score' => 'decimal:2',
             'deadline_at' => 'datetime',
             'canceled_at' => 'datetime',
         ];

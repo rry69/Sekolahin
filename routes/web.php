@@ -58,7 +58,6 @@ Route::middleware(['auth', 'role:Siswa'])->group(function () {
 
     Route::get('/registrations', [RegistrationController::class, 'index'])->name('registration.index');
     Route::get('/registrations/create', [RegistrationController::class, 'create'])->name('registration.create');
-    Route::get('/registrations/ranking', [RegistrationController::class, 'ranking'])->name('registration.ranking');
     Route::post('/registrations', [RegistrationController::class, 'store'])->name('registration.store');
     Route::get('/registrations/review', [RegistrationController::class, 'review'])->name('registration.review');
     Route::post('/registrations/confirm', [RegistrationController::class, 'confirm'])->name('registration.confirm');
@@ -101,6 +100,8 @@ Route::middleware(['auth', 'role:Admin'])->prefix('admin')->name('admin.')->grou
     Route::post('/settings', [AdminSettingController::class, 'update'])->name('settings.update');
 
     Route::get('/rekap', [AdminRekapController::class, 'index'])->name('rekap.index');
+    Route::get('/rekap/export/xlsx', [AdminRekapController::class, 'exportXlsx'])->name('rekap.export.xlsx');
+    Route::get('/rekap/export/pdf', [AdminRekapController::class, 'exportPdf'])->name('rekap.export.pdf');
 
     Route::get('/majors', [AdminMajorController::class, 'index'])->name('majors.index');
     Route::get('/majors/create', [AdminMajorController::class, 'create'])->name('majors.create');

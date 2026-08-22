@@ -51,7 +51,7 @@
                                 Dibatalkan: {{ $registration->canceled_at->format('d M Y H:i') }}
                             </span>
                         @endif
-                        <form action="{{ route('admin.registrations.delete-account', $registration) }}" method="POST" onsubmit="return confirm('Hapus akun siswa {{ $registration->applicant?->full_name ?? '' }}? Seluruh data pendaftaran, ujian, dan pembayarannya akan ikut terhapus permanen.')">
+                        <form action="{{ route('admin.registrations.delete-account', $registration) }}" method="POST" onsubmit="return confirm('Hapus akun siswa {{ $registration->applicant?->full_name ?? '' }}? Seluruh data pendaftaran dan pembayarannya akan ikut terhapus permanen.')">
                             @csrf
                             <button type="submit" class="px-3 py-1 text-sm font-semibold rounded bg-red-600 text-white hover:bg-red-700">
                                 Hapus Akun

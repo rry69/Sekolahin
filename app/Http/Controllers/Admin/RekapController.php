@@ -2,18 +2,31 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\RekapExport;
 use App\Http\Controllers\Controller;
 use App\Models\Major;
 use App\Models\Registration;
 use App\Models\RegistrationPeriod;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class RekapController extends Controller
 {
-    public function index(Request $request)
+    /**
+     * Query dasar rekap siswa diterima (accepted + re_registration_complete),
+     * dibatasi filter major_id / period_id / search. Dipakai index() dan export.
+     */
+    protected function buildQuery(Request $request)
     {
-        $query = Registration::with(['applicant.user', 'registrationPeriod', 'registrationTrack', 'school', 'major', 'finalMajor'])
-            ->whereIn('status', ['accepted', 're_registration_complete']);
+        $query = Registration::with([
+            'applicant.user',
+            'registrationPeriod.schoolLevel',
+            'registrationTrack',
+            'school',
+            'major',
+            'finalMajor',
+        ])->whereIn('status', ['accepted', 're_registration_complete']);
 
         if ($request->filled('major_id')) {
             $query->where('final_major_id', $request->major_id);
@@ -25,14 +38,21 @@ class RekapController extends Controller
 
         if ($request->filled('search')) {
             $search = $request->search;
-            $query->whereHas('applicant', function ($q) use ($search) {
-                $q->where('full_name', 'like', "%{$search}%")
-                  ->orWhere('nisn', 'like', "%{$search}%")
-                  ->orWhere('student_number', 'like', "%{$search}%");
-            })->orWhere('registration_number', 'like', "%{$search}%");
+            $query->where(function ($q) use ($search) {
+                $q->whereHas('applicant', function ($q) use ($search) {
+                    $q->where('full_name', 'like', "%{$search}%")
+                      ->orWhere('nisn', 'like', "%{$search}%")
+                      ->orWhere('student_number', 'like', "%{$search}%");
+                })->orWhere('registration_number', 'like', "%{$search}%");
+            });
         }
 
-        $registrations = $query->latest()->paginate(20);
+        return $query;
+    }
+
+    public function index(Request $request)
+    {
+        $registrations = $this->buildQuery($request)->latest()->paginate(20);
 
         $majors = Major::with('school')->get();
         $periods = RegistrationPeriod::all();
@@ -50,5 +70,24 @@ class RekapController extends Controller
         }
 
         return view('admin.rekap.index', compact('registrations', 'majors', 'periods', 'statsPerMajor'));
+    }
+
+    public function exportXlsx(Request $request)
+    {
+        $registrations = $this->buildQuery($request)->latest()->get();
+
+        return Excel::download(new RekapExport($registrations), 'rekap-siswa-diterima.xlsx');
+    }
+
+    public function exportPdf(Request $request)
+    {
+        $registrations = $this->buildQuery($request)->latest()->get();
+
+        $pdf = Pdf::loadView('pdf.rekap', [
+            'registrations' => $registrations,
+            'exportedAt' => now(),
+        ])->setPaper('a4', 'landscape');
+
+        return $pdf->download('rekap-siswa-diterima.pdf');
     }
 }

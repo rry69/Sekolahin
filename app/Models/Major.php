@@ -13,18 +13,11 @@ class Major extends Model
         'code',
         'quota',
         'description',
-        'requires_health_test',
-        'requires_interview',
-        'requires_skill_test',
     ];
 
     protected function casts(): array
     {
-        return [
-            'requires_health_test' => 'boolean',
-            'requires_interview' => 'boolean',
-            'requires_skill_test' => 'boolean',
-        ];
+        return [];
     }
 
     public function school()

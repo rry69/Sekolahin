@@ -83,6 +83,27 @@
                 @endif
             @endif
 
+            @if (!$registrations->isEmpty())
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
+                    <div class="bg-white rounded-lg shadow-sm p-4 border border-gray-200">
+                        <p class="text-sm font-medium text-gray-500">Total Pendaftaran</p>
+                        <p class="mt-1 text-2xl font-bold text-gray-900">{{ $summary['total'] }}</p>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-sm p-4 border border-gray-200">
+                        <p class="text-sm font-medium text-gray-500">Menunggu Verifikasi</p>
+                        <p class="mt-1 text-2xl font-bold text-yellow-600">{{ $summary['pending'] }}</p>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-sm p-4 border border-gray-200">
+                        <p class="text-sm font-medium text-gray-500">Terverifikasi</p>
+                        <p class="mt-1 text-2xl font-bold text-blue-600">{{ $summary['verified'] }}</p>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-sm p-4 border border-gray-200">
+                        <p class="text-sm font-medium text-gray-500">Diterima / Terdaftar</p>
+                        <p class="mt-1 text-2xl font-bold text-green-600">{{ $summary['accepted'] }}</p>
+                    </div>
+                </div>
+            @endif
+
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
                     @if ($registrations->isEmpty())
@@ -112,7 +133,8 @@
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Batas Waktu</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Pembayaran</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Aksi</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Dokumen</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody class="bg-white divide-y divide-gray-200">
@@ -184,6 +206,27 @@
                                                 <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $paymentColors[$reg->payment_status] ?? 'bg-gray-100 text-gray-800' }}">
                                                     {{ ucfirst($reg->payment_status) }}
                                                 </span>
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                @php
+                                                    $requiredTypes = $reg->requiredDocumentTypes();
+                                                    $uploadedTypes = $reg->documents->pluck('document_type')->unique();
+                                                    $verifiedTypes = $reg->documents->whereNotNull('verified_at')->pluck('document_type')->unique();
+                                                    $uploadedCount = $uploadedTypes->intersect($requiredTypes)->count();
+                                                    $verifiedCount = $verifiedTypes->intersect($requiredTypes)->count();
+                                                    $totalRequired = count($requiredTypes);
+                                                    $docPct = $totalRequired > 0 ? round(($verifiedCount / $totalRequired) * 100) : 0;
+                                                    $docColor = $verifiedCount === $totalRequired ? 'text-green-600' : ($uploadedCount > 0 ? 'text-yellow-600' : 'text-gray-500');
+                                                @endphp
+                                                <span class="inline-flex items-center gap-1 text-xs font-medium {{ $docColor }}">
+                                                    <span class="text-gray-500">{{ $verifiedCount }}/{{ $totalRequired }}</span>
+                                                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                    </svg>
+                                                </span>
+                                                <div class="mt-1 w-16 h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                                                    <div class="h-full rounded-full {{ $verifiedCount === $totalRequired ? 'bg-green-500' : 'bg-yellow-500' }}" style="width: {{ $docPct }}%"></div>
+                                                </div>
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                                 <a href="{{ route('registration.show', $reg) }}" class="text-indigo-600 hover:text-indigo-900">

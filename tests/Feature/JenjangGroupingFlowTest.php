@@ -160,9 +160,6 @@ class JenjangGroupingFlowTest extends TestCase
             'name' => 'Jurusan Ilegal',
             'code' => 'ILEGAL',
             'quota' => 36,
-            'requires_health_test' => false,
-            'requires_interview' => false,
-            'requires_skill_test' => false,
         ]);
         $response->assertStatus(422);
         $this->assertDatabaseMissing('majors', ['code' => 'ILEGAL']);
@@ -178,9 +175,6 @@ class JenjangGroupingFlowTest extends TestCase
             'name' => 'Jurusan Baru SMK',
             'code' => 'BARU',
             'quota' => 36,
-            'requires_health_test' => false,
-            'requires_interview' => false,
-            'requires_skill_test' => false,
         ]);
         $response->assertRedirect(route('admin.majors.index'));
         $response->assertSessionHas('success');

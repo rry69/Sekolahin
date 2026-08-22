@@ -213,15 +213,6 @@
                         </div>
                     </div>
 
-                    @if ($registration->test_score)
-                        <div class="mb-6">
-                            <h4 class="text-sm font-medium text-gray-500 uppercase mb-2">Nilai Tes</h4>
-                            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                                <p class="text-2xl font-bold text-blue-800">{{ $registration->test_score }}</p>
-                            </div>
-                        </div>
-                    @endif
-
                     @if ($registration->notes)
                         <div class="mb-6">
                             <h4 class="text-sm font-medium text-gray-500 uppercase mb-2">Catatan</h4>

@@ -40,9 +40,21 @@ class RegistrationController extends Controller
             return redirect()->route('applicant.profile')->with('error', 'Lengkapi data diri terlebih dahulu sebelum mendaftar');
         }
 
-        $registrations = $applicant->registrations()->with(['registrationPeriod.schoolLevel', 'registrationTrack'])->latest()->get();
+        $registrations = $applicant->registrations()->with([
+            'registrationPeriod.schoolLevel',
+            'registrationTrack',
+            'documents',
+        ])->latest()->get();
 
-        return view('registration.index', compact('registrations'));
+        // Ringkasan status untuk kartu dashboard siswa
+        $summary = [
+            'total' => $registrations->count(),
+            'pending' => $registrations->where('status', 'pending')->count(),
+            'verified' => $registrations->where('status', 'verified')->count(),
+            'accepted' => $registrations->whereIn('status', ['accepted', 're_registration_complete'])->count(),
+        ];
+
+        return view('registration.index', compact('registrations', 'summary'));
     }
 
     public function create()
@@ -470,40 +482,6 @@ class RegistrationController extends Controller
     }
 
     // ponytail: sync logic lives in SyncsXenditPayment; inline wrapper deleted
-
-    public function ranking(Request $request)
-    {
-        $validated = $request->validate([
-            'major_id' => 'required|exists:majors,id',
-            'period_id' => 'nullable|exists:registration_periods,id',
-        ]);
-
-        $major = Major::with('school')->findOrFail($validated['major_id']);
-        $majors = Major::with('school')->orderBy('name')->get();
-        
-        $query = Registration::where('major_id', $validated['major_id'])
-            ->whereNotNull('total_score')
-            ->with(['applicant.user', 'registrationTrack']);
-
-        if (isset($validated['period_id'])) {
-            $query->where('registration_period_id', $validated['period_id']);
-        }
-
-        $rankings = $query->orderByDesc('total_score')
-            ->orderBy('created_at')
-            ->get()
-            ->map(function ($registration, $index) {
-                $registration->rank_position = $index + 1;
-                return $registration;
-            });
-
-        $userRegistration = null;
-        if (auth()->user()->applicant) {
-            $userRegistration = $rankings->firstWhere('applicant_id', auth()->user()->applicant->id);
-        }
-
-        return view('registration.ranking', compact('major', 'majors', 'rankings', 'userRegistration'));
-    }
 
     public function uploadDocument(Request $request, Registration $registration)
     {

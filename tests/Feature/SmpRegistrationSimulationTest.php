@@ -519,19 +519,4 @@ class SmpRegistrationSimulationTest extends TestCase
         ]))->assertOk()->assertDontSee('Jurusan Pilihan');
         fwrite(STDOUT, "\n[TEMUAN 7] Review page SMP: tidak ada 'Jurusan Pilihan' (OK)\n");
     }
-
-    /**
-     * TEMUAN 8: Ranking page — SMP tanpa major, ranking() memerlukan major_id
-     * yang required. Ini berarti ranking tidak berlaku untuk SMP.
-     */
-    public function test_temuan_ranking_requires_major(): void
-    {
-        ['period' => $period, 'school' => $school] = $this->seedSmpBase();
-        $siswa = $this->createSmpSiswa('smp-rank@spmb.test', 999030080, 2012);
-
-        $this->actingAs($siswa)->get('/registrations/ranking')
-            ->assertSessionHasErrors('major_id');
-        fwrite(STDOUT, "\n[TEMUAN 8] Ranking page: memerlukan major_id → tidak bisa dipakai untuk SMP\n");
-        fwrite(STDOUT, "  → Ini EXPECTED karena ranking berbasis jurusan, bukan per-sekolah/level\n");
-    }
 }

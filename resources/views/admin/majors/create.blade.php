@@ -72,18 +72,6 @@
                         @error('description')<p class="text-red-600 text-sm mt-1">{{ $message }}</p>@enderror
                     </div>
 
-                    <div class="grid grid-cols-3 gap-4 mb-6">
-                        <label class="flex items-center gap-2 text-sm text-gray-700">
-                            <input type="checkbox" name="requires_health_test" value="1" class="rounded border-gray-300"> Tes Kesehatan
-                        </label>
-                        <label class="flex items-center gap-2 text-sm text-gray-700">
-                            <input type="checkbox" name="requires_interview" value="1" class="rounded border-gray-300"> Tes Wawancara
-                        </label>
-                        <label class="flex items-center gap-2 text-sm text-gray-700">
-                            <input type="checkbox" name="requires_skill_test" value="1" class="rounded border-gray-300"> Tes Keterampilan
-                        </label>
-                    </div>
-
                     <div class="flex justify-between">
                         <a href="{{ route('admin.majors.index') }}" class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">Batal</a>
                         <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">Tambah Jurusan</button>
