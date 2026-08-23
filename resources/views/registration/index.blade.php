@@ -2,15 +2,12 @@
     <x-slot name="header">
         <div class="flex justify-between items-center">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Pendaftaran Saya
+                Dashboard
             </h2>
             <div class="flex gap-3 items-center">
                 <x-notification-panel />
-                <x-app-button variant="secondary" :href="route('applicant.profile')">
-                    <i class="fa-solid fa-id-card"></i> Biodata Saya
-                </x-app-button>
-                <x-app-button variant="primary" :href="route('registration.create')">
-                    <i class="fa-solid fa-plus"></i> Daftar Baru
+                <x-app-button variant="secondary" :href="route('applicant.profile')" size="md" class="!p-2" aria-label="Biodata Saya" title="Biodata Saya">
+                    <i class="fa-solid fa-id-card text-lg"></i>
                 </x-app-button>
             </div>
         </div>

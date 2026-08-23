@@ -43,7 +43,7 @@
             ],
         ],
         'registration.index' => [
-            'title' => 'Pendaftaran Saya',
+            'title' => 'Dashboard',
             'icon' => 'fa-list-check',
             'intro' => 'Halaman ini menampilkan semua pendaftaran Anda:',
             'steps' => [

@@ -49,9 +49,9 @@
         x-transition:leave-end="opacity-0 scale-95"
         @click.outside="close()"
         role="menu" aria-label="Notifikasi"
-        class="absolute right-0 top-full mt-2 w-80 sm:w-96 max-w-[92vw] bg-white rounded-xl shadow-xl border border-gray-200 z-50 overflow-hidden">
+        class="fixed sm:absolute left-2 sm:left-auto right-2 sm:right-0 top-20 sm:top-full sm:mt-2 w-auto sm:w-96 max-w-[calc(100vw-1rem)] sm:max-w-[92vw] bg-white rounded-xl shadow-xl border border-gray-200 z-50 overflow-hidden flex flex-col max-h-[80vh] sm:max-h-none">
         <!-- Header panel -->
-        <div class="px-4 py-3 border-b border-gray-100 flex items-center justify-between bg-gray-50">
+        <div class="shrink-0 px-4 py-3 border-b border-gray-100 flex items-center justify-between bg-gray-50">
             <div class="flex items-center gap-2">
                 <span class="text-sm font-semibold text-gray-900">Notifikasi</span>
                 <span x-show="unread > 0" x-cloak
@@ -72,7 +72,7 @@
         </div>
 
         <!-- Daftar notifikasi -->
-        <div class="max-h-96 overflow-y-auto divide-y divide-gray-100">
+        <div class="flex-1 min-h-0 overflow-y-auto sm:max-h-96 divide-y divide-gray-100">
             <template x-if="notifications.length === 0">
                 <div class="px-4 py-10 text-center">
                     <div class="mx-auto w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center text-gray-400">
@@ -110,7 +110,7 @@
         </div>
 
         <!-- Footer: lihat semua -->
-        <div class="border-t border-gray-100">
+        <div class="shrink-0 border-t border-gray-100">
             <a href="{{ route('notifications.index') }}"
                 class="flex items-center justify-center gap-2 px-4 py-2.5 text-sm text-indigo-600 hover:bg-indigo-50 transition">
                 Lihat Semua Notifikasi
