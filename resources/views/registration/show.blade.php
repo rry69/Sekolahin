@@ -210,6 +210,13 @@
 
                     <div class="mb-6">
                         <h4 class="text-sm font-medium text-gray-500 uppercase mb-2">Upload Dokumen</h4>
+                        @php $isWithdrawn = $registration->status === 'withdrawn'; @endphp
+                        @if($isWithdrawn)
+                            <div class="mb-3 bg-orange-50 border border-orange-200 rounded-lg p-3">
+                                <p class="text-sm font-medium text-orange-800">Upload dokumen dikunci — Anda telah mengundurkan diri.</p>
+                                <p class="text-xs text-orange-700 mt-1">Status semua dokumen diubah menjadi <span class="font-bold">Ditolak</span> (Pendaftar mengundurkan diri). Tidak dapat menambah atau mengganti dokumen.</p>
+                            </div>
+                        @endif
                         <div class="bg-gray-50 border border-gray-200 rounded-lg p-4">
                             @php
                                 $documentTypes = [
@@ -237,13 +244,13 @@
                                 $multi = ['rapor'];
                             @endphp
 
-                            <form action="{{ route('registration.documents.upload', $registration) }}" method="POST" enctype="multipart/form-data">
+                            <form action="{{ route('registration.documents.upload', $registration) }}" method="POST" enctype="multipart/form-data" @if($isWithdrawn) onsubmit="return false;" @endif>
                                 @csrf
 
                                 <div class="space-y-4">
                                 @foreach($documentTypes as $type => $label)
                                     @php $docsOfType = $uploadedDocs->get($type, collect()); @endphp
-                                    <div class="border border-gray-300 rounded-lg p-4">
+                                    <div class="border border-gray-300 rounded-lg p-4 {{ $isWithdrawn ? 'bg-gray-100 opacity-75' : '' }}">
                                         <div class="flex justify-between items-start">
                                             <div class="flex-1">
                                                 <h5 class="font-medium text-gray-900">{{ $label }}</h5>
@@ -267,28 +274,34 @@
                                                             @if(isset($isAdmin) && $isAdmin && !$doc->verified_at)
                                                                 <button type="button" onclick="submitDocAction('{{ route('admin.documents.verify', $doc) }}', 'PATCH')" class="text-sm text-green-600 hover:underline">Verifikasi</button>
                                                                 <button type="button" onclick="openRejectModal({{ $doc->id }})" class="text-sm text-red-600 hover:underline ml-2">Tolak</button>
-                                                            @elseif($isStudentView)
+                                                            @elseif($isStudentView && !$isWithdrawn)
                                                                 <button type="button" onclick="if(confirm('Hapus dokumen ini?')) submitDocAction('{{ route('registration.documents.delete', [$registration, $doc]) }}', 'DELETE')" class="text-sm text-red-600 hover:underline">Hapus</button>
                                                             @endif
                                                         </div>
                                                     @endforeach
-                                                    @if($isStudentView)
+                                                    @if($isStudentView && !$isWithdrawn)
                                                         <p class="text-xs text-gray-400 mt-2">{{ in_array($type, $multi) ? 'Tambah file lain / ganti dokumen di bawah.' : 'Pilih file jika ingin mengganti dokumen ini.' }}</p>
                                                     @endif
                                                 @else
                                                     @if(isset($isAdmin) && $isAdmin)
                                                         <p class="text-sm text-gray-500 mt-2">Belum diupload</p>
+                                                    @elseif($isWithdrawn)
+                                                        <p class="text-sm text-red-600 mt-2 font-medium">Ditolak — pendaftar mengundurkan diri</p>
                                                     @else
                                                         <label class="block mt-2 text-sm text-gray-500">Pilih file:</label>
                                                     @endif
                                                 @endif
                                             </div>
 
-                                            @if($isStudentView)
+                                            @if($isStudentView && !$isWithdrawn)
                                                 <div class="ml-4">
                                                     <input type="file" name="documents[{{ $type }}]{{ in_array($type, $multi) ? '[]' : '' }}" {{ in_array($type, $multi) ? 'multiple' : '' }}
                                                         accept=".pdf,.jpg,.jpeg,.png"
                                                         class="text-sm border border-gray-300 rounded px-2 py-1">
+                                                </div>
+                                            @elseif($isWithdrawn)
+                                                <div class="ml-4">
+                                                    <span class="text-xs px-2 py-1 bg-red-100 text-red-700 rounded font-medium border border-red-200">Terkunci</span>
                                                 </div>
                                             @endif
                                         </div>
@@ -296,7 +309,7 @@
                                 @endforeach
                                 </div>
 
-                                @if($isStudentView)
+                                @if($isStudentView && !$isWithdrawn)
                                     <div class="mt-4">
                                         <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
                                             Upload Semua Dokumen
@@ -322,8 +335,17 @@
             ->whereIn('status', ['verified', 'paid'])
             ->exists();
         $payLocked = ($registration->status !== 'verified' || $registration->payment_amount === null) && !$hasPaidPayment;
+        $isWithdrawnPay = $registration->status === 'withdrawn';
     @endphp
-    @if($payLocked)
+    @if($isWithdrawnPay)
+        <div class="mb-6">
+            <h4 class="text-sm font-medium text-gray-500 uppercase mb-2">Pembayaran</h4>
+            <div class="bg-red-50 border border-red-200 rounded-lg p-4">
+                <p class="text-sm font-medium text-red-800">Pembayaran dibatalkan — Anda telah mengundurkan diri</p>
+                <p class="text-sm text-red-700 mt-1">Pendaftaran <span class="font-semibold">{{ $registration->registration_number }}</span> dibatalkan pada {{ $registration->withdrawn_at?->format('d M Y H:i') }}. Status dokumen telah diubah menjadi <span class="font-bold">Ditolak</span> dan pembayaran tidak dapat dilanjutkan.</p>
+            </div>
+        </div>
+    @elseif($payLocked)
         <div class="mb-6">
             <h4 class="text-sm font-medium text-gray-500 uppercase mb-2">Pembayaran</h4>
             <div class="bg-amber-50 border border-amber-200 rounded-lg p-4">
@@ -556,12 +578,11 @@
                         </x-app-button>
 
                         @if ((!isset($isAdmin) || !$isAdmin) && $registration->status === 'pending')
-                            <form method="POST" action="{{ route('registration.withdraw', $registration) }}"
-                                  onsubmit="return confirm('Yakin ingin membatalkan pendaftaran ini? Tindakan ini tidak dapat dibatalkan.');">
+                            <button type="button" onclick="openWithdrawModal1()" class="inline-flex items-center gap-2 px-5 py-2.5 bg-red-600 text-white rounded-lg hover:bg-red-700 font-semibold text-sm shadow-sm transition">
+                                <i class="fa-solid fa-arrow-right-from-bracket"></i> Mundur dari Pendaftaran
+                            </button>
+                            <form id="withdraw-form" method="POST" action="{{ route('registration.withdraw', $registration) }}" class="hidden">
                                 @csrf
-                                <x-app-button variant="danger" size="sm" type="submit">
-                                    <i class="fa-solid fa-arrow-right-from-bracket"></i> Mundur dari Pendaftaran
-                                </x-app-button>
                             </form>
                         @endif
                     </div>
@@ -569,6 +590,63 @@
             </div>
         </div>
     </div>
+
+    @if ((!isset($isAdmin) || !$isAdmin) && $registration->status === 'pending')
+    {{-- Modal Konfirmasi 1 --}}
+    <div id="withdraw-modal-1" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="closeWithdrawModal1()"></div>
+        <div class="relative flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-xl shadow-2xl max-w-md w-full overflow-hidden animate-in">
+                <div class="px-6 pt-6 pb-4">
+                    <div class="w-12 h-12 rounded-full bg-amber-100 flex items-center justify-center mx-auto mb-4">
+                        <i class="fa-solid fa-triangle-exclamation text-amber-600 text-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-900 text-center">Yakin ingin mengundurkan diri?</h3>
+                    <p class="text-sm text-gray-600 text-center mt-2">Pendaftaran <span class="font-semibold text-gray-900">{{ $registration->registration_number }}</span> akan dibatalkan.</p>
+                    <div class="mt-4 bg-amber-50 border border-amber-200 rounded-lg p-3 text-left">
+                        <p class="text-xs font-semibold text-amber-800 mb-1">Yang akan terjadi:</p>
+                        <ul class="text-xs text-amber-700 space-y-1 list-disc list-inside">
+                            <li>Status pendaftaran menjadi <span class="font-bold">Mundur Diri</span></li>
+                            <li>Semua dokumen diubah menjadi <span class="font-bold">Ditolak</span></li>
+                            <li>Upload dokumen & pembayaran akan <span class="font-bold">terkunci</span></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="bg-gray-50 px-6 py-4 grid grid-cols-2 gap-3">
+                    <button type="button" onclick="closeWithdrawModal1()" class="w-full py-2.5 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 font-medium text-sm text-center">Batal</button>
+                    <button type="button" onclick="confirmWithdrawStep1()" class="w-full py-2.5 bg-gray-900 text-white rounded-lg hover:bg-black font-semibold text-sm text-center shadow-sm">Ya, Lanjutkan</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- Modal Konfirmasi 2 --}}
+    <div id="withdraw-modal-2" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="closeWithdrawModal2()"></div>
+        <div class="relative flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-xl shadow-2xl max-w-md w-full overflow-hidden">
+                <div class="px-6 pt-6 pb-4">
+                    <div class="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-4">
+                        <i class="fa-solid fa-circle-xmark text-red-600 text-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-900 text-center">Konfirmasi Terakhir</h3>
+                    <p class="text-sm text-red-600 font-medium text-center mt-2">Tindakan ini tidak dapat dibatalkan!</p>
+                    <div class="mt-4 bg-red-50 border border-red-200 rounded-lg p-3 text-left">
+                        <p class="text-xs text-red-700">Setelah mengundurkan diri, pendaftaran ini <span class="font-bold">tidak bisa dipulihkan</span>. Jika ingin mendaftar lagi, Anda harus membuat pendaftaran baru selama periode masih dibuka.</p>
+                    </div>
+                    <label class="flex items-start gap-2 mt-4 cursor-pointer group">
+                        <input type="checkbox" id="withdraw-ack" class="mt-0.5 w-4 h-4 rounded border-gray-300 text-red-600 focus:ring-red-500">
+                        <span class="text-xs text-gray-700 group-hover:text-gray-900">Saya memahami dan menyetujui bahwa pendaftaran akan dibatalkan permanen.</span>
+                    </label>
+                </div>
+                <div class="bg-gray-50 px-6 py-4 grid grid-cols-2 gap-3">
+                    <button type="button" onclick="closeWithdrawModal2()" class="w-full py-2.5 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 font-medium text-sm text-center">Kembali</button>
+                    <button type="button" id="withdraw-final-btn" onclick="confirmWithdrawFinal()" disabled class="w-full py-2.5 bg-red-600 text-white rounded-lg hover:bg-red-700 font-semibold text-sm text-center shadow-sm disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed">Ya, Saya Mundur</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif
 
     <script>
         function submitDocAction(url, method) {
@@ -580,6 +658,43 @@
             document.body.appendChild(form);
             form.submit();
         }
+
+        function openWithdrawModal1() {
+            document.getElementById('withdraw-modal-1').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeWithdrawModal1() {
+            document.getElementById('withdraw-modal-1').classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+        function confirmWithdrawStep1() {
+            closeWithdrawModal1();
+            document.getElementById('withdraw-modal-2').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeWithdrawModal2() {
+            document.getElementById('withdraw-modal-2').classList.add('hidden');
+            document.body.style.overflow = '';
+            const ack = document.getElementById('withdraw-ack');
+            if (ack) ack.checked = false;
+            const btn = document.getElementById('withdraw-final-btn');
+            if (btn) btn.disabled = true;
+        }
+        function confirmWithdrawFinal() {
+            const ack = document.getElementById('withdraw-ack');
+            if (!ack || !ack.checked) return;
+            document.getElementById('withdraw-form').submit();
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+            const ack = document.getElementById('withdraw-ack');
+            const btn = document.getElementById('withdraw-final-btn');
+            if (ack && btn) {
+                ack.addEventListener('change', function() { btn.disabled = !this.checked; });
+            }
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') { closeWithdrawModal1(); closeWithdrawModal2(); }
+            });
+        });
     </script>
 
     @if(isset($isAdmin) && $isAdmin)

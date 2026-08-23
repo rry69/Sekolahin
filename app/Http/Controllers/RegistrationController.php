@@ -94,7 +94,7 @@ class RegistrationController extends Controller
         $trackStatusMap = RegistrationTrackSchoolLevel::statusMap();
         // Kirim pemetaan usia minimal dan umur pendaftar untuk hint FE
         $applicantForHint = auth()->user()->applicant;
-        $applicantAge = $applicantForHint?->birth_date ? \Carbon\Carbon::parse($applicantForHint->birth_date)->diffInYears(now()) : null;
+        $applicantAge = $applicantForHint?->birth_date ? (int) floor(\Carbon\Carbon::parse($applicantForHint->birth_date)->diffInYears(now())) : null;
         $ageMins = [];
         foreach ($periods as $p) {
             $raw = \App\Models\Setting::get("age_min_{$p->school_level_id}");
@@ -211,7 +211,7 @@ class RegistrationController extends Controller
         }
         $applicantForAge = auth()->user()->applicant;
         if ($period && $applicantForAge?->birth_date) {
-            $ageAtNow = \Carbon\Carbon::parse($applicantForAge->birth_date)->diffInYears(now());
+            $ageAtNow = (int) floor(\Carbon\Carbon::parse($applicantForAge->birth_date)->diffInYears(now()));
             $rawMin = \App\Models\Setting::get("age_min_{$period->school_level_id}");
             if ($rawMin !== null && $rawMin !== '' && is_numeric($rawMin)) {
                 $ageMin = (int) $rawMin;
@@ -312,7 +312,7 @@ class RegistrationController extends Controller
             return back()->with('error', "Pendaftaran untuk jenjang {$period->schoolLevel->name} sudah ditutup. Periode telah berakhir pada {$tgl}.")->withInput();
         }
         if ($applicant?->birth_date) {
-            $ageAtNow = \Carbon\Carbon::parse($applicant->birth_date)->diffInYears(now());
+            $ageAtNow = (int) floor(\Carbon\Carbon::parse($applicant->birth_date)->diffInYears(now()));
             $rawMin = \App\Models\Setting::get("age_min_{$period->school_level_id}");
             if ($rawMin !== null && $rawMin !== '' && is_numeric($rawMin)) {
                 $ageMin = (int) $rawMin;
@@ -408,7 +408,7 @@ class RegistrationController extends Controller
         // Batas usia minimal per jenjang (admin/configurable via Setting age_min_{levelId})
         $applicantForAge = auth()->user()->applicant;
         if ($applicantForAge?->birth_date) {
-            $ageAtNow = \Carbon\Carbon::parse($applicantForAge->birth_date)->diffInYears(now());
+            $ageAtNow = (int) floor(\Carbon\Carbon::parse($applicantForAge->birth_date)->diffInYears(now()));
             $rawMin = \App\Models\Setting::get("age_min_{$period->school_level_id}");
             if ($rawMin !== null && $rawMin !== '' && is_numeric($rawMin)) {
                 $ageMin = (int) $rawMin;
@@ -510,6 +510,10 @@ class RegistrationController extends Controller
             abort(403);
         }
 
+        if ($registration->status === 'withdrawn') {
+            return back()->with('error', 'Pendaftaran sudah dibatalkan (mengundurkan diri). Upload dokumen dikunci dan status dokumen telah ditolak.');
+        }
+
         $registration->load(['registrationTrack', 'registrationPeriod.schoolLevel']);
 
         $allowedDocs = ['foto', 'kartu_keluarga', 'akta_lahir', 'rapor', 'ijazah_skl', 'sertifikat_prestasi', 'surat_keterangan_tidak_mampu'];
@@ -600,6 +604,10 @@ class RegistrationController extends Controller
             abort(403);
         }
 
+        if ($registration->status === 'withdrawn') {
+            return back()->with('error', 'Pendaftaran sudah dibatalkan (mengundurkan diri). Dokumen tidak dapat dihapus.');
+        }
+
         if ($document->registration_id !== $registration->id) {
             abort(403);
         }
@@ -677,6 +685,13 @@ class RegistrationController extends Controller
         $registration->update([
             'status' => 'withdrawn',
             'withdrawn_at' => now(),
+        ]);
+
+        // Langsung tandai semua dokumen sebagai Ditolak
+        $registration->documents()->update([
+            'verification_notes' => 'Pendaftar mengundurkan diri',
+            'verified_at' => null,
+            'verified_by' => null,
         ]);
 
         ActivityLogger::log('registration.withdraw', 'Siswa mundur dari pendaftaran ' . $registration->registration_number . ' (' . $registration->applicant?->full_name . ')', $registration, [

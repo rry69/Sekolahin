@@ -117,13 +117,12 @@
                                                 class="h-4 w-4 text-indigo-600 focus:ring-indigo-500">
                                             <span class="ml-3">
                                                 <span class="font-medium">{{ $track->name }}</span>
-                                                <span class="text-sm block text-amber-600">{{ $track->description }} · Biaya ditentukan setelah berkas Terverifikasi</span>
+                                                <span class="text-sm block text-gray-500">{{ $track->description }}</span>
                                             </span>
                                         </label>
                                     @endforeach
                                 </div>
                                 @error('registration_track_id')<span class="text-red-500 text-sm">{{ $message }}</span>@enderror
-                                <p id="track-fee-hint" class="text-xs mt-2"></p>
                             </div>
 
                             <div class="mb-6">
@@ -219,7 +218,6 @@
   const majorSection = document.getElementById('major-section');
   const schoolHint = document.getElementById('school-hint');
   const quotaHint = document.getElementById('major-quota-hint');
-  const feeHint = document.getElementById('track-fee-hint');
 
   const NO_MAJOR_LEVELS = ['1', '2', '3'];
 
@@ -297,14 +295,6 @@
     }
     const tid = getTrackId();
     const mid = majorSelect.value;
-    if(feeHint){
-      if(!tid){ feeHint.textContent=''; }
-      else {
-        const tname = tracks[tid] || '';
-        feeHint.textContent=tname+': biaya akan ditentukan setelah berkas Terverifikasi (Reguler Rp 500.000; Prestasi/Beasiswa bisa potongan/gratis) — upload berkas dulu.';
-        feeHint.className = 'text-xs mt-2 text-amber-600';
-      }
-    }
     if(!tid || !mid){ quotaHint.textContent='Pilih jalur dan jurusan untuk melihat sisa kuota jalur tersebut.'; quotaHint.className='text-xs mt-1 text-gray-500'; syncOptions(); return; }
     const quota = quotaMap[mid] && quotaMap[mid][tid] !== undefined ? quotaMap[mid][tid] : null;
     const used = acceptedByMajorTrack[mid] && acceptedByMajorTrack[mid][tid] !== undefined ? acceptedByMajorTrack[mid][tid] : 0;

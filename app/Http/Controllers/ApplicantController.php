@@ -85,7 +85,7 @@ class ApplicantController extends Controller
             return;
         }
 
-        $ageNow = $birth->diffInYears(now());
+        $ageNow = (int) floor($birth->diffInYears(now()));
         if ($ageNow < 3) {
             throw \Illuminate\Validation\ValidationException::withMessages([
                 'birth_date' => 'Usia minimal pendaftar adalah 3 tahun (usia sekarang ' . $ageNow . ' tahun).',

@@ -42,6 +42,10 @@ class PaymentController extends Controller
             abort(403, 'Unauthorized');
         }
 
+        if ($registration->status === 'withdrawn') {
+            return back()->with('error', 'Pendaftaran sudah dibatalkan (mengundurkan diri). Pembayaran tidak dapat dilanjutkan dan status dokumen telah ditolak.');
+        }
+
         $isReRegFee = ($validated['payment_type'] === 're_registration_fee');
 
         if ($isReRegFee) {
