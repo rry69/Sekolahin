@@ -49,4 +49,23 @@ class NotificationController extends Controller
 
         return back();
     }
+
+    /**
+     * Buka notifikasi: tandai dibaca lalu redirect ke tujuan (atau halaman notifikasi).
+     * Dipakai link notifikasi agar sekali klik langsung dibaca.
+     */
+    public function open(string $notification)
+    {
+        $notif = auth()->user()->notifications()
+            ->whereKey($notification)
+            ->firstOrFail();
+
+        if (! $notif->read_at) {
+            $notif->update(['read_at' => now()]);
+        }
+
+        $url = data_get($notif->data, 'url');
+
+        return redirect($url ?: route('notifications.index'));
+    }
 }

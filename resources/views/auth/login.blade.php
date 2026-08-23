@@ -1,9 +1,4 @@
 <x-guest-layout>
-    <x-help-steps title="Cara masuk ke SPMB" icon="fa-right-to-bracket" :steps="[
-        'Masukkan <strong>Email</strong> dan <strong>Password</strong> yang terdaftar.',
-        'Jika lupa password, klik <strong>Forgot your password?</strong> untuk reset via email.',
-        'Belum punya akun? Klik <strong>Daftar</strong> di bawah form.',
-    ]" />
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
 

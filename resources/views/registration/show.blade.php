@@ -19,16 +19,10 @@
                 </div>
             @endif
 
-            <x-help-steps title="Selesaikan pendaftaran — 3 hal sebelum batas waktu" icon="fa-file-circle-check" :steps="[
-                '<strong>Upload Dokumen</strong> di bagian Upload Dokumen (foto, KK, akta, rapor — pilih file lalu Upload Semua). Dokumen yang ditolak ada alasan, upload ulang.',
-                '<strong>Pembayaran</strong> di bagian Pembayaran — pilih Bayar Online via Xendit atau transfer manual + upload bukti.',
-                '<strong>Pantau Status</strong> di atas — Belum Lengkap → Menunggu Verifikasi → Diterima. Jika Diterima, tombol Daftar Ulang akan muncul.',
-            ]" />
-
             @if (!isset($isAdmin) || !$isAdmin)
                 @if ($registration->status === 'withdrawn')
                     <div class="mb-4 bg-orange-100 border border-orange-400 text-orange-700 px-4 py-3 rounded">
-                        <p class="font-semibold">↩ Pendaftaran ini telah Anda batalkan (mengundurkan diri)</p>
+                        <p class="font-semibold">↩ Anda telah Mundur diri dari pendaftaran ini</p>
                         <p class="text-sm mt-1">Anda dapat membuat pendaftaran baru jika periode pendaftaran masih dibuka.</p>
                     </div>
                 @endif
@@ -140,31 +134,12 @@
                                     $docsComplete = false;
                                 }
 
-                                $statusColors = [
-                                    'pending' => 'bg-yellow-100 text-yellow-800 border-yellow-300',
-                                    'verified' => 'bg-blue-100 text-blue-800 border-blue-300',
-                                    'rejected' => 'bg-red-100 text-red-800 border-red-300',
-                                    'accepted' => 'bg-green-100 text-green-800 border-green-300',
-                                    're_registration_complete' => 'bg-purple-100 text-purple-800 border-purple-300',
-                                    'canceled' => 'bg-gray-300 text-gray-700 border-gray-400',
-                                    'withdrawn' => 'bg-orange-100 text-orange-800 border-orange-300',
-                                ];
-
                                 if ($registration->status === 'pending' && !$docsComplete) {
                                     $statusLabel = 'Belum Lengkap';
                                     $statusColor = 'bg-gray-100 text-gray-800 border-gray-300';
                                 } else {
-                                    $statusLabels = [
-                                        'pending' => 'Menunggu Verifikasi',
-                                        'verified' => 'Terverifikasi',
-                                        'rejected' => 'Ditolak',
-                                        'accepted' => 'Diterima',
-                                        're_registration_complete' => 'Terdaftar',
-                                        'canceled' => 'Dibatalkan',
-                                        'withdrawn' => 'Mengundurkan Diri',
-                                    ];
-                                    $statusLabel = $statusLabels[$registration->status] ?? ucfirst($registration->status);
-                                    $statusColor = $statusColors[$registration->status] ?? 'bg-gray-100 text-gray-800 border-gray-300';
+                                    $statusLabel = \App\Support\StatusBadge::registrationStatusLabel($registration->status);
+                                    $statusColor = \App\Support\StatusBadge::registrationStatusClass($registration->status);
                                 }
                             @endphp
                             <div class="border-2 rounded-lg p-4 {{ $statusColor }}">
@@ -205,21 +180,11 @@
                         <div>
                             <h4 class="text-sm font-medium text-gray-500 uppercase mb-2">Status Pembayaran</h4>
                             @php
-                                $paymentColors = [
-                                    'unpaid' => 'bg-gray-100 text-gray-800 border-gray-300',
-                                    'pending' => 'bg-yellow-100 text-yellow-800 border-yellow-300',
-                                    'paid' => 'bg-green-100 text-green-800 border-green-300',
-                                    'failed' => 'bg-red-100 text-red-800 border-red-300',
-                                ];
-                                $paymentLabels = [
-                                    'unpaid' => 'Belum Dibayar',
-                                    'pending' => 'Menunggu Konfirmasi',
-                                    'paid' => 'Lunas',
-                                    'failed' => 'Gagal',
-                                ];
+                                $paymentColor = \App\Support\StatusBadge::paymentStatusClass($registration->payment_status);
+                                $paymentLabel = \App\Support\StatusBadge::paymentStatusLabel($registration->payment_status);
                             @endphp
-                            <div class="border-2 rounded-lg p-4 {{ $paymentColors[$registration->payment_status] ?? 'bg-gray-100 text-gray-800 border-gray-300' }}">
-                                <p class="font-bold text-lg">{{ $paymentLabels[$registration->payment_status] ?? ucfirst($registration->payment_status) }}</p>
+                            <div class="border-2 rounded-lg p-4 {{ $paymentColor }}">
+                                <p class="font-bold text-lg">{{ $paymentLabel }}</p>
                                 @if ($registration->payment_amount)
                                     <p class="text-sm mt-1">Jumlah: Rp {{ number_format($registration->payment_amount, 0, ',', '.') }}</p>
                                 @endif
@@ -586,17 +551,17 @@
     @endif
 
                     <div class="flex justify-between mt-8 items-center">
-                        <a href="{{ route('registration.index') }}" class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">
-                            Kembali
-                        </a>
+                        <x-app-button variant="secondary" size="sm" :href="route('registration.index')">
+                            <i class="fa-solid fa-arrow-left"></i> Kembali
+                        </x-app-button>
 
                         @if ((!isset($isAdmin) || !$isAdmin) && $registration->status === 'pending')
                             <form method="POST" action="{{ route('registration.withdraw', $registration) }}"
                                   onsubmit="return confirm('Yakin ingin membatalkan pendaftaran ini? Tindakan ini tidak dapat dibatalkan.');">
                                 @csrf
-                                <button type="submit" class="px-4 py-2 bg-red-50 border border-red-300 text-red-600 rounded-md hover:bg-red-100 font-medium">
-                                    Mengundurkan Diri dari Pendaftaran
-                                </button>
+                                <x-app-button variant="danger" size="sm" type="submit">
+                                    <i class="fa-solid fa-arrow-right-from-bracket"></i> Mundur dari Pendaftaran
+                                </x-app-button>
                             </form>
                         @endif
                     </div>

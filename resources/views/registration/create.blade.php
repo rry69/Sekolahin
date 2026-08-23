@@ -47,14 +47,8 @@
                                 </div>
                             @endif
                         @endif
-                        <x-help-steps title="Cara memilih pendaftaran" icon="fa-file-circle-plus" :steps="[
-                            'Pilih <strong>Jenjang &amp; Periode</strong> — hanya periode yang <strong>sedang dibuka</strong> yang bisa dipilih. Periode yang belum dibuka atau sudah ditutup terkunci otomatis.',
-                            'Pilih <strong>Jalur</strong> sesuai kondisi (Reguler/Prestasi/Beasiswa).',
-                            'Pilih <strong>Sekolah</strong> yang tersedia untuk jenjang terpilih, lalu <strong>Jurusan</strong> sesuai sekolah — perhatikan sisa kuota, lalu klik <strong>Lanjut ke Review</strong>.',
-                        ]" />
                         <form method="POST" action="{{ route('registration.store') }}">
                             @csrf
-
                             @if($hasAge)
                                 <div class="mb-4 text-sm text-gray-600">Usia Anda saat ini: <span class="font-semibold">{{ $applicantAge }} tahun</span> (dari tanggal lahir di profil)</div>
                             @endif
@@ -158,10 +152,10 @@
 
                             <div class="flex justify-between">
                                 <a href="{{ route('registration.index') }}" class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">
-                                    Batal
+                                    Kembali
                                 </a>
-                                <button type="submit" id="submit-registration" class="bg-indigo-600 text-white px-6 py-2 rounded-md hover:bg-indigo-700 disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed" @if($openCount === 0) disabled @endif>
-                                    Lanjut ke Review
+                                <button type="submit" id="submit-registration" class="inline-flex items-center px-6 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed font-medium" @if($openCount === 0) disabled @endif>
+                                    <i class="fa-solid fa-paper-plane mr-2"></i> Lanjut ke Review
                                 </button>
                             </div>
                             @if($openCount === 0)

@@ -1,34 +1,25 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Detail Pembayaran
-        </h2>
+        <div class="flex items-center gap-3">
+            <a href="{{ route('registration.index') }}" class="inline-flex items-center p-2 rounded-md text-gray-500 hover:text-gray-700 hover:bg-gray-100" aria-label="Kembali ke Pendaftaran">
+                <i class="fa-solid fa-arrow-left text-lg"></i>
+            </a>
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                Detail Pembayaran
+            </h2>
+        </div>
     </x-slot>
 
     <div class="py-12">
         <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6">
-                    <x-help-steps title="Memahami status pembayaran" icon="fa-money-check-dollar" :steps="[
-                        '<strong>pending</strong> = menunggu verifikasi admin/Xendit — cek berkala.',
-                        '<strong>verified/lunas</strong> = sah, tidak perlu aksi lagi.',
-                        '<strong>rejected</strong> = ditolak — baca alasan dan lakukan pembayaran ulang.',
-                    ]" />
                     <div class="flex justify-between items-start mb-6">
                         <div>
                             <h3 class="text-2xl font-bold text-gray-900">Pembayaran #{{ $payment->id }}</h3>
                             <p class="text-sm text-gray-600 mt-1">No. Registrasi: {{ $payment->registration->registration_number }}</p>
                         </div>
-                        @php
-                            $statusColors = [
-                                'pending' => 'bg-yellow-100 text-yellow-800 border-yellow-300',
-                                'verified' => 'bg-green-100 text-green-800 border-green-300',
-                                'rejected' => 'bg-red-100 text-red-800 border-red-300',
-                            ];
-                        @endphp
-                        <span class="px-3 py-1 text-sm font-semibold rounded border {{ $statusColors[$payment->status] ?? 'bg-gray-100 text-gray-800 border-gray-300' }}">
-                            {{ ucfirst($payment->status) }}
-                        </span>
+                        <x-status-badge :status="$payment->status" type="payment" class="border px-3 py-1" />
                     </div>
 
                     <div class="border-b pb-6 mb-6">

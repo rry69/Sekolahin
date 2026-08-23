@@ -15,11 +15,6 @@
 
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
-                    <x-help-steps title="Cek sebelum daftar" icon="fa-eye" :steps="[
-                        'Pastikan jenjang, periode, jalur, dan jurusan sudah sesuai.',
-                        'Jika ada yang salah, klik <strong>Kembali</strong>.',
-                        'Klik <strong>Konfirmasi &amp; Daftar</strong> untuk menerbitkan nomor pendaftaran — batas waktu akan mulai berjalan.',
-                    ]" />
                     <h3 class="text-lg font-semibold mb-4">Periksa kembali data pendaftaran Anda sebelum mengonfirmasi.</h3>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
@@ -63,8 +58,8 @@
                                 <input type="hidden" name="registration_track_id" value="{{ $validated['registration_track_id'] }}">
                                 <input type="hidden" name="major_id" value="{{ $validated['major_id'] ?? '' }}">
                                 <input type="hidden" name="school_id" value="{{ $validated['school_id'] }}">
-                                <button type="submit" class="bg-indigo-600 text-white px-6 py-2 rounded-md hover:bg-indigo-700">
-                                    Konfirmasi & Daftar
+                                <button type="submit" class="inline-flex items-center bg-indigo-600 text-white px-6 py-2 rounded-md hover:bg-indigo-700 font-medium">
+                                    <i class="fa-solid fa-check mr-2"></i> Konfirmasi & Daftar
                                 </button>
                             </form>
                         </div>

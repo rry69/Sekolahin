@@ -1,8 +1,13 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Profil Pendaftar
-        </h2>
+        <div class="flex items-center gap-3">
+            <a href="{{ route('registration.index') }}" class="inline-flex items-center p-2 rounded-md text-gray-500 hover:text-gray-700 hover:bg-gray-100" aria-label="Kembali ke Pendaftaran">
+                <i class="fa-solid fa-arrow-left text-lg"></i>
+            </a>
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                Profil Pendaftar
+            </h2>
+        </div>
     </x-slot>
 
     <div class="py-12">
@@ -20,14 +25,6 @@
                             {{ session('error') }}
                         </div>
                     @endif
-
-                    <x-help-steps title="Panduan melengkapi profil" icon="fa-user-pen" :steps="[
-                        'Isi <strong>Nama, NISN (10 digit) dan NIK (16 digit)</strong> sesuai rapor/KK.',
-                        'Buka <strong>nisn.data.kemendikdasmen.go.id</strong>, cari NISN + nama ibu kandung, salin link hasil pencarian dan tempel di kolom <em>Link Hasil Pencarian NISN</em>, lalu klik <strong>Cek NISN &amp; NIK</strong>.',
-                        'Isi <strong>tanggal lahir</strong> — usia &amp; hint tahun lulus akan muncul otomatis (3–40 th).',
-                        'Lengkapi alamat (provinsi → desa), orang tua/wali, dan sekolah asal.',
-                        'Klik <strong>Lanjut ke Review</strong> → cek kembali → <strong>Konfirmasi &amp; Simpan</strong>.',
-                    ]" />
 
                     <form method="POST" action="{{ route('applicant.profile.update') }}">
                         @csrf
@@ -56,8 +53,8 @@
                                         class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                                         placeholder="https://nisn.data.kemendikdasmen.go.id/search-result?id=0x...">
                                     <button type="button" id="cek-nisn-btn"
-                                        class="shrink-0 bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 text-sm font-medium">
-                                        Cek NISN & NIK
+                                        class="shrink-0 inline-flex items-center bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 text-sm font-medium">
+                                        <i class="fa-solid fa-magnifying-glass mr-1.5"></i> Cek NISN & NIK
                                     </button>
                                 </div>
                                 <div id="nisn-check-result" class="hidden mt-2 px-4 py-3 rounded text-sm"></div>
@@ -232,8 +229,8 @@
                         </div>
 
                         <div class="mt-6 flex justify-end">
-                            <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700">
-                                Lanjut ke Review
+                            <button type="submit" class="inline-flex items-center bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 font-medium">
+                                <i class="fa-solid fa-arrow-right mr-2"></i> Lanjut ke Review
                             </button>
                         </div>
                     </form>

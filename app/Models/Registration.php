@@ -122,7 +122,7 @@ class Registration extends Model
             'accepted' => 'Diterima',
             're_registration_complete' => 'Daftar Ulang Selesai',
             'canceled' => 'Dibatalkan',
-            'withdrawn' => 'Mengundurkan Diri',
+            'withdrawn' => 'Mundur Diri',
             default => $status ? ucfirst(str_replace('_', ' ', $status)) : '-',
         };
     }

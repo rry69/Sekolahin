@@ -1,32 +1,34 @@
-@extends('layouts.dashboard')
-@section('title', 'Dashboard')
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            Dashboard
+        </h2>
+    </x-slot>
 
-@section('content')
-<div class="breadcrumb">
-  <a href="{{ route('admin.dashboard') }}">Dashboard</a>
-  <span class="sep">/</span>
-  <span>Overview</span>
-</div>
-<h1 class="page-title">Welcome back, {{ Auth::user()->name }}</h1>
-
-<div class="deal-meta">
-  <span class="created">Today <span>{{ now()->format('d M, Y') }}</span></span>
-</div>
-
-<div class="summary-cards">
-  <div class="summary-card">
-    <div class="label"><i class="fa-regular fa-clock"></i> Pending Tasks</div>
-    <div class="value">0</div>
-  </div>
-  <div class="summary-card">
-    <div class="label"><i class="fa-solid fa-check"></i> Completed</div>
-    <div class="value">0</div>
-  </div>
-  <div class="summary-card">
-    <div class="label"><i class="fa-solid fa-bell"></i> Notifications</div>
-    <div class="value">0</div>
-  </div>
-</div>
-
-<div class="empty-state">No recent activity</div>
-@endsection
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6">
+                    <div class="text-center py-8">
+                        <div class="mx-auto w-16 h-16 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600">
+                            <i class="fa-solid fa-graduation-cap text-2xl"></i>
+                        </div>
+                        <h3 class="mt-4 text-lg font-semibold text-gray-900">Selamat datang, {{ Auth::user()->name }}!</h3>
+                        <p class="mt-2 text-sm text-gray-500 max-w-xl mx-auto">
+                            Ini adalah Sistem Penerimaan Mahasiswa Baru (SPMB). Silakan lengkapi biodata dan daftar
+                            untuk memulai pendaftaran Anda.
+                        </p>
+                        <div class="mt-6 flex flex-wrap justify-center gap-3">
+                            <x-app-button variant="primary" :href="route('registration.index')">
+                                <i class="fa-solid fa-folder-open"></i> Lihat Pendaftaran
+                            </x-app-button>
+                            <x-app-button variant="secondary" :href="route('applicant.profile')">
+                                <i class="fa-solid fa-id-card"></i> Biodata Saya
+                            </x-app-button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</x-app-layout>

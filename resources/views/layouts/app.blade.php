@@ -16,6 +16,7 @@
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+        <style>[x-cloak] { display: none !important; }</style>
         <script>
             // Anti-stale-asset guard: force re-validation so the latest build (custom date picker) is always used.
             if ('caches' in window) {
@@ -27,8 +28,6 @@
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100">
-            @include('layouts.navigation')
-
             <!-- Page Heading -->
             @isset($header)
                 <header class="bg-white shadow">

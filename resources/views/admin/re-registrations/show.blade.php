@@ -16,15 +16,7 @@
                         <h3 class="text-2xl font-bold text-gray-900">Detail Daftar Ulang</h3>
                         <p class="text-sm text-gray-600 mt-1">No. Registrasi: {{ $reRegistration->registration->registration_number }}</p>
                     </div>
-                    @php
-                        $statusColors = [
-                            'pending' => 'bg-yellow-100 text-yellow-800 border-yellow-300',
-                            'completed' => 'bg-green-100 text-green-800 border-green-300',
-                        ];
-                    @endphp
-                    <span class="px-3 py-1 text-sm font-semibold rounded border {{ $statusColors[$reRegistration->status] ?? 'bg-gray-100 text-gray-800 border-gray-300' }}">
-                        {{ ucfirst($reRegistration->status) }}
-                    </span>
+                    <x-status-badge :status="$reRegistration->status" type="registration" class="border px-3 py-1" />
                 </div>
 
                 <div class="border-b pb-6 mb-6">

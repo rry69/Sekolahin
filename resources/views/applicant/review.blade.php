@@ -15,12 +15,6 @@
 
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
-                    <x-help-steps title="Cek sebelum simpan" icon="fa-clipboard-check" :steps="[
-                        'Periksa Nama, NISN/NIK, tempat &amp; tanggal lahir, dan kontak.',
-                        'Pastikan status NISN ✓ Terverifikasi (atau Menunggu jika server sedang gangguan).',
-                        'Jika ada yang salah, klik <strong>Kembali</strong> untuk memperbaiki.',
-                        'Jika sudah yakin, klik <strong>Konfirmasi &amp; Simpan</strong>.',
-                    ]" />
                     <h3 class="text-lg font-semibold mb-4">Periksa kembali data diri Anda sebelum menyimpan.</h3>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
@@ -94,8 +88,8 @@
                             </a>
                             <form method="POST" action="{{ route('applicant.profile.confirm') }}">
                                 @csrf
-                                <button type="submit" class="bg-indigo-600 text-white px-6 py-2 rounded-md hover:bg-indigo-700">
-                                    Konfirmasi & Simpan
+                                <button type="submit" class="inline-flex items-center bg-indigo-600 text-white px-6 py-2 rounded-md hover:bg-indigo-700 font-medium">
+                                    <i class="fa-solid fa-check mr-2"></i> Konfirmasi & Simpan
                                 </button>
                             </form>
                         </div>

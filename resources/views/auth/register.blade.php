@@ -1,9 +1,4 @@
 <x-guest-layout>
-    <x-help-steps title="Langkah membuat akun" icon="fa-user-plus" :steps="[
-        'Isi <strong>Nama</strong> lengkap, <strong>Email</strong> aktif, dan <strong>Password</strong>.',
-        'Klik <strong>Register</strong> — cek inbox untuk verifikasi email bila diminta.',
-        'Setelah login, lengkapi <strong>Profil/Biodata</strong> sebelum mendaftar.',
-    ]" />
     <form method="POST" action="{{ route('register') }}">
         @csrf
 

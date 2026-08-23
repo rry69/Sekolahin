@@ -4,13 +4,22 @@
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 Pendaftaran Saya
             </h2>
-            <div class="flex gap-3">
-                <a href="{{ route('applicant.profile') }}" class="bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-gray-700">
-                    Biodata Saya
+            <div class="flex gap-3 items-center">
+                <a href="{{ route('notifications.index') }}" class="relative inline-flex items-center p-2 rounded-md text-gray-500 hover:text-gray-700 hover:bg-gray-100 focus:outline-none" aria-label="Notifikasi">
+                    <i class="fa-solid fa-bell text-lg"></i>
+                    @if (Auth::user()->unreadNotifications->count() > 0)
+                        <span class="absolute -top-1 -right-1 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-red-500 rounded-full">
+                            {{ Auth::user()->unreadNotifications->count() > 9 ? '9+' : Auth::user()->unreadNotifications->count() }}
+                        </span>
+                    @endif
+                    <span class="sr-only">Notifikasi</span>
                 </a>
-                <a href="{{ route('registration.create') }}" class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700">
-                    Daftar Baru
-                </a>
+                <x-app-button variant="secondary" :href="route('applicant.profile')">
+                    <i class="fa-solid fa-id-card"></i> Biodata Saya
+                </x-app-button>
+                <x-app-button variant="primary" :href="route('registration.create')">
+                    <i class="fa-solid fa-plus"></i> Daftar Baru
+                </x-app-button>
             </div>
         </div>
     </x-slot>
@@ -22,13 +31,6 @@
                     {{ session('success') }}
                 </div>
             @endif
-
-            <x-help-steps title="Alur pendaftaran" icon="fa-route" :steps="[
-                'Pastikan <strong>Profil/Biodata</strong> sudah lengkap (klik Biodata Saya / Lengkapi Profil jika ada peringatan kuning).',
-                'Klik <strong>Daftar Baru</strong> untuk membuat pendaftaran.',
-                'Setelah pendaftaran jadi, buka <strong>Detail</strong> untuk upload dokumen &amp; bayar sebelum batas waktu habis.',
-                'Pantau <strong>Status</strong> dan <strong>Pembayaran</strong> di tabel — hubungi panitia jika butuh bantuan.',
-            ]" />
 
             @php
                 $activeReg = $registrations->firstWhere(function ($r) {
@@ -76,26 +78,8 @@
             @if ($activeRegistration)
                 @php
                     // ===== Statistik progres (bermakna walau hanya 1 pendaftaran) =====
-                    $statusInfo = [
-                        'pending' => ['label' => 'Menunggu Verifikasi', 'cls' => 'bg-blue-50 text-blue-600'],
-                        'verified' => ['label' => 'Terverifikasi', 'cls' => 'bg-indigo-50 text-indigo-600'],
-                        'accepted' => ['label' => 'Diterima', 'cls' => 'bg-emerald-50 text-emerald-600'],
-                        're_registration_complete' => ['label' => 'Terdaftar', 'cls' => 'bg-purple-50 text-purple-600'],
-                        'rejected' => ['label' => 'Ditolak', 'cls' => 'bg-red-50 text-red-600'],
-                        'canceled' => ['label' => 'Dibatalkan', 'cls' => 'bg-gray-100 text-gray-500'],
-                        'withdrawn' => ['label' => 'Mengundurkan Diri', 'cls' => 'bg-orange-50 text-orange-600'],
-                    ];
-                    $statusKey = $activeRegistration->status;
-                    $statusCard = $statusInfo[$statusKey] ?? ['label' => ucfirst(str_replace('_', ' ', $statusKey)), 'cls' => 'bg-gray-50 text-gray-600'];
-
-                    $paymentInfo = [
-                        'unpaid' => ['label' => 'Belum Dibayar', 'icon' => 'fa-credit-card', 'cls' => 'bg-gray-50 text-gray-500'],
-                        'pending' => ['label' => 'Menunggu Konfirmasi', 'icon' => 'fa-clock', 'cls' => 'bg-yellow-50 text-yellow-600'],
-                        'paid' => ['label' => 'Lunas', 'icon' => 'fa-circle-check', 'cls' => 'bg-emerald-50 text-emerald-600'],
-                        'failed' => ['label' => 'Gagal', 'icon' => 'fa-circle-xmark', 'cls' => 'bg-red-50 text-red-600'],
-                    ];
-                    $paymentKey = $activeRegistration->payment_status;
-                    $paymentCard = $paymentInfo[$paymentKey] ?? ['label' => ucfirst($paymentKey), 'icon' => 'fa-credit-card', 'cls' => 'bg-gray-50 text-gray-500'];
+                    $statusCard = \App\Support\StatusBadge::registrationStatusCard($activeRegistration->status);
+                    $paymentCard = \App\Support\StatusBadge::paymentStatusCard($activeRegistration->payment_status);
 
                     $docPct = $docStats['total'] > 0 ? round(($docStats['verified'] / $docStats['total']) * 100) : 0;
                     $docAllVerified = $docStats['total'] > 0 && $docStats['verified'] >= $docStats['total'];
@@ -212,11 +196,11 @@
                             </div>
                         </div>
                         <p class="mt-4 text-xs text-gray-400">
-                            @if ($paymentKey === 'paid')
+                            @if ($activeRegistration->payment_status === 'paid')
                                 Pembayaran sudah lunas
-                            @elseif ($paymentKey === 'pending')
+                            @elseif ($activeRegistration->payment_status === 'pending')
                                 Menunggu konfirmasi panitia
-                            @elseif ($paymentKey === 'failed')
+                            @elseif ($activeRegistration->payment_status === 'failed')
                                 Pembayaran gagal — coba lagi
                             @else
                                 Belum ada pembayaran
@@ -260,15 +244,15 @@
                             </div>
                         </div>
                         <p class="mt-4 text-xs text-gray-400">
-                            @if ($statusKey === 'accepted')
+                            @if ($activeRegistration->status === 'accepted')
                                 Segera lakukan daftar ulang
-                            @elseif ($statusKey === 're_registration_complete')
+                            @elseif ($activeRegistration->status === 're_registration_complete')
                                 Proses selesai — selamat! 🎉
-                            @elseif ($statusKey === 'rejected')
+                            @elseif ($activeRegistration->status === 'rejected')
                                 Perbaiki sesuai catatan panitia
-                            @elseif ($statusKey === 'canceled')
+                            @elseif ($activeRegistration->status === 'canceled')
                                 Pendaftaran dibatalkan
-                            @elseif ($statusKey === 'withdrawn')
+                            @elseif ($activeRegistration->status === 'withdrawn')
                                 Pendaftaran dibatalkan (mengundurkan diri)
                             @else
                                 Ikuti langkah pada alur di bawah
@@ -382,29 +366,7 @@
                                                 {{ $reg->registrationTrack->name }}
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap">
-                                                @php
-                                                $statusColors = [
-                                                    'pending' => 'bg-yellow-100 text-yellow-800',
-                                                    'verified' => 'bg-blue-100 text-blue-800',
-                                                    'rejected' => 'bg-red-100 text-red-800',
-                                                    'accepted' => 'bg-green-100 text-green-800',
-                                                    're_registration_complete' => 'bg-purple-100 text-purple-800',
-                                                    'canceled' => 'bg-gray-300 text-gray-700',
-                                                    'withdrawn' => 'bg-orange-100 text-orange-800',
-                                                ];
-                                                $statusLabels = [
-                                                    'pending' => 'Menunggu Verifikasi',
-                                                    'verified' => 'Terverifikasi',
-                                                    'rejected' => 'Ditolak',
-                                                    'accepted' => 'Diterima',
-                                                    're_registration_complete' => 'Terdaftar',
-                                                    'canceled' => 'Dibatalkan',
-                                                    'withdrawn' => 'Mengundurkan Diri',
-                                                ];
-                                                @endphp
-                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $statusColors[$reg->status] ?? 'bg-gray-100 text-gray-800' }}">
-                                                    {{ $statusLabels[$reg->status] ?? ucfirst(str_replace('_', ' ', $reg->status)) }}
-                                                </span>
+                                                <x-status-badge :status="$reg->status" type="registration" />
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                                 @if ($reg->deadline_at && $reg->status === 'pending')
@@ -426,23 +388,7 @@
                                                 @endif
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap">
-                                                @php
-                                                    $paymentColors = [
-                                                        'unpaid' => 'bg-gray-100 text-gray-800',
-                                                        'pending' => 'bg-yellow-100 text-yellow-800',
-                                                        'paid' => 'bg-green-100 text-green-800',
-                                                        'failed' => 'bg-red-100 text-red-800',
-                                                    ];
-                                                    $paymentLabels = [
-                                                        'unpaid' => 'Belum Dibayar',
-                                                        'pending' => 'Menunggu Konfirmasi',
-                                                        'paid' => 'Lunas',
-                                                        'failed' => 'Gagal',
-                                                    ];
-                                                @endphp
-                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $paymentColors[$reg->payment_status] ?? 'bg-gray-100 text-gray-800' }}">
-                                                    {{ $paymentLabels[$reg->payment_status] ?? ucfirst($reg->payment_status) }}
-                                                </span>
+                                                <x-status-badge :status="$reg->payment_status" type="payment" />
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap">
                                                 @php

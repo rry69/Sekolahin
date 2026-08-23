@@ -22,20 +22,8 @@
                         <h3 class="text-2xl font-bold text-gray-900">Detail Pendaftaran</h3>
                         <p class="text-sm text-gray-600 mt-1">No. Registrasi: {{ $registration->registration_number }}</p>
                     </div>
-                    @php
-                        $statusColors = [
-                            'pending' => 'bg-yellow-100 text-yellow-800 border-yellow-300',
-                            'verified' => 'bg-blue-100 text-blue-800 border-blue-300',
-                            'accepted' => 'bg-green-100 text-green-800 border-green-300',
-                            'rejected' => 'bg-red-100 text-red-800 border-red-300',
-                            'canceled' => 'bg-gray-300 text-gray-700 border-gray-400',
-                            'withdrawn' => 'bg-orange-100 text-orange-800 border-orange-300',
-                        ];
-                    @endphp
                     <div class="flex items-center gap-2">
-                        <span class="px-3 py-1 text-sm font-semibold rounded border {{ $statusColors[$registration->status] ?? 'bg-gray-100 text-gray-800 border-gray-300' }}">
-                            {{ \App\Models\Registration::statusLabel($registration->status) }}
-                        </span>
+                        <x-status-badge :status="$registration->status" type="registration" class="border px-3 py-1" />
                         @if ($registration->deadline_at && $registration->status === 'pending')
                             @php
                                 $hoursRemaining = $registration->getDeadlineHoursRemaining();
