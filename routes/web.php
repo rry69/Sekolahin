@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ApplicantController;
 use App\Http\Controllers\RegistrationController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\XenditWebhookController;
 use App\Http\Controllers\Admin\DashboardController;
@@ -68,6 +69,14 @@ Route::middleware(['auth', 'role:Siswa'])->group(function () {
     Route::delete('/registrations/{registration}/documents/{document}', [RegistrationController::class, 'deleteDocument'])->name('registration.documents.delete');
     
     Route::post('/payments', [PaymentController::class, 'store'])->name('payments.store');
+
+    // Notifikasi in-app siswa
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::post('/notifications/read-all', [NotificationController::class, 'markAllRead'])->name('notifications.read-all');
+    Route::post('/notifications/{notification}/read', [NotificationController::class, 'markRead'])->name('notifications.read');
+
+    // Siswa mundur diri (hanya saat status pending)
+    Route::post('/registrations/{registration}/withdraw', [RegistrationController::class, 'withdraw'])->name('registration.withdraw');
 });
 
 Route::middleware(['auth', 'role:Admin'])->prefix('admin')->name('admin.')->group(function () {

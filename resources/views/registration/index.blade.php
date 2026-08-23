@@ -30,16 +30,6 @@
                 'Pantau <strong>Status</strong> dan <strong>Pembayaran</strong> di tabel — hubungi panitia jika butuh bantuan.',
             ]" />
 
-            @if (!auth()->user()->applicant)
-                <div class="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded mb-4">
-                    <p class="font-medium">Profil belum lengkap!</p>
-                    <p class="text-sm mt-1">Silakan lengkapi profil Anda terlebih dahulu sebelum mendaftar.</p>
-                    <a href="{{ route('applicant.profile') }}" class="mt-2 inline-block bg-yellow-600 text-white px-4 py-2 rounded hover:bg-yellow-700">
-                        Lengkapi Profil
-                    </a>
-                </div>
-            @endif
-
             @php
                 $activeReg = $registrations->firstWhere(function ($r) {
                     return $r->status === 'pending' && in_array($r->payment_status, ['unpaid', 'pending']);
@@ -83,25 +73,256 @@
                 @endif
             @endif
 
-            @if (!$registrations->isEmpty())
-                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
-                    <div class="bg-white rounded-lg shadow-sm p-4 border border-gray-200">
-                        <p class="text-sm font-medium text-gray-500">Total Pendaftaran</p>
-                        <p class="mt-1 text-2xl font-bold text-gray-900">{{ $summary['total'] }}</p>
+            @if ($activeRegistration)
+                @php
+                    // ===== Statistik progres (bermakna walau hanya 1 pendaftaran) =====
+                    $statusInfo = [
+                        'pending' => ['label' => 'Menunggu Verifikasi', 'cls' => 'bg-blue-50 text-blue-600'],
+                        'verified' => ['label' => 'Terverifikasi', 'cls' => 'bg-indigo-50 text-indigo-600'],
+                        'accepted' => ['label' => 'Diterima', 'cls' => 'bg-emerald-50 text-emerald-600'],
+                        're_registration_complete' => ['label' => 'Terdaftar', 'cls' => 'bg-purple-50 text-purple-600'],
+                        'rejected' => ['label' => 'Ditolak', 'cls' => 'bg-red-50 text-red-600'],
+                        'canceled' => ['label' => 'Dibatalkan', 'cls' => 'bg-gray-100 text-gray-500'],
+                        'withdrawn' => ['label' => 'Mundur Diri', 'cls' => 'bg-orange-50 text-orange-600'],
+                    ];
+                    $statusKey = $activeRegistration->status;
+                    $statusCard = $statusInfo[$statusKey] ?? ['label' => ucfirst(str_replace('_', ' ', $statusKey)), 'cls' => 'bg-gray-50 text-gray-600'];
+
+                    $paymentInfo = [
+                        'unpaid' => ['label' => 'Belum Dibayar', 'icon' => 'fa-credit-card', 'cls' => 'bg-gray-50 text-gray-500'],
+                        'pending' => ['label' => 'Menunggu Konfirmasi', 'icon' => 'fa-clock', 'cls' => 'bg-yellow-50 text-yellow-600'],
+                        'paid' => ['label' => 'Lunas', 'icon' => 'fa-circle-check', 'cls' => 'bg-emerald-50 text-emerald-600'],
+                        'failed' => ['label' => 'Gagal', 'icon' => 'fa-circle-xmark', 'cls' => 'bg-red-50 text-red-600'],
+                    ];
+                    $paymentKey = $activeRegistration->payment_status;
+                    $paymentCard = $paymentInfo[$paymentKey] ?? ['label' => ucfirst($paymentKey), 'icon' => 'fa-credit-card', 'cls' => 'bg-gray-50 text-gray-500'];
+
+                    $docPct = $docStats['total'] > 0 ? round(($docStats['verified'] / $docStats['total']) * 100) : 0;
+                    $docAllVerified = $docStats['total'] > 0 && $docStats['verified'] >= $docStats['total'];
+
+                    $deadlineInfo = ['label' => '-', 'cls' => 'bg-gray-50 text-gray-500', 'icon' => 'fa-hourglass-half'];
+                    if ($deadline) {
+                        if ($deadline['expired']) {
+                            $deadlineInfo = ['label' => 'Terlewati', 'cls' => 'bg-red-50 text-red-600', 'icon' => 'fa-triangle-exclamation'];
+                        } elseif ($deadline['hours'] !== null && $deadline['hours'] <= 24) {
+                            $deadlineInfo = ['label' => $deadline['label'], 'cls' => 'bg-amber-50 text-amber-600', 'icon' => 'fa-hourglass-end'];
+                        } else {
+                            $deadlineInfo = ['label' => $deadline['label'], 'cls' => 'bg-blue-50 text-blue-600', 'icon' => 'fa-hourglass-half'];
+                        }
+                    }
+
+                    // ===== Timeline alur pendaftaran =====
+                    $stepDefs = [
+                        ['label' => 'Profil', 'desc' => 'Biodata lengkap'],
+                        ['label' => 'Daftar', 'desc' => 'Pendaftaran dibuat'],
+                        ['label' => 'Dokumen', 'desc' => 'Berkas diupload'],
+                        ['label' => 'Verifikasi', 'desc' => 'Dicek panitia'],
+                        ['label' => 'Bayar', 'desc' => 'Pembayaran lunas'],
+                        ['label' => 'Diterima', 'desc' => 'Daftar ulang'],
+                    ];
+                    $flowState = 'normal';
+                    $stepState = ['todo', 'todo', 'todo', 'todo', 'todo', 'todo'];
+                    if ($activeRegistration) {
+                        $regStatus = $activeRegistration->status;
+                        $regPaid = $activeRegistration->payment_status === 'paid';
+                        $allDocs = $docStats['total'] > 0 && $docStats['uploaded'] >= $docStats['total'];
+                        $someDocs = $docStats['uploaded'] > 0;
+
+                        if ($regStatus === 'canceled') {
+                            $flowState = 'canceled';
+                        } elseif ($regStatus === 'withdrawn') {
+                            $flowState = 'withdrawn';
+                        } elseif ($regStatus === 'rejected') {
+                            $flowState = 'rejected';
+                        }
+
+                        $stepState[0] = 'done'; // Profil
+                        $stepState[1] = 'done'; // Pendaftaran dibuat
+
+                        // Dokumen: selesai bila semua wajib terupload; aktif bila sebagian terupload
+                        if ($allDocs) {
+                            $stepState[2] = 'done';
+                        } elseif ($someDocs) {
+                            $stepState[2] = 'current';
+                        }
+
+                        // Verifikasi: selesai bila status sudah lewat verifikasi
+                        if (in_array($regStatus, ['verified', 'accepted', 're_registration_complete'])) {
+                            $stepState[3] = 'done';
+                        }
+
+                        // Bayar: selesai bila lunas
+                        if ($regPaid) {
+                            $stepState[4] = 'done';
+                        }
+
+                        // Diterima
+                        if (in_array($regStatus, ['accepted', 're_registration_complete'])) {
+                            $stepState[5] = 'done';
+                        }
+
+                        if ($flowState === 'rejected') {
+                            $stepState[3] = 'rejected';
+                        } elseif ($flowState === 'canceled' || $flowState === 'withdrawn') {
+                            $stepState = array_fill(0, 6, 'todo');
+                        } else {
+                            // Pastikan HANYA SATU tahap aktif: kalau sudah ada 'current'
+                            // (mis. dokumen sebagian), jangan timpa dengan yang lain.
+                            $alreadyCurrent = in_array('current', $stepState, true);
+                            if (!$alreadyCurrent) {
+                                foreach ($stepState as $i => $s) {
+                                    if ($s === 'todo') {
+                                        $stepState[$i] = 'current';
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                @endphp
+
+                {{-- Kartu statistik progres --}}
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                    {{-- Dokumen --}}
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
+                        <div class="flex items-start justify-between">
+                            <div>
+                                <p class="text-xs font-medium text-gray-500 uppercase tracking-wide">Dokumen Terverifikasi</p>
+                                <p class="mt-2 text-3xl font-bold text-gray-900">{{ $docStats['verified'] }}<span class="text-lg text-gray-400 font-medium">/{{ $docStats['total'] }}</span></p>
+                            </div>
+                            <div class="w-11 h-11 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center text-lg shrink-0">
+                                <i class="fa-solid fa-file-lines"></i>
+                            </div>
+                        </div>
+                        <div class="mt-4 h-2 bg-gray-100 rounded-full overflow-hidden">
+                            <div class="h-full rounded-full transition-all {{ $docAllVerified ? 'bg-emerald-500' : 'bg-indigo-500' }}" style="width: {{ $docPct }}%"></div>
+                        </div>
+                        <p class="mt-2 text-xs text-gray-400">{{ $docAllVerified ? 'Semua berkas terverifikasi' : ($docStats['uploaded'] > 0 ? $docStats['uploaded'] . ' berkas terupload' : 'Belum ada berkas diupload') }}</p>
                     </div>
-                    <div class="bg-white rounded-lg shadow-sm p-4 border border-gray-200">
-                        <p class="text-sm font-medium text-gray-500">Menunggu Verifikasi</p>
-                        <p class="mt-1 text-2xl font-bold text-yellow-600">{{ $summary['pending'] }}</p>
+
+                    {{-- Pembayaran --}}
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
+                        <div class="flex items-start justify-between">
+                            <div>
+                                <p class="text-xs font-medium text-gray-500 uppercase tracking-wide">Pembayaran</p>
+                                <p class="mt-2 text-2xl font-bold {{ str_contains($paymentCard['cls'], 'emerald') ? 'text-emerald-600' : 'text-gray-900' }}">{{ $paymentCard['label'] }}</p>
+                            </div>
+                            <div class="w-11 h-11 rounded-lg {{ $paymentCard['cls'] }} flex items-center justify-center text-lg shrink-0">
+                                <i class="fa-solid {{ $paymentCard['icon'] }}"></i>
+                            </div>
+                        </div>
+                        <p class="mt-4 text-xs text-gray-400">
+                            @if ($paymentKey === 'paid')
+                                Pembayaran sudah lunas
+                            @elseif ($paymentKey === 'pending')
+                                Menunggu konfirmasi panitia
+                            @elseif ($paymentKey === 'failed')
+                                Pembayaran gagal — coba lagi
+                            @else
+                                Belum ada pembayaran
+                            @endif
+                        </p>
                     </div>
-                    <div class="bg-white rounded-lg shadow-sm p-4 border border-gray-200">
-                        <p class="text-sm font-medium text-gray-500">Terverifikasi</p>
-                        <p class="mt-1 text-2xl font-bold text-blue-600">{{ $summary['verified'] }}</p>
+
+                    {{-- Batas waktu --}}
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
+                        <div class="flex items-start justify-between">
+                            <div>
+                                <p class="text-xs font-medium text-gray-500 uppercase tracking-wide">Batas Waktu</p>
+                                <p class="mt-2 text-2xl font-bold {{ str_contains($deadlineInfo['cls'], 'red') ? 'text-red-600' : (str_contains($deadlineInfo['cls'], 'amber') ? 'text-amber-600' : 'text-gray-900') }}">{{ $deadlineInfo['label'] }}</p>
+                            </div>
+                            <div class="w-11 h-11 rounded-lg {{ $deadlineInfo['cls'] }} flex items-center justify-center text-lg shrink-0">
+                                <i class="fa-solid {{ $deadlineInfo['icon'] }}"></i>
+                            </div>
+                        </div>
+                        <p class="mt-4 text-xs text-gray-400">
+                            @if ($deadline)
+                                @if ($deadline['expired'])
+                                    Pendaftaran akan dibatalkan otomatis
+                                @else
+                                    Sisa waktu penyelesaian pendaftaran
+                                @endif
+                            @else
+                                Tidak ada batas waktu aktif
+                            @endif
+                        </p>
                     </div>
-                    <div class="bg-white rounded-lg shadow-sm p-4 border border-gray-200">
-                        <p class="text-sm font-medium text-gray-500">Diterima / Terdaftar</p>
-                        <p class="mt-1 text-2xl font-bold text-green-600">{{ $summary['accepted'] }}</p>
+
+                    {{-- Tahap saat ini --}}
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
+                        <div class="flex items-start justify-between">
+                            <div>
+                                <p class="text-xs font-medium text-gray-500 uppercase tracking-wide">Tahap Saat Ini</p>
+                                <p class="mt-2 text-2xl font-bold text-gray-900">{{ $statusCard['label'] }}</p>
+                            </div>
+                            <div class="w-11 h-11 rounded-lg {{ $statusCard['cls'] }} flex items-center justify-center text-lg shrink-0">
+                                <i class="fa-solid fa-route"></i>
+                            </div>
+                        </div>
+                        <p class="mt-4 text-xs text-gray-400">
+                            @if ($statusKey === 'accepted')
+                                Segera lakukan daftar ulang
+                            @elseif ($statusKey === 're_registration_complete')
+                                Proses selesai — selamat! 🎉
+                            @elseif ($statusKey === 'rejected')
+                                Perbaiki sesuai catatan panitia
+                            @elseif ($statusKey === 'canceled')
+                                Pendaftaran dibatalkan
+                            @elseif ($statusKey === 'withdrawn')
+                                Pendaftaran dibatalkan (mundur diri)
+                            @else
+                                Ikuti langkah pada alur di bawah
+                            @endif
+                        </p>
                     </div>
                 </div>
+
+                {{-- Timeline alur pendaftaran --}}
+                @if ($flowState !== 'canceled' && $flowState !== 'withdrawn')
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-sm font-bold text-gray-900 uppercase tracking-wide">Alur Pendaftaran Anda</h3>
+                        @if ($flowState === 'rejected')
+                            <span class="text-xs font-semibold text-red-600 bg-red-50 px-3 py-1 rounded-full">⚠ Berkas ditolak — perbaiki dan upload ulang</span>
+                        @endif
+                    </div>
+                    <div class="flex flex-wrap md:flex-nowrap items-start">
+                        @foreach ($stepDefs as $i => $step)
+                            @php
+                                $s = $stepState[$i] ?? 'todo';
+                                $circleCls = match ($s) {
+                                    'done' => 'bg-emerald-500 border-emerald-500 text-white',
+                                    'current' => 'bg-white border-indigo-500 text-indigo-600 ring-4 ring-indigo-100',
+                                    'rejected' => 'bg-red-500 border-red-500 text-white',
+                                    default => 'bg-white border-gray-300 text-gray-400',
+                                };
+                                $labelCls = match ($s) {
+                                    'done' => 'text-emerald-600',
+                                    'current' => 'text-indigo-600',
+                                    'rejected' => 'text-red-600',
+                                    default => 'text-gray-400',
+                                };
+                            @endphp
+                            <div class="relative flex-1 min-w-[96px] flex flex-col items-center text-center px-1 mb-4 md:mb-0">
+                                @if ($i > 0)
+                                    <div class="hidden md:block absolute top-5 left-[-50%] right-[50%] h-0.5 {{ in_array($s, ['done']) ? 'bg-emerald-400' : 'bg-gray-200' }}"></div>
+                                @endif
+                                <div class="relative z-10 w-10 h-10 rounded-full border-2 flex items-center justify-center text-sm font-bold {{ $circleCls }}">
+                                    @if ($s === 'done')
+                                        <i class="fa-solid fa-check text-xs"></i>
+                                    @elseif ($s === 'rejected')
+                                        <i class="fa-solid fa-xmark text-xs"></i>
+                                    @else
+                                        {{ $i + 1 }}
+                                    @endif
+                                </div>
+                                <p class="mt-2 text-xs font-semibold {{ $labelCls }}">{{ $step['label'] }}</p>
+                                <p class="text-[10px] text-gray-400 leading-tight">{{ $step['desc'] }}</p>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+                @endif
             @endif
 
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
@@ -128,13 +349,15 @@
                                     <tr>
                                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">No. Pendaftaran</th>
                                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Jenjang</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Sekolah</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Jurusan</th>
                                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Periode</th>
                                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Jalur</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Batas Waktu</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Pembayaran</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Dokumen</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Aksi</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Batas Waktu</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Pembayaran</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Dokumen</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody class="bg-white divide-y divide-gray-200">
@@ -145,6 +368,12 @@
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                                 {{ $reg->registrationPeriod->schoolLevel->name }}
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                {{ $reg->school?->name ?? '-' }}
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                {{ $reg->major?->name ?? $reg->finalMajor?->name ?? '-' }}
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                                 {{ $reg->registrationPeriod->name }}
@@ -161,6 +390,7 @@
                                                     'accepted' => 'bg-green-100 text-green-800',
                                                     're_registration_complete' => 'bg-purple-100 text-purple-800',
                                                     'canceled' => 'bg-gray-300 text-gray-700',
+                                                    'withdrawn' => 'bg-orange-100 text-orange-800',
                                                 ];
                                                 $statusLabels = [
                                                     'pending' => 'Menunggu Verifikasi',
@@ -169,6 +399,7 @@
                                                     'accepted' => 'Diterima',
                                                     're_registration_complete' => 'Terdaftar',
                                                     'canceled' => 'Dibatalkan',
+                                                    'withdrawn' => 'Mundur Diri',
                                                 ];
                                                 @endphp
                                                 <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $statusColors[$reg->status] ?? 'bg-gray-100 text-gray-800' }}">
@@ -202,9 +433,15 @@
                                                         'paid' => 'bg-green-100 text-green-800',
                                                         'failed' => 'bg-red-100 text-red-800',
                                                     ];
+                                                    $paymentLabels = [
+                                                        'unpaid' => 'Belum Dibayar',
+                                                        'pending' => 'Menunggu Konfirmasi',
+                                                        'paid' => 'Lunas',
+                                                        'failed' => 'Gagal',
+                                                    ];
                                                 @endphp
                                                 <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $paymentColors[$reg->payment_status] ?? 'bg-gray-100 text-gray-800' }}">
-                                                    {{ ucfirst($reg->payment_status) }}
+                                                    {{ $paymentLabels[$reg->payment_status] ?? ucfirst($reg->payment_status) }}
                                                 </span>
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap">

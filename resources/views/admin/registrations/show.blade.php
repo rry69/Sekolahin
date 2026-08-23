@@ -29,6 +29,7 @@
                             'accepted' => 'bg-green-100 text-green-800 border-green-300',
                             'rejected' => 'bg-red-100 text-red-800 border-red-300',
                             'canceled' => 'bg-gray-300 text-gray-700 border-gray-400',
+                            'withdrawn' => 'bg-orange-100 text-orange-800 border-orange-300',
                         ];
                     @endphp
                     <div class="flex items-center gap-2">
@@ -49,6 +50,11 @@
                         @if ($registration->canceled_at)
                             <span class="text-xs text-gray-500">
                                 Dibatalkan: {{ $registration->canceled_at->format('d M Y H:i') }}
+                            </span>
+                        @endif
+                        @if ($registration->withdrawn_at)
+                            <span class="text-xs text-gray-500">
+                                Mundur diri: {{ $registration->withdrawn_at->format('d M Y H:i') }}
                             </span>
                         @endif
                         <form action="{{ route('admin.registrations.delete-account', $registration) }}" method="POST" onsubmit="return confirm('Hapus akun siswa {{ $registration->applicant?->full_name ?? '' }}? Seluruh data pendaftaran dan pembayarannya akan ikut terhapus permanen.')">

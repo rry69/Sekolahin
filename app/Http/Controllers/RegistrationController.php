@@ -43,18 +43,39 @@ class RegistrationController extends Controller
         $registrations = $applicant->registrations()->with([
             'registrationPeriod.schoolLevel',
             'registrationTrack',
+            'school',
+            'major',
+            'finalMajor',
             'documents',
         ])->latest()->get();
 
-        // Ringkasan status untuk kartu dashboard siswa
-        $summary = [
-            'total' => $registrations->count(),
-            'pending' => $registrations->where('status', 'pending')->count(),
-            'verified' => $registrations->where('status', 'verified')->count(),
-            'accepted' => $registrations->whereIn('status', ['accepted', 're_registration_complete'])->count(),
-        ];
+        $activeRegistration = $registrations->first();
 
-        return view('registration.index', compact('registrations', 'summary'));
+        // Statistik bermakna untuk siswa (umumnya hanya 1 pendaftaran).
+        // Fokus pada PROGRES, bukan jumlah.
+        $docStats = ['verified' => 0, 'uploaded' => 0, 'total' => 0];
+        if ($activeRegistration) {
+            $requiredTypes = $activeRegistration->requiredDocumentTypes();
+            $uploadedTypes = $activeRegistration->documents->pluck('document_type')->unique();
+            $verifiedTypes = $activeRegistration->documents->whereNotNull('verified_at')->pluck('document_type')->unique();
+            $docStats = [
+                'verified' => $verifiedTypes->intersect($requiredTypes)->count(),
+                'uploaded' => $uploadedTypes->intersect($requiredTypes)->count(),
+                'total' => count($requiredTypes),
+            ];
+        }
+
+        $deadline = null;
+        if ($activeRegistration && $activeRegistration->deadline_at && in_array($activeRegistration->status, ['pending', 'verified'])) {
+            $deadline = [
+                'at' => $activeRegistration->deadline_at,
+                'expired' => $activeRegistration->isDeadlineExpired(),
+                'hours' => $activeRegistration->getDeadlineHoursRemaining(),
+                'label' => $activeRegistration->getDeadlineLabel(),
+            ];
+        }
+
+        return view('registration.index', compact('registrations', 'activeRegistration', 'docStats', 'deadline'));
     }
 
     public function create()
@@ -637,5 +658,32 @@ class RegistrationController extends Controller
         $filename = 'bukti-daftar-ulang-' . $registration->registration_number . '.pdf';
 
         return $pdf->download($filename);
+    }
+
+    /**
+     * Siswa mundur diri (membatalkan pendaftarannya sendiri).
+     * Hanya diperbolehkan selama status masih pending (belum diverifikasi).
+     */
+    public function withdraw(Registration $registration)
+    {
+        if (auth()->user()->applicant?->id !== $registration->applicant_id) {
+            abort(403);
+        }
+
+        if ($registration->status !== 'pending') {
+            return back()->with('error', 'Pendaftaran hanya bisa dibatalkan sebelum diverifikasi panitia.');
+        }
+
+        $registration->update([
+            'status' => 'withdrawn',
+            'withdrawn_at' => now(),
+        ]);
+
+        ActivityLogger::log('registration.withdraw', 'Siswa mundur dari pendaftaran ' . $registration->registration_number . ' (' . $registration->applicant?->full_name . ')', $registration, [
+            'registration_number' => $registration->registration_number,
+            'status' => 'withdrawn',
+        ]);
+
+        return back()->with('success', 'Pendaftaran berhasil dibatalkan. Anda dapat membuat pendaftaran baru jika masih dalam periode pendaftaran.');
     }
 }

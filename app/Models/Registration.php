@@ -23,6 +23,7 @@ class Registration extends Model
         'notes',
         'deadline_at',
         'canceled_at',
+        'withdrawn_at',
     ];
 
     protected function casts(): array
@@ -32,6 +33,7 @@ class Registration extends Model
             'payment_amount' => 'decimal:2',
             'deadline_at' => 'datetime',
             'canceled_at' => 'datetime',
+            'withdrawn_at' => 'datetime',
         ];
     }
 
@@ -95,6 +97,11 @@ class Registration extends Model
         return $this->status === 'canceled';
     }
 
+    public function isWithdrawn(): bool
+    {
+        return $this->status === 'withdrawn';
+    }
+
     public function getDeadlineHoursRemaining(): ?int
     {
         if (!$this->deadline_at) {
@@ -128,7 +135,7 @@ class Registration extends Model
 
     public function scopeActive($query)
     {
-        return $query->whereNotIn('status', ['canceled', 'accepted', 're_registration_complete']);
+        return $query->whereNotIn('status', ['canceled', 'withdrawn', 'accepted', 're_registration_complete']);
     }
 
     /**

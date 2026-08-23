@@ -20,7 +20,23 @@ class StatusChanged extends Notification
 
     public function via(object $notifiable): array
     {
-        return ['mail', 'whatsapp'];
+        return ['database', 'mail', 'whatsapp'];
+    }
+
+    /**
+     * Data yang tersimpan di tabel notifications (untuk bell in-app).
+     * Dipakai juga oleh channel database Laravel.
+     */
+    public function toArray(object $notifiable): array
+    {
+        return [
+            'message' => $this->message,
+            'registration_number' => $this->registration->registration_number,
+            'registration_id' => $this->registration->id,
+            'status' => $this->registration->status,
+            'payment_status' => $this->registration->payment_status,
+            'url' => route('registration.show', $this->registration),
+        ];
     }
 
     public function toMail(object $notifiable): MailMessage

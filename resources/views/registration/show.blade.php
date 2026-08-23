@@ -26,6 +26,15 @@
             ]" />
 
             @if (!isset($isAdmin) || !$isAdmin)
+                @if ($registration->status === 'withdrawn')
+                    <div class="mb-4 bg-orange-100 border border-orange-400 text-orange-700 px-4 py-3 rounded">
+                        <p class="font-semibold">↩ Pendaftaran ini telah Anda batalkan (mundur diri)</p>
+                        <p class="text-sm mt-1">Anda dapat membuat pendaftaran baru jika periode pendaftaran masih dibuka.</p>
+                    </div>
+                @endif
+            @endif
+
+            @if (!isset($isAdmin) || !$isAdmin)
                 @php
                     $rejectedDocs = $registration->documents->whereNotNull('verification_notes');
                 @endphp
@@ -184,6 +193,9 @@
                                 @endif
                                 @if ($registration->canceled_at)
                                     <p class="text-sm mt-1 text-red-600">Dibatalkan pada: {{ $registration->canceled_at->format('d M Y H:i') }}</p>
+                                @endif
+                                @if ($registration->withdrawn_at)
+                                    <p class="text-sm mt-1 text-orange-600">Mundur diri pada: {{ $registration->withdrawn_at->format('d M Y H:i') }}</p>
                                 @endif
                             </div>
                         </div>
@@ -571,10 +583,20 @@
         </div>
     @endif
 
-                    <div class="flex justify-between mt-8">
+                    <div class="flex justify-between mt-8 items-center">
                         <a href="{{ route('registration.index') }}" class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">
                             Kembali
                         </a>
+
+                        @if ((!isset($isAdmin) || !$isAdmin) && $registration->status === 'pending')
+                            <form method="POST" action="{{ route('registration.withdraw', $registration) }}"
+                                  onsubmit="return confirm('Yakin ingin membatalkan pendaftaran ini? Tindakan ini tidak dapat dibatalkan.');">
+                                @csrf
+                                <button type="submit" class="px-4 py-2 bg-red-50 border border-red-300 text-red-600 rounded-md hover:bg-red-100 font-medium">
+                                    Mundur dari Pendaftaran
+                                </button>
+                            </form>
+                        @endif
                     </div>
                 </div>
             </div>
