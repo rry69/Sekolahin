@@ -99,6 +99,7 @@ Route::middleware(['auth', 'role:Admin'])->prefix('admin')->name('admin.')->grou
     Route::get('/registrations/{registration}', [AdminRegistrationController::class, 'show'])->name('registrations.show');
     Route::post('/registrations/{registration}/verify', [AdminRegistrationController::class, 'verify'])->name('registrations.verify');
     Route::post('/registrations/{registration}/update-payment', [AdminRegistrationController::class, 'updatePayment'])->name('registrations.update-payment');
+    Route::post('/registrations/{registration}/reset-password', [AdminRegistrationController::class, 'resetPassword'])->name('registrations.reset-password');
     Route::post('/registrations/{registration}/delete-account', [AdminRegistrationController::class, 'destroyAccount'])->name('registrations.delete-account');
     Route::post('/registrations/{registration}/reset', [AdminRegistrationController::class, 'reset'])->name('registrations.reset');
     

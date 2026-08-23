@@ -603,7 +603,7 @@
   .dark .hover\:bg-gray-100:hover { background-color: #232329 !important; }
   .dark .hover\:bg-gray-200:hover { background-color: #2c2c33 !important; }
   .dark .hover\:bg-yellow-200:hover { background-color: rgba(234, 179, 8, 0.25) !important; }
-  /* help-widget + file-preview + misc components */
+  /* file-preview + misc components */
   .dark .bg-amber-50 { background-color: rgba(180, 83, 9, 0.15) !important; }
   .dark .border-amber-200 { border-color: rgba(180, 83, 9, 0.30) !important; }
   .dark .text-amber-900 { color: #fcd34d !important; }
@@ -706,7 +706,6 @@
 </div>
 
 @include('components.file-preview-modal')
-@include('components.help-widget')
 
 <script>
 // === Theme Toggle ===

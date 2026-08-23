@@ -82,7 +82,7 @@
                                 <tr>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $registration->applicant->full_name ?? '-' }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm">{{ $registration->registrationTrack->name ?? '-' }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm">{{ ucfirst($registration->status) }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm">{{ \App\Models\Registration::statusLabel($registration->status) }}</td>
                                 </tr>
                             @empty
                                 <tr>

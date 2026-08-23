@@ -44,8 +44,6 @@
             </main>
         </div>
 
-        @include('components.help-widget')
-
         @stack('scripts')
     </body>
 </html>

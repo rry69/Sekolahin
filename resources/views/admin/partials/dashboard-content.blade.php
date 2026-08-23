@@ -134,7 +134,7 @@
             'accepted' => ['label' => 'Diterima', 'cls' => 'status-accepted'],
             're_registration_complete' => ['label' => 'Daftar Ulang Selesai', 'cls' => 'status-accepted'],
             'canceled' => ['label' => 'Dibatalkan', 'cls' => 'status-rejected'],
-            'withdrawn' => ['label' => 'Mundur Diri', 'cls' => 'status-rejected'],
+            'withdrawn' => ['label' => 'Mengundurkan Diri', 'cls' => 'status-rejected'],
           ];
           $s = $smap[$reg->status] ?? ['label' => ucfirst(str_replace('_',' ',$reg->status)), 'cls' => 'status-pending'];
         @endphp

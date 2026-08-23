@@ -83,7 +83,7 @@
                         're_registration_complete' => ['label' => 'Terdaftar', 'cls' => 'bg-purple-50 text-purple-600'],
                         'rejected' => ['label' => 'Ditolak', 'cls' => 'bg-red-50 text-red-600'],
                         'canceled' => ['label' => 'Dibatalkan', 'cls' => 'bg-gray-100 text-gray-500'],
-                        'withdrawn' => ['label' => 'Mundur Diri', 'cls' => 'bg-orange-50 text-orange-600'],
+                        'withdrawn' => ['label' => 'Mengundurkan Diri', 'cls' => 'bg-orange-50 text-orange-600'],
                     ];
                     $statusKey = $activeRegistration->status;
                     $statusCard = $statusInfo[$statusKey] ?? ['label' => ucfirst(str_replace('_', ' ', $statusKey)), 'cls' => 'bg-gray-50 text-gray-600'];
@@ -269,7 +269,7 @@
                             @elseif ($statusKey === 'canceled')
                                 Pendaftaran dibatalkan
                             @elseif ($statusKey === 'withdrawn')
-                                Pendaftaran dibatalkan (mundur diri)
+                                Pendaftaran dibatalkan (mengundurkan diri)
                             @else
                                 Ikuti langkah pada alur di bawah
                             @endif
@@ -399,7 +399,7 @@
                                                     'accepted' => 'Diterima',
                                                     're_registration_complete' => 'Terdaftar',
                                                     'canceled' => 'Dibatalkan',
-                                                    'withdrawn' => 'Mundur Diri',
+                                                    'withdrawn' => 'Mengundurkan Diri',
                                                 ];
                                                 @endphp
                                                 <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $statusColors[$reg->status] ?? 'bg-gray-100 text-gray-800' }}">

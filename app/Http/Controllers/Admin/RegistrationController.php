@@ -12,7 +12,10 @@ use App\Services\ActivityLogger;
 use App\Traits\EnrollsStudent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use Illuminate\Validation\Rules;
 
 class RegistrationController extends Controller
 {
@@ -366,6 +369,43 @@ class RegistrationController extends Controller
             : $count . ' pendaftaran milik ' . $userLabel . ' berhasil direset — akun & profil siswa tetap.';
 
         return redirect()->route('admin.registrations.index')->with('success', $msg);
+    }
+
+    public function resetPassword(Request $request, Registration $registration)
+    {
+        $user = $registration->applicant?->user;
+
+        if (! $user) {
+            return back()->with('error', 'Akun siswa tidak ditemukan');
+        }
+
+        $request->validate([
+            'new_password' => ['nullable', 'string', 'min:8', 'max:64'],
+        ]);
+
+        // Default: password acak 12 karakter jika admin tidak mengisi manual
+        $plain = $request->filled('new_password')
+            ? $request->input('new_password')
+            : Str::random(12);
+
+        $user->password = Hash::make($plain);
+        $user->save();
+
+        // Kirim notifikasi email berisi password baru (synchronous, tanpa queue)
+        try {
+            $user->notify(new \App\Notifications\PasswordResetByAdmin($plain, $user->name, $user->email));
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::warning('Gagal kirim email notifikasi password: ' . $e->getMessage());
+        }
+
+        ActivityLogger::log('account.reset_password', 'Password akun siswa direset: ' . $user->name . ' (' . $user->email . ')', $user, [
+            'registration_number' => $registration->registration_number,
+            'reset_by' => auth()->id(),
+        ]);
+
+        return back()
+            ->with('success', 'Password akun ' . $user->email . ' berhasil direset. Password baru: ' . $plain . ' — notifikasi telah dikirim ke email siswa.')
+            ->with('reset_password_' . $user->id, $plain);
     }
 
     public function destroyAccount(Registration $registration)

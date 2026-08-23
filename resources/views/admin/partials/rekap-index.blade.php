@@ -76,7 +76,7 @@
         </td>
         <td>{{ $reg->finalMajor->name ?? '-' }}</td>
         <td style="font-size:12px;color:var(--tx2);">{{ $reg->registrationPeriod->name ?? '-' }}</td>
-        <td><span class="status-badge status-accepted">{{ ucfirst(str_replace('_', ' ', $reg->status)) }}</span></td>
+        <td><span class="status-badge status-accepted">{{ \App\Models\Registration::statusLabel($reg->status) }}</span></td>
       </tr>
       @endforeach
     </tbody>

@@ -74,7 +74,7 @@
         </td>
         <td>{{ $reg->registrationPeriod->schoolLevel->name ?? '-' }}</td>
         <td>{{ $reg->registrationTrack->name ?? '-' }}</td>
-        <td><span class="status-badge status-{{ $reg->status }}">{{ ucfirst(str_replace('_', ' ', $reg->status)) }}</span></td>
+        <td><span class="status-badge status-{{ $reg->status }}">{{ \App\Models\Registration::statusLabel($reg->status) }}</span></td>
         <td>
           @php
             $pm = ['unpaid'=>'pending','pending'=>'pending','paid'=>'accepted','failed'=>'rejected'];

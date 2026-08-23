@@ -102,6 +102,31 @@ class Registration extends Model
         return $this->status === 'withdrawn';
     }
 
+    /**
+     * Apakah pendaftaran sudah diterima (termasuk yang sudah daftar ulang).
+     */
+    public function isAccepted(): bool
+    {
+        return in_array($this->status, ['accepted', 're_registration_complete']);
+    }
+
+    /**
+     * Label status pendaftaran dalam Bahasa Indonesia.
+     */
+    public static function statusLabel(?string $status): string
+    {
+        return match ($status) {
+            'pending' => 'Menunggu Verifikasi',
+            'verified' => 'Terverifikasi',
+            'rejected' => 'Ditolak',
+            'accepted' => 'Diterima',
+            're_registration_complete' => 'Daftar Ulang Selesai',
+            'canceled' => 'Dibatalkan',
+            'withdrawn' => 'Mengundurkan Diri',
+            default => $status ? ucfirst(str_replace('_', ' ', $status)) : '-',
+        };
+    }
+
     public function getDeadlineHoursRemaining(): ?int
     {
         if (!$this->deadline_at) {

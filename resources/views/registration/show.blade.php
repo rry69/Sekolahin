@@ -28,7 +28,7 @@
             @if (!isset($isAdmin) || !$isAdmin)
                 @if ($registration->status === 'withdrawn')
                     <div class="mb-4 bg-orange-100 border border-orange-400 text-orange-700 px-4 py-3 rounded">
-                        <p class="font-semibold">↩ Pendaftaran ini telah Anda batalkan (mundur diri)</p>
+                        <p class="font-semibold">↩ Pendaftaran ini telah Anda batalkan (mengundurkan diri)</p>
                         <p class="text-sm mt-1">Anda dapat membuat pendaftaran baru jika periode pendaftaran masih dibuka.</p>
                     </div>
                 @endif
@@ -147,6 +147,7 @@
                                     'accepted' => 'bg-green-100 text-green-800 border-green-300',
                                     're_registration_complete' => 'bg-purple-100 text-purple-800 border-purple-300',
                                     'canceled' => 'bg-gray-300 text-gray-700 border-gray-400',
+                                    'withdrawn' => 'bg-orange-100 text-orange-800 border-orange-300',
                                 ];
 
                                 if ($registration->status === 'pending' && !$docsComplete) {
@@ -160,6 +161,7 @@
                                         'accepted' => 'Diterima',
                                         're_registration_complete' => 'Terdaftar',
                                         'canceled' => 'Dibatalkan',
+                                        'withdrawn' => 'Mengundurkan Diri',
                                     ];
                                     $statusLabel = $statusLabels[$registration->status] ?? ucfirst($registration->status);
                                     $statusColor = $statusColors[$registration->status] ?? 'bg-gray-100 text-gray-800 border-gray-300';
@@ -195,7 +197,7 @@
                                     <p class="text-sm mt-1 text-red-600">Dibatalkan pada: {{ $registration->canceled_at->format('d M Y H:i') }}</p>
                                 @endif
                                 @if ($registration->withdrawn_at)
-                                    <p class="text-sm mt-1 text-orange-600">Mundur diri pada: {{ $registration->withdrawn_at->format('d M Y H:i') }}</p>
+                                    <p class="text-sm mt-1 text-orange-600">Mengundurkan diri pada: {{ $registration->withdrawn_at->format('d M Y H:i') }}</p>
                                 @endif
                             </div>
                         </div>
@@ -593,7 +595,7 @@
                                   onsubmit="return confirm('Yakin ingin membatalkan pendaftaran ini? Tindakan ini tidak dapat dibatalkan.');">
                                 @csrf
                                 <button type="submit" class="px-4 py-2 bg-red-50 border border-red-300 text-red-600 rounded-md hover:bg-red-100 font-medium">
-                                    Mundur dari Pendaftaran
+                                    Mengundurkan Diri dari Pendaftaran
                                 </button>
                             </form>
                         @endif

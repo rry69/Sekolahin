@@ -35,7 +35,7 @@ class RegistrationObserver
             'rejected' => 'Berkas Anda ditolak. ' . ($registration->verified_notes ?? 'Silakan hubungi panitia.'),
             'accepted' => $this->acceptedMessage($registration),
             'canceled' => 'Pendaftaran Anda dibatalkan karena melewati batas waktu.',
-            'withdrawn' => 'Pendaftaran Anda telah dibatalkan (mundur diri). Jika ini sebuah kesalahan, silakan hubungi panitia.',
+            'withdrawn' => 'Pendaftaran Anda telah dibatalkan (mengundurkan diri). Jika ini sebuah kesalahan, silakan hubungi panitia.',
             're_registration_complete' => 'Daftar ulang Anda telah diselesaikan. Silakan cetak bukti daftar ulang di halaman pendaftaran.',
             default => '',
         };

@@ -15,7 +15,7 @@ class AccountController extends Controller
     {
         $siswaRoleId = \App\Models\Role::where('name', 'Siswa')->value('id');
 
-        $query = User::with(['applicant' => fn($q) => $q->withCount('registrations')])
+        $query = User::with(['applicant' => fn($q) => $q->withCount('registrations')->with('registrations')])
             ->where('role_id', $siswaRoleId);
 
         if ($request->filled('search')) {

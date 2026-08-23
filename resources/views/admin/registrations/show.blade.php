@@ -34,7 +34,7 @@
                     @endphp
                     <div class="flex items-center gap-2">
                         <span class="px-3 py-1 text-sm font-semibold rounded border {{ $statusColors[$registration->status] ?? 'bg-gray-100 text-gray-800 border-gray-300' }}">
-                            {{ ucfirst($registration->status) }}
+                            {{ \App\Models\Registration::statusLabel($registration->status) }}
                         </span>
                         @if ($registration->deadline_at && $registration->status === 'pending')
                             @php
@@ -54,15 +54,23 @@
                         @endif
                         @if ($registration->withdrawn_at)
                             <span class="text-xs text-gray-500">
-                                Mundur diri: {{ $registration->withdrawn_at->format('d M Y H:i') }}
+                                Mengundurkan diri: {{ $registration->withdrawn_at->format('d M Y H:i') }}
                             </span>
                         @endif
+                        <form action="{{ route('admin.registrations.reset-password', $registration) }}" method="POST" class="inline-block" onsubmit="return confirm('Yakin ingin mereset password akun {{ $registration->applicant?->user?->email ?? '' }}? Password baru akan dikirim ke email siswa.');">
+                            @csrf
+                            <button type="submit" class="px-3 py-1 text-sm font-semibold rounded bg-amber-500 text-white hover:bg-amber-600">
+                                Reset Password
+                            </button>
+                        </form>
+                        @if (! $registration->isAccepted())
                         <form action="{{ route('admin.registrations.delete-account', $registration) }}" method="POST" onsubmit="return confirm('Hapus akun siswa {{ $registration->applicant?->full_name ?? '' }}? Seluruh data pendaftaran dan pembayarannya akan ikut terhapus permanen.')">
                             @csrf
                             <button type="submit" class="px-3 py-1 text-sm font-semibold rounded bg-red-600 text-white hover:bg-red-700">
                                 Hapus Akun
                             </button>
                         </form>
+                        @endif
                     </div>
                 </div>
 
@@ -105,6 +113,18 @@
                         <div>
                             <p class="text-sm text-gray-600">Email</p>
                             <p class="font-medium text-gray-900">{{ $registration->applicant->user->email ?? '-' }}</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-600">Password Akun</p>
+                            <p class="font-medium text-gray-900">
+                                @if ($registration->applicant->user && !empty(session('reset_password_' . $registration->applicant->user->id)))
+                                    <span class="text-green-700">{{ session('reset_password_' . $registration->applicant->user->id) }}</span>
+                                    <span class="text-xs text-gray-400">(baru saja direset)</span>
+                                @else
+                                    <span class="text-gray-400">Tersembunyi</span>
+                                    <span class="text-xs text-gray-500">— klik "Reset Password" untuk membuat password baru</span>
+                                @endif
+                            </p>
                         </div>
                         <div>
                             <p class="text-sm text-gray-600">Jenis Kelamin</p>
