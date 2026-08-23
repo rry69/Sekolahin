@@ -7,6 +7,9 @@
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 {{ __('Profile') }}
             </h2>
+            <div class="ms-auto">
+                <x-notification-panel />
+            </div>
         </div>
     </x-slot>
 

@@ -5,15 +5,7 @@
                 Pendaftaran Saya
             </h2>
             <div class="flex gap-3 items-center">
-                <a href="{{ route('notifications.index') }}" class="relative inline-flex items-center p-2 rounded-md text-gray-500 hover:text-gray-700 hover:bg-gray-100 focus:outline-none" aria-label="Notifikasi">
-                    <i class="fa-solid fa-bell text-lg"></i>
-                    @if (Auth::user()->unreadNotifications->count() > 0)
-                        <span class="absolute -top-1 -right-1 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-red-500 rounded-full">
-                            {{ Auth::user()->unreadNotifications->count() > 9 ? '9+' : Auth::user()->unreadNotifications->count() }}
-                        </span>
-                    @endif
-                    <span class="sr-only">Notifikasi</span>
-                </a>
+                <x-notification-panel />
                 <x-app-button variant="secondary" :href="route('applicant.profile')">
                     <i class="fa-solid fa-id-card"></i> Biodata Saya
                 </x-app-button>
