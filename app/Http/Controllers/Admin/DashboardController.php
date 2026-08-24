@@ -48,26 +48,4 @@ class DashboardController extends Controller
 
         return view('admin.dashboard', compact('stats', 'recentRegistrations', 'expiredRegistrations', 'nearDeadlineRegistrations', 'upcomingDeadlineRegistrations', 'deadlineTotal'));
     }
-
-    public function registrations(Request $request)
-    {
-        $query = Registration::with(['applicant.user', 'registrationPeriod.schoolLevel', 'registrationTrack']);
-
-        if ($request->status) {
-            $query->where('status', $request->status);
-        }
-
-        if ($request->payment_status) {
-            $query->where('payment_status', $request->payment_status);
-        }
-
-        $registrations = $query->latest()->paginate(20);
-
-        if ($request->ajax()) {
-            $html = view('admin.partials.registrations-content', compact('registrations'))->render();
-            return response()->json(['html' => $html, 'active_nav' => 'registrations']);
-        }
-
-        return view('admin.registrations', compact('registrations'));
-    }
 }
