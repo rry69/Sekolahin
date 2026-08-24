@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SPMB — Masuk (Varian 2: Split Screen)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+  :root {
+    --primary: #6C78F5; --primary-hover: #5A64E8; --primary-active: #4A54C9;
+    --primary-400: #8B96F5; --primary-100: #E5E9FC; --primary-50: #F1F3FE;
+    --success: #2DC99C; --danger: #F27389; --warning: #F5CC66; --info: #248FE6;
+    --n0: #FFFFFF; --n50: #F8F9FB; --n100: #F5F6FA; --n150: #EEF0F4;
+    --n200: #E0E2E8; --n300: #C9CDD6; --n400: #9AA0AE; --n500: #6B7280;
+    --n700: #3F4451; --n900: #1A1A2E;
+    --r-xs: 4px; --r-sm: 6px; --r-md: 8px; --r-lg: 12px;
+    --font-sans: 'Inter', system-ui, sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: var(--font-sans); min-height: 100vh; display: flex; -webkit-font-smoothing: antialiased; color: var(--n700); }
+  .hidden { display: none !important; }
+
+  /* ===== Kiri: brand panel ===== */
+  .brand-panel {
+    flex: 1 1 50%; display: flex; flex-direction: column; justify-content: space-between;
+    background: linear-gradient(150deg, #4A54C9 0%, #6C78F5 55%, #8B96F5 100%);
+    color: #fff; padding: 48px 56px; position: relative; overflow: hidden;
+  }
+  .brand-panel::before {
+    content: ''; position: absolute; width: 420px; height: 420px; border-radius: 50%;
+    background: rgba(255,255,255,.08); top: -120px; right: -120px;
+  }
+  .brand-panel::after {
+    content: ''; position: absolute; width: 300px; height: 300px; border-radius: 50%;
+    background: rgba(255,255,255,.05); bottom: -80px; left: -60px;
+  }
+  .brand-top { display: flex; align-items: center; gap: 12px; position: relative; z-index: 1; }
+  .brand-logo {
+    width: 44px; height: 44px; border-radius: 12px; background: rgba(255,255,255,.18);
+    display: flex; align-items: center; justify-content: center; font-size: 18px;
+    border: 1px solid rgba(255,255,255,.25);
+  }
+  .brand-top strong { font-size: 18px; font-weight: 800; letter-spacing: -0.01em; }
+  .brand-top small { display: block; font-size: 11px; font-weight: 600; opacity: .8; letter-spacing: .04em; }
+  .brand-hero { position: relative; z-index: 1; max-width: 480px; }
+  .brand-hero .badge {
+    display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px;
+    background: rgba(255,255,255,.16); border: 1px solid rgba(255,255,255,.25);
+    border-radius: 999px; font-size: 12px; font-weight: 600; letter-spacing: .02em;
+  }
+  .brand-hero h1 { margin-top: 20px; font-size: 34px; font-weight: 800; line-height: 1.2; letter-spacing: -0.02em; }
+  .brand-hero p { margin-top: 14px; font-size: 15px; line-height: 1.6; opacity: .88; max-width: 420px; }
+  .brand-points { margin-top: 32px; display: flex; flex-direction: column; gap: 16px; }
+  .point { display: flex; align-items: center; gap: 14px; font-size: 14px; font-weight: 500; }
+  .point i {
+    width: 36px; height: 36px; border-radius: 10px; flex-shrink: 0;
+    background: rgba(255,255,255,.16); display: flex; align-items: center; justify-content: center;
+    font-size: 15px; border: 1px solid rgba(255,255,255,.2);
+  }
+  .brand-foot { position: relative; z-index: 1; display: flex; align-items: center; gap: 16px; font-size: 12px; opacity: .75; }
+  .brand-foot .sep { width: 1px; height: 14px; background: rgba(255,255,255,.35); }
+
+  /* ===== Kanan: form ===== */
+  .form-panel { flex: 1 1 50%; display: flex; align-items: center; justify-content: center; background: var(--n100); padding: 48px 32px; }
+  .form-box { width: 100%; max-width: 400px; }
+  .form-head { margin-bottom: 28px; }
+  .form-head .eyebrow { font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--primary); }
+  .form-head h1 { margin-top: 6px; font-size: 26px; font-weight: 800; color: var(--n900); letter-spacing: -0.02em; }
+  .form-head p { margin-top: 8px; font-size: 14px; color: var(--n500); }
+  .field { margin-bottom: 18px; }
+  .field label { display: block; font-size: 12px; font-weight: 600; color: var(--n700); margin-bottom: 6px; }
+  .input-wrap { position: relative; }
+  .input-wrap i.lead {
+    position: absolute; left: 13px; top: 50%; transform: translateY(-50%); font-size: 14px;
+    color: var(--n400); pointer-events: none;
+  }
+  .input-wrap input {
+    width: 100%; height: 44px; border: 1px solid var(--n200); border-radius: var(--r-xs);
+    background: var(--n0); padding: 0 40px 0 38px; font-family: var(--font-sans);
+    font-size: 14px; color: var(--n900); transition: border-color .15s, box-shadow .15s;
+  }
+  .input-wrap input::placeholder { color: var(--n400); }
+  .input-wrap input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(108,120,245,.22); }
+  .input-wrap .toggle {
+    position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+    width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;
+    border: 0; background: transparent; color: var(--n400); cursor: pointer; border-radius: var(--r-xs); font-size: 14px;
+  }
+  .input-wrap .toggle:hover { color: var(--primary); }
+  .row-between { display: flex; align-items: center; justify-content: space-between; margin: 4px 0 22px; }
+  .checkbox { display: inline-flex; align-items: center; gap: 8px; cursor: pointer; font-size: 13px; color: var(--n500); }
+  .checkbox input { width: 16px; height: 16px; accent-color: var(--primary); cursor: pointer; }
+  .link { font-size: 13px; font-weight: 600; color: var(--primary); text-decoration: none; }
+  .link:hover { text-decoration: underline; }
+  .btn-primary {
+    display: flex; width: 100%; height: 48px; align-items: center; justify-content: center; gap: 8px;
+    background: var(--primary); color: #fff; border: 0; border-radius: var(--r-sm);
+    font-family: var(--font-sans); font-size: 15px; font-weight: 600; cursor: pointer;
+    box-shadow: 0 4px 14px -4px rgba(108,120,245,.5); transition: background .15s, transform .1s;
+  }
+  .btn-primary:hover { background: var(--primary-hover); }
+  .btn-primary:active { background: var(--primary-active); transform: scale(.985); }
+  .divider { display: flex; align-items: center; gap: 12px; margin: 28px 0 20px; color: var(--n400); font-size: 12px; }
+  .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--n150); }
+  .social-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .btn-social {
+    display: flex; height: 44px; align-items: center; justify-content: center; gap: 8px;
+    background: var(--n0); border: 1px solid var(--n200); border-radius: var(--r-sm);
+    font-size: 13px; font-weight: 600; color: var(--n700); cursor: pointer; transition: all .15s;
+  }
+  .btn-social:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-50); }
+  .form-foot { margin-top: 24px; text-align: center; font-size: 13px; color: var(--n500); }
+  .form-foot a { color: var(--primary); font-weight: 600; text-decoration: none; }
+  .form-foot a:hover { text-decoration: underline; }
+  .back { position: fixed; top: 16px; left: 16px; z-index: 5; }
+  .back a {
+    display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600;
+    color: var(--n500); text-decoration: none; background: var(--n0); border: 1px solid var(--n150);
+    padding: 7px 12px; border-radius: var(--r-sm); box-shadow: 0 1px 3px rgba(16,24,40,.1);
+  }
+  .back a:hover { color: var(--primary); border-color: var(--primary-400); }
+
+  @media (max-width: 900px) {
+    body { flex-direction: column; }
+    .brand-panel { padding: 32px 28px; flex: none; }
+    .brand-hero h1 { font-size: 24px; }
+    .brand-points { margin-top: 20px; }
+    .form-panel { padding: 36px 20px; }
+  }
+</style>
+</head>
+<body>
+  <div class="back"><a href="index.html"><i class="fa-solid fa-arrow-left"></i> Semua varian</a></div>
+
+  <!-- Panel kiri: brand -->
+  <aside class="brand-panel">
+    <div class="brand-top">
+      <div class="brand-logo"><i class="fa-solid fa-graduation-cap"></i></div>
+      <div><strong>SPMB</strong><small>Penerimaan Murid Baru</small></div>
+    </div>
+
+    <div class="brand-hero">
+      <span class="badge"><i class="fa-solid fa-circle-check"></i> Pendaftaran dibuka</span>
+      <h1>Mulai perjalanan pendidikan putra-putri Anda</h1>
+      <p>Kelola pendaftaran, pantau status berkas, dan lakukan pembayaran dalam satu tempat. Mudah, transparan, dan terpercaya.</p>
+      <div class="brand-points">
+        <div class="point"><i class="fa-solid fa-file-lines"></i> Pendaftaran online tanpa antre</div>
+        <div class="point"><i class="fa-solid fa-magnifying-glass-chart"></i> Pantau status berkas real-time</div>
+        <div class="point"><i class="fa-solid fa-shield-halved"></i> Data aman &amp; terenkripsi</div>
+      </div>
+    </div>
+
+    <div class="brand-foot">
+      <span>© 2026 SPMB</span>
+      <span class="sep"></span>
+      <span>Dukungan: halo@spmb.sch.id</span>
+      <span class="sep"></span>
+      <span>Bantuan</span>
+    </div>
+  </aside>
+
+  <!-- Panel kanan: form -->
+  <main class="form-panel">
+    <div class="form-box">
+      <!-- LOGIN -->
+      <div id="view-login">
+        <div class="form-head">
+          <div class="eyebrow">Selamat datang kembali</div>
+          <h1>Masuk ke akun Anda</h1>
+          <p>Masukkan email dan kata sandi untuk melanjutkan.</p>
+        </div>
+
+        <form onsubmit="return false;">
+          <div class="field">
+            <label for="email">Email</label>
+            <div class="input-wrap">
+              <i class="fa-solid fa-envelope lead"></i>
+              <input id="email" type="email" placeholder="nama@email.com" autocomplete="username">
+            </div>
+          </div>
+          <div class="field">
+            <label for="password">Kata Sandi</label>
+            <div class="input-wrap">
+              <i class="fa-solid fa-lock lead"></i>
+              <input id="password" type="password" placeholder="Masukkan kata sandi" autocomplete="current-password">
+              <button class="toggle" type="button" onclick="togglePw(this)" aria-label="Tampilkan kata sandi"><i class="fa-regular fa-eye"></i></button>
+            </div>
+          </div>
+          <div class="row-between">
+            <label class="checkbox"><input type="checkbox" checked> Ingat saya</label>
+            <a class="link" href="#">Lupa kata sandi?</a>
+          </div>
+          <button class="btn-primary" onclick="fakeSubmit(this)">Masuk <i class="fa-solid fa-arrow-right"></i></button>
+        </form>
+
+        <div class="divider">atau masuk dengan</div>
+        <div class="social-row">
+          <button class="btn-social"><i class="fa-brands fa-google"></i> Google</button>
+          <button class="btn-social"><i class="fa-solid fa-school"></i> Akun Sekolah</button>
+        </div>
+
+        <div class="form-foot">Belum punya akun? <a href="#" onclick="showRegister(event)">Daftar sekarang</a></div>
+      </div>
+
+      <!-- REGISTER -->
+      <div id="view-register" class="hidden">
+        <div class="form-head">
+          <div class="eyebrow">Akun baru</div>
+          <h1>Buat akun SPMB</h1>
+          <p>Isi data diri Anda untuk memulai pendaftaran.</p>
+        </div>
+
+        <form onsubmit="return false;">
+          <div class="field">
+            <label for="r-name">Nama Lengkap</label>
+            <div class="input-wrap">
+              <i class="fa-solid fa-user lead"></i>
+              <input id="r-name" type="text" placeholder="Nama sesuai identitas">
+            </div>
+          </div>
+          <div class="field">
+            <label for="r-email">Email</label>
+            <div class="input-wrap">
+              <i class="fa-solid fa-envelope lead"></i>
+              <input id="r-email" type="email" placeholder="nama@email.com" autocomplete="username">
+            </div>
+          </div>
+          <div class="field">
+            <label for="r-password">Kata Sandi</label>
+            <div class="input-wrap">
+              <i class="fa-solid fa-lock lead"></i>
+              <input id="r-password" type="password" placeholder="Minimal 8 karakter" autocomplete="new-password">
+              <button class="toggle" type="button" onclick="togglePw(this)" aria-label="Tampilkan kata sandi"><i class="fa-regular fa-eye"></i></button>
+            </div>
+          </div>
+          <div class="field">
+            <label for="r-password2">Ulangi Kata Sandi</label>
+            <div class="input-wrap">
+              <i class="fa-solid fa-lock lead"></i>
+              <input id="r-password2" type="password" placeholder="Ketik ulang kata sandi" autocomplete="new-password">
+              <button class="toggle" type="button" onclick="togglePw(this)" aria-label="Tampilkan kata sandi"><i class="fa-regular fa-eye"></i></button>
+            </div>
+          </div>
+          <label class="checkbox" style="margin: 4px 0 22px;"><input type="checkbox" checked> Saya menyetujui <a class="link" href="#">syarat &amp; ketentuan</a></label>
+          <button class="btn-primary" onclick="fakeSubmit(this)">Daftar <i class="fa-solid fa-arrow-right"></i></button>
+        </form>
+
+        <div class="form-foot">Sudah punya akun? <a href="#" onclick="showLogin(event)">Masuk</a></div>
+      </div>
+    </div>
+  </main>
+
+<script>
+  function togglePw(btn) {
+    var input = btn.parentElement.querySelector('input');
+    var icon = btn.querySelector('i');
+    var show = input.type === 'password';
+    input.type = show ? 'text' : 'password';
+    icon.className = show ? 'fa-regular fa-eye-slash' : 'fa-regular fa-eye';
+  }
+  function fakeSubmit(btn) {
+    var original = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Memproses...';
+    setTimeout(function(){ btn.disabled = false; btn.innerHTML = original; }, 1400);
+  }
+  function showRegister(e) { e.preventDefault(); document.getElementById('view-login').classList.add('hidden'); document.getElementById('view-register').classList.remove('hidden'); }
+  function showLogin(e) { e.preventDefault(); document.getElementById('view-register').classList.add('hidden'); document.getElementById('view-login').classList.remove('hidden'); }
+</script>
+</body>
+</html>

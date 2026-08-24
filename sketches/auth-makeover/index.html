@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SPMB — Makeover Login (5 Varian)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #6C78F5;
+    --primary-hover: #5A64E8;
+    --primary-active: #4A54C9;
+    --primary-400: #8B96F5;
+    --primary-100: #E5E9FC;
+    --primary-50: #F1F3FE;
+    --success: #2DC99C;
+    --danger: #F27389;
+    --warning: #F5CC66;
+    --info: #248FE6;
+    --n0: #FFFFFF; --n50: #F8F9FB; --n100: #F5F6FA; --n150: #EEF0F4;
+    --n200: #E0E2E8; --n300: #C9CDD6; --n400: #9AA0AE; --n500: #6B7280;
+    --n700: #3F4451; --n900: #1A1A2E;
+    --font-sans: 'Inter', system-ui, sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: var(--font-sans); background: var(--n100); color: var(--n700); -webkit-font-smoothing: antialiased; }
+  .page { max-width: 1100px; margin: 0 auto; padding: 40px 32px 72px; }
+  .page-head { margin-bottom: 36px; }
+  .page-head h1 { font-size: 28px; font-weight: 800; color: var(--n900); letter-spacing: -0.01em; }
+  .page-head p { margin-top: 6px; font-size: 14px; color: var(--n500); }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 24px; }
+  .card {
+    background: var(--n0); border: 1px solid var(--n150); border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(16,24,40,.06); overflow: hidden;
+    display: flex; flex-direction: column;
+  }
+  .card .preview { border-bottom: 1px solid var(--n150); }
+  .card .preview iframe { width: 100%; height: 340px; border: 0; display: block; background: #fff; }
+  .card .body { padding: 18px 20px 20px; flex: 1; display: flex; flex-direction: column; }
+  .card .num { font-family: var(--font-mono); font-size: 11px; font-weight: 600; color: var(--primary); letter-spacing: 0.08em; }
+  .card h2 { margin-top: 4px; font-size: 17px; font-weight: 700; color: var(--n900); }
+  .card .stance { margin-top: 4px; font-size: 12px; color: var(--n500); }
+  .card .desc { margin-top: 10px; font-size: 13px; line-height: 1.55; color: var(--n700); }
+  .card .tags { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 6px; }
+  .tag { font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 999px; background: var(--primary-50); color: var(--primary); }
+  .card .actions { margin-top: auto; padding-top: 16px; display: flex; gap: 10px; }
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    font-family: var(--font-sans); font-size: 13px; font-weight: 600;
+    height: 40px; padding: 0 18px; border-radius: 6px; cursor: pointer;
+    border: 1.5px solid transparent; text-decoration: none; transition: all .18s ease;
+  }
+  .btn-primary { background: var(--primary); color: #fff; box-shadow: 0 4px 14px -4px rgba(108,120,245,.45); }
+  .btn-primary:hover { background: var(--primary-hover); }
+  .btn-outline { border-color: var(--n300); color: var(--n700); background: #fff; }
+  .btn-outline:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-50); }
+  .foot-note { margin-top: 28px; font-size: 12px; color: var(--n400); }
+  .foot-note code { font-family: var(--font-mono); background: var(--n150); padding: 1px 6px; border-radius: 4px; }
+</style>
+</head>
+<body>
+  <div class="page">
+    <div class="page-head">
+      <h1>SPMB — Makeover Halaman Login &amp; Register</h1>
+      <p>5 varian desain berbasis design system EGGPLORE (primary <code>#6C78F5</code>, Inter, radius input 4px / tombol 6px / kartu 8px). Setiap varian punya stance berbeda; buka file-nya untuk melihat login + register.</p>
+    </div>
+
+    <div class="grid">
+      <!-- 01 -->
+      <div class="card">
+        <div class="preview"><iframe src="01-centered-card.html" loading="lazy"></iframe></div>
+        <div class="body">
+          <div class="num">01</div>
+          <h2>Centered Card</h2>
+          <div class="stance">Konservatif — kartu putih di tengah, paling dekat dengan kondisi sekarang</div>
+          <p class="desc">Layout aman dan familier: logo di atas, kartu putih fokus, background netral. Cocok untuk transisi tanpa risiko. Semua token EGGPLORE diterapkan rapi.</p>
+          <div class="tags"><span class="tag">Kartu tengah</span><span class="tag">Rendah risiko</span><span class="tag">Netral</span></div>
+          <div class="actions"><a class="btn btn-primary" href="01-centered-card.html" target="_blank">Buka</a></div>
+        </div>
+      </div>
+
+      <!-- 02 -->
+      <div class="card">
+        <div class="preview"><iframe src="02-split-screen.html" loading="lazy"></iframe></div>
+        <div class="body">
+          <div class="num">02</div>
+          <h2>Split Screen</h2>
+          <div class="stance">Modern — panel brand di kiri, form di kanan</div>
+          <p class="desc">Separuh layar berisi branding ungu dengan info pendaftaran &amp; poin keunggulan, separuh lagi form. Umum dipakai produk SaaS; memberi kesan profesional.</p>
+          <div class="tags"><span class="tag">Dua panel</span><span class="tag">Branding kuat</span><span class="tag">SaaS-like</span></div>
+          <div class="actions"><a class="btn btn-primary" href="02-split-screen.html" target="_blank">Buka</a></div>
+        </div>
+      </div>
+
+      <!-- 03 -->
+      <div class="card">
+        <div class="preview"><iframe src="03-brand-story.html" loading="lazy"></iframe></div>
+        <div class="body">
+          <div class="num">03</div>
+          <h2>Brand Story</h2>
+          <div class="stance">Bercerita — form kecil di kiri, narasi &amp; statistik di kanan</div>
+          <p class="desc">Menonjolkan sisi "Decide/Learn": headline, poin alur pendaftaran, dan bukti sosial. Menenangkan calon pendaftar sebelum masuk.</p>
+          <div class="tags"><span class="tag">Narasi</span><span class="tag">Statistik</span><span class="tag">Menenangkan</span></div>
+          <div class="actions"><a class="btn btn-primary" href="03-brand-story.html" target="_blank">Buka</a></div>
+        </div>
+      </div>
+
+      <!-- 04 -->
+      <div class="card">
+        <div class="preview"><iframe src="04-soft-glass.html" loading="lazy"></iframe></div>
+        <div class="body">
+          <div class="num">04</div>
+          <h2>Soft Glass</h2>
+          <div class="stance">Elegan — kartu kaca di atas latar gradasi lembut</div>
+          <p class="desc">Panel semi-transparan (glassmorphism terkendali) di atas background gradasi indigo lembut dengan blob organik. Modern tapi tetap kalem.</p>
+          <div class="tags"><span class="tag">Glassmorphism</span><span class="tag">Gradasi lembut</span><span class="tag">Modern</span></div>
+          <div class="actions"><a class="btn btn-primary" href="04-soft-glass.html" target="_blank">Buka</a></div>
+        </div>
+      </div>
+
+      <!-- 05 -->
+      <div class="card">
+        <div class="preview"><iframe src="05-dark-premium.html" loading="lazy"></iframe></div>
+        <div class="body">
+          <div class="num">05</div>
+          <h2>Dark Premium</h2>
+          <div class="stance">Divergen — tema gelap premium, aksen ungu menyala</div>
+          <p class="desc">Mode gelap penuh dengan kontras tinggi, glow halus, dan tipografi tegas. Berani beda; cocok untuk kesan modern &amp; teknis.</p>
+          <div class="tags"><span class="tag">Dark mode</span><span class="tag">Kontras tinggi</span><span class="tag">Premium</span></div>
+          <div class="actions"><a class="btn btn-primary" href="05-dark-premium.html" target="_blank">Buka</a></div>
+        </div>
+      </div>
+    </div>
+
+    <p class="foot-note">Sumber: design system <code>design-system/</code> (EGGPLORE) + skill ui-ux-pro-max / claude-design / sketch / ui-styling / popular-web-designs. Belum ada logika Laravel — murni HTML statis untuk pemilihan arah.</p>
+  </div>
+</body>
+</html>

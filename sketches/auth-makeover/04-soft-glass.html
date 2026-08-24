@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SPMB — Masuk (Varian 4: Soft Glass)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+  :root {
+    --primary: #6C78F5; --primary-hover: #5A64E8; --primary-active: #4A54C9;
+    --primary-400: #8B96F5; --primary-100: #E5E9FC; --primary-50: #F1F3FE;
+    --success: #2DC99C; --danger: #F27389; --warning: #F5CC66; --info: #248FE6;
+    --n0: #FFFFFF; --n50: #F8F9FB; --n100: #F5F6FA; --n150: #EEF0F4;
+    --n200: #E0E2E8; --n300: #C9CDD6; --n400: #9AA0AE; --n500: #6B7280;
+    --n700: #3F4451; --n900: #1A1A2E;
+    --r-xs: 4px; --r-sm: 6px; --r-md: 8px; --r-lg: 12px;
+    --font-sans: 'Inter', system-ui, sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: var(--font-sans); min-height: 100vh; display: flex; align-items: center; justify-content: center;
+    padding: 24px 16px; color: var(--n700); overflow-x: hidden; -webkit-font-smoothing: antialiased;
+    background: linear-gradient(135deg, #EEF0FB 0%, #F6F5FE 45%, #F0F7F5 100%);
+  }
+  .hidden { display: none !important; }
+  /* blob dekoratif */
+  .blob { position: fixed; border-radius: 50%; filter: blur(70px); opacity: .5; z-index: 0; pointer-events: none; }
+  .blob-1 { width: 380px; height: 380px; background: rgba(108,120,245,.35); top: -90px; right: -60px; }
+  .blob-2 { width: 320px; height: 320px; background: rgba(168,81,215,.22); bottom: -80px; left: -70px; }
+  .blob-3 { width: 220px; height: 220px; background: rgba(45,201,156,.2); top: 40%; left: 55%; }
+
+  .glass-card {
+    position: relative; z-index: 1; width: 100%; max-width: 420px;
+    background: rgba(255,255,255,.66);
+    border: 1px solid rgba(255,255,255,.75);
+    border-radius: var(--r-lg);
+    box-shadow: 0 24px 48px -12px rgba(26,26,46,.18), 0 4px 12px rgba(26,26,46,.06);
+    backdrop-filter: blur(20px) saturate(1.4);
+    -webkit-backdrop-filter: blur(20px) saturate(1.4);
+    padding: 40px 36px 32px;
+  }
+  .glass-brand { text-align: center; margin-bottom: 28px; }
+  .glass-logo {
+    width: 56px; height: 56px; margin: 0 auto 14px; border-radius: 16px;
+    background: linear-gradient(135deg, var(--primary), #A851D7);
+    display: flex; align-items: center; justify-content: center; color: #fff; font-size: 22px;
+    box-shadow: 0 8px 20px -6px rgba(108,120,245,.55);
+  }
+  .glass-brand h1 { font-size: 22px; font-weight: 800; color: var(--n900); letter-spacing: -0.01em; }
+  .glass-brand p { margin-top: 6px; font-size: 13px; color: var(--n500); }
+  .field { margin-bottom: 18px; }
+  .field label { display: block; font-size: 12px; font-weight: 600; color: var(--n700); margin-bottom: 6px; }
+  .input-wrap { position: relative; }
+  .input-wrap i.lead { position: absolute; left: 13px; top: 50%; transform: translateY(-50%); font-size: 14px; color: var(--n400); pointer-events: none; }
+  .input-wrap input {
+    width: 100%; height: 46px; border: 1px solid rgba(108,120,245,.25); border-radius: var(--r-xs);
+    background: rgba(255,255,255,.8); padding: 0 40px 0 38px; font-family: var(--font-sans);
+    font-size: 14px; color: var(--n900); transition: border-color .15s, box-shadow .15s, background .15s;
+  }
+  .input-wrap input::placeholder { color: var(--n400); }
+  .input-wrap input:focus { outline: none; border-color: var(--primary); background: #fff; box-shadow: 0 0 0 3px rgba(108,120,245,.2); }
+  .input-wrap .toggle {
+    position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+    width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;
+    border: 0; background: transparent; color: var(--n400); cursor: pointer; border-radius: var(--r-xs); font-size: 14px;
+  }
+  .input-wrap .toggle:hover { color: var(--primary); }
+  .row-between { display: flex; align-items: center; justify-content: space-between; margin: 4px 0 22px; }
+  .checkbox { display: inline-flex; align-items: center; gap: 8px; cursor: pointer; font-size: 13px; color: var(--n500); }
+  .checkbox input { width: 16px; height: 16px; accent-color: var(--primary); cursor: pointer; }
+  .link { font-size: 13px; font-weight: 600; color: var(--primary); text-decoration: none; }
+  .link:hover { text-decoration: underline; }
+  .btn-primary {
+    display: flex; width: 100%; height: 48px; align-items: center; justify-content: center; gap: 8px;
+    background: linear-gradient(135deg, var(--primary), var(--primary-hover)); color: #fff; border: 0;
+    border-radius: var(--r-sm); font-family: var(--font-sans); font-size: 15px; font-weight: 600; cursor: pointer;
+    box-shadow: 0 8px 20px -6px rgba(108,120,245,.6); transition: transform .1s, filter .15s;
+  }
+  .btn-primary:hover { filter: brightness(1.05); }
+  .btn-primary:active { transform: scale(.985); }
+  .divider { display: flex; align-items: center; gap: 12px; margin: 28px 0 20px; color: var(--n400); font-size: 12px; }
+  .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: rgba(26,26,46,.1); }
+  .social-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .btn-social {
+    display: flex; height: 44px; align-items: center; justify-content: center; gap: 8px;
+    background: rgba(255,255,255,.7); border: 1px solid rgba(108,120,245,.22); border-radius: var(--r-sm);
+    font-size: 13px; font-weight: 600; color: var(--n700); cursor: pointer; transition: all .15s;
+  }
+  .btn-social:hover { border-color: var(--primary); color: var(--primary); background: rgba(255,255,255,.95); }
+  .glass-foot { margin-top: 24px; text-align: center; font-size: 13px; color: var(--n500); }
+  .glass-foot a { color: var(--primary); font-weight: 600; text-decoration: none; }
+  .glass-foot a:hover { text-decoration: underline; }
+  .back { position: fixed; top: 16px; left: 16px; z-index: 5; }
+  .back a {
+    display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600;
+    color: var(--n500); text-decoration: none; background: rgba(255,255,255,.7); border: 1px solid rgba(255,255,255,.8);
+    padding: 7px 12px; border-radius: var(--r-sm); box-shadow: 0 1px 3px rgba(16,24,40,.1); backdrop-filter: blur(8px);
+  }
+  .back a:hover { color: var(--primary); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .blob { animation: none; }
+  }
+</style>
+</head>
+<body>
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+  <div class="back"><a href="index.html"><i class="fa-solid fa-arrow-left"></i> Semua varian</a></div>
+
+  <!-- LOGIN -->
+  <div class="glass-card" id="view-login">
+    <div class="glass-brand">
+      <div class="glass-logo"><i class="fa-solid fa-graduation-cap"></i></div>
+      <h1>Masuk ke SPMB</h1>
+      <p>Penerimaan Murid Baru — akses akun Anda</p>
+    </div>
+    <form onsubmit="return false;">
+      <div class="field">
+        <label for="email">Email</label>
+        <div class="input-wrap">
+          <i class="fa-solid fa-envelope lead"></i>
+          <input id="email" type="email" placeholder="nama@email.com" autocomplete="username">
+        </div>
+      </div>
+      <div class="field">
+        <label for="password">Kata Sandi</label>
+        <div class="input-wrap">
+          <i class="fa-solid fa-lock lead"></i>
+          <input id="password" type="password" placeholder="Masukkan kata sandi" autocomplete="current-password">
+          <button class="toggle" type="button" onclick="togglePw(this)" aria-label="Tampilkan kata sandi"><i class="fa-regular fa-eye"></i></button>
+        </div>
+      </div>
+      <div class="row-between">
+        <label class="checkbox"><input type="checkbox" checked> Ingat saya</label>
+        <a class="link" href="#">Lupa kata sandi?</a>
+      </div>
+      <button class="btn-primary" onclick="fakeSubmit(this)">Masuk <i class="fa-solid fa-arrow-right"></i></button>
+    </form>
+    <div class="divider">atau masuk dengan</div>
+    <div class="social-row">
+      <button class="btn-social"><i class="fa-brands fa-google"></i> Google</button>
+      <button class="btn-social"><i class="fa-solid fa-school"></i> Akun Sekolah</button>
+    </div>
+    <div class="glass-foot">Belum punya akun? <a href="#" onclick="showRegister(event)">Daftar sekarang</a></div>
+  </div>
+
+  <!-- REGISTER -->
+  <div class="glass-card hidden" id="view-register" style="max-width:440px">
+    <div class="glass-brand">
+      <div class="glass-logo"><i class="fa-solid fa-graduation-cap"></i></div>
+      <h1>Buat Akun SPMB</h1>
+      <p>Mulai proses pendaftaran Anda</p>
+    </div>
+    <form onsubmit="return false;">
+      <div class="field">
+        <label for="r-name">Nama Lengkap</label>
+        <div class="input-wrap">
+          <i class="fa-solid fa-user lead"></i>
+          <input id="r-name" type="text" placeholder="Nama sesuai identitas">
+        </div>
+      </div>
+      <div class="field">
+        <label for="r-email">Email</label>
+        <div class="input-wrap">
+          <i class="fa-solid fa-envelope lead"></i>
+          <input id="r-email" type="email" placeholder="nama@email.com" autocomplete="username">
+        </div>
+      </div>
+      <div class="field">
+        <label for="r-password">Kata Sandi</label>
+        <div class="input-wrap">
+          <i class="fa-solid fa-lock lead"></i>
+          <input id="r-password" type="password" placeholder="Minimal 8 karakter" autocomplete="new-password">
+          <button class="toggle" type="button" onclick="togglePw(this)" aria-label="Tampilkan kata sandi"><i class="fa-regular fa-eye"></i></button>
+        </div>
+      </div>
+      <div class="field">
+        <label for="r-password2">Ulangi Kata Sandi</label>
+        <div class="input-wrap">
+          <i class="fa-solid fa-lock lead"></i>
+          <input id="r-password2" type="password" placeholder="Ketik ulang kata sandi" autocomplete="new-password">
+          <button class="toggle" type="button" onclick="togglePw(this)" aria-label="Tampilkan kata sandi"><i class="fa-regular fa-eye"></i></button>
+        </div>
+      </div>
+      <label class="checkbox" style="margin: 4px 0 22px;"><input type="checkbox" checked> Saya menyetujui <a class="link" href="#">syarat &amp; ketentuan</a></label>
+      <button class="btn-primary" onclick="fakeSubmit(this)">Daftar <i class="fa-solid fa-arrow-right"></i></button>
+    </form>
+    <div class="glass-foot">Sudah punya akun? <a href="#" onclick="showLogin(event)">Masuk</a></div>
+  </div>
+
+<script>
+  function togglePw(btn) {
+    var input = btn.parentElement.querySelector('input');
+    var icon = btn.querySelector('i');
+    var show = input.type === 'password';
+    input.type = show ? 'text' : 'password';
+    icon.className = show ? 'fa-regular fa-eye-slash' : 'fa-regular fa-eye';
+  }
+  function fakeSubmit(btn) {
+    var original = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Memproses...';
+    setTimeout(function(){ btn.disabled = false; btn.innerHTML = original; }, 1400);
+  }
+  function showRegister(e) { e.preventDefault(); document.getElementById('view-login').classList.add('hidden'); document.getElementById('view-register').classList.remove('hidden'); }
+  function showLogin(e) { e.preventDefault(); document.getElementById('view-register').classList.add('hidden'); document.getElementById('view-login').classList.remove('hidden'); }
+</script>
+</body>
+</html>
