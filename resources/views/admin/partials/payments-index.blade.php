@@ -70,7 +70,7 @@
         </td>
         <td>
           @if ($payment->proof_file)
-            <button type="button" onclick="showFileModal('{{ asset('storage/' . $payment->proof_file) }}', 'Bukti Pembayaran · {{ $payment->registration->applicant->full_name }}')" class="btn btn-outline" style="padding:4px 10px;font-size:11px;">
+            <button type="button" onclick="showFileModal('{{ route('payments.proof', $payment) }}', 'Bukti Pembayaran · {{ $payment->registration->applicant->full_name }}')" class="btn btn-outline" style="padding:4px 10px;font-size:11px;">
               Lihat Bukti
             </button>
           @else

@@ -160,7 +160,7 @@
                                     @endif
                                 </div>
                                 <div class="flex items-center gap-2 flex-wrap justify-end" id="doc-actions-{{ $doc->id }}">
-                                    <button type="button" onclick="showFileModal('{{ Storage::url($doc->file_path) }}', '{{ $doc->document_type }}')" class="text-sm text-blue-600 hover:underline">Lihat</button>
+                                    <button type="button" onclick="showFileModal('{{ route('registration.documents.download', [$registration, $doc]) }}', '{{ $doc->document_type }}')" class="text-sm text-blue-600 hover:underline">Lihat</button>
                                     @if($doc->verified_at)
                                         <span id="doc-badge-{{ $doc->id }}" class="px-2 py-1 text-xs bg-green-100 text-green-800 rounded">Terverifikasi</span>
                                         <span id="doc-verify-btns-{{ $doc->id }}" class="hidden items-center gap-2">
@@ -298,7 +298,7 @@
                             <a href="{{ route('payments.invoice.view', $invoicePayment) }}" target="_blank" class="inline-flex items-center gap-1.5 px-4 py-2 bg-green-600 text-white text-sm font-medium rounded hover:bg-green-700">Lihat Invoice</a>
                         @endif
                         @if($proofPayment)
-                            <button type="button" onclick="showFileModal('{{ asset('storage/' . $proofPayment->proof_file) }}', 'Bukti Pembayaran')" class="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded hover:bg-blue-700">Lihat Bukti</button>
+                            <button type="button" onclick="showFileModal('{{ route('payments.proof', $proofPayment) }}', 'Bukti Pembayaran')" class="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded hover:bg-blue-700">Lihat Bukti</button>
                         @endif
                         @if($pendingPayment)
                             <form action="{{ route('admin.payments.verify', $pendingPayment) }}" method="POST" class="inline">
@@ -342,7 +342,7 @@
                             <div class="flex items-center gap-2 ml-3">
                                 @if ($payment->proof_file)
                                     <button type="button"
-                                        onclick="showFileModal('{{ asset('storage/' . $payment->proof_file) }}', 'Bukti Pembayaran')"
+                                        onclick="showFileModal('{{ route('payments.proof', $payment) }}', 'Bukti Pembayaran')"
                                         class="px-3 py-1 bg-blue-600 text-white text-xs rounded hover:bg-blue-700">
                                         Lihat Bukti
                                     </button>

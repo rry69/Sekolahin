@@ -43,7 +43,7 @@ class SimulasiNotifikasiMundurTest extends TestCase
     {
         parent::setUp();
         $this->withoutMiddleware(\Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class);
-        Storage::fake('public');
+        Storage::fake('private');
     }
 
     // ------------------------------------------------------------------
@@ -127,11 +127,11 @@ class SimulasiNotifikasiMundurTest extends TestCase
     private function registerSiswa(string $email): User
     {
         $this->post('/logout'); // aman: 302 jika guest
-        $this->post('/register', [
+        $response = $this->post('/register', [
             'name' => 'Siswa Dummy',
             'email' => $email,
-            'password' => 'password',
-            'password_confirmation' => 'password',
+            'password' => 'N3w-Passw0rd!',
+            'password_confirmation' => 'N3w-Passw0rd!',
         ])->assertRedirect(route('dashboard'));
 
         return User::where('email', $email)->first();

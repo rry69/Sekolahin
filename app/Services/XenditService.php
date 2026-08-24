@@ -303,11 +303,12 @@ class XenditService
     public function verifyCallbackToken($callbackToken)
     {
         $configToken = config('services.xendit.webhook_token');
-        
+
         if (empty($configToken)) {
-            return true;
+            \Illuminate\Support\Facades\Log::error('Xendit webhook: token callback belum dikonfigurasi — tolak callback agar tidak fail-open');
+            return false;
         }
 
-        return $callbackToken === $configToken;
+        return hash_equals((string) $configToken, (string) $callbackToken);
     }
 }

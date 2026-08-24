@@ -51,7 +51,7 @@ class InvoiceService
 
         $filename = 'INV-' . $payment->id . '.pdf';
         $path = 'invoices/' . $filename;
-        \Illuminate\Support\Facades\Storage::disk('public')->put($path, $pdf->output());
+        \Illuminate\Support\Facades\Storage::disk('private')->put($path, $pdf->output());
 
         $payment->update([
             'invoice_pdf' => $path,

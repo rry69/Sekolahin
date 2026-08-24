@@ -125,10 +125,10 @@ class PaymentController extends Controller
 
         foreach ($registration->payments as $p) {
             if ($p->proof_file) {
-                \Illuminate\Support\Facades\Storage::disk('public')->delete($p->proof_file);
+                \Illuminate\Support\Facades\Storage::disk('private')->delete($p->proof_file);
             }
             if ($p->invoice_pdf) {
-                \Illuminate\Support\Facades\Storage::disk('public')->delete($p->invoice_pdf);
+                \Illuminate\Support\Facades\Storage::disk('private')->delete($p->invoice_pdf);
             }
         }
         $registration->payments()->delete();

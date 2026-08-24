@@ -81,7 +81,7 @@
                                         <p class="text-sm text-gray-500">{{ basename($payment->proof_file) }}</p>
                                     </div>
                                 </div>
-                                <button type="button" onclick="showFileModal('{{ asset('storage/' . $payment->proof_file) }}', 'Bukti Pembayaran')" class="px-4 py-2 bg-blue-600 text-white text-sm rounded hover:bg-blue-700">
+                                <button type="button" onclick="showFileModal('{{ route('payments.proof', $payment) }}', 'Bukti Pembayaran')" class="px-4 py-2 bg-blue-600 text-white text-sm rounded hover:bg-blue-700">
                                     Lihat Bukti
                                 </button>
                             </div>

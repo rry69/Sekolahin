@@ -257,7 +257,7 @@
                                                 @if($docsOfType->count() > 0)
                                                     @foreach($docsOfType as $doc)
                                                         <p class="text-sm text-gray-600 mt-1">
-                                                            <button type="button" onclick="showFileModal('{{ Storage::url($doc->file_path) }}', '{{ $doc->file_name }}')" class="text-blue-600 hover:underline">{{ $doc->file_name }}</button>
+                                                            <button type="button" onclick="showFileModal('{{ route('registration.documents.download', [$registration, $doc]) }}', '{{ $doc->file_name }}')" class="text-blue-600 hover:underline">{{ $doc->file_name }}</button>
                                                             @if($doc->verified_at)
                                                                 <span class="ml-2 px-2 py-0.5 text-xs bg-green-100 text-green-800 rounded">Terverifikasi</span>
                                                             @elseif($doc->verification_notes)

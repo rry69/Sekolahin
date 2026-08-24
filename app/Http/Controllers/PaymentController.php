@@ -161,7 +161,7 @@ class PaymentController extends Controller
 
         if ($request->hasFile('proof_file')) {
             $file = $request->file('proof_file');
-            $path = $file->store('payment-proofs', 'public');
+            $path = $file->store('payment-proofs', 'private');
             $validated['proof_file'] = $path;
         }
 
@@ -228,7 +228,7 @@ class PaymentController extends Controller
             abort(404, 'Invoice belum tersedia');
         }
 
-        return Storage::disk('public')->download($payment->invoice_pdf, 'invoice-' . ($payment->invoice_number ?? $payment->id) . '.pdf');
+        return Storage::disk('private')->download($payment->invoice_pdf, 'invoice-' . ($payment->invoice_number ?? $payment->id) . '.pdf');
     }
 
     /**
@@ -246,5 +246,37 @@ class PaymentController extends Controller
             && $payment->xendit_invoice_url;
 
         return view('payments.invoice', compact('payment', 'registration', 'canPayOnline'));
+    }
+
+    /**
+     * Tampilkan bukti pembayaran (file privat) inline.
+     * Hanya pemilik pendaftaran atau Admin.
+     */
+    public function proof(Payment $payment)
+    {
+        $this->authorizePaymentAccess($payment);
+
+        if (! $payment->proof_file) {
+            abort(404, 'Bukti pembayaran belum tersedia');
+        }
+
+        $path = $payment->proof_file;
+
+        if (! Storage::disk('private')->exists($path)) {
+            abort(404, 'Bukti pembayaran tidak ditemukan');
+        }
+
+        $ext = strtolower(pathinfo($path, PATHINFO_EXTENSION));
+        $contentTypes = [
+            'pdf' => 'application/pdf',
+            'jpg' => 'image/jpeg',
+            'jpeg' => 'image/jpeg',
+            'png' => 'image/png',
+        ];
+
+        return response(Storage::disk('private')->get($path), 200, [
+            'Content-Type' => $contentTypes[$ext] ?? 'application/octet-stream',
+            'Content-Disposition' => 'inline; filename="' . basename($path) . '"',
+        ]);
     }
 }

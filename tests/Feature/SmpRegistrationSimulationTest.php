@@ -37,7 +37,7 @@ class SmpRegistrationSimulationTest extends TestCase
     {
         parent::setUp();
         $this->withoutMiddleware(\Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class);
-        Storage::fake('public');
+        Storage::fake('private');
     }
 
     // ---- helpers -------------------------------------------------------

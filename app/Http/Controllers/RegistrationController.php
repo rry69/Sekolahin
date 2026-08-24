@@ -520,6 +520,7 @@ class RegistrationController extends Controller
 
         $request->validate([
             'documents' => 'required|array',
+            'documents.*' => 'file|mimes:jpg,jpeg,png,pdf|max:5120',
         ]);
 
         $uploadedCount = 0;
@@ -549,9 +550,17 @@ class RegistrationController extends Controller
                     continue;
                 }
 
-                $fileName = time() . '_' . $type . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+                $safeExt = strtolower($file->guessExtension() ?: 'bin');
+                $allowedExt = ['jpg', 'jpeg', 'png', 'pdf'];
 
-                $filePath = $file->storeAs('documents', $fileName, 'public');
+                if (! in_array($safeExt, $allowedExt, true)) {
+                    $rejectedTypes[] = $type . ' (ekstensi tidak diizinkan)';
+                    continue;
+                }
+
+                $fileName = time() . '_' . $type . '_' . Str::random(16) . '.' . $safeExt;
+
+                $filePath = $file->storeAs('documents', $fileName, 'private');
 
                 RegistrationDocument::create([
                     'registration_id' => $registration->id,
@@ -598,6 +607,41 @@ class RegistrationController extends Controller
         return back()->with('success', $message);
     }
 
+    /**
+     * Unduh/tampilkan dokumen pendaftaran (file privat).
+     * Hanya pemilik pendaftaran atau Admin yang boleh mengakses.
+     */
+    public function downloadDocument(Registration $registration, RegistrationDocument $document)
+    {
+        $isOwner = auth()->user()->applicant?->id === $registration->applicant_id;
+        $isAdmin = auth()->user()->role?->name === 'Admin';
+
+        if (! $isOwner && ! $isAdmin) {
+            abort(403);
+        }
+
+        if ($document->registration_id !== $registration->id) {
+            abort(404);
+        }
+
+        if (! Storage::disk('private')->exists($document->file_path)) {
+            abort(404, 'Dokumen tidak ditemukan');
+        }
+
+        $ext = strtolower(pathinfo($document->file_path, PATHINFO_EXTENSION));
+        $contentTypes = [
+            'pdf' => 'application/pdf',
+            'jpg' => 'image/jpeg',
+            'jpeg' => 'image/jpeg',
+            'png' => 'image/png',
+        ];
+
+        return response(Storage::disk('private')->get($document->file_path), 200, [
+            'Content-Type' => $contentTypes[$ext] ?? 'application/octet-stream',
+            'Content-Disposition' => 'inline; filename="' . $document->file_name . '"',
+        ]);
+    }
+
     public function deleteDocument(Registration $registration, RegistrationDocument $document)
     {
         if (auth()->user()->applicant?->id !== $registration->applicant_id) {
@@ -612,7 +656,7 @@ class RegistrationController extends Controller
             abort(403);
         }
 
-        Storage::disk('public')->delete($document->file_path);
+        Storage::disk('private')->delete($document->file_path);
         $document->delete();
 
         ActivityLogger::log('document.delete', 'Dokumen dihapus: ' . $document->document_type . ' (' . $registration->registration_number . ')', $registration, [

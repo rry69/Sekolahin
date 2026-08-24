@@ -196,7 +196,7 @@ class RegistrationController extends Controller
         // dokumen kosong; saat memverifikasi, bersihkan catatan penolakan lama.
         if ($validated['status'] === 'rejected') {
             foreach ($registration->documents as $doc) {
-                Storage::disk('public')->delete($doc->file_path);
+                Storage::disk('private')->delete($doc->file_path);
             }
             $registration->documents()->delete();
         } else {
@@ -353,7 +353,7 @@ class RegistrationController extends Controller
         });
 
         foreach ($paths as $path) {
-            try { Storage::disk('public')->delete($path); } catch (\Throwable $e) {}
+            try { Storage::disk('private')->delete($path); } catch (\Throwable $e) {}
         }
 
         $count = count($regNumbers);

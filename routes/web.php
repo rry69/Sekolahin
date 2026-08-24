@@ -48,6 +48,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/payments/{payment}', [PaymentController::class, 'show'])->name('payments.show');
     Route::get('/payments/{payment}/invoice', [PaymentController::class, 'invoice'])->name('payments.invoice');
     Route::get('/payments/{payment}/invoice/view', [PaymentController::class, 'invoiceView'])->name('payments.invoice.view');
+    Route::get('/payments/{payment}/proof', [PaymentController::class, 'proof'])->name('payments.proof');
+
+    // Berkas privat (dokumen pendaftaran) — hanya pemilik pendaftaran atau Admin
+    Route::get('/registrations/{registration}/documents/{document}', [RegistrationController::class, 'downloadDocument'])->name('registration.documents.download');
 });
 
 Route::middleware(['auth', 'role:Siswa'])->group(function () {

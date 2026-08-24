@@ -26,8 +26,8 @@ class RegistrationTest extends TestCase
         $response = $this->post('/register', [
             'name' => 'Test User',
             'email' => 'test@example.com',
-            'password' => 'password',
-            'password_confirmation' => 'password',
+            'password' => 'N3w-Passw0rd!',
+            'password_confirmation' => 'N3w-Passw0rd!',
         ]);
 
         $this->assertAuthenticated();
@@ -41,8 +41,8 @@ class RegistrationTest extends TestCase
         $response = $this->post('/register', [
             'name' => 'Test User',
             'email' => 'test@example.com',
-            'password' => 'password',
-            'password_confirmation' => 'password',
+            'password' => 'N3w-Passw0rd!',
+            'password_confirmation' => 'N3w-Passw0rd!',
         ]);
 
         $response->assertSessionHasNoErrors();

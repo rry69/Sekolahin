@@ -38,7 +38,12 @@ class RegistrationPaymentMatrixSmaTest extends TestCase
     {
         parent::setUp();
         $this->withoutMiddleware(\Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class);
-        Storage::fake('public');
+        Storage::fake('private');
+
+        // Token callback webhook Xendit untuk skenario online (W1 fail-closed).
+        config([
+            'services.xendit.webhook_token' => 'test-webhook-token',
+        ]);
     }
 
     // ---- helpers -------------------------------------------------------
@@ -322,14 +327,15 @@ class RegistrationPaymentMatrixSmaTest extends TestCase
                 $this->assertNotNull($payment->external_id);
                 $step('bayar_online', 'Invoice Xendit dibuat (mock, tanpa API asli)', true, 'external_id=' . $payment->external_id);
 
-                // Webhook Xendit PAID (token kosong di .env -> verifyCallbackToken true)
-                $this->post('/webhooks/xendit', [
-                    'external_id' => $payment->external_id,
-                    'id' => $payment->xendit_invoice_id,
-                    'status' => 'PAID',
-                    'paid_at' => now()->toISOString(),
-                    'payment_method' => 'QRIS',
-                ])->assertJson(['success' => true]);
+                // Webhook Xendit PAID (dengan token callback valid — lihat setUp)
+                $this->withHeader('X-CALLBACK-TOKEN', 'test-webhook-token')
+                    ->post('/webhooks/xendit', [
+                        'external_id' => $payment->external_id,
+                        'id' => $payment->xendit_invoice_id,
+                        'status' => 'PAID',
+                        'paid_at' => now()->toISOString(),
+                        'payment_method' => 'QRIS',
+                    ])->assertJson(['success' => true]);
                 $payment->refresh();
                 $this->assertSame('verified', $payment->status);
                 $step('webhook_paid', 'Webhook Xendit PAID diterima', true);
