@@ -37,12 +37,12 @@
 - **Pilih sekolah, jenjang (TK/SD/SMP/SMA-SMK), jalur (Reguler/Prestasi/Beasiswa), dan jurusan** sesuai kuota per jalur.
 - **Upload & status verifikasi berkas** (KTP/KK/ijazah/sertifikat, maks 5 MB, JPG/PNG/PDF) — dokumen privat, hanya bisa diakses pemilik & admin.
 - **Invoice milik sistem** (`INV/2026/000001`, PDF) + **pembayaran online via Xendit** atau manual (transfer bank / tunai).
-- **Halaman ranking real-time**, notifikasi in-app (dropdown ala Facebook) & **WhatsApp** untuk setiap perubahan status.
+- **Halaman daftar pendaftaran & status** untuk siswa, notifikasi in-app (dropdown ala Facebook) & **WhatsApp** untuk setiap perubahan status.
 - **Daftar ulang** dengan kode verifikasi + bukti daftar ulang (PDF).
 
 ### 🛠️ Untuk Admin
 - **Dashboard** dengan statistik & kartu klik-able (data-driven dari `config/admin-menu.php`).
-- **Kelola pendaftaran**: verifikasi berkas, terima/tolak, ranking, kuota per jurusan per jalur, periode & deadline otomatis.
+- **Kelola pendaftaran**: verifikasi berkas, terima/tolak, kuota per jurusan per jalur, periode & deadline otomatis.
 - **Kelola master data**: sekolah, jenjang, jurusan, jalur (aktif/nonaktif per jenjang), dan pengaturan biaya.
 - **Audit log** (`ActivityLog`) untuk seluruh aktivitas penting.
 
@@ -81,7 +81,7 @@ Upload & Verifikasi Berkas
 Penetapan Biaya & Pembayaran (manual / Xendit)
    │
    ▼
-Kelulusan & Ranking
+Kelulusan (otomatis saat berkas & pembayaran terverifikasi)
    │
    ▼
 Daftar Ulang → Bukti Daftar Ulang (PDF)

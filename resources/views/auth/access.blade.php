@@ -8,9 +8,9 @@
             || old('name') !== null;
         $loginActive = ! $registerActive;
 
-        // Kelas input bersama (rounded-xl, tinggi 48px, fokus lembut)
-        $inputBase = 'h-12 w-full rounded-xl border-[1.5px] border-gray-200 bg-white text-sm text-gray-900 placeholder-gray-400 transition focus:border-[#6C78F5] focus:outline-none focus:ring-4 focus:ring-[#8B96F5]/20';
-        $inputErr  = ' border-red-400 focus:border-red-400 focus:ring-red-100';
+        // Kelas input minimalist: transparan, hanya garis bawah, fokus -> garis indigo
+        $inputBase = 'h-11 w-full rounded-none border-0 border-b-2 border-gray-200 bg-transparent px-1 text-sm text-gray-900 placeholder-gray-400 transition-colors duration-200 focus:border-[#6C78F5] focus:outline-none focus:ring-0';
+        $inputErr  = ' focus:border-red-400';
     @endphp
 
     <style>
@@ -70,7 +70,7 @@
             transition: left .25s ease-out;
         }
         #tab-indicator.pos-login { left: 4px; }
-        #tab-indicator.pos-register { left: calc(50% + 0px); }
+        #tab-indicator.pos-register { left: 50%; }
 
         /* Tombol submit: panah bergeser saat hover */
         .btn-submit .fa-arrow-right { transition: transform .2s ease-out; }
@@ -80,8 +80,8 @@
         .pw-bar { height: 5px; border-radius: 9999px; background: #E5E7EB; transition: background-color .2s ease-out; }
     </style>
 
-    <div class="rounded-2xl bg-white p-6 sm:p-8"
-         style="border: 1px solid rgba(108,120,245,.14); box-shadow: 0 24px 48px -28px rgba(30,27,75,.25);">
+    {{-- Form tanpa kartu: langsung di atas background lembut (soft-field style) --}}
+    <div class="px-1 py-2 sm:px-2">
 
         {{-- ===== Tab pil: Masuk | Daftar ===== --}}
         <div id="auth-tabs" role="tablist" aria-label="Mode autentikasi"
@@ -119,12 +119,9 @@
                     <div>
                         <label for="login-email" class="mb-1.5 block text-xs font-semibold text-gray-700">{{ __('Email') }}</label>
                         <div class="relative">
-                            <span class="pointer-events-none absolute left-2 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-lg" style="background:#EEF0FB;">
-                                <i class="fa-solid fa-envelope text-[13px]" style="color:#6C78F5;"></i>
-                            </span>
                             <input id="login-email" type="email" name="email" :value="old('email')" required autocomplete="username" placeholder="nama@email.com"
-                                   class="{{ $inputBase }} pl-13 pr-3.5 {{ $errors->has('email') ? $inputErr : '' }}"
-                                   style="padding-left: 3.25rem;">
+                                   class="{{ $inputBase }} pr-3.5 {{ $errors->has('email') ? $inputErr : '' }}"
+                                  >
                         </div>
                         @error('email')
                             <p class="mt-1.5 flex items-center gap-1.5 text-xs text-red-500"><i class="fa-solid fa-circle-exclamation"></i> {{ $message }}</p>
@@ -135,11 +132,8 @@
                     <div>
                         <label for="login-password" class="mb-1.5 block text-xs font-semibold text-gray-700">{{ __('Kata Sandi') }}</label>
                         <div class="relative">
-                            <span class="pointer-events-none absolute left-2 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-lg" style="background:#EEF0FB;">
-                                <i class="fa-solid fa-lock text-[13px]" style="color:#6C78F5;"></i>
-                            </span>
                             <input id="login-password" type="password" name="password" required autocomplete="current-password" placeholder="Masukkan kata sandi"
-                                   class="{{ $inputBase }} pr-11 {{ $errors->has('password') ? $inputErr : '' }}" style="padding-left: 3.25rem;">
+                                   class="{{ $inputBase }} pr-11 {{ $errors->has('password') ? $inputErr : '' }}">
                             <button type="button" onclick="togglePassword(this)" class="absolute right-2.5 top-1/2 flex h-8 w-8 -translate-y-1/2 cursor-pointer items-center justify-center rounded-lg text-gray-400 transition hover:bg-[#EEF0FB] hover:text-[#6C78F5]" aria-label="Tampilkan kata sandi">
                                 <i class="fa-regular fa-eye text-sm"></i>
                             </button>
@@ -164,7 +158,7 @@
                         @endif
                     </div>
 
-                    <button type="submit" class="btn-submit flex h-12 w-full cursor-pointer items-center justify-center gap-2 rounded-xl text-[15px] font-semibold text-white transition active:scale-[.985] focus:outline-none focus-visible:ring-4 focus-visible:ring-[#8B96F5]/40"
+                    <button type="submit" class="btn-submit flex h-12 w-full cursor-pointer items-center justify-center gap-2 rounded-full text-[15px] font-semibold text-white transition active:scale-[.985] focus:outline-none focus-visible:ring-4 focus-visible:ring-[#8B96F5]/40"
                             style="background: linear-gradient(135deg, #6C78F5, #4A54C9); box-shadow: 0 10px 20px -8px rgba(108,120,245,.6);">
                         {{ __('Masuk') }} <i class="fa-solid fa-arrow-right"></i>
                     </button>
@@ -175,7 +169,7 @@
             <div id="panel-register" class="auth-panel {{ $registerActive ? 'is-active' : 'is-out-left' }}" role="tabpanel">
 
                 <div class="mb-7">
-                    <h1 class="text-[26px] font-extrabold tracking-tight text-gray-900">Buat akun SPMB</h1>
+                    <h1 class="text-[26px] font-extrabold tracking-tight text-gray-900">Buat akun Sekolahin</h1>
                     <p class="mt-2 text-sm text-gray-500">Isi data diri Anda untuk memulai pendaftaran.</p>
                 </div>
 
@@ -186,11 +180,8 @@
                     <div>
                         <label for="reg-name" class="mb-1.5 block text-xs font-semibold text-gray-700">{{ __('Nama Lengkap') }}</label>
                         <div class="relative">
-                            <span class="pointer-events-none absolute left-2 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-lg" style="background:#EEF0FB;">
-                                <i class="fa-solid fa-user text-[13px]" style="color:#6C78F5;"></i>
-                            </span>
                             <input id="reg-name" type="text" name="name" :value="old('name')" required autocomplete="name" placeholder="Nama sesuai identitas"
-                                   class="{{ $inputBase }} pr-3.5 {{ $errors->has('name') ? $inputErr : '' }}" style="padding-left: 3.25rem;">
+                                   class="{{ $inputBase }} pr-3.5 {{ $errors->has('name') ? $inputErr : '' }}">
                         </div>
                         @error('name')
                             <p class="mt-1.5 flex items-center gap-1.5 text-xs text-red-500"><i class="fa-solid fa-circle-exclamation"></i> {{ $message }}</p>
@@ -201,11 +192,8 @@
                     <div>
                         <label for="reg-email" class="mb-1.5 block text-xs font-semibold text-gray-700">{{ __('Email') }}</label>
                         <div class="relative">
-                            <span class="pointer-events-none absolute left-2 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-lg" style="background:#EEF0FB;">
-                                <i class="fa-solid fa-envelope text-[13px]" style="color:#6C78F5;"></i>
-                            </span>
                             <input id="reg-email" type="email" name="email" :value="old('email')" required autocomplete="username" placeholder="nama@email.com"
-                                   class="{{ $inputBase }} pr-3.5 {{ $errors->has('email') ? $inputErr : '' }}" style="padding-left: 3.25rem;">
+                                   class="{{ $inputBase }} pr-3.5 {{ $errors->has('email') ? $inputErr : '' }}">
                         </div>
                         @error('email')
                             <p class="mt-1.5 flex items-center gap-1.5 text-xs text-red-500"><i class="fa-solid fa-circle-exclamation"></i> {{ $message }}</p>
@@ -216,11 +204,8 @@
                     <div>
                         <label for="reg-password" class="mb-1.5 block text-xs font-semibold text-gray-700">{{ __('Kata Sandi') }}</label>
                         <div class="relative">
-                            <span class="pointer-events-none absolute left-2 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-lg" style="background:#EEF0FB;">
-                                <i class="fa-solid fa-lock text-[13px]" style="color:#6C78F5;"></i>
-                            </span>
                             <input id="reg-password" type="password" name="password" required autocomplete="new-password" placeholder="Minimal 8 karakter"
-                                   class="{{ $inputBase }} pr-11 {{ $errors->has('password') ? $inputErr : '' }}" style="padding-left: 3.25rem;"
+                                   class="{{ $inputBase }} pr-11 {{ $errors->has('password') ? $inputErr : '' }}"
                                    oninput="updateStrength(this.value)">
                             <button type="button" onclick="togglePassword(this)" class="absolute right-2.5 top-1/2 flex h-8 w-8 -translate-y-1/2 cursor-pointer items-center justify-center rounded-lg text-gray-400 transition hover:bg-[#EEF0FB] hover:text-[#6C78F5]" aria-label="Tampilkan kata sandi">
                                 <i class="fa-regular fa-eye text-sm"></i>
@@ -242,11 +227,8 @@
                     <div>
                         <label for="reg-password_confirmation" class="mb-1.5 block text-xs font-semibold text-gray-700">{{ __('Ulangi Kata Sandi') }}</label>
                         <div class="relative">
-                            <span class="pointer-events-none absolute left-2 top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-lg" style="background:#EEF0FB;">
-                                <i class="fa-solid fa-lock text-[13px]" style="color:#6C78F5;"></i>
-                            </span>
                             <input id="reg-password_confirmation" type="password" name="password_confirmation" required autocomplete="new-password" placeholder="Ketik ulang kata sandi"
-                                   class="{{ $inputBase }} pr-11 {{ $errors->has('password_confirmation') ? $inputErr : '' }}" style="padding-left: 3.25rem;">
+                                   class="{{ $inputBase }} pr-11 {{ $errors->has('password_confirmation') ? $inputErr : '' }}">
                             <button type="button" onclick="togglePassword(this)" class="absolute right-2.5 top-1/2 flex h-8 w-8 -translate-y-1/2 cursor-pointer items-center justify-center rounded-lg text-gray-400 transition hover:bg-[#EEF0FB] hover:text-[#6C78F5]" aria-label="Tampilkan kata sandi">
                                 <i class="fa-regular fa-eye text-sm"></i>
                             </button>
@@ -263,7 +245,7 @@
                         <span>Saya menyetujui <a href="#" class="font-semibold text-[#6C78F5] hover:underline">syarat &amp; ketentuan</a></span>
                     </label>
 
-                    <button type="submit" class="btn-submit flex h-12 w-full cursor-pointer items-center justify-center gap-2 rounded-xl text-[15px] font-semibold text-white transition active:scale-[.985] focus:outline-none focus-visible:ring-4 focus-visible:ring-[#8B96F5]/40"
+                    <button type="submit" class="btn-submit flex h-12 w-full cursor-pointer items-center justify-center gap-2 rounded-full text-[15px] font-semibold text-white transition active:scale-[.985] focus:outline-none focus-visible:ring-4 focus-visible:ring-[#8B96F5]/40"
                             style="background: linear-gradient(135deg, #6C78F5, #4A54C9); box-shadow: 0 10px 20px -8px rgba(108,120,245,.6);">
                         {{ __('Daftar') }} <i class="fa-solid fa-arrow-right"></i>
                     </button>
