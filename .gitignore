@@ -58,3 +58,4 @@ yarn-error.log
 /sidebar.html
 /tests/reports/
 /design-system
+/tests/Feature/XenditOnlinePaymentAfterHardeningTest.php
