@@ -13,7 +13,7 @@
 
 <div class="relative">
     <select {{ $attributes->merge([
-        'class' => 'block h-11 w-full appearance-none border-0 border-b-2 bg-transparent pr-8 text-sm text-eggplore-neutral-900 placeholder-eggplore-neutral-300 transition-colors focus:outline-none focus:ring-0 disabled:cursor-not-allowed disabled:border-eggplore-neutral-100 disabled:text-eggplore-neutral-400 ' . $stateClasses,
+        'class' => 'block h-11 w-full appearance-none bg-none border-0 border-b-2 bg-transparent pr-8 text-sm text-eggplore-neutral-900 placeholder-eggplore-neutral-300 transition-colors focus:outline-none focus:ring-0 disabled:cursor-not-allowed disabled:border-eggplore-neutral-100 disabled:text-eggplore-neutral-400 ' . $stateClasses,
     ]) }}>
         {{ $slot }}
     </select>
