@@ -197,6 +197,64 @@ class JenjangGroupingFlowTest extends TestCase
         $response->assertSee('school-select');
     }
 
+    public function test_registration_form_renders_custom_school_dropdown_soft_card()
+    {
+        ['siswa' => $siswa, 'smk' => $smk, 'sma' => $sma] = $this->seedBase();
+
+        $html = $this->actingAs($siswa)->get(route('registration.create'))
+            ->assertStatus(200)
+            ->getContent();
+
+        // Trigger custom dropdown (soft card inline)
+        $this->assertStringContainsString('id="school-trigger"', $html);
+        $this->assertStringContainsString('aria-haspopup="listbox"', $html);
+        $this->assertStringContainsString('aria-expanded="false"', $html);
+
+        // Panel inline pakai grid 0fr (soft card expandable)
+        $this->assertStringContainsString('id="school-panel"', $html);
+        $this->assertStringContainsString('grid-template-rows:0fr', $html);
+
+        // Listbox berisi sekolah sebagai role=option dengan data-levels
+        $this->assertStringContainsString('id="school-listbox"', $html);
+        $this->assertStringContainsString('role="listbox"', $html);
+        $this->assertStringContainsString('data-levels="4"', $html); // SMA
+        $this->assertStringContainsString('data-levels="5"', $html); // SMK
+        $this->assertStringContainsString('class="school-option', $html);
+
+        // Native select tetap ada sebagai source of truth & nama field form
+        $this->assertStringContainsString('id="school-select"', $html);
+        $this->assertStringContainsString('name="school_id"', $html);
+    }
+
+    public function test_registration_form_renders_custom_major_dropdown_soft_card()
+    {
+        ['siswa' => $siswa] = $this->seedBase();
+
+        $html = $this->actingAs($siswa)->get(route('registration.create'))
+            ->assertStatus(200)
+            ->getContent();
+
+        // Trigger custom dropdown jurusan
+        $this->assertStringContainsString('id="major-trigger"', $html);
+        $this->assertStringContainsString('aria-haspopup="listbox"', $html);
+
+        // Panel inline pakai grid 0fr (soft card expandable)
+        $this->assertStringContainsString('id="major-panel"', $html);
+        $this->assertStringContainsString('grid-template-rows:0fr', $html);
+
+        // Listbox jurusan dengan role=listbox
+        $this->assertStringContainsString('id="major-listbox"', $html);
+        $this->assertStringContainsString('role="listbox"', $html);
+
+        // Native select tetap ada sebagai source of truth & nama field form
+        $this->assertStringContainsString('id="major-select"', $html);
+        $this->assertStringContainsString('name="major_id"', $html);
+
+        // JS custom jurusan ter-render (fungsi & badge kuota)
+        $this->assertStringContainsString('majorRenderOptions', $html);
+        $this->assertStringContainsString('majorSyncBadges', $html);
+    }
+
     public function test_confirm_rejects_school_not_serving_period_level()
     {
         ['siswa' => $siswa, 'smk' => $smk, 'sma' => $sma] = $this->seedBase();

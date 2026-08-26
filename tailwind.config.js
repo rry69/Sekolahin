@@ -63,6 +63,7 @@ export default {
             },
             boxShadow: {
                 xs: '0 1px 2px rgba(16,24,40,.06)',
+                brand: '0 4px 14px -4px rgba(108,120,245,.45)',
             },
         },
     },

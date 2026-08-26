@@ -301,15 +301,35 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
                     @if ($registrations->isEmpty())
-                        <div class="text-center py-12">
-                            <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                            </svg>
-                            <h3 class="mt-2 text-sm font-medium text-gray-900">Belum ada pendaftaran</h3>
-                            <p class="mt-1 text-sm text-gray-500">Mulai dengan membuat pendaftaran baru.</p>
+                        <div class="text-center py-12 px-4">
+                            {{-- Ilustrasi: dokumen + badge plus --}}
+                            <div class="relative mx-auto h-24 w-24">
+                                <div class="absolute inset-0 rounded-2xl bg-eggplore-primary-50 rotate-3"></div>
+                                <div class="absolute inset-0 rounded-2xl bg-eggplore-primary-100 -rotate-3"></div>
+                                <div class="absolute inset-0 flex items-center justify-center rounded-2xl bg-white border border-eggplore-neutral-200 shadow-sm">
+                                    <svg class="h-10 w-10 text-eggplore-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                    </svg>
+                                </div>
+                                <div class="absolute -right-1 -bottom-1 flex h-8 w-8 items-center justify-center rounded-full bg-eggplore-success text-white shadow-md">
+                                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4" />
+                                    </svg>
+                                </div>
+                            </div>
+
+                            <h3 class="mt-6 text-xl font-bold text-eggplore-neutral-900">Siap memulai perjalananmu?</h3>
+                            <p class="mx-auto mt-2 max-w-sm text-sm text-eggplore-neutral-500">
+                                Daftarkan dirimu ke sekolah impian. Pilih jenjang, sekolah, dan jalur pendaftaran yang tersedia.
+                            </p>
+
                             @if (auth()->user()->applicant)
-                                <div class="mt-6">
-                                    <a href="{{ route('registration.create') }}" class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
+                                <div class="mt-7">
+                                    <a href="{{ route('registration.create') }}"
+                                       class="inline-flex items-center gap-2 bg-eggplore-primary text-white px-8 h-12 rounded-btn text-sm font-semibold shadow-sm hover:bg-eggplore-primary-600 hover:shadow-brand active:bg-eggplore-primary-700 active:scale-[0.98] transition-all">
+                                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4" />
+                                        </svg>
                                         Buat Pendaftaran
                                     </a>
                                 </div>
