@@ -101,9 +101,10 @@ class RegistrationController extends Controller
             $ageMins[$p->id] = ($raw !== null && $raw !== '' && is_numeric($raw)) ? (int) $raw : null;
         }
         // Semua sekolah (dengan jenjang & jurusan) untuk dropdown dinamis.
+        // Jurusan nonaktif disembunyikan dari form pendaftaran siswa.
         $schools = School::with([
             'schoolLevels',
-            'majors' => function($query) { $query->orderBy('name'); },
+            'majors' => function($query) { $query->active()->orderBy('name'); },
         ])->orderBy('name')->get();
 
         if ($schools->isEmpty()) {
@@ -268,6 +269,10 @@ class RegistrationController extends Controller
             return back()->with('error', 'Jurusan yang dipilih tidak tersedia di sekolah ini')->withInput();
         }
 
+        if (! $major->is_active) {
+            return back()->with('error', 'Jurusan ' . $major->name . ' sedang nonaktif dan tidak menerima pendaftaran')->withInput();
+        }
+
         if ($major->school_level_id && $major->school_level_id !== $period->school_level_id) {
             return back()->with('error', 'Jurusan yang dipilih tidak sesuai dengan jenjang yang dipilih')->withInput();
         }
@@ -297,6 +302,10 @@ class RegistrationController extends Controller
 
         if (! RegistrationTrackSchoolLevel::isActive((int) $track->id, (int) $period->school_level_id)) {
             return back()->with('error', 'Jalur ' . $track->name . ' sedang ditutup untuk jenjang ' . $period->schoolLevel->name . '. Silakan pilih jalur lain.')->withInput();
+        }
+
+        if ($needsMajor && $major && ! $major->is_active) {
+            return back()->with('error', 'Jurusan ' . $major->name . ' sedang nonaktif dan tidak menerima pendaftaran')->withInput();
         }
 
         $pStatus = $period->registrationStatus();
@@ -369,6 +378,10 @@ class RegistrationController extends Controller
 
             if ($major->school_id !== $school->id) {
                 return back()->with('error', 'Jurusan yang dipilih tidak tersedia di sekolah ini');
+            }
+
+            if (! $major->is_active) {
+                return back()->with('error', 'Jurusan ' . $major->name . ' sedang nonaktif dan tidak menerima pendaftaran');
             }
 
             if ($major->school_level_id && $major->school_level_id !== $period->school_level_id) {

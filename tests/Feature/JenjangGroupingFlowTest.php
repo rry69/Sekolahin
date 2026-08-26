@@ -125,16 +125,27 @@ class JenjangGroupingFlowTest extends TestCase
         return ['admin' => $admin, 'siswa' => $siswa, 'smk' => $smk, 'sma' => $sma];
     }
 
-    public function test_major_index_groups_by_jenjang()
+    public function test_major_index_shows_flat_table_with_filter_and_status()
     {
-        ['admin' => $admin] = $this->seedBase();
+        ['admin' => $admin, 'smk' => $smk, 'sma' => $sma] = $this->seedBase();
 
         $response = $this->actingAs($admin)->get(route('admin.majors.index'));
         $response->assertStatus(200);
-        $response->assertSee('Jenjang SMK');
-        $response->assertSee('Jenjang SMA');
+
+        // Toolbar filter/search
+        $response->assertSee('Cari Jurusan');
+        $response->assertSee('mjrSearch');
+        $response->assertSee('Tambah Jurusan');
+
+        // Kolom & data jurusan dari kedua sekolah
         $response->assertSee('Jurusan TKJ');
         $response->assertSee('Jurusan MIPA');
+        $response->assertSee('SMK Negeri 1 Jakarta');
+        $response->assertSee('SMA Negeri 1 Jakarta');
+        $response->assertSee('Status');
+
+        // Status badge default aktif
+        $response->assertSee('Aktif');
     }
 
     public function test_school_index_groups_by_jenjang()

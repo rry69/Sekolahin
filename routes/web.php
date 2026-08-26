@@ -126,6 +126,8 @@ Route::middleware(['auth', 'role:Admin'])->prefix('admin')->name('admin.')->grou
     Route::get('/majors/{major}', [AdminMajorController::class, 'show'])->name('majors.show');
     Route::get('/majors/{major}/edit', [AdminMajorController::class, 'edit'])->name('majors.edit');
     Route::patch('/majors/{major}', [AdminMajorController::class, 'update'])->name('majors.update');
+    Route::post('/majors/{major}/toggle-status', [AdminMajorController::class, 'toggleStatus'])->name('majors.toggle-status');
+    Route::delete('/majors/{major}', [AdminMajorController::class, 'destroy'])->name('majors.destroy');
 
     Route::get('/periods', [AdminRegistrationPeriodController::class, 'index'])->name('periods.index');
     Route::get('/periods/create', [AdminRegistrationPeriodController::class, 'create'])->name('periods.create');

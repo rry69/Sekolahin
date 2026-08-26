@@ -13,11 +13,26 @@ class Major extends Model
         'code',
         'quota',
         'description',
+        'is_active',
+        'order',
     ];
 
     protected function casts(): array
     {
-        return [];
+        return [
+            'is_active' => 'boolean',
+            'order' => 'integer',
+        ];
+    }
+
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
+    }
+
+    public function statusLabel(): string
+    {
+        return $this->is_active ? 'Aktif' : 'Nonaktif';
     }
 
     public function school()
