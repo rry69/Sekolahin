@@ -154,12 +154,12 @@ function initPicker(root){
     function setSeg(){
         [segDays,segMonths,segYears].forEach(function(b){
             if(!b) return;
-            b.className = 'flex-1 py-1.5 rounded-full text-xs font-medium text-[#5A6E90] hover:text-[#8AA0C2] transition-all duration-200 active:scale-95';
+            b.className = 'flex-1 py-1.5 rounded-full text-xs font-medium text-eggplore-neutral-500 hover:text-eggplore-primary-600 transition-all duration-200 active:scale-95';
             b.setAttribute('aria-selected','false');
         });
         const active = view==='days'?segDays:view==='months'?segMonths:segYears;
         if (active){
-            active.className = 'flex-1 py-1.5 rounded-full text-xs font-semibold bg-[#E2E8F0] text-[#0A1628] transition-all duration-200';
+            active.className = 'flex-1 py-1.5 rounded-full text-xs font-semibold bg-eggplore-primary text-white shadow-sm transition-all duration-200';
             active.setAttribute('aria-selected','true');
         }
     }
@@ -187,8 +187,8 @@ function initPicker(root){
             const disabled = isDisabled(dt);
             const b = document.createElement('button'); b.type='button'; b.textContent=String(d);
             b.className = disabled
-                ? 'dp-mono w-8 h-8 mx-auto grid place-items-center rounded-full text-[12px] text-[#2A3D5E] opacity-40 cursor-not-allowed'
-                : 'dp-mono w-8 h-8 mx-auto grid place-items-center rounded-full text-[12px] text-[#2A3D5E] hover:bg-[#13233F] transition-all duration-150 hover:scale-105 active:scale-90';
+                ? 'dp-mono w-8 h-8 mx-auto grid place-items-center rounded-full text-[12px] text-eggplore-neutral-300 opacity-40 cursor-not-allowed'
+                : 'dp-mono w-8 h-8 mx-auto grid place-items-center rounded-full text-[12px] text-eggplore-neutral-300 hover:bg-eggplore-primary-50 transition-all duration-150 hover:scale-105 active:scale-90';
             b.disabled = disabled;
             if (!disabled) b.addEventListener('click', function(){ viewDate = new Date(y,m-1,1); render(); });
             daysGrid.appendChild(b);
@@ -200,10 +200,10 @@ function initPicker(root){
             const disabled = isDisabled(dt);
             const b = document.createElement('button'); b.type='button'; b.textContent=String(d);
             let cls='dp-mono w-8 h-8 mx-auto grid place-items-center rounded-full text-[12px] transition-all duration-150 hover:scale-105 active:scale-90 ';
-            if (disabled) cls+='text-[#2A3D5E] opacity-40 cursor-not-allowed';
-            else if (sel) cls+='bg-[#E2E8F0] text-[#0A1628] font-bold dp-pop-select';
-            else if (isT) cls+='text-white ring-1 ring-[#E2E8F0]/30 hover:bg-[#13233F]';
-            else cls+='text-[#CBD5E1] hover:bg-[#13233F] hover:text-white';
+            if (disabled) cls+='text-eggplore-neutral-300 opacity-40 cursor-not-allowed';
+            else if (sel) cls+='bg-eggplore-primary text-white font-bold dp-pop-select';
+            else if (isT) cls+='text-eggplore-primary-600 ring-1 ring-eggplore-primary-400/40 hover:bg-eggplore-primary-50';
+            else cls+='text-eggplore-neutral-500 hover:bg-eggplore-primary-50 hover:text-eggplore-primary-600';
             b.className=cls; b.disabled=disabled;
             if (!disabled) b.addEventListener('click', function(){
                 selected = new Date(y,m,d); selected.setHours(0,0,0,0);
@@ -218,8 +218,8 @@ function initPicker(root){
             const disabled = isDisabled(dt);
             const b=document.createElement('button'); b.type='button'; b.textContent=String(d);
             b.className = disabled
-                ? 'dp-mono w-8 h-8 mx-auto grid place-items-center rounded-full text-[12px] text-[#2A3D5E] opacity-40 cursor-not-allowed'
-                : 'dp-mono w-8 h-8 mx-auto grid place-items-center rounded-full text-[12px] text-[#2A3D5E] hover:bg-[#13233F] transition-all duration-150 hover:scale-105 active:scale-90';
+                ? 'dp-mono w-8 h-8 mx-auto grid place-items-center rounded-full text-[12px] text-eggplore-neutral-300 opacity-40 cursor-not-allowed'
+                : 'dp-mono w-8 h-8 mx-auto grid place-items-center rounded-full text-[12px] text-eggplore-neutral-300 hover:bg-eggplore-primary-50 transition-all duration-150 hover:scale-105 active:scale-90';
             b.disabled=disabled;
             if(!disabled) b.addEventListener('click', function(){ viewDate=new Date(y,m+1,1); render();});
             daysGrid.appendChild(b);
@@ -232,10 +232,10 @@ function initPicker(root){
             const b=document.createElement('button'); b.type='button'; b.textContent=mn;
             const sel = selected && selected.getFullYear()===viewDate.getFullYear() && selected.getMonth()===i;
             b.className = sel
-                ? 'py-2.5 rounded-full bg-[#E2E8F0] text-[#0A1628] font-bold text-xs dp-pop-select'
+                ? 'py-2.5 rounded-full bg-eggplore-primary text-white font-bold text-xs dp-pop-select'
                 : (viewDate.getMonth()===i
-                    ? 'py-2.5 rounded-full bg-[#13233F] text-white ring-1 ring-[#2A4A7A] text-xs transition-all duration-150 hover:scale-[1.02] active:scale-95'
-                    : 'py-2.5 rounded-full bg-[#0E1E38] hover:bg-[#13233F] text-[#CBD5E1] text-xs transition-all duration-150 hover:scale-[1.02] active:scale-95');
+                    ? 'py-2.5 rounded-full bg-eggplore-primary-50 text-eggplore-primary-700 ring-1 ring-eggplore-primary-200 text-xs transition-all duration-150 hover:scale-[1.02] active:scale-95'
+                    : 'py-2.5 rounded-full bg-white hover:bg-eggplore-primary-50 text-eggplore-neutral-500 text-xs transition-all duration-150 hover:scale-[1.02] active:scale-95');
             b.addEventListener('click', function(){ viewDate=new Date(viewDate.getFullYear(),i,1); view='days'; render();});
             monthsGrid.appendChild(b);
         });
@@ -248,10 +248,10 @@ function initPicker(root){
             const b=document.createElement('button'); b.type='button'; b.textContent=String(y);
             const sel = selected && selected.getFullYear()===y;
             b.className = sel
-                ? 'py-2.5 rounded-full bg-[#E2E8F0] text-[#0A1628] font-bold text-xs dp-pop-select'
+                ? 'py-2.5 rounded-full bg-eggplore-primary text-white font-bold text-xs dp-pop-select'
                 : (viewDate.getFullYear()===y
-                    ? 'py-2.5 rounded-full bg-[#13233F] text-white ring-1 ring-[#2A4A7A] text-xs transition-all duration-150 hover:scale-[1.02] active:scale-95'
-                    : 'py-2.5 rounded-full bg-[#0E1E38] hover:bg-[#13233F] text-[#CBD5E1] text-xs transition-all duration-150 hover:scale-[1.02] active:scale-95');
+                    ? 'py-2.5 rounded-full bg-eggplore-primary-50 text-eggplore-primary-700 ring-1 ring-eggplore-primary-200 text-xs transition-all duration-150 hover:scale-[1.02] active:scale-95'
+                    : 'py-2.5 rounded-full bg-white hover:bg-eggplore-primary-50 text-eggplore-neutral-500 text-xs transition-all duration-150 hover:scale-[1.02] active:scale-95');
             b.addEventListener('click', function(){ viewDate=new Date(y,viewDate.getMonth(),1); view='months'; render();});
             yearsGrid.appendChild(b);
         }
@@ -377,16 +377,16 @@ function enhanceLegacyDateInputs(){
 
         wrapper.innerHTML =
             '<input type="hidden" data-datepicker-input name="'+native.getAttribute('name')+'" id="'+native.getAttribute('id')+'" value="'+(native.value||'')+'" '+(native.hasAttribute('required')?'required':'')+'>' +
-            '<div data-datepicker-trigger role="button" tabindex="0" aria-haspopup="dialog" aria-expanded="false" class="flex items-center bg-white border border-[#E2E8F0] rounded-lg px-3 py-2.5 cursor-pointer hover:border-[#93B4FF] transition-all duration-200 hover:shadow-[0_2px_10px_rgba(10,22,40,0.06)] active:scale-[0.99] select-none focus:outline-none focus-visible:ring-2 focus-visible:ring-[#93B4FF] focus-visible:ring-offset-2 focus-visible:ring-offset-white">' +
-                '<p data-datepicker-display class="flex-1 min-w-0 text-[#0A1628] font-medium text-[14px] truncate">'+displayPlaceholder+'</p>' +
-                '<svg class="w-4 h-4 text-[#5A6E90] shrink-0 ml-2" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="3"></rect><path d="M3 10h18M8 2v4M16 2v4"></path></svg>' +
+            '<div data-datepicker-trigger role="button" tabindex="0" aria-haspopup="dialog" aria-expanded="false" class="flex h-11 items-center bg-white border border-eggplore-neutral-200 rounded-input px-3.5 cursor-pointer hover:border-eggplore-primary-400 transition-colors select-none focus:outline-none focus-visible:ring-2 focus-visible:ring-eggplore-primary-400/25 focus-visible:border-eggplore-primary-500">' +
+                '<p data-datepicker-display class="flex-1 min-w-0 text-eggplore-neutral-900 font-medium text-sm truncate">'+displayPlaceholder+'</p>' +
+                '<svg class="w-4 h-4 text-eggplore-neutral-400 shrink-0 ml-2" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="3"></rect><path d="M3 10h18M8 2v4M16 2v4"></path></svg>' +
             '</div>' +
-            '<div data-datepicker-picker role="dialog" aria-modal="false" aria-label="Pilih tanggal" class="hidden absolute z-50 top-[62px] left-0 w-full bg-[#0A1628] border border-[#1B2E4F] rounded-[20px] overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.6)] will-change-transform dp-picker">' +
-                '<div class="p-2.5 pb-0"><div class="flex bg-[#091326] border border-[#13233F] rounded-full p-1" role="tablist"><button type="button" data-datepicker-seg="days" role="tab" aria-selected="true" class="flex-1 py-1.5 rounded-full text-xs font-semibold bg-[#E2E8F0] text-[#0A1628] transition-all duration-200">Tanggal</button><button type="button" data-datepicker-seg="months" role="tab" aria-selected="false" class="flex-1 py-1.5 rounded-full text-xs font-medium text-[#5A6E90] hover:text-[#8AA0C2] transition-all duration-200 active:scale-95">Bulan</button><button type="button" data-datepicker-seg="years" role="tab" aria-selected="false" class="flex-1 py-1.5 rounded-full text-xs font-medium text-[#5A6E90] hover:text-[#8AA0C2] transition-all duration-200 active:scale-95">Tahun</button></div></div>' +
-                '<div class="flex items-center justify-between px-3 pt-3 pb-1"><button type="button" data-datepicker-prev aria-label="Bulan sebelumnya" class="w-7 h-7 grid place-items-center rounded-full hover:bg-[#13233F] text-[#5A6E90] hover:text-white transition-all duration-150 active:scale-90"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"></path></svg></button><span data-datepicker-header class="text-white font-bold text-[13px] tracking-wide inline-block"></span><button type="button" data-datepicker-next aria-label="Bulan berikutnya" class="w-7 h-7 grid place-items-center rounded-full hover:bg-[#13233F] text-[#5A6E90] hover:text-white transition-all duration-150 active:scale-90"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"></path></svg></button></div>' +
-                '<div data-datepicker-weekdays class="grid grid-cols-7 px-3 pb-1"><span class="dp-mono text-center text-[10px] tracking-widest text-[#3A4E6E] py-1">S</span><span class="dp-mono text-center text-[10px] tracking-widest text-[#3A4E6E] py-1">M</span><span class="dp-mono text-center text-[10px] tracking-widest text-[#3A4E6E] py-1">T</span><span class="dp-mono text-center text-[10px] tracking-widest text-[#3A4E6E] py-1">W</span><span class="dp-mono text-center text-[10px] tracking-widest text-[#3A4E6E] py-1">T</span><span class="dp-mono text-center text-[10px] tracking-widest text-[#3A4E6E] py-1">F</span><span class="dp-mono text-center text-[10px] tracking-widest text-[#3A4E6E] py-1">S</span></div>' +
+            '<div data-datepicker-picker role="dialog" aria-modal="false" aria-label="Pilih tanggal" class="hidden absolute z-50 top-[58px] left-0 w-full bg-white border border-eggplore-neutral-200 rounded-lg overflow-hidden shadow-md will-change-transform dp-picker">' +
+                '<div class="p-2.5 pb-0"><div class="flex bg-eggplore-neutral-100 border border-eggplore-neutral-150 rounded-full p-1" role="tablist"><button type="button" data-datepicker-seg="days" role="tab" aria-selected="true" class="flex-1 py-1.5 rounded-full text-xs font-semibold bg-eggplore-primary text-white shadow-sm transition-all duration-200">Tanggal</button><button type="button" data-datepicker-seg="months" role="tab" aria-selected="false" class="flex-1 py-1.5 rounded-full text-xs font-medium text-eggplore-neutral-500 hover:text-eggplore-primary-600 transition-all duration-200 active:scale-95">Bulan</button><button type="button" data-datepicker-seg="years" role="tab" aria-selected="false" class="flex-1 py-1.5 rounded-full text-xs font-medium text-eggplore-neutral-500 hover:text-eggplore-primary-600 transition-all duration-200 active:scale-95">Tahun</button></div></div>' +
+                '<div class="flex items-center justify-between px-3 pt-3 pb-1"><button type="button" data-datepicker-prev aria-label="Bulan sebelumnya" class="w-7 h-7 grid place-items-center rounded-full hover:bg-eggplore-primary-50 text-eggplore-neutral-400 hover:text-eggplore-primary-600 transition-all duration-150 active:scale-90"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"></path></svg></button><span data-datepicker-header class="text-eggplore-neutral-900 font-bold text-[13px] tracking-wide inline-block"></span><button type="button" data-datepicker-next aria-label="Bulan berikutnya" class="w-7 h-7 grid place-items-center rounded-full hover:bg-eggplore-primary-50 text-eggplore-neutral-400 hover:text-eggplore-primary-600 transition-all duration-150 active:scale-90"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"></path></svg></button></div>' +
+                '<div data-datepicker-weekdays class="grid grid-cols-7 px-3 pb-1"><span class="dp-mono text-center text-[10px] tracking-widest text-eggplore-neutral-400 py-1">S</span><span class="dp-mono text-center text-[10px] tracking-widest text-eggplore-neutral-400 py-1">M</span><span class="dp-mono text-center text-[10px] tracking-widest text-eggplore-neutral-400 py-1">T</span><span class="dp-mono text-center text-[10px] tracking-widest text-eggplore-neutral-400 py-1">W</span><span class="dp-mono text-center text-[10px] tracking-widest text-eggplore-neutral-400 py-1">T</span><span class="dp-mono text-center text-[10px] tracking-widest text-eggplore-neutral-400 py-1">F</span><span class="dp-mono text-center text-[10px] tracking-widest text-eggplore-neutral-400 py-1">S</span></div>' +
                 '<div data-datepicker-days class="grid grid-cols-7 gap-y-0.5 px-3 pb-3" role="grid"></div><div data-datepicker-months class="hidden grid-cols-3 gap-1.5 p-3" role="grid"></div><div data-datepicker-years class="hidden grid-cols-4 gap-1.5 p-3" role="grid"></div>' +
-                '<div class="flex items-center gap-2 px-3 py-2.5 border-t border-[#13233F] bg-[#091326]"><button type="button" data-datepicker-clear class="flex-1 py-2 rounded-full border border-[#1E3358] text-[13px] text-[#5A6E90] hover:text-white hover:border-[#2A4A7A] transition-all duration-150 active:scale-95">Clear</button><button type="button" data-datepicker-today class="flex-1 py-2 rounded-full bg-[#13233F] text-[13px] font-medium text-[#93B4FF] hover:bg-[#1A335E] transition-all duration-150 active:scale-95">Today</button><button type="button" data-datepicker-done class="flex-1 py-2 rounded-full bg-[#E2E8F0] text-[13px] font-bold text-[#0A1628] hover:bg-white transition-all duration-150 active:scale-95">Done</button></div>' +
+                '<div class="flex items-center gap-2 px-3 py-2.5 border-t border-eggplore-neutral-150 bg-eggplore-neutral-50"><button type="button" data-datepicker-clear class="flex-1 py-2 rounded-btn border border-eggplore-neutral-200 text-[13px] text-eggplore-neutral-500 hover:text-eggplore-primary-600 hover:border-eggplore-primary-400 transition-all duration-150 active:scale-95">Clear</button><button type="button" data-datepicker-today class="flex-1 py-2 rounded-btn bg-eggplore-primary-50 text-[13px] font-medium text-eggplore-primary-600 hover:bg-eggplore-primary-100 transition-all duration-150 active:scale-95">Today</button><button type="button" data-datepicker-done class="flex-1 py-2 rounded-btn bg-eggplore-primary text-[13px] font-bold text-white hover:bg-eggplore-primary-600 transition-all duration-150 active:scale-95">Done</button></div>' +
             '</div>';
 
         native.parentNode.insertBefore(wrapper, native);
