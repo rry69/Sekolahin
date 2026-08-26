@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Preview — Review Data Diri (EGGPLORE)</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+    theme: {
+        extend: {
+            fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
+            colors: {
+                eggplore: {
+                    primary: { DEFAULT: '#6C78F5', 50: '#F1F3FE', 100: '#E5E9FC', 200: '#C9CEF3', 400: '#8B96F5', 450: '#7482F2', 500: '#6C78F5', 600: '#5A64E8', 700: '#4A54C9' },
+                    success: { DEFAULT: '#2DC99C', soft: '#E1F5F1' },
+                    danger:  { DEFAULT: '#F27389', soft: '#FEEBEE' },
+                    warning: { DEFAULT: '#F5CC66', soft: '#FBF3D9' },
+                    info:    { DEFAULT: '#248FE6', soft: '#E3F0FC' },
+                    neutral: { 50: '#F8F9FB', 100: '#F5F6FA', 150: '#EEF0F4', 200: '#E0E2E8', 300: '#C9CDD6', 400: '#9AA0AE', 500: '#6B7280', 700: '#3F4451', 900: '#1A1A2E' },
+                },
+            },
+            borderRadius: { btn: '6px', input: '4px', card: '8px' },
+        }
+    }
+}
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>[x-cloak]{display:none!important}</style>
+</head>
+<body class="font-sans antialiased bg-gray-100 min-h-screen">
+<!-- Header -->
+<header class="bg-white shadow">
+    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center gap-3">
+            <a href="#" class="inline-flex items-center p-2 rounded-md text-eggplore-neutral-400 hover:text-eggplore-neutral-700 hover:bg-eggplore-primary-50" aria-label="Kembali ke Biodata">
+                <i class="fa-solid fa-arrow-left text-lg"></i>
+            </a>
+            <h2 class="font-bold text-xl text-eggplore-neutral-900 leading-tight tracking-tight">Review Data Diri</h2>
+            <div class="ms-auto">
+                <button class="relative inline-flex items-center p-2 rounded-md text-gray-500 hover:text-gray-700 hover:bg-gray-100" aria-label="Notifikasi">
+                    <i class="fa-solid fa-bell text-lg"></i>
+                    <span class="absolute -top-1 -right-1 inline-flex items-center justify-center px-1.5 py-0.5 text-[10px] font-bold text-white bg-red-500 rounded-full min-w-[1.25rem]">2</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="py-8 md:py-12 pb-24">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-[300px_minmax(0,1fr)] gap-10 xl:gap-16 items-start">
+
+            <!-- KOLOM KIRI -->
+            <aside class="lg:sticky lg:top-24 space-y-8">
+                <div>
+                    <p class="text-[11px] font-semibold uppercase tracking-[0.08em] text-eggplore-neutral-400">Langkah 3 dari 3</p>
+                    <h1 class="mt-1.5 text-3xl font-bold tracking-tight leading-tight text-eggplore-neutral-900">Periksa &amp; Simpan</h1>
+                    <p class="mt-2 text-sm text-eggplore-neutral-500 leading-relaxed">Pastikan seluruh data sudah benar sebelum disimpan. Anda masih bisa kembali untuk mengubah.</p>
+                </div>
+
+                <nav aria-label="Progress pendaftaran">
+                    <ol class="space-y-1 text-sm">
+                        <li>
+                            <a href="#" class="group flex items-center gap-3 rounded-md px-2 -mx-2 py-1.5 hover:bg-eggplore-primary-50 transition-colors">
+                                <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-eggplore-primary-500 text-white"><i class="fa-solid fa-check text-[10px]"></i></span>
+                                <span class="text-eggplore-neutral-500 group-hover:text-eggplore-primary-600 transition-colors">Isi Biodata</span>
+                            </a>
+                        </li>
+                        <li>
+                            <span class="flex items-center gap-3 rounded-md px-2 -mx-2 py-1.5">
+                                <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-eggplore-primary-500 text-white"><i class="fa-solid fa-check text-[10px]"></i></span>
+                                <span class="font-medium text-eggplore-neutral-900">Review Data</span>
+                            </span>
+                        </li>
+                        <li>
+                            <span class="flex items-center gap-3 px-2 -mx-2 py-1.5 opacity-60">
+                                <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-eggplore-neutral-300 text-eggplore-neutral-400"><i class="fa-solid fa-check text-[10px]"></i></span>
+                                <span class="text-eggplore-neutral-500">Selesai</span>
+                            </span>
+                        </li>
+                    </ol>
+                </nav>
+
+                <div>
+                    <p class="text-[11px] font-semibold uppercase tracking-[0.08em] text-eggplore-neutral-400 mb-2">Bagian Data</p>
+                    <ul class="space-y-2.5 text-sm">
+                        <li><a href="#diri" class="group flex items-baseline justify-between gap-3 scroll-mt-24"><span class="text-eggplore-neutral-500 group-hover:text-eggplore-primary-600 transition-colors">Data Diri</span><i class="fa-solid fa-arrow-right text-xs text-eggplore-neutral-300 group-hover:text-eggplore-primary-600 transition-colors"></i></a></li>
+                        <li><a href="#alamat" class="group flex items-baseline justify-between gap-3 scroll-mt-24"><span class="text-eggplore-neutral-500 group-hover:text-eggplore-primary-600 transition-colors">Alamat</span><i class="fa-solid fa-arrow-right text-xs text-eggplore-neutral-300 group-hover:text-eggplore-primary-600 transition-colors"></i></a></li>
+                        <li><a href="#ortu" class="group flex items-baseline justify-between gap-3 scroll-mt-24"><span class="text-eggplore-neutral-500 group-hover:text-eggplore-primary-600 transition-colors">Orang Tua / Wali</span><i class="fa-solid fa-arrow-right text-xs text-eggplore-neutral-300 group-hover:text-eggplore-primary-600 transition-colors"></i></a></li>
+                        <li><a href="#sekolah" class="group flex items-baseline justify-between gap-3 scroll-mt-24"><span class="text-eggplore-neutral-500 group-hover:text-eggplore-primary-600 transition-colors">Sekolah Asal</span><i class="fa-solid fa-arrow-right text-xs text-eggplore-neutral-300 group-hover:text-eggplore-primary-600 transition-colors"></i></a></li>
+                    </ul>
+                </div>
+            </aside>
+
+            <!-- KOLOM KANAN -->
+            <main class="min-w-0">
+                <div class="mb-8 border-l-2 border-eggplore-primary-500 pl-4 py-1">
+                    <p class="text-sm text-eggplore-neutral-500 leading-relaxed">Periksa kembali data diri Anda sebelum menyimpan. <span class="text-eggplore-neutral-400">Setelah disimpan, data ini menjadi profil resmi pendaftaran Anda.</span></p>
+                </div>
+
+                <div class="space-y-10">
+
+                    <!-- DATA DIRI -->
+                    <section id="diri" class="scroll-mt-24">
+                        <header class="flex items-center gap-3 mb-6">
+                            <span class="h-5 w-[2px] rounded-full bg-eggplore-primary-500" aria-hidden="true"></span>
+                            <h3 class="text-lg font-bold text-eggplore-neutral-900 tracking-tight">Data Diri</h3>
+                            <span class="flex-1 h-px bg-eggplore-neutral-150"></span>
+                        </header>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-6 max-w-3xl">
+                            <div class="sm:col-span-2 min-w-0">
+                                <p class="text-[11px] font-semibold uppercase tracking-[0.08em] text-eggplore-neutral-400">Nama Lengkap</p>
+                                <p class="mt-1 text-sm font-medium text-eggplore-neutral-900">Budi Santoso</p>
+                            </div>
+                            <div class="min-w-0">
+                                <p class="text-[11px] font-semibold uppercase tracking-[0.08em] text-eggplore-neutral-400">NISN</p>
+                                <p class="mt-1 text-sm font-mono text-eggplore-neutral-900">0081234567</p>
+                            </div>
+                            <div class="min-w-0">
+                                <p class="text-[11px] font-semibold uppercase tracking-[0.08em] text-eggplore-neutral-400">Verifikasi NISN</p>
+                                <span class="mt-1 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold bg-eggplore-success-soft text-eggplore-success"><i class="fa-solid fa-circle-check"></i>Terverifikasi</span>
+                            </div>
+                            <div class="min-w-0">
+                                <p class="text-[11px] font-semibold uppercase tracking-[0.08em] text-eggplore-neutral-400">NIK</p>
+                                <p class="mt-1 text-sm font-mono text-eggplore-neutral-900">3171010101010001</p>
+                            </div>
+                            <div class="min-w-0">
+                                <p class="text-[11px] font-semibold uppercase tracking-[0.08em] text-eggplore-neutral-400">Tempat Lahir</p>
+                                <p class="mt-1 text-sm font-medium text-eggplore-neutral-900">Jakarta</p>
+                            </div>
+                            <div class="min-w-0">
+                                <p class="text-[11px] font-semibold uppercase tracking-[0.08em] text-eggplore-neutral-400">Tanggal Lahir</p>
+                                <p class="mt-1 text-sm font-mono text-eggplore-neutral-900">14 Mei 2010</p>
+                            </div>
+                            <div class="min-w-0">
+                                <p class="text-[11px] font-semibold uppercase tracking-[0.08em] text-eggplore-neutral-400">Jenis Kelamin</p>
+                                <p class="mt-1 text-sm font-medium text-eggplore-neutral-900">Laki-laki</p>
+                            </div>
+                            <div class="min-w-0">
+                                <p class="text-[11px] font-semibold uppercase tracking-[0.08em] text-eggplore-neutral-400">Agama</p>
+                                <p class="mt-1 text-sm font-medium text-eggplore-neutral-900">Islam</p>
+                            </div>
+                            <div class="min-w-0">
+                                <p class="text-[11px] font-semibold uppercase tracking-[0.08em] text-eggplore-neutral-400">Nomor Telepon</p>
+                                <p class="mt-1 text-sm font-mono text-eggplore-neutral-900">081234567890</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <div class="border-t border-eggplore-neutral-150"></div>
+
+                    <!-- ALAMAT -->
+                    <section id="alamat" class="scroll-mt-24">
+                        <header class="flex items-center gap-3 mb-6">
+                            <span class="h-5 w-[2px] rounded-full bg-eggplore-primary-500" aria-hidden="true"></span>
+                            <h3 class="text-lg font-bold text-eggplore-neutral-900 tracking-tight">Alamat</h3>
+                            <span class="flex-1 h-px bg-eggplore-neutral-150"></span>
+                        </header>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-6 max-w-3xl">
+                            <div class="sm:col-span-2 min-w-0">
+                                <p class="text-[11px] font-semibold uppercase tracking-[0.08em] text-eggplore-neutral-400">Alamat Lengkap</p>
+                                <p class="mt-1 text-sm font-medium text-eggplore-neutral-900">Jl. Melati No. 10, RT 02/RW 05, Senayan, Kebayoran Baru</p>
+                            </div>
+                            <div class="min-w-0">
+                                <p class="text-[11px] font-semibold uppercase tracking-[0.08em] text-eggplore-neutral-400">RT / RW</p>
+                                <p class="mt-1 text-sm font-mono text-eggplore-neutral-900">02 / 05</p>
+                            </div>
+                            <div class="min-w-0">
+                                <p class="text-[11px] font-semibold uppercase tracking-[0.08em] text-eggplore-neutral-400">Kelurahan / Desa</p>
+                                <p class="mt-1 text-sm font-medium text-eggplore-neutral-900">Senayan</p>
+                            </div>
+                            <div class="min-w-0">
+                                <p class="text-[11px] font-semibold uppercase tracking-[0.08em] text-eggplore-neutral-400">Kecamatan</p>
+                                <p class="mt-1 text-sm font-medium text-eggplore-neutral-900">Kebayoran Baru</p>
+                            </div>
+                            <div class="min-w-0">
+                                <p class="text-[11px] font-semibold uppercase tracking-[0.08em] text-eggplore-neutral-400">Kabupaten / Kota</p>
+                                <p class="mt-1 text-sm font-medium text-eggplore-neutral-900">Jakarta Selatan</p>
+                            </div>
+                            <div class="min-w-0">
+                                <p class="text-[11px] font-semibold uppercase tracking-[0.08em] text-eggplore-neutral-400">Provinsi</p>
+                                <p class="mt-1 text-sm font-medium text-eggplore-neutral-900">DKI Jakarta</p>
+                            </div>
+                            <div class="min-w-0">
+                                <p class="text-[11px] font-semibold uppercase tracking-[0.08em] text-eggplore-neutral-400">Kode Pos</p>
+                                <p class="mt-1 text-sm font-mono text-eggplore-neutral-900">12190</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <div class="border-t border-eggplore-neutral-150"></div>
+
+                    <!-- ORTU -->
+                    <section id="ortu" class="scroll-mt-24">
+                        <header class="flex items-center gap-3 mb-6">
+                            <span class="h-5 w-[2px] rounded-full bg-eggplore-primary-500" aria-hidden="true"></span>
+                            <h3 class="text-lg font-bold text-eggplore-neutral-900 tracking-tight">Orang Tua / Wali</h3>
+                            <span class="flex-1 h-px bg-eggplore-neutral-150"></span>
+                        </header>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-6 max-w-3xl">
+                            <div class="min-w-0"><p class="text-[11px] font-semibold uppercase tracking-[0.08em] text-eggplore-neutral-400">Nama Ayah</p><p class="mt-1 text-sm font-medium text-eggplore-neutral-900">Ahmad Subarjo</p></div>
+                            <div class="min-w-0"><p class="text-[11px] font-semibold uppercase tracking-[0.08em] text-eggplore-neutral-400">Pekerjaan Ayah</p><p class="mt-1 text-sm font-medium text-eggplore-neutral-900">Wiraswasta</p></div>
+                            <div class="min-w-0"><p class="text-[11px] font-semibold uppercase tracking-[0.08em] text-eggplore-neutral-400">Nama Ibu</p><p class="mt-1 text-sm font-medium text-eggplore-neutral-900">Siti Aminah</p></div>
+                            <div class="min-w-0"><p class="text-[11px] font-semibold uppercase tracking-[0.08em] text-eggplore-neutral-400">Pekerjaan Ibu</p><p class="mt-1 text-sm font-medium text-eggplore-neutral-900">Ibu Rumah Tangga</p></div>
+                            <div class="min-w-0"><p class="text-[11px] font-semibold uppercase tracking-[0.08em] text-eggplore-neutral-400">Nama Wali</p><p class="mt-1 text-sm text-eggplore-neutral-300">—</p></div>
+                            <div class="min-w-0"><p class="text-[11px] font-semibold uppercase tracking-[0.08em] text-eggplore-neutral-400">Nomor HP Orang Tua / Wali</p><p class="mt-1 text-sm font-mono text-eggplore-neutral-300">—</p></div>
+                        </div>
+                    </section>
+
+                    <div class="border-t border-eggplore-neutral-150"></div>
+
+                    <!-- SEKOLAH -->
+                    <section id="sekolah" class="scroll-mt-24">
+                        <header class="flex items-center gap-3 mb-6">
+                            <span class="h-5 w-[2px] rounded-full bg-eggplore-primary-500" aria-hidden="true"></span>
+                            <h3 class="text-lg font-bold text-eggplore-neutral-900 tracking-tight">Sekolah Asal</h3>
+                            <span class="flex-1 h-px bg-eggplore-neutral-150"></span>
+                        </header>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-6 max-w-3xl">
+                            <div class="min-w-0"><p class="text-[11px] font-semibold uppercase tracking-[0.08em] text-eggplore-neutral-400">Sekolah Asal</p><p class="mt-1 text-sm font-medium text-eggplore-neutral-900">SMPN 1 Jakarta</p></div>
+                            <div class="min-w-0">
+                                <p class="text-[11px] font-semibold uppercase tracking-[0.08em] text-eggplore-neutral-400">Tahun Lulus</p>
+                                <p class="mt-1 text-sm font-mono text-eggplore-neutral-900">2025 <span class="ml-2 text-xs text-eggplore-success">(usia saat lulus ±15 th)</span></p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- AKSI -->
+                    <div class="pt-2 flex flex-col-reverse sm:flex-row sm:items-center sm:justify-between gap-3 border-t border-eggplore-neutral-150">
+                        <a href="#" class="inline-flex items-center justify-center px-5 h-10 rounded-btn text-sm font-medium text-eggplore-neutral-500 hover:text-eggplore-neutral-900 transition-colors"><i class="fa-solid fa-arrow-left text-xs mr-2"></i> Kembali</a>
+                        <button type="submit" class="inline-flex items-center justify-center gap-2 bg-eggplore-primary text-white px-5 h-10 rounded-btn hover:bg-eggplore-primary-600 active:bg-eggplore-primary-700 text-sm font-semibold shadow-sm transition-colors"><i class="fa-solid fa-check mr-1"></i> Konfirmasi &amp; Simpan</button>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+</div>
+</body>
+</html>
