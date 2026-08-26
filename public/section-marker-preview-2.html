@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Preview Penanda Section — Alternatif Baru (EGGPLORE)</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          eggplore: {
+            primary: { 500: '#6C78F5', 400: '#8B96F5', 600: '#5A64E8', 50: '#F1F3FE' },
+            success: '#2DC99C',
+            danger: '#F27389',
+            neutral: { 100: '#F5F6FA', 150: '#EEF0F4', 200: '#E0E2E8', 300: '#C9CDD6', 400: '#9AA0AE', 500: '#6B7280', 700: '#3F4451', 900: '#1A1A2E' }
+          }
+        }
+      }
+    }
+  }
+</script>
+<style>
+  body { font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  .preview-note { font-size: 12px; color: #9AA0AE; }
+  .tag { display:inline-block; font-size: 11px; font-weight:600; letter-spacing:.03em; padding: 2px 10px; border-radius: 999px; }
+  .demo-section { margin-bottom: 14px; }
+</style>
+</head>
+<body class="min-h-screen bg-[#FAFAFB] text-eggplore-neutral-900 antialiased">
+  <div class="mx-auto max-w-4xl px-6 py-12">
+
+    <header class="mb-10">
+      <span class="tag bg-[#F1F3FE] text-eggplore-primary-500 mb-3">DESIGN SYSTEM EGGPLORE — BATCH 2</span>
+      <h1 class="text-2xl font-bold tracking-tight">Penanda Section — Saran Lain</h1>
+      <p class="preview-note mt-2 max-w-2xl">
+        4 arah baru yang berbeda dari batch pertama (ikon/uppercase/dot/pill). Tetap minimalis, editorial, token EGGPLORE.
+      </p>
+    </header>
+
+    <!-- A: Garis aksen vertikal -->
+    <section class="mb-12 rounded-2xl border border-eggplore-neutral-200 bg-white p-6">
+      <div class="mb-4 flex items-center gap-3">
+        <span class="flex h-8 w-8 items-center justify-center rounded-full bg-eggplore-primary-500 text-sm font-bold text-white">A</span>
+        <div>
+          <h2 class="text-base font-bold">Garis aksen vertikal — paling editorial</h2>
+          <p class="preview-note">Batang tipis 3px di kiri judul, seperti penanda kutipan di majalah. Sangat tenang.</p>
+        </div>
+      </div>
+      <div class="space-y-3">
+        <div class="demo-section">
+          <div class="flex items-center gap-3">
+            <span class="h-5 w-[2px] rounded-full bg-eggplore-primary-500"></span>
+            <h3 class="text-lg font-bold tracking-tight">Data Diri</h3>
+            <span class="flex-1 h-px bg-eggplore-neutral-150"></span>
+          </div>
+        </div>
+        <div class="demo-section">
+          <div class="flex items-center gap-3">
+            <span class="h-5 w-[2px] rounded-full bg-eggplore-primary-500"></span>
+            <h3 class="text-lg font-bold tracking-tight">Alamat</h3>
+            <span class="flex-1 h-px bg-eggplore-neutral-150"></span>
+          </div>
+        </div>
+        <div class="demo-section">
+          <div class="flex items-center gap-3">
+            <span class="h-5 w-[2px] rounded-full bg-eggplore-primary-500"></span>
+            <h3 class="text-lg font-bold tracking-tight">Orang Tua / Wali</h3>
+            <span class="flex-1 h-px bg-eggplore-neutral-150"></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- B: Ikon tanpa lingkaran -->
+    <section class="mb-12 rounded-2xl border border-eggplore-neutral-200 bg-white p-6">
+      <div class="mb-4 flex items-center gap-3">
+        <span class="flex h-8 w-8 items-center justify-center rounded-full bg-eggplore-primary-500 text-sm font-bold text-white">B</span>
+        <div>
+          <h2 class="text-base font-bold">Ikon polos tanpa lingkaran — paling ringan</h2>
+          <p class="preview-note">Ikon 16px langsung di kiri judul, tanpa background. Lebih hemat dari batch-1.</p>
+        </div>
+      </div>
+      <div class="space-y-3">
+        <div class="demo-section">
+          <div class="flex items-center gap-3">
+            <i class="fa-solid fa-user text-base text-eggplore-primary-500"></i>
+            <h3 class="text-lg font-bold tracking-tight">Data Diri</h3>
+            <span class="flex-1 h-px bg-eggplore-neutral-150"></span>
+          </div>
+        </div>
+        <div class="demo-section">
+          <div class="flex items-center gap-3">
+            <i class="fa-solid fa-location-dot text-base text-eggplore-primary-500"></i>
+            <h3 class="text-lg font-bold tracking-tight">Alamat</h3>
+            <span class="flex-1 h-px bg-eggplore-neutral-150"></span>
+          </div>
+        </div>
+        <div class="demo-section">
+          <div class="flex items-center gap-3">
+            <i class="fa-solid fa-people-roof text-base text-eggplore-primary-500"></i>
+            <h3 class="text-lg font-bold tracking-tight">Orang Tua / Wali</h3>
+            <span class="flex-1 h-px bg-eggplore-neutral-150"></span>
+          </div>
+        </div>
+        <div class="demo-section">
+          <div class="flex items-center gap-3">
+            <i class="fa-solid fa-school text-base text-eggplore-primary-500"></i>
+            <h3 class="text-lg font-bold tracking-tight">Sekolah Asal</h3>
+            <span class="flex-1 h-px bg-eggplore-neutral-150"></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- C: Overline di atas judul -->
+    <section class="mb-12 rounded-2xl border border-eggplore-neutral-200 bg-white p-6">
+      <div class="mb-4 flex items-center gap-3">
+        <span class="flex h-8 w-8 items-center justify-center rounded-full bg-eggplore-primary-500 text-sm font-bold text-white">C</span>
+        <div>
+          <h2 class="text-base font-bold">Overline di atas judul — dua baris, kesan dokumen</h2>
+          <p class="preview-note">Kicker kecil di atas judul, judul besar di bawahnya. Seperti halaman dokumen resmi.</p>
+        </div>
+      </div>
+      <div class="space-y-5">
+        <div class="demo-section">
+          <div class="pb-3 border-b border-eggplore-neutral-150">
+            <p class="text-[11px] font-bold uppercase tracking-[0.16em] text-eggplore-primary-500 mb-1">Bagian 1 · Identitas</p>
+            <h3 class="text-xl font-bold tracking-tight">Data Diri</h3>
+          </div>
+        </div>
+        <div class="demo-section">
+          <div class="pb-3 border-b border-eggplore-neutral-150">
+            <p class="text-[11px] font-bold uppercase tracking-[0.16em] text-eggplore-primary-500 mb-1">Bagian 2 · Domisili</p>
+            <h3 class="text-xl font-bold tracking-tight">Alamat</h3>
+          </div>
+        </div>
+        <div class="demo-section">
+          <div class="pb-3 border-b border-eggplore-neutral-150">
+            <p class="text-[11px] font-bold uppercase tracking-[0.16em] text-eggplore-primary-500 mb-1">Bagian 3 · Keluarga</p>
+            <h3 class="text-xl font-bold tracking-tight">Orang Tua / Wali</h3>
+          </div>
+        </div>
+        <div class="demo-section">
+          <div class="pb-3 border-b border-eggplore-neutral-150">
+            <p class="text-[11px] font-bold uppercase tracking-[0.16em] text-eggplore-primary-500 mb-1">Bagian 4 · Pendidikan</p>
+            <h3 class="text-xl font-bold tracking-tight">Sekolah Asal</h3>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- D: Status kelengkapan -->
+    <section class="mb-12 rounded-2xl border border-eggplore-neutral-200 bg-white p-6">
+      <div class="mb-4 flex items-center gap-3">
+        <span class="flex h-8 w-8 items-center justify-center rounded-full bg-eggplore-primary-500 text-sm font-bold text-white">D</span>
+        <div>
+          <h2 class="text-base font-bold">Status kelengkapan — fungsional, bukan sekadar dekorasi</h2>
+          <p class="preview-note">Ganti angka dengan indikator status: centang hijau jika section lengkap, titik abu jika belum.</p>
+        </div>
+      </div>
+      <div class="space-y-3">
+        <div class="demo-section">
+          <div class="flex items-center gap-3">
+            <span class="grid h-6 w-6 place-items-center rounded-full bg-eggplore-success/15 text-eggplore-success"><i class="fa-solid fa-check text-[11px]"></i></span>
+            <h3 class="text-lg font-bold tracking-tight">Data Diri</h3>
+            <span class="flex-1 h-px bg-eggplore-neutral-150"></span>
+            <span class="font-mono text-[11px] text-eggplore-success">lengkap</span>
+          </div>
+        </div>
+        <div class="demo-section">
+          <div class="flex items-center gap-3">
+            <span class="h-2 w-2 rounded-full bg-eggplore-neutral-300"></span>
+            <h3 class="text-lg font-bold tracking-tight">Alamat</h3>
+            <span class="flex-1 h-px bg-eggplore-neutral-150"></span>
+            <span class="font-mono text-[11px] text-eggplore-neutral-400">75%</span>
+          </div>
+        </div>
+        <div class="demo-section">
+          <div class="flex items-center gap-3">
+            <span class="h-2 w-2 rounded-full bg-eggplore-neutral-300"></span>
+            <h3 class="text-lg font-bold tracking-tight">Orang Tua / Wali</h3>
+            <span class="flex-1 h-px bg-eggplore-neutral-150"></span>
+            <span class="font-mono text-[11px] text-eggplore-neutral-400">50%</span>
+          </div>
+        </div>
+        <div class="demo-section">
+          <div class="flex items-center gap-3">
+            <span class="h-2 w-2 rounded-full bg-eggplore-neutral-300"></span>
+            <h3 class="text-lg font-bold tracking-tight">Sekolah Asal</h3>
+            <span class="flex-1 h-px bg-eggplore-neutral-150"></span>
+            <span class="font-mono text-[11px] text-eggplore-neutral-400">0%</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="preview-note border-t border-eggplore-neutral-200 pt-6 text-center">
+      Bonus: tanpa penanda sama sekali — cukup judul lebih besar + garis bawah tipis (tipografi murni).
+    </footer>
+  </div>
+</body>
+</html>

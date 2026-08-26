@@ -124,12 +124,12 @@
                         @csrf
                         @method('PATCH')
 
-                        {{-- ========== 01 DATA DIRI ========== --}}
+                        {{-- ===== DATA DIRI ===== --}}
                         <section id="section-diri" class="scroll-mt-24 py-8 first:pt-0">
-                            <header class="flex items-baseline gap-3 mb-7">
-                                <span class="text-xs font-mono font-semibold text-eggplore-primary-500">01</span>
+                            <header class="flex items-center gap-3 mb-7">
+                                <span class="h-5 w-[2px] rounded-full bg-eggplore-primary-500" aria-hidden="true"></span>
                                 <h3 class="text-lg font-bold text-eggplore-neutral-900 tracking-tight">Data Diri</h3>
-                                <span class="flex-1 h-px bg-eggplore-neutral-150 self-center"></span>
+                                <span class="flex-1 h-px bg-eggplore-neutral-150"></span>
                             </header>
 
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6 max-w-3xl">
@@ -230,12 +230,12 @@
 
                         <div class="border-t border-eggplore-neutral-150 my-2"></div>
 
-                        {{-- ========== 02 ALAMAT ========== --}}
+                        {{-- ===== ALAMAT ===== --}}
                         <section id="section-alamat" class="scroll-mt-24 py-8">
-                            <header class="flex items-baseline gap-3 mb-7">
-                                <span class="text-xs font-mono font-semibold text-eggplore-primary-500">02</span>
+                            <header class="flex items-center gap-3 mb-7">
+                                <span class="h-5 w-[2px] rounded-full bg-eggplore-primary-500" aria-hidden="true"></span>
                                 <h3 class="text-lg font-bold text-eggplore-neutral-900 tracking-tight">Alamat</h3>
-                                <span class="flex-1 h-px bg-eggplore-neutral-150 self-center"></span>
+                                <span class="flex-1 h-px bg-eggplore-neutral-150"></span>
                             </header>
 
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6 max-w-3xl">
@@ -294,12 +294,12 @@
 
                         <div class="border-t border-eggplore-neutral-150 my-2"></div>
 
-                        {{-- ========== 03 ORANG TUA / WALI ========== --}}
+                        {{-- ===== ORANG TUA / WALI ===== --}}
                         <section id="section-ortu" class="scroll-mt-24 py-8">
-                            <header class="flex items-baseline gap-3 mb-7">
-                                <span class="text-xs font-mono font-semibold text-eggplore-primary-500">03</span>
+                            <header class="flex items-center gap-3 mb-7">
+                                <span class="h-5 w-[2px] rounded-full bg-eggplore-primary-500" aria-hidden="true"></span>
                                 <h3 class="text-lg font-bold text-eggplore-neutral-900 tracking-tight">Orang Tua / Wali</h3>
-                                <span class="flex-1 h-px bg-eggplore-neutral-150 self-center"></span>
+                                <span class="flex-1 h-px bg-eggplore-neutral-150"></span>
                             </header>
 
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6 max-w-3xl">
@@ -344,12 +344,12 @@
 
                         <div class="border-t border-eggplore-neutral-150 my-2"></div>
 
-                        {{-- ========== 04 SEKOLAH ASAL ========== --}}
+                        {{-- ===== SEKOLAH ASAL ===== --}}
                         <section id="section-sekolah" class="scroll-mt-24 py-8">
-                            <header class="flex items-baseline gap-3 mb-7">
-                                <span class="text-xs font-mono font-semibold text-eggplore-primary-500">04</span>
+                            <header class="flex items-center gap-3 mb-7">
+                                <span class="h-5 w-[2px] rounded-full bg-eggplore-primary-500" aria-hidden="true"></span>
                                 <h3 class="text-lg font-bold text-eggplore-neutral-900 tracking-tight">Sekolah Asal</h3>
-                                <span class="flex-1 h-px bg-eggplore-neutral-150 self-center"></span>
+                                <span class="flex-1 h-px bg-eggplore-neutral-150"></span>
                             </header>
 
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6 max-w-3xl">
