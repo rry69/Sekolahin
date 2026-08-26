@@ -131,6 +131,7 @@ class SchoolSettingsFlowTest extends TestCase
 
         $response = $this->actingAs($admin)->patch(route('admin.schools.update', $school), [
             'name' => 'SMK Negeri 1 Jakarta Baru',
+            'npsn' => '20102101',
             'address' => 'Jl. Baru No. 1',
             'phone' => '021-000',
             'email' => 'new@example.com',
@@ -219,5 +220,97 @@ class SchoolSettingsFlowTest extends TestCase
         $response->assertStatus(200);
         $response->assertSee('Pendaftar');
         $response->assertSee('Jurusan TKJ');
+    }
+
+    public function test_edit_page_renders_new_profile_fields()
+    {
+        [$admin] = $this->seedBase();
+        $school = School::first();
+
+        $response = $this->actingAs($admin)->get(route('admin.schools.edit', $school));
+        $response->assertStatus(200);
+        $response->assertSee('Informasi Dasar');
+        $response->assertSee('NPSN');
+        $response->assertSee('Status Sekolah');
+        $response->assertSee('Akreditasi');
+        $response->assertSee('WhatsApp');
+        $response->assertSee('Website Sekolah');
+        $response->assertSee('Kecamatan');
+        $response->assertSee('Link Google Maps');
+        $response->assertSee('Logo Sekolah');
+        $response->assertSee('Deskripsi Singkat Sekolah');
+    }
+
+    public function test_update_stores_new_profile_fields()
+    {
+        [$admin] = $this->seedBase();
+        $school = School::first();
+
+        $this->actingAs($admin)->patch(route('admin.schools.update', $school), [
+            'name' => 'SMK Negeri 1 Jakarta',
+            'npsn' => '20102101',
+            'school_status' => 'negeri',
+            'accreditation' => 'A',
+            'address' => 'Jl. Baru No. 1',
+            'district' => 'Senen',
+            'city' => 'Jakarta Pusat',
+            'province' => 'DKI Jakarta',
+            'maps_link' => 'https://maps.google.com/?q=test',
+            'phone' => '021-000',
+            'whatsapp' => '081234567890',
+            'email' => 'new@example.com',
+            'website' => 'https://smk.test',
+            'principal_name' => 'Kepsek Baru',
+            'description' => 'Deskripsi singkat sekolah.',
+            'school_level_ids' => [5],
+        ]);
+
+        $school->refresh();
+        $this->assertSame('20102101', $school->npsn);
+        $this->assertSame('negeri', $school->school_status);
+        $this->assertSame('A', $school->accreditation);
+        $this->assertSame('Senen', $school->district);
+        $this->assertSame('Jakarta Pusat', $school->city);
+        $this->assertSame('DKI Jakarta', $school->province);
+        $this->assertSame('https://maps.google.com/?q=test', $school->maps_link);
+        $this->assertSame('081234567890', $school->whatsapp);
+        $this->assertSame('https://smk.test', $school->website);
+        $this->assertSame('Deskripsi singkat sekolah.', $school->description);
+    }
+
+    public function test_update_requires_npsn_with_8_digits()
+    {
+        [$admin] = $this->seedBase();
+        $school = School::first();
+
+        // Missing NPSN -> validation error
+        $response = $this->actingAs($admin)->patch(route('admin.schools.update', $school), [
+            'name' => 'SMK Negeri 1 Jakarta',
+            'school_level_ids' => [5],
+        ]);
+        $response->assertSessionHasErrors('npsn');
+
+        // NPSN not 8 digits -> validation error
+        $response = $this->actingAs($admin)->patch(route('admin.schools.update', $school), [
+            'name' => 'SMK Negeri 1 Jakarta',
+            'npsn' => '123',
+            'school_level_ids' => [5],
+        ]);
+        $response->assertSessionHasErrors('npsn');
+    }
+
+    public function test_update_rejects_invalid_url_fields()
+    {
+        [$admin] = $this->seedBase();
+        $school = School::first();
+
+        $response = $this->actingAs($admin)->patch(route('admin.schools.update', $school), [
+            'name' => 'SMK Negeri 1 Jakarta',
+            'npsn' => '20102101',
+            'website' => 'bukan-url',
+            'maps_link' => 'bukan-url',
+            'school_level_ids' => [5],
+        ]);
+        $response->assertSessionHasErrors(['website', 'maps_link']);
     }
 }

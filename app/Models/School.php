@@ -8,10 +8,21 @@ class School extends Model
 {
     protected $fillable = [
         'name',
+        'npsn',
+        'school_status',
+        'accreditation',
         'address',
+        'district',
+        'city',
+        'province',
+        'maps_link',
         'phone',
+        'whatsapp',
         'email',
+        'website',
         'principal_name',
+        'logo_path',
+        'description',
     ];
 
     public function schoolLevels()
