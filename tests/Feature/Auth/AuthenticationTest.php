@@ -42,6 +42,30 @@ class AuthenticationTest extends TestCase
         $this->assertGuest();
     }
 
+    public function test_invalid_password_shows_localized_error_not_raw_key(): void
+    {
+        $user = User::factory()->create();
+
+        $response = $this->from('/login')->post('/login', [
+            'email' => $user->email,
+            'password' => 'wrong-password',
+        ]);
+
+        $response->assertRedirect('/login');
+        $response->assertSessionHasErrors('email');
+        $response->assertSessionDoesntHaveErrors('password');
+
+        // Pesan error harus berupa teks Indonesia, bukan key mentah "auth.failed".
+        $this->assertStringNotContainsString(
+            'auth.failed',
+            (string) session('errors')
+        );
+        $this->assertStringContainsString(
+            'Kredensial yang dimasukkan tidak cocok',
+            (string) session('errors')
+        );
+    }
+
     public function test_users_can_logout(): void
     {
         $user = User::factory()->create();
