@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Preview — Daftar Registrasi (Kartu)</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>[x-cloak]{display:none!important}</style>
+</head>
+<body class="font-sans antialiased bg-gray-100 min-h-screen">
+<!-- Header -->
+<header class="bg-white shadow">
+    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center">
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">Dashboard</h2>
+            <div class="flex gap-3 items-center">
+                <button class="relative inline-flex items-center p-2 rounded-md text-gray-500 hover:text-gray-700 hover:bg-gray-100" aria-label="Notifikasi">
+                    <i class="fa-solid fa-bell text-lg"></i>
+                    <span class="absolute -top-1 -right-1 inline-flex items-center justify-center px-1.5 py-0.5 text-[10px] font-bold text-white bg-red-500 rounded-full min-w-[1.25rem]">1</span>
+                </button>
+                <a href="#" class="inline-flex items-center justify-center p-2 rounded-lg bg-white text-gray-700 border border-gray-300 shadow-sm hover:bg-gray-50" aria-label="Biodata Saya" title="Biodata Saya">
+                    <i class="fa-solid fa-id-card text-lg"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="py-12">
+    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+            <div class="p-6 text-gray-900">
+                <div class="space-y-4">
+
+                    <!-- KARTU 1: pending + deadline -->
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5 sm:p-6">
+                        <div class="flex flex-wrap items-start justify-between gap-3">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0">
+                                    <i class="fa-solid fa-file-lines text-sm"></i>
+                                </div>
+                                <div>
+                                    <p class="text-[11px] font-semibold uppercase tracking-wide text-gray-400">No. Pendaftaran</p>
+                                    <p class="font-mono text-base font-semibold text-gray-900">REG/2026/000123</p>
+                                </div>
+                            </div>
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">Menunggu Verifikasi</span>
+                        </div>
+
+                        <div class="mt-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-4">
+                            <div><p class="text-[11px] font-semibold uppercase tracking-wide text-gray-400">Jenjang</p><p class="mt-0.5 text-sm font-medium text-gray-900">SMA</p></div>
+                            <div><p class="text-[11px] font-semibold uppercase tracking-wide text-gray-400">Sekolah</p><p class="mt-0.5 text-sm font-medium text-gray-900">SMA Negeri 1 Jakarta</p></div>
+                            <div><p class="text-[11px] font-semibold uppercase tracking-wide text-gray-400">Jurusan</p><p class="mt-0.5 text-sm font-medium text-gray-900">IPA</p></div>
+                            <div><p class="text-[11px] font-semibold uppercase tracking-wide text-gray-400">Periode</p><p class="mt-0.5 text-sm font-medium text-gray-900">2026/2027</p></div>
+                            <div><p class="text-[11px] font-semibold uppercase tracking-wide text-gray-400">Jalur</p><p class="mt-0.5 text-sm font-medium text-gray-900">Reguler</p></div>
+                            <div><p class="text-[11px] font-semibold uppercase tracking-wide text-gray-400">Batas Waktu</p><p class="mt-0.5 text-sm font-medium text-yellow-600">18 jam lagi</p></div>
+                        </div>
+
+                        <div class="mt-5 pt-4 border-t border-gray-100 flex flex-wrap items-center justify-between gap-4">
+                            <div class="flex flex-wrap items-center gap-x-8 gap-y-4">
+                                <div>
+                                    <p class="text-[11px] font-semibold uppercase tracking-wide text-gray-400">Dokumen</p>
+                                    <div class="mt-1.5 flex items-center gap-2">
+                                        <span class="font-mono text-sm font-semibold text-yellow-600">2/4</span>
+                                        <div class="w-20 h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                                            <div class="h-full rounded-full bg-yellow-500" style="width: 50%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <p class="text-[11px] font-semibold uppercase tracking-wide text-gray-400">Pembayaran</p>
+                                    <div class="mt-1.5"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Belum Dibayar</span></div>
+                                </div>
+                            </div>
+                            <a href="#" class="inline-flex items-center gap-1.5 text-sm font-semibold text-indigo-600 hover:text-indigo-900 transition-colors">
+                                Lihat Detail <i class="fa-solid fa-arrow-right text-xs"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- KARTU 2: diterima, dokumen lengkap, lunas -->
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5 sm:p-6">
+                        <div class="flex flex-wrap items-start justify-between gap-3">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0">
+                                    <i class="fa-solid fa-file-lines text-sm"></i>
+                                </div>
+                                <div>
+                                    <p class="text-[11px] font-semibold uppercase tracking-wide text-gray-400">No. Pendaftaran</p>
+                                    <p class="font-mono text-base font-semibold text-gray-900">REG/2026/000098</p>
+                                </div>
+                            </div>
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Diterima</span>
+                        </div>
+
+                        <div class="mt-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-4">
+                            <div><p class="text-[11px] font-semibold uppercase tracking-wide text-gray-400">Jenjang</p><p class="mt-0.5 text-sm font-medium text-gray-900">SMK</p></div>
+                            <div><p class="text-[11px] font-semibold uppercase tracking-wide text-gray-400">Sekolah</p><p class="mt-0.5 text-sm font-medium text-gray-900">SMK Negeri 2 Jakarta</p></div>
+                            <div><p class="text-[11px] font-semibold uppercase tracking-wide text-gray-400">Jurusan</p><p class="mt-0.5 text-sm font-medium text-gray-900">Rekayasa Perangkat Lunak</p></div>
+                            <div><p class="text-[11px] font-semibold uppercase tracking-wide text-gray-400">Periode</p><p class="mt-0.5 text-sm font-medium text-gray-900">2026/2027</p></div>
+                            <div><p class="text-[11px] font-semibold uppercase tracking-wide text-gray-400">Jalur</p><p class="mt-0.5 text-sm font-medium text-gray-900">Prestasi</p></div>
+                            <div><p class="text-[11px] font-semibold uppercase tracking-wide text-gray-400">Batas Waktu</p><p class="mt-0.5 text-sm text-gray-300">—</p></div>
+                        </div>
+
+                        <div class="mt-5 pt-4 border-t border-gray-100 flex flex-wrap items-center justify-between gap-4">
+                            <div class="flex flex-wrap items-center gap-x-8 gap-y-4">
+                                <div>
+                                    <p class="text-[11px] font-semibold uppercase tracking-wide text-gray-400">Dokumen</p>
+                                    <div class="mt-1.5 flex items-center gap-2">
+                                        <span class="font-mono text-sm font-semibold text-green-600">4/4</span>
+                                        <div class="w-20 h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                                            <div class="h-full rounded-full bg-green-500" style="width: 100%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <p class="text-[11px] font-semibold uppercase tracking-wide text-gray-400">Pembayaran</p>
+                                    <div class="mt-1.5"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Lunas</span></div>
+                                </div>
+                            </div>
+                            <a href="#" class="inline-flex items-center gap-1.5 text-sm font-semibold text-indigo-600 hover:text-indigo-900 transition-colors">
+                                Lihat Detail <i class="fa-solid fa-arrow-right text-xs"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

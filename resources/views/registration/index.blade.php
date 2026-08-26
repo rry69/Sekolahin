@@ -316,99 +316,101 @@
                             @endif
                         </div>
                     @else
-                        <div class="overflow-x-auto">
-                            <table class="min-w-full divide-y divide-gray-200">
-                                <thead class="bg-gray-50">
-                                    <tr>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">No. Pendaftaran</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Jenjang</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Sekolah</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Jurusan</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Periode</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Jalur</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Batas Waktu</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Pembayaran</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Dokumen</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="bg-white divide-y divide-gray-200">
-                                    @foreach ($registrations as $reg)
-                                        <tr>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                                {{ $reg->registration_number }}
-                                            </td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                {{ $reg->registrationPeriod->schoolLevel->name }}
-                                            </td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                {{ $reg->school?->name ?? '-' }}
-                                            </td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                {{ $reg->major?->name ?? $reg->finalMajor?->name ?? '-' }}
-                                            </td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                {{ $reg->registrationPeriod->name }}
-                                            </td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                {{ $reg->registrationTrack->name }}
-                                            </td>
-                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                <x-status-badge :status="$reg->status" type="registration" />
-                                            </td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                                @if ($reg->deadline_at && $reg->status === 'pending')
-                                                    @php
-                                                        $hoursRemaining = $reg->getDeadlineHoursRemaining();
-                                                        $isExpired = $reg->isDeadlineExpired();
-                                                    @endphp
-                                                    @if ($isExpired)
-                                                        <span class="text-red-600 font-medium">Terlewati</span>
-                                                    @elseif ($hoursRemaining !== null)
-                                                        @if ($hoursRemaining <= 24)
-                                                            <span class="text-yellow-600 font-medium">{{ $reg->getDeadlineLabel() }}</span>
-                                                        @else
-                                                            {{ $reg->getDeadlineLabel() }}
-                                                        @endif
-                                                    @endif
+                        <div class="space-y-4">
+                            @foreach ($registrations as $reg)
+                                @php
+                                    $reqTypes = $reg->requiredDocumentTypes();
+                                    $upTypes = $reg->documents->pluck('document_type')->unique();
+                                    $verTypes = $reg->documents->whereNotNull('verified_at')->pluck('document_type')->unique();
+                                    $upCount = $upTypes->intersect($reqTypes)->count();
+                                    $verCount = $verTypes->intersect($reqTypes)->count();
+                                    $totalReq = count($reqTypes);
+                                    $docPct = $totalReq > 0 ? round(($verCount / $totalReq) * 100) : 0;
+                                    $docAllDone = $totalReq > 0 && $verCount >= $totalReq;
+                                    $hasDeadline = $reg->deadline_at && $reg->status === 'pending';
+                                    $dlExpired = $hasDeadline ? $reg->isDeadlineExpired() : false;
+                                    $dlHours = $hasDeadline ? $reg->getDeadlineHoursRemaining() : null;
+                                    $majorName = $reg->major?->name ?? $reg->finalMajor?->name ?? null;
+                                @endphp
+                                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5 sm:p-6">
+                                    {{-- Header kartu: nomor + status --}}
+                                    <div class="flex flex-wrap items-start justify-between gap-3">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-10 h-10 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0">
+                                                <i class="fa-solid fa-file-lines text-sm"></i>
+                                            </div>
+                                            <div>
+                                                <p class="text-[11px] font-semibold uppercase tracking-wide text-gray-400">No. Pendaftaran</p>
+                                                <p class="font-mono text-base font-semibold text-gray-900">{{ $reg->registration_number }}</p>
+                                            </div>
+                                        </div>
+                                        <x-status-badge :status="$reg->status" type="registration" />
+                                    </div>
+
+                                    {{-- Info utama --}}
+                                    <div class="mt-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-4">
+                                        <div>
+                                            <p class="text-[11px] font-semibold uppercase tracking-wide text-gray-400">Jenjang</p>
+                                            <p class="mt-0.5 text-sm font-medium text-gray-900">{{ $reg->registrationPeriod->schoolLevel->name }}</p>
+                                        </div>
+                                        <div>
+                                            <p class="text-[11px] font-semibold uppercase tracking-wide text-gray-400">Sekolah</p>
+                                            <p class="mt-0.5 text-sm font-medium text-gray-900">{{ $reg->school?->name ?? '-' }}</p>
+                                        </div>
+                                        @if ($majorName)
+                                        <div>
+                                            <p class="text-[11px] font-semibold uppercase tracking-wide text-gray-400">Jurusan</p>
+                                            <p class="mt-0.5 text-sm font-medium text-gray-900">{{ $majorName }}</p>
+                                        </div>
+                                        @endif
+                                        <div>
+                                            <p class="text-[11px] font-semibold uppercase tracking-wide text-gray-400">Periode</p>
+                                            <p class="mt-0.5 text-sm font-medium text-gray-900">{{ $reg->registrationPeriod->name }}</p>
+                                        </div>
+                                        <div>
+                                            <p class="text-[11px] font-semibold uppercase tracking-wide text-gray-400">Jalur</p>
+                                            <p class="mt-0.5 text-sm font-medium text-gray-900">{{ $reg->registrationTrack->name }}</p>
+                                        </div>
+                                        <div>
+                                            <p class="text-[11px] font-semibold uppercase tracking-wide text-gray-400">Batas Waktu</p>
+                                            @if ($hasDeadline)
+                                                @if ($dlExpired)
+                                                    <p class="mt-0.5 text-sm font-medium text-red-600">Terlewati</p>
+                                                @elseif ($dlHours !== null && $dlHours <= 24)
+                                                    <p class="mt-0.5 text-sm font-medium text-yellow-600">{{ $reg->getDeadlineLabel() }}</p>
                                                 @else
-                                                    -
+                                                    <p class="mt-0.5 text-sm font-medium text-gray-900">{{ $reg->getDeadlineLabel() }}</p>
                                                 @endif
-                                            </td>
-                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                <x-status-badge :status="$reg->payment_status" type="payment" />
-                                            </td>
-                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                @php
-                                                    $requiredTypes = $reg->requiredDocumentTypes();
-                                                    $uploadedTypes = $reg->documents->pluck('document_type')->unique();
-                                                    $verifiedTypes = $reg->documents->whereNotNull('verified_at')->pluck('document_type')->unique();
-                                                    $uploadedCount = $uploadedTypes->intersect($requiredTypes)->count();
-                                                    $verifiedCount = $verifiedTypes->intersect($requiredTypes)->count();
-                                                    $totalRequired = count($requiredTypes);
-                                                    $docPct = $totalRequired > 0 ? round(($verifiedCount / $totalRequired) * 100) : 0;
-                                                    $docColor = $verifiedCount === $totalRequired ? 'text-green-600' : ($uploadedCount > 0 ? 'text-yellow-600' : 'text-gray-500');
-                                                @endphp
-                                                <span class="inline-flex items-center gap-1 text-xs font-medium {{ $docColor }}">
-                                                    <span class="text-gray-500">{{ $verifiedCount }}/{{ $totalRequired }}</span>
-                                                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                                    </svg>
-                                                </span>
-                                                <div class="mt-1 w-16 h-1.5 bg-gray-200 rounded-full overflow-hidden">
-                                                    <div class="h-full rounded-full {{ $verifiedCount === $totalRequired ? 'bg-green-500' : 'bg-yellow-500' }}" style="width: {{ $docPct }}%"></div>
+                                            @else
+                                                <p class="mt-0.5 text-sm text-gray-300">—</p>
+                                            @endif
+                                        </div>
+                                    </div>
+
+                                    {{-- Footer: dokumen + pembayaran + aksi --}}
+                                    <div class="mt-5 pt-4 border-t border-gray-100 flex flex-wrap items-center justify-between gap-4">
+                                        <div class="flex flex-wrap items-center gap-x-8 gap-y-4">
+                                            <div>
+                                                <p class="text-[11px] font-semibold uppercase tracking-wide text-gray-400">Dokumen</p>
+                                                <div class="mt-1.5 flex items-center gap-2">
+                                                    <span class="font-mono text-sm font-semibold {{ $docAllDone ? 'text-green-600' : ($upCount > 0 ? 'text-yellow-600' : 'text-gray-500') }}">{{ $verCount }}/{{ $totalReq }}</span>
+                                                    <div class="w-20 h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                                                        <div class="h-full rounded-full {{ $docAllDone ? 'bg-green-500' : 'bg-yellow-500' }}" style="width: {{ $docPct }}%"></div>
+                                                    </div>
                                                 </div>
-                                            </td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                                <a href="{{ route('registration.show', $reg) }}" class="text-indigo-600 hover:text-indigo-900">
-                                                    Detail
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
+                                            </div>
+                                            <div>
+                                                <p class="text-[11px] font-semibold uppercase tracking-wide text-gray-400">Pembayaran</p>
+                                                <div class="mt-1.5"><x-status-badge :status="$reg->payment_status" type="payment" /></div>
+                                            </div>
+                                        </div>
+                                        <a href="{{ route('registration.show', $reg) }}"
+                                           class="inline-flex items-center gap-1.5 text-sm font-semibold text-indigo-600 hover:text-indigo-900 transition-colors">
+                                            Lihat Detail <i class="fa-solid fa-arrow-right text-xs"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            @endforeach
                         </div>
                     @endif
                 </div>
