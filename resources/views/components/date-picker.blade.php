@@ -28,7 +28,7 @@
          aria-haspopup="dialog"
          aria-expanded="false"
          aria-controls="{{ $inputId }}-picker"
-         class="flex h-11 items-center bg-white border border-eggplore-neutral-200 rounded-input px-3.5 cursor-pointer hover:border-eggplore-primary-400 transition-colors select-none focus:outline-none focus-visible:ring-2 focus-visible:ring-eggplore-primary-400/25 focus-visible:border-eggplore-primary-500"
+         class="flex h-11 items-center border-b-2 border-eggplore-neutral-200 bg-transparent cursor-pointer transition-colors select-none focus:outline-none focus-visible:border-eggplore-primary-500 hover:border-eggplore-primary-400"
     >
         <p data-datepicker-display class="flex-1 min-w-0 text-eggplore-neutral-900 font-medium text-sm truncate">{{ $placeholder }}</p>
         <svg class="w-4 h-4 text-eggplore-neutral-400 shrink-0 ml-2" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24" aria-hidden="true">

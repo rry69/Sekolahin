@@ -699,16 +699,15 @@
 
     function setState(el, msg) {
         const ok = ['border-eggplore-neutral-200', 'border-eggplore-danger', 'border-eggplore-success',
-                    'focus:border-eggplore-primary-500', 'focus:ring-eggplore-primary-400/25',
-                    'focus:border-eggplore-danger', 'focus:ring-eggplore-danger/20',
-                    'focus:border-eggplore-success', 'focus:ring-eggplore-success/20'];
+                    'focus:border-eggplore-primary-500', 'hover:border-eggplore-primary-400',
+                    'focus:border-eggplore-danger', 'focus:border-eggplore-success'];
         ok.forEach(c => el.classList.remove(c));
         if (msg) {
-            el.classList.add('border-eggplore-danger', 'focus:border-eggplore-danger', 'focus:ring-eggplore-danger/20');
+            el.classList.add('border-eggplore-danger', 'focus:border-eggplore-danger');
         } else if (el.value.trim()) {
-            el.classList.add('border-eggplore-success', 'focus:border-eggplore-success', 'focus:ring-eggplore-success/20');
+            el.classList.add('border-eggplore-success', 'focus:border-eggplore-success');
         } else {
-            el.classList.add('border-eggplore-neutral-200', 'focus:border-eggplore-primary-500', 'focus:ring-eggplore-primary-400/25');
+            el.classList.add('border-eggplore-neutral-200', 'focus:border-eggplore-primary-500', 'hover:border-eggplore-primary-400');
         }
 
         const field = el.closest('.form-field');

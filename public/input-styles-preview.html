@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Preview Gaya Input Field — EGGPLORE (Underline Editorial)</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          eggplore: {
+            primary: { 500: '#6C78F5', 400: '#8B96F5' },
+            success: '#2DC99C',
+            danger: '#F27389',
+            neutral: {
+              100: '#F5F6FA', 200: '#E0E2E8', 300: '#C9CDD6',
+              400: '#9AA0AE', 700: '#3F4451', 900: '#1A1A2E'
+            }
+          }
+        }
+      }
+    }
+  }
+</script>
+<style>
+  body { font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  .preview-note { font-size: 12px; color: #9AA0AE; }
+  .tag { display:inline-block; font-size: 11px; font-weight:600; letter-spacing:.03em;
+         padding: 2px 10px; border-radius: 999px; }
+</style>
+</head>
+<body class="min-h-screen bg-[#FAFAFB] text-eggplore-neutral-900 antialiased">
+  <div class="mx-auto max-w-4xl px-6 py-12">
+
+    <header class="mb-10">
+      <span class="tag bg-[#F1F3FE] text-eggplore-primary-500 mb-3">DESIGN SYSTEM EGGPLORE</span>
+      <h1 class="text-2xl font-bold tracking-tight">Underline Editorial — Implementasi</h1>
+      <p class="preview-note mt-2 max-w-2xl">
+        Gaya yang dipilih & sudah diterapkan ke komponen form-input, form-select, form-textarea, dan date-picker.
+        Semua state (normal, focus, valid, error) memakai token EGGPLORE.
+      </p>
+    </header>
+
+    <!-- Normal + Focus -->
+    <section class="mb-12">
+      <h2 class="mb-1 text-sm font-bold uppercase tracking-wide text-eggplore-neutral-400">Normal &amp; Focus</h2>
+      <p class="preview-note mb-5">Garis bawah 2px abu → ungu saat focus/hover.</p>
+      <div class="grid gap-8 sm:grid-cols-2">
+        <div>
+          <label class="mb-1 block text-xs font-semibold text-eggplore-neutral-700">Nama Lengkap <span class="text-eggplore-danger">*</span></label>
+          <input type="text" placeholder="Contoh: Budi Santoso"
+                 class="w-full border-0 border-b-2 border-eggplore-neutral-200 bg-transparent py-2.5 text-sm text-eggplore-neutral-900 placeholder-eggplore-neutral-300 outline-none transition-colors focus:border-eggplore-primary-500 hover:border-eggplore-primary-400" />
+          <p class="preview-note mt-1.5">Sesuai dokumen resmi / ijazah.</p>
+        </div>
+        <div>
+          <label class="mb-1 block text-xs font-semibold text-eggplore-neutral-700">NISN</label>
+          <input type="text" value="0081234567" placeholder="10 digit"
+                 class="w-full border-0 border-b-2 border-eggplore-primary-500 bg-transparent py-2.5 text-sm font-mono text-eggplore-neutral-900 placeholder-eggplore-neutral-300 outline-none transition-colors focus:border-eggplore-primary-500" />
+        </div>
+      </div>
+    </section>
+
+    <!-- Valid + Error -->
+    <section class="mb-12">
+      <h2 class="mb-1 text-sm font-bold uppercase tracking-wide text-eggplore-neutral-400">Valid &amp; Error</h2>
+      <p class="preview-note mb-5">Valid → garis hijau; error → garis merah + pesan.</p>
+      <div class="grid gap-8 sm:grid-cols-2">
+        <div>
+          <label class="mb-1 block text-xs font-semibold text-eggplore-success">NIK</label>
+          <input type="text" value="3171010101010001" placeholder="16 digit"
+                 class="w-full border-0 border-b-2 border-eggplore-success bg-transparent py-2.5 text-sm font-mono text-eggplore-neutral-900 placeholder-eggplore-neutral-300 outline-none transition-colors focus:border-eggplore-success" />
+          <p class="mt-1.5 flex items-start gap-1.5 text-xs text-eggplore-success">
+            <span>✓</span><span>NIK valid.</span>
+          </p>
+        </div>
+        <div>
+          <label class="mb-1 block text-xs font-semibold text-eggplore-danger">NISN</label>
+          <input type="text" value="00812" placeholder="10 digit"
+                 class="w-full border-0 border-b-2 border-eggplore-danger bg-transparent py-2.5 text-sm font-mono text-eggplore-neutral-900 placeholder-eggplore-neutral-300 outline-none transition-colors focus:border-eggplore-danger" />
+          <p class="mt-1.5 flex items-start gap-1.5 text-xs text-eggplore-danger">
+            <span>⚠</span><span>NISN harus 10 digit angka.</span>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Select + Date + Textarea -->
+    <section class="mb-12">
+      <h2 class="mb-1 text-sm font-bold uppercase tracking-wide text-eggplore-neutral-400">Select, Date, Textarea</h2>
+      <p class="preview-note mb-5">Semua mengikuti pola garis bawah yang sama.</p>
+      <div class="grid gap-8 sm:grid-cols-2">
+        <div>
+          <label class="mb-1 block text-xs font-semibold text-eggplore-neutral-700">Jenis Kelamin</label>
+          <div class="relative">
+            <select class="w-full appearance-none border-0 border-b-2 border-eggplore-neutral-200 bg-transparent py-2.5 pr-8 text-sm text-eggplore-neutral-900 outline-none transition-colors focus:border-eggplore-primary-500">
+              <option>Laki-laki</option>
+              <option>Perempuan</option>
+            </select>
+            <svg class="pointer-events-none absolute right-1 top-1/2 h-4 w-4 -translate-y-1/2 text-eggplore-neutral-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"></path></svg>
+          </div>
+        </div>
+        <div>
+          <label class="mb-1 block text-xs font-semibold text-eggplore-neutral-700">Tanggal Lahir</label>
+          <div class="flex h-11 items-center border-b-2 border-eggplore-neutral-200 bg-transparent cursor-pointer transition-colors">
+            <p class="flex-1 min-w-0 text-sm font-medium text-eggplore-neutral-900">17 Agustus 2008</p>
+            <svg class="h-4 w-4 shrink-0 text-eggplore-neutral-400" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="3"></rect><path d="M3 10h18M8 2v4M16 2v4"></path></svg>
+          </div>
+        </div>
+        <div class="sm:col-span-2">
+          <label class="mb-1 block text-xs font-semibold text-eggplore-neutral-700">Alamat Lengkap</label>
+          <textarea placeholder="Contoh: Jl. Melati No. 12, RT 003 RW 004, Kel. Kebon Jeruk, Jakarta Barat"
+                    class="block min-h-24 w-full resize-y border-0 border-b-2 border-eggplore-neutral-200 bg-transparent py-2 text-sm leading-relaxed text-eggplore-neutral-900 placeholder-eggplore-neutral-300 outline-none transition-colors focus:border-eggplore-primary-500"></textarea>
+        </div>
+      </div>
+    </section>
+
+    <footer class="preview-note border-t border-eggplore-neutral-200 pt-6 text-center">
+      Gaya underline editorial — ringan, flat, selaras layout anti-card. Token EGGPLORE dipertahankan.
+    </footer>
+  </div>
+</body>
+</html>
