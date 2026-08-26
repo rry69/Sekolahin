@@ -109,6 +109,8 @@ Route::middleware(['auth', 'role:Admin'])->prefix('admin')->name('admin.')->grou
     Route::post('/registrations/{registration}/reset', [AdminRegistrationController::class, 'reset'])->name('registrations.reset');
     
     Route::get('/accounts', [AdminAccountController::class, 'index'])->name('accounts.index');
+    Route::get('/accounts/{user}', [AdminAccountController::class, 'show'])->name('accounts.show');
+    Route::post('/accounts/{user}/reset-password', [AdminAccountController::class, 'resetPassword'])->name('accounts.reset-password');
     Route::delete('/accounts/{user}', [AdminAccountController::class, 'destroy'])->name('accounts.destroy');
     
     Route::get('/settings', [AdminSettingController::class, 'edit'])->name('settings.edit');

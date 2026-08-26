@@ -87,14 +87,19 @@
         <td style="font-size:12px;color:var(--tx2);">{{ $account->created_at->format('d M Y') }}</td>
         <td>
           @php $hasAccepted = $account->applicant?->registrations?->contains(fn($r) => $r->isAccepted()) ?? false; @endphp
-          @if (! $hasAccepted)
-          <form action="{{ route('admin.accounts.destroy', $account) }}" method="POST"
-                onsubmit="return confirm('Hapus akun siswa {{ $account->applicant->full_name ?? $account->name }}? Seluruh data pendaftaran dan pembayarannya akan ikut terhapus permanen.')" style="display:inline;">
-            @csrf
-            @method('DELETE')
-            <button type="submit" class="btn btn-danger" style="padding:4px 10px;font-size:11px;">Hapus Akun</button>
-          </form>
-          @endif
+          <div style="display:inline-flex;gap:6px;align-items:center;">
+            <a href="{{ route('admin.accounts.show', $account) }}" class="btn btn-outline" style="padding:4px 10px;font-size:11px;" title="Lihat detail akun">
+              <i class="fa-regular fa-eye" style="font-size:10px;"></i> Detail
+            </a>
+            @if (! $hasAccepted)
+            <form action="{{ route('admin.accounts.destroy', $account) }}" method="POST"
+                  onsubmit="return confirm('Hapus akun siswa {{ $account->applicant->full_name ?? $account->name }}? Seluruh data pendaftaran dan pembayarannya akan ikut terhapus permanen.')" style="display:inline;">
+              @csrf
+              @method('DELETE')
+              <button type="submit" class="btn btn-danger" style="padding:4px 10px;font-size:11px;">Hapus Akun</button>
+            </form>
+            @endif
+          </div>
         </td>
       </tr>
       @endforeach
