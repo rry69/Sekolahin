@@ -31,7 +31,6 @@
       <tr>
         <th>No. Registrasi</th>
         <th>Nama Siswa</th>
-        <th>Uk. Seragam</th>
         <th>Tanggal Submit</th>
         <th>Status</th>
         <th>Aksi</th>
@@ -45,7 +44,6 @@
           <div style="font-weight:500;">{{ $reReg->registration->applicant->full_name }}</div>
           <div style="font-size:11px;color:var(--tx4);">{{ $reReg->registration->applicant->user->email }}</div>
         </td>
-        <td>{{ trim(($reReg->uniform_shirt_size ?? '-') . ' / ' . ($reReg->uniform_pants_size ?? '-'), ' /') ?: '-' }}</td>
         <td style="font-size:12px;color:var(--tx2);">
           {{ $reReg->submitted_at ? $reReg->submitted_at->format('d M Y H:i') : '-' }}
         </td>

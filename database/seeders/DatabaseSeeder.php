@@ -17,9 +17,10 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             SchoolLevelSeeder::class,
             SchoolSeeder::class,
-            MajorSeeder::class,
             RegistrationTrackSeeder::class,
+            MajorSeeder::class,
             SettingSeeder::class,
+            DemoDataSeeder::class,
         ]);
     }
 }

@@ -19,12 +19,14 @@ class RegistrationTrackSeeder extends Seeder
         ];
 
         foreach ($tracks as $track) {
-            \DB::table('registration_tracks')->insert([
-                'name' => $track['name'],
-                'description' => $track['description'],
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
+            \DB::table('registration_tracks')->updateOrInsert(
+                ['name' => $track['name']],
+                [
+                    'description' => $track['description'],
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]
+            );
         }
     }
 }

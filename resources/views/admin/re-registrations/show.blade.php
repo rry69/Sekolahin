@@ -41,32 +41,6 @@
                     </div>
                 </div>
 
-                <div class="border-b pb-6 mb-6">
-                    <h4 class="text-sm font-medium text-gray-500 uppercase mb-3">Data Seragam &amp; Fisik</h4>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div>
-                            <p class="text-sm text-gray-600">Ukuran Baju</p>
-                            <p class="font-medium text-gray-900">{{ $reRegistration->uniform_shirt_size ?? '-' }}</p>
-                        </div>
-                        <div>
-                            <p class="text-sm text-gray-600">Ukuran Celana</p>
-                            <p class="font-medium text-gray-900">{{ $reRegistration->uniform_pants_size ?? '-' }}</p>
-                        </div>
-                        <div>
-                            <p class="text-sm text-gray-600">Golongan Darah</p>
-                            <p class="font-medium text-gray-900">{{ $reRegistration->blood_type ?? '-' }}</p>
-                        </div>
-                        <div>
-                            <p class="text-sm text-gray-600">Tinggi Badan</p>
-                            <p class="font-medium text-gray-900">{{ $reRegistration->height_cm ? $reRegistration->height_cm . ' cm' : '-' }}</p>
-                        </div>
-                        <div>
-                            <p class="text-sm text-gray-600">Berat Badan</p>
-                            <p class="font-medium text-gray-900">{{ $reRegistration->weight_kg ? $reRegistration->weight_kg . ' kg' : '-' }}</p>
-                        </div>
-                    </div>
-                </div>
-
                 @if($reRegistration->verification_code)
                 <div class="border-b pb-6 mb-6">
                     <h4 class="text-sm font-medium text-gray-500 uppercase mb-3">Kode Verifikasi</h4>

@@ -48,32 +48,6 @@
   </div>
 </div>
 
-<div style="border-bottom:1px solid var(--border);padding-bottom:20px;margin-bottom:20px;">
-  <h4 style="font-size:11px;font-weight:600;color:var(--tx3);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:12px;">Data Seragam &amp; Fisik</h4>
-  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;">
-    <div>
-      <p style="font-size:12px;color:var(--tx2);margin-bottom:4px;">Ukuran Baju</p>
-      <p style="font-weight:500;">{{ $reRegistration->uniform_shirt_size ?? '-' }}</p>
-    </div>
-    <div>
-      <p style="font-size:12px;color:var(--tx2);margin-bottom:4px;">Ukuran Celana</p>
-      <p style="font-weight:500;">{{ $reRegistration->uniform_pants_size ?? '-' }}</p>
-    </div>
-    <div>
-      <p style="font-size:12px;color:var(--tx2);margin-bottom:4px;">Golongan Darah</p>
-      <p style="font-weight:500;">{{ $reRegistration->blood_type ?? '-' }}</p>
-    </div>
-    <div>
-      <p style="font-size:12px;color:var(--tx2);margin-bottom:4px;">Tinggi Badan</p>
-      <p style="font-weight:500;">{{ $reRegistration->height_cm ? $reRegistration->height_cm . ' cm' : '-' }}</p>
-    </div>
-    <div>
-      <p style="font-size:12px;color:var(--tx2);margin-bottom:4px;">Berat Badan</p>
-      <p style="font-weight:500;">{{ $reRegistration->weight_kg ? $reRegistration->weight_kg . ' kg' : '-' }}</p>
-    </div>
-  </div>
-</div>
-
 @if($reRegistration->verification_code)
 <div style="border-bottom:1px solid var(--border);padding-bottom:20px;margin-bottom:20px;">
   <h4 style="font-size:11px;font-weight:600;color:var(--tx3);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:12px;">Kode Verifikasi</h4>
