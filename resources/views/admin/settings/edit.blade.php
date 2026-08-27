@@ -70,7 +70,8 @@
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Nomor Rekening</label>
-                        <input type="text" name="bank_account_number" value="{{ old('bank_account_number', App\Models\Setting::get('bank_account_number')) }}" required class="w-full border-gray-300 rounded-md shadow-sm">
+                        <input type="text" name="bank_account_number" id="bank_account_number" inputmode="numeric" pattern="\d{6,30}"
+                            value="{{ old('bank_account_number', App\Models\Setting::get('bank_account_number')) }}" required class="w-full border-gray-300 rounded-md shadow-sm">
                         @error('bank_account_number')<p class="text-red-600 text-sm mt-1">{{ $message }}</p>@enderror
                     </div>
                 </div>
@@ -114,7 +115,7 @@
                                         @endphp
                                         <td class="px-4 py-3">
                                             @if($isReguler)
-                                                <input type="number" min="0" step="1000" name="fees[{{ $level->id }}][{{ $track->id }}]"
+                                                <input type="number" min="0" max="1000000000" step="1000" name="fees[{{ $level->id }}][{{ $track->id }}]"
                                                     value="{{ App\Models\Setting::get($feeKey) }}"
                                                     class="w-full border-gray-300 rounded-md shadow-sm text-sm" placeholder="500000">
                                             @else
@@ -297,14 +298,14 @@
                                 </div>
                             @endforeach
                         </div>
-                        <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 mt-6">Simpan Status Pendaftaran</button>
+                        <button type="submit" id="btn-save-levels" class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 mt-6">Simpan Status Pendaftaran</button>
                     </form>
                 </div>
             </div>
 
             <!-- Submit utama (semua tab kecuali jenjang punya form sendiri) -->
             <div class="p-6 pt-2 flex justify-end">
-                <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700">Simpan Pengaturan</button>
+                <button type="submit" id="btn-save-settings" class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700">Simpan Pengaturan</button>
             </div>
         </form>
     </div>
@@ -347,6 +348,43 @@
     if (notifH2 && notifH2Label) {
         notifH2.addEventListener('input', function() {
             notifH2Label.textContent = this.value || '2';
+        });
+    }
+
+    // ===== Validasi & keamanan saat menyimpan =====
+
+    // Nomor rekening: hanya angka (backend juga memvalidasi digits_between:6,30).
+    var bankAcc = document.getElementById('bank_account_number');
+    if (bankAcc) {
+        bankAcc.addEventListener('input', function () {
+            this.value = this.value.replace(/\D/g, '').slice(0, 30);
+        });
+    }
+
+    // Loading state + cegah double submit pada tombol Simpan Pengaturan.
+    var btnSave = document.getElementById('btn-save-settings');
+    if (btnSave) {
+        btnSave.addEventListener('click', function (e) {
+            // Konfirmasi karena form memuat perubahan penting (biaya & batas waktu).
+            if (!window.confirm('Simpan perubahan pengaturan ini?\n\nTermasuk biaya pendaftaran, batas waktu, jadwal daftar ulang, dan batas usia.')) {
+                e.preventDefault();
+                return;
+            }
+            btnSave.disabled = true;
+            btnSave.textContent = 'Menyimpan...';
+        });
+    }
+
+    // Loading state + konfirmasi pada tombol Simpan Status Pendaftaran (jenjang).
+    var btnLevels = document.getElementById('btn-save-levels');
+    if (btnLevels) {
+        btnLevels.addEventListener('click', function (e) {
+            if (!window.confirm('Simpan perubahan status pendaftaran per jenjang?')) {
+                e.preventDefault();
+                return;
+            }
+            btnLevels.disabled = true;
+            btnLevels.textContent = 'Menyimpan...';
         });
     }
 </script>

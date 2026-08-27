@@ -38,7 +38,7 @@ class SettingController extends Controller
     {
         $data = $request->validate([
             'bank_name'                  => 'required|string|max:255',
-            'bank_account_number'        => 'required|string|max:50',
+            'bank_account_number'        => 'required|digits_between:6,30',
             'bank_account_name'          => 'required|string|max:255',
             'payment_note'               => 'nullable|string',
             'registration_deadline_hours'=> 'required|integer|min:1|max:720',
@@ -54,7 +54,7 @@ class SettingController extends Controller
             'rereg_notif_cta'            => 'nullable|string|max:60',
             'rereg_notif_h2'             => 'nullable|integer|min:1|max:14',
             'fees'                       => 'nullable|array',
-            'fees.*.*'                   => 'nullable|numeric|min:0',
+            'fees.*.*'                   => 'nullable|numeric|min:0|max:1000000000',
             'notes'                      => 'nullable|array',
             'notes.*'                    => 'nullable|string',
             'age_min'                    => 'nullable|array',
