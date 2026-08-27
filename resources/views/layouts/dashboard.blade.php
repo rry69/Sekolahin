@@ -643,6 +643,16 @@ function hideRejectModal() {
   var modal = document.getElementById('rejectModal');
   if (modal) modal.style.display = 'none';
 }
+function showReRegRejectModal(reRegistrationId) {
+  var modal = document.getElementById('reRegRejectModal');
+  var form = document.getElementById('reRegRejectForm');
+  if (form) form.action = '/admin/re-registrations/' + reRegistrationId + '/reject';
+  if (modal) modal.style.display = 'flex';
+}
+function hideReRegRejectModal() {
+  var modal = document.getElementById('reRegRejectModal');
+  if (modal) modal.style.display = 'none';
+}
 function toggleFilterForm() {
   var f = document.getElementById('filterForm');
   if (f) f.style.display = f.style.display === 'none' ? 'block' : 'none';
@@ -833,13 +843,13 @@ document.addEventListener('DOMContentLoaded', function () {
       return;
     }
 
-    if (e.target.id === 'statusModal' || e.target.id === 'paymentModal' || e.target.id === 'rejectModal') {
+    if (e.target.id === 'statusModal' || e.target.id === 'paymentModal' || e.target.id === 'rejectModal' || e.target.id === 'reRegRejectModal') {
       e.target.style.display = 'none';
     }
   });
 
   contentArea.addEventListener('submit', function (e) {
-    if (e.target.id === 'statusForm' || e.target.id === 'paymentForm') {
+    if (e.target.id === 'statusForm' || e.target.id === 'paymentForm' || e.target.id === 'reRegRejectForm') {
       e.preventDefault();
       var form = e.target;
       fetch(form.action, {
@@ -849,12 +859,16 @@ document.addEventListener('DOMContentLoaded', function () {
       })
       .then(function (r) { return r.json(); })
       .then(function (data) {
+        var modal = form.closest('[style*="position:fixed"]') || document.getElementById('reRegRejectModal');
+        if (modal) modal.style.display = 'none';
         if (data.success) {
-          form.closest('[style*="position:fixed"]').style.display = 'none';
           showToast(data.message);
           loadContent(window.location.href, false);
+        } else {
+          showToast(data.message || 'Terjadi kesalahan');
         }
-      });
+      })
+      .catch(function () { showToast('Gagal terhubung ke server'); });
       return;
     }
 

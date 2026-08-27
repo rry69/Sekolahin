@@ -9,6 +9,12 @@
             </div>
         @endif
 
+        @if (session('error'))
+            <div class="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+                {{ session('error') }}
+            </div>
+        @endif
+
         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
             <div class="p-6">
                 <div class="flex justify-between items-start mb-6">
@@ -78,14 +84,38 @@
                 <div class="flex justify-between items-center">
                     <a href="{{ route('admin.re-registrations.index') }}" class="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300">Kembali</a>
                     @if ($reRegistration->status === 'pending')
-                        <form action="{{ route('admin.re-registrations.verify', $reRegistration) }}" method="POST" onsubmit="return confirm('Yakin ingin verifikasi daftar ulang ini?')">
-                            @csrf
-                            <button type="submit" class="px-6 py-2 bg-green-600 text-white rounded hover:bg-green-700">Verifikasi Daftar Ulang</button>
-                        </form>
+                        <div class="flex gap-2">
+                            <button type="button" onclick="showReRegRejectModal({{ $reRegistration->id }})" class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">Tolak Daftar Ulang</button>
+                            <form action="{{ route('admin.re-registrations.verify', $reRegistration) }}" method="POST" onsubmit="return confirm('Yakin ingin verifikasi daftar ulang ini?')">
+                                @csrf
+                                <button type="submit" class="px-6 py-2 bg-green-600 text-white rounded hover:bg-green-700">Verifikasi Daftar Ulang</button>
+                            </form>
+                        </div>
                     @endif
                 </div>
             </div>
         </div>
     </div>
+</div>
+
+<div id="reRegRejectModal" class="modal-overlay" style="display:none;">
+  <div class="modal-card">
+    <div class="modal-head">
+      <div style="flex:1;">
+        <h3 class="modal-title">Tolak Daftar Ulang</h3>
+      </div>
+    </div>
+    <form id="reRegRejectForm" method="POST">
+      @csrf
+      <div style="margin-bottom:16px;">
+        <label style="display:block;font-size:12px;font-weight:500;margin-bottom:6px;">Catatan / Alasan Penolakan</label>
+        <textarea name="notes" rows="4" style="width:100%;padding:8px 12px;border:1px solid var(--input-border);border-radius:6px;font-size:13px;font-family:inherit;background:var(--input-bg);color:var(--tx-body);" required></textarea>
+      </div>
+      <div style="display:flex;gap:8px;justify-content:flex-end;">
+        <button type="button" onclick="hideReRegRejectModal()" class="btn btn-outline">Batal</button>
+        <button type="submit" class="btn btn-danger">Tolak</button>
+      </div>
+    </form>
+  </div>
 </div>
 @endsection

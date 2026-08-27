@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\ReRegistration;
+use App\Models\SchoolLevel;
 use App\Services\ActivityLogger;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -18,13 +19,27 @@ class ReRegistrationController extends Controller
             $query->where('status', $request->status);
         }
 
+        if ($request->filled('level')) {
+            $query->whereHas('registration.registrationPeriod', fn ($q) => $q->where('school_level_id', $request->level));
+        }
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->whereHas('registration.applicant', fn ($a) => $a->where('full_name', 'like', "%{$search}%"))
+                    ->orWhereHas('registration', fn ($r) => $r->where('registration_number', 'like', "%{$search}%"));
+            });
+        }
+
         $reRegistrations = $query->orderBy('submitted_at', 'desc')->paginate(20);
 
         if ($request->ajax()) {
             return response()->json(['html' => view('admin.partials.re-registrations-index', compact('reRegistrations'))->render()]);
         }
 
-        return view('admin.re-registrations.index', compact('reRegistrations'));
+        $schoolLevels = SchoolLevel::orderBy('name')->get();
+
+        return view('admin.re-registrations.index', compact('reRegistrations', 'schoolLevels'));
     }
 
     public function show(ReRegistration $reRegistration)
@@ -61,6 +76,41 @@ class ReRegistrationController extends Controller
         }
 
         return back()->with('success', 'Daftar ulang berhasil diverifikasi');
+    }
+
+    public function reject(Request $request, ReRegistration $reRegistration)
+    {
+        $validated = $request->validate([
+            'notes' => 'required|string|max:1000',
+        ]);
+
+        if ($reRegistration->status !== 'pending') {
+            return back()->with('error', 'Daftar ulang ini sudah tidak berstatus pending');
+        }
+
+        $reRegistration->update([
+            'status' => 'rejected',
+            'verified_by' => auth()->id(),
+            'verified_at' => now(),
+            'notes' => $validated['notes'],
+        ]);
+
+        // Kembalikan status pendaftaran ke diterima (belum selesai daftar ulang).
+        $registration = $reRegistration->registration;
+        if ($registration->status === 're_registration_complete') {
+            $registration->update(['status' => 'accepted']);
+        }
+
+        ActivityLogger::log('re_registration.reject', 'Daftar ulang ditolak: ' . $registration->registration_number, $reRegistration, [
+            'registration_number' => $registration->registration_number,
+            'notes' => $validated['notes'],
+        ]);
+
+        if ($request->ajax()) {
+            return response()->json(['success' => true, 'message' => 'Daftar ulang berhasil ditolak']);
+        }
+
+        return back()->with('success', 'Daftar ulang berhasil ditolak');
     }
 
     public function verifyByCode(Request $request)

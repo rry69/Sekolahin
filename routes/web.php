@@ -149,6 +149,7 @@ Route::middleware(['auth', 'role:Admin'])->prefix('admin')->name('admin.')->grou
     Route::get('/re-registrations', [AdminReRegistrationController::class, 'index'])->name('re-registrations.index');
     Route::get('/re-registrations/{reRegistration}', [AdminReRegistrationController::class, 'show'])->name('re-registrations.show');
     Route::post('/re-registrations/{reRegistration}/verify', [AdminReRegistrationController::class, 'verify'])->name('re-registrations.verify');
+    Route::post('/re-registrations/{reRegistration}/reject', [AdminReRegistrationController::class, 'reject'])->name('re-registrations.reject');
 
     Route::get('/activity-logs', [AdminActivityLogController::class, 'index'])->name('activity-logs.index');
     Route::get('/activity-logs/export/csv', [AdminActivityLogController::class, 'exportCsv'])->name('activity-logs.export.csv');
