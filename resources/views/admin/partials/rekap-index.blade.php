@@ -63,6 +63,7 @@
         <th>Jurusan Diterima</th>
         <th>Periode</th>
         <th>Status</th>
+        <th>Aksi</th>
       </tr>
     </thead>
     <tbody>
@@ -77,6 +78,9 @@
         <td>{{ $reg->finalMajor->name ?? '-' }}</td>
         <td style="font-size:12px;color:var(--tx2);">{{ $reg->registrationPeriod->name ?? '-' }}</td>
         <td><span class="status-badge status-accepted">{{ \App\Models\Registration::statusLabel($reg->status) }}</span></td>
+        <td>
+          <a href="{{ route('admin.registrations.show', $reg) }}" class="btn btn-outline" style="padding:4px 10px;font-size:11px;text-decoration:none;">Detail</a>
+        </td>
       </tr>
       @endforeach
     </tbody>
