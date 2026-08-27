@@ -43,9 +43,21 @@ class TrackSettingController extends Controller
 
     public function update(Request $request, RegistrationTrack $track, SchoolLevel $level)
     {
+        // Pertahanan berlapis: rute sudah dalam grup middleware 'role:Admin',
+        // tapi pastikan method ini hanya bisa dieksekusi admin — jangan pernah
+        // percaya status dari frontend tanpa otorisasi di sini.
+        abort_unless($request->user() && $request->user()->role?->name === 'Admin', 403, 'Unauthorized access');
+
         $data = $request->validate([
             'is_active' => 'required|boolean',
         ]);
+
+        // Jangan percaya kombinasi {track, level} dari URL begitu saja:
+        // pastikan keduanya ada (sudah dijamin route-model binding) dan
+        // kombinasi yang dikirim memang sah untuk disimpan.
+        if (! $track->exists || ! $level->exists) {
+            abort(404);
+        }
 
         $row = RegistrationTrackSchoolLevel::firstOrCreate(
             [

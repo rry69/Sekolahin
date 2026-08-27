@@ -517,6 +517,8 @@
   .track-pill.on { background: var(--accent); }
   .track-pill .track-knob { position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; background: #fff; border-radius: 9999px; transition: left .2s; box-shadow: 0 1px 2px rgba(0,0,0,0.2); }
   .track-pill.on .track-knob { left: 22px; }
+  .track-toggle:disabled + .track-pill { opacity: .55; cursor: wait; }
+  .track-toggle:disabled { cursor: wait; }
 
   /* ===================== RESPONSIVE (mobile) ===================== */
   @media (max-width: 767px) {
@@ -817,6 +819,20 @@ document.addEventListener('DOMContentLoaded', function () {
       return;
     }
 
+    var navPag = e.target.closest('nav[aria-label="Pagination"] a, nav[aria-label="Pagination Navigation"] a, nav a[href*="page="]');
+    if (navPag) {
+      e.preventDefault();
+      loadContent(navPag.getAttribute('href'));
+      return;
+    }
+
+    var actReset = e.target.closest('a[href*="activity-logs"]');
+    if (actReset && actReset.getAttribute('href').indexOf('/export/') === -1) {
+      e.preventDefault();
+      loadContent(actReset.getAttribute('href'));
+      return;
+    }
+
     if (e.target.id === 'statusModal' || e.target.id === 'paymentModal' || e.target.id === 'rejectModal') {
       e.target.style.display = 'none';
     }
@@ -844,7 +860,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (e.target.id === 'filterForm') {
       e.preventDefault();
-      var url = new URL(e.target.action, window.location.origin);
+      var url = new URL(e.target.getAttribute('action'), window.location.origin);
       var fd = new FormData(e.target);
       for (var pair of fd.entries()) {
         if (pair[1]) url.searchParams.set(pair[0], pair[1]);
@@ -855,17 +871,33 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   // Track status toggles (delegated — konten di-inject via AJAX)
+  // Alur: konfirmasi saat menonaktifkan → loading (anti double-click) → PATCH AJAX → update UI lokal.
   contentArea.addEventListener('change', function (e) {
     var el = e.target;
     if (!el.classList || !el.classList.contains('track-toggle')) return;
+    var row = el.closest('.track-row');
     var trackId = el.getAttribute('data-track');
     var levelId = el.getAttribute('data-level');
     var trackName = el.getAttribute('data-track-name');
     var levelName = el.getAttribute('data-level-name');
     var isActive = el.checked;
-    var row = el.closest('.track-row');
+    var wasActive = el.getAttribute('data-status') !== '0';
 
+    // Konfirmasi hanya saat MENONAKTIFKAN — aktifkan langsung (tanpa konfirmasi).
+    if (!isActive) {
+      var ok = window.confirm('Nonaktifkan jalur ' + trackName + ' untuk jenjang ' + levelName + '?\n\nJalur ini tidak akan muncul di form pendaftaran siswa dan ditolak di backend. Data historis pendaftar lama tetap tersimpan.');
+      if (!ok) { el.checked = wasActive; return; }
+    }
+
+    // Loading state: disable toggle sampai request selesai (cegah double-click).
     el.disabled = true;
+    var pill = el.nextElementSibling;
+    if (pill) pill.classList.add('track-pill-busy');
+
+    function finish() {
+      el.disabled = false;
+      if (pill) pill.classList.remove('track-pill-busy');
+    }
 
     fetch('/admin/tracks/' + trackId + '/level/' + levelId, {
       method: 'PATCH',
@@ -879,28 +911,29 @@ document.addEventListener('DOMContentLoaded', function () {
     })
     .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, body: j }; }); })
     .then(function (res) {
-      el.disabled = false;
+      finish();
       if (!res.ok || !res.body.success) {
-        el.checked = !isActive;
+        el.checked = wasActive;
         showToast(res.body.message || 'Gagal menyimpan perubahan');
         return;
       }
-      el.checked = !!res.body.is_active;
+      // Update UI lokal tanpa reload: checkbox + badge + pill mengikuti status server.
+      var on = !!res.body.is_active;
+      el.checked = on;
+      el.setAttribute('data-status', on ? '1' : '0');
       if (row) {
         var badge = row.querySelector('.track-badge');
         if (badge) {
-          var on = !!res.body.is_active;
           badge.className = 'status-badge track-badge ' + (on ? 'status-accepted' : 'status-rejected');
           badge.removeAttribute('style');
         }
       }
-      var pill = el.nextElementSibling;
-      if (pill) pill.classList.toggle('on', !!res.body.is_active);
+      if (pill) pill.classList.toggle('on', on);
       showToast(res.body.message || (trackName + ' untuk ' + levelName + ' diperbarui'));
     })
     .catch(function () {
-      el.disabled = false;
-      el.checked = !isActive;
+      finish();
+      el.checked = wasActive;
       showToast('Gagal terhubung ke server');
     });
   });

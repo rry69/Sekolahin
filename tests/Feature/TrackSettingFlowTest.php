@@ -135,6 +135,35 @@ class TrackSettingFlowTest extends TestCase
         $this->assertTrue(RegistrationTrackSchoolLevel::isActive($track->id, $smk->id));
     }
 
+    public function test_non_admin_cannot_toggle_track_status()
+    {
+        [, $siswa] = $this->seedBase();
+
+        $track = RegistrationTrack::where('name', 'Beasiswa')->first();
+        $smk = SchoolLevel::where('name', 'SMK')->first();
+
+        $response = $this->actingAs($siswa)->patchJson(route('admin.tracks.update', [$track, $smk]), ['is_active' => false]);
+        $response->assertStatus(403);
+
+        // Status tidak berubah
+        $this->assertTrue(RegistrationTrackSchoolLevel::isActive($track->id, $smk->id));
+    }
+
+    public function test_toggle_requires_valid_track_and_level()
+    {
+        [$admin] = $this->seedBase();
+
+        // Track tidak valid → 404 (route-model binding)
+        $smk = SchoolLevel::where('name', 'SMK')->first();
+        $response = $this->actingAs($admin)->patchJson('/admin/tracks/99999/level/' . $smk->id, ['is_active' => false]);
+        $response->assertStatus(404);
+
+        // Level tidak valid → 404
+        $track = RegistrationTrack::where('name', 'Beasiswa')->first();
+        $response = $this->actingAs($admin)->patchJson('/admin/tracks/' . $track->id . '/level/99999', ['is_active' => false]);
+        $response->assertStatus(404);
+    }
+
     public function test_admin_toggle_via_ajax_json()
     {
         [$admin] = $this->seedBase();

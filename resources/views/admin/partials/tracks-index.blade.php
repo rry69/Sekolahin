@@ -40,7 +40,7 @@
               </div>
               <label style="position:relative;display:inline-flex;align-items:center;cursor:pointer;margin-left:16px;flex-shrink:0;">
                 <input type="checkbox" class="sr-only track-toggle" data-track="{{ $track->id }}" data-level="{{ $level->id }}"
-                  data-track-name="{{ $track->name }}" data-level-name="{{ $level->name }}" {{ $isActive ? 'checked' : '' }}>
+                  data-track-name="{{ $track->name }}" data-level-name="{{ $level->name }}" data-status="{{ $isActive ? '1' : '0' }}" {{ $isActive ? 'checked' : '' }}>
                 <div class="track-pill {{ $isActive ? 'on' : '' }}">
                   <div class="track-knob"></div>
                 </div>
