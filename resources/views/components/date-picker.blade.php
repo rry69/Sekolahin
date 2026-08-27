@@ -42,7 +42,7 @@
          role="dialog"
          aria-modal="false"
          aria-label="Pilih tanggal"
-         class="hidden absolute z-50 top-[58px] left-0 w-full bg-white border border-eggplore-neutral-200 rounded-lg overflow-hidden shadow-md will-change-transform dp-picker"
+         class="hidden absolute z-50 top-[58px] left-0 w-80 bg-white border border-eggplore-neutral-200 rounded-lg overflow-hidden shadow-md will-change-transform dp-picker"
     >
         <div class="p-2.5 pb-0">
             <div class="flex bg-eggplore-neutral-100 border border-eggplore-neutral-150 rounded-full p-1" role="tablist">
@@ -53,9 +53,9 @@
         </div>
 
         <div class="flex items-center justify-between px-3 pt-3 pb-1">
-            <button type="button" data-datepicker-prev aria-label="Bulan sebelumnya" class="w-7 h-7 grid place-items-center rounded-full hover:bg-eggplore-primary-50 text-eggplore-neutral-400 hover:text-eggplore-primary-600 transition-all duration-150 active:scale-90"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"></path></svg></button>
-            <span data-datepicker-header class="text-eggplore-neutral-900 font-bold text-[13px] tracking-wide inline-block"></span>
-            <button type="button" data-datepicker-next aria-label="Bulan berikutnya" class="w-7 h-7 grid place-items-center rounded-full hover:bg-eggplore-primary-50 text-eggplore-neutral-400 hover:text-eggplore-primary-600 transition-all duration-150 active:scale-90"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"></path></svg></button>
+            <button type="button" data-datepicker-prev aria-label="Bulan sebelumnya" class="w-8 h-8 grid place-items-center rounded-full hover:bg-eggplore-primary-50 text-eggplore-neutral-400 hover:text-eggplore-primary-600 transition-all duration-150 active:scale-90"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"></path></svg></button>
+            <span data-datepicker-header class="text-eggplore-neutral-900 font-bold text-sm tracking-wide inline-block"></span>
+            <button type="button" data-datepicker-next aria-label="Bulan berikutnya" class="w-8 h-8 grid place-items-center rounded-full hover:bg-eggplore-primary-50 text-eggplore-neutral-400 hover:text-eggplore-primary-600 transition-all duration-150 active:scale-90"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"></path></svg></button>
         </div>
 
         <div data-datepicker-weekdays class="grid grid-cols-7 px-3 pb-1">

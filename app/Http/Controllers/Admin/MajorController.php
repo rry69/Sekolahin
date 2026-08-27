@@ -79,6 +79,15 @@ class MajorController extends Controller
         $schools = School::whereHas('schoolLevels', fn ($q) => $q->whereIn('name', ['SMA', 'SMK']))
             ->orderBy('name')->get();
 
+        if ($request->header('X-SPMB-Full')) {
+            $html = view('admin.partials.majors-index', compact('majors', 'tracks', 'levels', 'schools'))->render();
+
+            return response()->json([
+                'html' => $html,
+                'active_nav' => 'majors',
+            ]);
+        }
+
         if ($request->ajax()) {
             $html = view('admin.partials.majors-table', compact('majors', 'tracks'))->render();
 

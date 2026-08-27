@@ -187,8 +187,8 @@ function initPicker(root){
             const disabled = isDisabled(dt);
             const b = document.createElement('button'); b.type='button'; b.textContent=String(d);
             b.className = disabled
-                ? 'dp-mono w-8 h-8 mx-auto grid place-items-center rounded-full text-[12px] text-eggplore-neutral-300 opacity-40 cursor-not-allowed'
-                : 'dp-mono w-8 h-8 mx-auto grid place-items-center rounded-full text-[12px] text-eggplore-neutral-300 hover:bg-eggplore-primary-50 transition-all duration-150 hover:scale-105 active:scale-90';
+                ? 'dp-mono w-10 h-10 mx-auto grid place-items-center rounded-full text-sm text-eggplore-neutral-300 opacity-40 cursor-not-allowed'
+                : 'dp-mono w-10 h-10 mx-auto grid place-items-center rounded-full text-sm text-eggplore-neutral-300 hover:bg-eggplore-primary-50 transition-all duration-150 hover:scale-105 active:scale-90';
             b.disabled = disabled;
             if (!disabled) b.addEventListener('click', function(){ viewDate = new Date(y,m-1,1); render(); });
             daysGrid.appendChild(b);
@@ -199,7 +199,7 @@ function initPicker(root){
             const isT = isSameDay(dt, today);
             const disabled = isDisabled(dt);
             const b = document.createElement('button'); b.type='button'; b.textContent=String(d);
-            let cls='dp-mono w-8 h-8 mx-auto grid place-items-center rounded-full text-[12px] transition-all duration-150 hover:scale-105 active:scale-90 ';
+            let cls='dp-mono w-10 h-10 mx-auto grid place-items-center rounded-full text-sm transition-all duration-150 hover:scale-105 active:scale-90 ';
             if (disabled) cls+='text-eggplore-neutral-300 opacity-40 cursor-not-allowed';
             else if (sel) cls+='bg-eggplore-primary text-white font-bold dp-pop-select';
             else if (isT) cls+='text-eggplore-primary-600 ring-1 ring-eggplore-primary-400/40 hover:bg-eggplore-primary-50';
@@ -218,8 +218,8 @@ function initPicker(root){
             const disabled = isDisabled(dt);
             const b=document.createElement('button'); b.type='button'; b.textContent=String(d);
             b.className = disabled
-                ? 'dp-mono w-8 h-8 mx-auto grid place-items-center rounded-full text-[12px] text-eggplore-neutral-300 opacity-40 cursor-not-allowed'
-                : 'dp-mono w-8 h-8 mx-auto grid place-items-center rounded-full text-[12px] text-eggplore-neutral-300 hover:bg-eggplore-primary-50 transition-all duration-150 hover:scale-105 active:scale-90';
+                ? 'dp-mono w-10 h-10 mx-auto grid place-items-center rounded-full text-sm text-eggplore-neutral-300 opacity-40 cursor-not-allowed'
+                : 'dp-mono w-10 h-10 mx-auto grid place-items-center rounded-full text-sm text-eggplore-neutral-300 hover:bg-eggplore-primary-50 transition-all duration-150 hover:scale-105 active:scale-90';
             b.disabled=disabled;
             if(!disabled) b.addEventListener('click', function(){ viewDate=new Date(y,m+1,1); render();});
             daysGrid.appendChild(b);
@@ -298,13 +298,28 @@ function initPicker(root){
         },120);
     }
 
+    function positionPicker(){
+        if (!picker) return;
+        // Picker berukuran tetap (w-80). Pastikan tidak keluar viewport.
+        var r = picker.getBoundingClientRect();
+        var pad = 8;
+        var vw = window.innerWidth || document.documentElement.clientWidth;
+        if (r.right > vw - pad) {
+            picker.style.left = (parseInt(picker.style.left||'0',10) - (r.right - (vw - pad))) + 'px';
+        } else if (r.left < pad) {
+            picker.style.left = (pad - r.left) + 'px';
+        } else {
+            picker.style.left = '0px';
+        }
+    }
+
     function toggle(force){
         const shouldOpen = force!==undefined?force:!open; if(shouldOpen===open) return;
         if(shouldOpen){
             picker.classList.remove('hidden'); void picker.offsetWidth;
             picker.classList.remove('dp-animate-out'); picker.classList.add('dp-animate-in');
             if(chevron){ chevron.classList.add('dp-chevron-open'); }
-            trigger.setAttribute('aria-expanded','true'); open=true; render();
+            trigger.setAttribute('aria-expanded','true'); open=true; render(); positionPicker();
         } else {
             picker.classList.remove('dp-animate-in'); picker.classList.add('dp-animate-out');
             if(chevron){ chevron.classList.remove('dp-chevron-open'); }
@@ -381,7 +396,7 @@ function enhanceLegacyDateInputs(){
                 '<p data-datepicker-display class="flex-1 min-w-0 text-eggplore-neutral-900 font-medium text-sm truncate">'+displayPlaceholder+'</p>' +
                 '<svg class="w-4 h-4 text-eggplore-neutral-400 shrink-0 ml-2" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="3"></rect><path d="M3 10h18M8 2v4M16 2v4"></path></svg>' +
             '</div>' +
-            '<div data-datepicker-picker role="dialog" aria-modal="false" aria-label="Pilih tanggal" class="hidden absolute z-50 top-[58px] left-0 w-full bg-white border border-eggplore-neutral-200 rounded-lg overflow-hidden shadow-md will-change-transform dp-picker">' +
+            '<div data-datepicker-picker role="dialog" aria-modal="false" aria-label="Pilih tanggal" class="hidden absolute z-50 top-[58px] left-0 w-80 bg-white border border-eggplore-neutral-200 rounded-lg overflow-hidden shadow-md will-change-transform dp-picker">' +
                 '<div class="p-2.5 pb-0"><div class="flex bg-eggplore-neutral-100 border border-eggplore-neutral-150 rounded-full p-1" role="tablist"><button type="button" data-datepicker-seg="days" role="tab" aria-selected="true" class="flex-1 py-1.5 rounded-full text-xs font-semibold bg-eggplore-primary text-white shadow-sm transition-all duration-200">Tanggal</button><button type="button" data-datepicker-seg="months" role="tab" aria-selected="false" class="flex-1 py-1.5 rounded-full text-xs font-medium text-eggplore-neutral-500 hover:text-eggplore-primary-600 transition-all duration-200 active:scale-95">Bulan</button><button type="button" data-datepicker-seg="years" role="tab" aria-selected="false" class="flex-1 py-1.5 rounded-full text-xs font-medium text-eggplore-neutral-500 hover:text-eggplore-primary-600 transition-all duration-200 active:scale-95">Tahun</button></div></div>' +
                 '<div class="flex items-center justify-between px-3 pt-3 pb-1"><button type="button" data-datepicker-prev aria-label="Bulan sebelumnya" class="w-7 h-7 grid place-items-center rounded-full hover:bg-eggplore-primary-50 text-eggplore-neutral-400 hover:text-eggplore-primary-600 transition-all duration-150 active:scale-90"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"></path></svg></button><span data-datepicker-header class="text-eggplore-neutral-900 font-bold text-[13px] tracking-wide inline-block"></span><button type="button" data-datepicker-next aria-label="Bulan berikutnya" class="w-7 h-7 grid place-items-center rounded-full hover:bg-eggplore-primary-50 text-eggplore-neutral-400 hover:text-eggplore-primary-600 transition-all duration-150 active:scale-90"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"></path></svg></button></div>' +
                 '<div data-datepicker-weekdays class="grid grid-cols-7 px-3 pb-1"><span class="dp-mono text-center text-[10px] tracking-widest text-eggplore-neutral-400 py-1">S</span><span class="dp-mono text-center text-[10px] tracking-widest text-eggplore-neutral-400 py-1">M</span><span class="dp-mono text-center text-[10px] tracking-widest text-eggplore-neutral-400 py-1">T</span><span class="dp-mono text-center text-[10px] tracking-widest text-eggplore-neutral-400 py-1">W</span><span class="dp-mono text-center text-[10px] tracking-widest text-eggplore-neutral-400 py-1">T</span><span class="dp-mono text-center text-[10px] tracking-widest text-eggplore-neutral-400 py-1">F</span><span class="dp-mono text-center text-[10px] tracking-widest text-eggplore-neutral-400 py-1">S</span></div>' +

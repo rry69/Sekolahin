@@ -4,21 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="csrf-token" content="{{ csrf_token() }}">
-<script>
-  // Theme awal — cegah flash of wrong theme
-  (function () {
-    var t = null;
-    try { t = localStorage.getItem('spmb-theme'); } catch (e) {}
-    if (!t) t = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-    if (t === 'dark') document.documentElement.classList.add('dark');
-  })();
-</script>
 <title>{{ config('app.name', 'SPMB') }} - @yield('title', 'Dashboard')</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-<script>tailwind.config = { darkMode: 'class' };</script>
 <script src="https://cdn.tailwindcss.com"></script>
 @vite(['resources/css/app.css', 'resources/js/app.js'])
 <style>
@@ -63,43 +53,6 @@
     --w-expanded: 280px;
     color-scheme: light;
   }
-  .dark {
-    --page: #0F0F11;
-    --panel: #121214;
-    --panel-2: #1a1a1e;
-    --card-bg: #17171a;
-    --input-bg: #1a1a1e;
-    --border: rgba(255, 255, 255, 0.06);
-    --hairline: rgba(255, 255, 255, 0.05);
-    --input-border: #2c2c33;
-    --hover: rgba(255, 255, 255, 0.06);
-    --active: rgba(34, 211, 238, 0.12);
-    --tx1: #f4f4f5;
-    --tx2: #a1a1aa;
-    --tx3: #71717a;
-    --tx4: #565660;
-    --tx-body: #d4d4d8;
-    --accent: #22D3EE;
-    --accent-fg: #062A2F;
-    --accent-soft-bg: rgba(34, 211, 238, 0.12);
-    --accent-soft-fg: #67E8F9;
-    --danger: #f87171;
-    --on-danger: #450a0a;
-    --success: #4ade80;
-    --on-success: #052e16;
-    --warning: #fbbf24;
-    --info: #60a5fa;
-    --badge-pending-bg: rgba(217, 119, 6, 0.16); --badge-pending-fg: #fbbf24;
-    --badge-verified-bg: rgba(59, 130, 246, 0.16); --badge-verified-fg: #60a5fa;
-    --badge-accepted-bg: rgba(34, 197, 94, 0.16); --badge-accepted-fg: #4ade80;
-    --badge-rejected-bg: rgba(239, 68, 68, 0.16); --badge-rejected-fg: #f87171;
-    --success-bg: rgba(34, 197, 94, 0.12); --success-border: rgba(34, 197, 94, 0.35); --success-fg: #4ade80;
-    --error-bg: rgba(239, 68, 68, 0.12); --error-border: rgba(239, 68, 68, 0.35); --error-fg: #f87171;
-    --info-bg: rgba(59, 130, 246, 0.12); --info-border: rgba(59, 130, 246, 0.35); --info-fg: #60a5fa;
-    --pill-off: #3f3f46;
-    --shadow-lg: 0 20px 40px rgba(0, 0, 0, 0.55);
-    color-scheme: dark;
-  }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html, body { height: 100%; }
@@ -134,7 +87,6 @@
     width: var(--w-expanded);
     box-shadow: 0 16px 48px -12px rgba(0, 0, 0, 0.30);
   }
-  .dark .sidebar.expanded { box-shadow: 0 16px 48px -12px rgba(0, 0, 0, 0.55); }
 
   /* ---------- header / avatar ---------- */
   .sb-head {
@@ -322,7 +274,6 @@
     z-index: 50;
     transition: transform 150ms ease, color 150ms ease;
   }
-  .dark .sb-toggle { box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45); }
   .sb-toggle:hover { color: var(--tx1); transform: scale(1.06); }
   .sb-toggle:active { transform: scale(0.94); }
   .sb-toggle svg { width: 15px; height: 15px; stroke-width: 2; }
@@ -567,53 +518,6 @@
   .track-pill .track-knob { position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; background: #fff; border-radius: 9999px; transition: left .2s; box-shadow: 0 1px 2px rgba(0,0,0,0.2); }
   .track-pill.on .track-knob { left: 22px; }
 
-  /* ===================== DARK OVERRIDES (Tailwind Cohort B) ===================== */
-  .dark .bg-white { background-color: #17171a !important; }
-  .dark .bg-gray-50 { background-color: #1e1e23 !important; }
-  .dark .bg-gray-100 { background-color: #232329 !important; }
-  .dark .bg-gray-200 { background-color: #2c2c33 !important; }
-  .dark .bg-gray-300 { background-color: #3a3a42 !important; }
-  .dark .text-gray-900 { color: #f4f4f5 !important; }
-  .dark .text-gray-800 { color: #e4e4e7 !important; }
-  .dark .text-gray-700 { color: #d4d4d8 !important; }
-  .dark .text-gray-600 { color: #a1a1aa !important; }
-  .dark .text-gray-500 { color: #8b8b96 !important; }
-  .dark .text-gray-400 { color: #71717a !important; }
-  .dark .border-gray-100 { border-color: #2c2c33 !important; }
-  .dark .border-gray-200 { border-color: #2c2c33 !important; }
-  .dark .border-gray-300 { border-color: #3a3a42 !important; }
-  .dark .border-gray-400 { border-color: #4a4a54 !important; }
-  .dark .divide-gray-200 > :not([hidden]) ~ :not([hidden]) { border-color: #2c2c33 !important; }
-  .dark .divide-gray-200 > * { border-color: #2c2c33 !important; }
-  .dark .bg-green-100 { background-color: rgba(34, 197, 94, 0.15) !important; }
-  .dark .text-green-800 { color: #4ade80 !important; }
-  .dark .text-green-600, .dark .text-green-700 { color: #4ade80 !important; }
-  .dark .bg-red-100 { background-color: rgba(239, 68, 68, 0.15) !important; }
-  .dark .text-red-800 { color: #f87171 !important; }
-  .dark .text-red-600 { color: #f87171 !important; }
-  .dark .bg-yellow-100 { background-color: rgba(234, 179, 8, 0.15) !important; }
-  .dark .text-yellow-800 { color: #facc15 !important; }
-  .dark .bg-blue-100 { background-color: rgba(59, 130, 246, 0.15) !important; }
-  .dark .text-blue-800 { color: #60a5fa !important; }
-  .dark .bg-indigo-50 { background-color: rgba(79, 110, 247, 0.15) !important; }
-  .dark .text-indigo-600, .dark .text-indigo-700 { color: #818cf8 !important; }
-  .dark .bg-blue-600 { background-color: #1d6fe0 !important; }
-  .dark .hover\:bg-blue-700:hover { background-color: #1a5cc0 !important; }
-  .dark .hover\:bg-gray-50:hover { background-color: #1e1e23 !important; }
-  .dark .hover\:bg-gray-100:hover { background-color: #232329 !important; }
-  .dark .hover\:bg-gray-200:hover { background-color: #2c2c33 !important; }
-  .dark .hover\:bg-yellow-200:hover { background-color: rgba(234, 179, 8, 0.25) !important; }
-  /* file-preview + misc components */
-  .dark .bg-amber-50 { background-color: rgba(180, 83, 9, 0.15) !important; }
-  .dark .border-amber-200 { border-color: rgba(180, 83, 9, 0.30) !important; }
-  .dark .text-amber-900 { color: #fcd34d !important; }
-  .dark .bg-red-50 { background-color: rgba(239, 68, 68, 0.12) !important; }
-  .dark .text-red-900 { color: #fca5a5 !important; }
-  /* date-picker trigger (dropdown-nya sudah gelap) */
-  .dark [data-datepicker-trigger] { background-color: #1a1a1e !important; border-color: #2c2c33 !important; }
-  .dark [data-datepicker-trigger] [data-datepicker-display] { color: #e4e4e7 !important; }
-  .dark [data-datepicker-trigger]:focus-visible { outline-color: var(--accent); }
-
   /* ===================== RESPONSIVE (mobile) ===================== */
   @media (max-width: 767px) {
     .sb-hamburger { display: flex; }
@@ -708,19 +612,6 @@
 @include('components.file-preview-modal')
 
 <script>
-// === Theme Toggle ===
-(function () {
-  var root = document.documentElement;
-  var btn = document.querySelector('.theme-toggle');
-  function applyTheme(t) {
-    root.classList.toggle('dark', t === 'dark');
-    try { localStorage.setItem('spmb-theme', t); } catch (e) {}
-  }
-  if (btn) btn.addEventListener('click', function () {
-    applyTheme(root.classList.contains('dark') ? 'light' : 'dark');
-  });
-})();
-
 // === Modal Functions ===
 function openStatusModal(id, status, notes) {
   document.getElementById('statusForm').action = '/admin/registrations/' + id + '/status';
@@ -1020,7 +911,7 @@ document.addEventListener('DOMContentLoaded', function () {
     isLoading = true;
     showLoading();
 
-    fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest', 'Cache-Control': 'no-cache' }, cache: 'no-store' })
+    fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest', 'Cache-Control': 'no-cache', 'X-SPMB-Full': '1' }, cache: 'no-store' })
       .then(function (r) {
         var ct = r.headers.get('content-type') || '';
         if (ct.indexOf('application/json') === -1) {
@@ -1093,6 +984,137 @@ document.addEventListener('DOMContentLoaded', function () {
   });
   history.replaceState({ url: window.location.href }, '', window.location.href);
 
+  // ============ MAJORS & PERIODS: filter AJAX (delegated) ============
+  var mjrDebounce = null, prdDebounce = null;
+  var mjrController = null, prdController = null;
+
+  function filterTable(kind) {
+    var isM = kind === 'majors';
+    var body = document.getElementById(isM ? 'mjrBody' : 'prdBody');
+    var search = document.getElementById(isM ? 'mjrSearch' : 'prdSearch');
+    if (!body) return;
+    var params = new URLSearchParams();
+    if (search && search.value.trim()) params.set('q', search.value.trim());
+    if (isM) {
+      var ml = document.getElementById('mjrLevel');
+      var ms = document.getElementById('mjrSchool');
+      if (ml && ml.value) params.set('level', ml.value);
+      if (ms && ms.value) params.set('school_id', ms.value);
+    } else {
+      var pl = document.getElementById('prdLevel');
+      var ps = document.getElementById('prdStatus');
+      var py = document.getElementById('prdYear');
+      if (pl && pl.value) params.set('level', pl.value);
+      if (ps && ps.value) params.set('status', ps.value);
+      if (py && py.value) params.set('academic_year', py.value);
+      history.replaceState(null, '', window.location.pathname + (params.toString() ? '?' + params.toString() : ''));
+    }
+    var cls = isM ? 'mjr-skeleton' : 'prd-skeleton';
+    var wrap = isM ? 'mjr-table-wrap' : 'prd-table-wrap';
+    body.innerHTML = '<div class="' + wrap + '"><table class="data-table"><tbody class="' + cls + '">' +
+      '<tr><td colspan="20"><span class="skel" style="width:100%"></span></td></tr>' +
+      '<tr><td colspan="20"><span class="skel" style="width:70%"></span></td></tr>' +
+      '<tr><td colspan="20"><span class="skel" style="width:90%"></span></td></tr>' +
+      '</tbody></table></div>';
+    if (isM) { if (mjrController) mjrController.abort(); mjrController = new AbortController(); }
+    else { if (prdController) prdController.abort(); prdController = new AbortController(); }
+    fetch(window.location.pathname + '?' + params.toString(), {
+      headers: { 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json' },
+      signal: isM ? mjrController.signal : prdController.signal
+    })
+    .then(function (r) { return r.json(); })
+    .then(function (data) {
+      if (data && data.html) body.innerHTML = data.html;
+      if (data && data.total !== undefined) {
+        var totalEl = document.getElementById(isM ? 'mjrTotal' : 'prdTotal');
+        if (totalEl) totalEl.innerHTML = '<i class="' + (isM ? 'fa-solid fa-layer-group' : 'fa-solid fa-calendar-days') + '" style="font-size:11px;"></i> Total <strong>' + data.total + '</strong> ' + (isM ? 'jurusan' : 'periode');
+      }
+    })
+    .catch(function (err) { if (err && err.name === 'AbortError') return; });
+  }
+
+  document.addEventListener('input', function (e) {
+    var id = e.target && e.target.id;
+    if (id === 'mjrSearch') { clearTimeout(mjrDebounce); mjrDebounce = setTimeout(function () { filterTable('majors'); }, 300); }
+    else if (id === 'prdSearch') { clearTimeout(prdDebounce); prdDebounce = setTimeout(function () { filterTable('periods'); }, 300); }
+  });
+  document.addEventListener('change', function (e) {
+    var id = e.target && e.target.id;
+    if (id === 'mjrLevel' || id === 'mjrSchool') filterTable('majors');
+    else if (id === 'prdLevel' || id === 'prdStatus' || id === 'prdYear') filterTable('periods');
+  });
+
+  // ============ MAJORS & PERIODS: modal hapus (delegated) ============
+  window.openMajorDelete = function (id, name) {
+    var modal = document.getElementById('majorDeleteModal');
+    var nameEl = document.getElementById('majorDeleteName');
+    var form = document.getElementById('majorDeleteForm');
+    if (nameEl) nameEl.textContent = name;
+    if (form) form.action = '/admin/majors/' + id;
+    if (modal) modal.style.display = 'flex';
+  };
+  window.closeMajorDelete = function () {
+    var modal = document.getElementById('majorDeleteModal');
+    if (modal) modal.style.display = 'none';
+  };
+  window.openPeriodDelete = function (id, name, count) {
+    var modal = document.getElementById('periodDeleteModal');
+    var nameEl = document.getElementById('prdDeleteName');
+    var form = document.getElementById('prdDeleteForm');
+    var check = document.getElementById('prdConfirmCheck');
+    var confirmBtn = document.getElementById('prdDeleteConfirm');
+    var blockedBox = document.getElementById('prdBlockedBox');
+    var blockedCount = document.getElementById('prdBlockedCount');
+    var confirmWrap = document.getElementById('prdConfirmWrap');
+    var sub = document.getElementById('prdModalSub');
+    var title = document.getElementById('prdModalTitle');
+    count = parseInt(count, 10) || 0;
+    if (nameEl) nameEl.textContent = name;
+    if (form) form.action = '/admin/periods/' + id;
+    if (check) check.checked = false;
+    if (count > 0) {
+      if (blockedBox) blockedBox.style.display = 'block';
+      if (blockedCount) blockedCount.textContent = count;
+      if (confirmWrap) confirmWrap.style.display = 'none';
+      if (confirmBtn) { confirmBtn.disabled = true; confirmBtn.style.opacity = '0.5'; confirmBtn.style.pointerEvents = 'none'; }
+      if (title) title.textContent = 'Tidak dapat menghapus';
+      if (sub) sub.textContent = 'Periode ini sudah terpakai. Gunakan tombol Edit untuk menonaktifkan periode.';
+    } else {
+      if (blockedBox) blockedBox.style.display = 'none';
+      if (confirmWrap) confirmWrap.style.display = 'flex';
+      if (confirmBtn) { confirmBtn.disabled = true; confirmBtn.style.opacity = '0.5'; confirmBtn.style.pointerEvents = 'none'; }
+      if (title) title.textContent = 'Hapus periode?';
+      if (sub) sub.textContent = 'Periode yang sudah memiliki pendaftar tidak dapat dihapus — nonaktifkan saja.';
+    }
+    if (modal) modal.style.display = 'flex';
+  };
+  window.closePeriodDelete = function () {
+    var modal = document.getElementById('periodDeleteModal');
+    if (modal) modal.style.display = 'none';
+  };
+  document.addEventListener('click', function (e) {
+    var m = document.getElementById('majorDeleteModal');
+    if (m && m.style.display === 'flex' && e.target === m) window.closeMajorDelete();
+    var p = document.getElementById('periodDeleteModal');
+    if (p && p.style.display === 'flex' && e.target === p) window.closePeriodDelete();
+  });
+  document.addEventListener('change', function (e) {
+    if (e.target && e.target.id === 'prdConfirmCheck') {
+      var btn = document.getElementById('prdDeleteConfirm');
+      if (btn) {
+        btn.disabled = !e.target.checked;
+        btn.style.opacity = e.target.checked ? '1' : '0.5';
+        btn.style.pointerEvents = e.target.checked ? 'auto' : 'none';
+      }
+    }
+  });
+  document.addEventListener('submit', function (e) {
+    if (e.target && e.target.id === 'prdDeleteForm') {
+      var btn = document.getElementById('prdDeleteConfirm');
+      if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin" style="font-size:11px;"></i> Menghapus...'; }
+    }
+  });
+
   // Escape: tutup modal / drawer
   document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape') {
@@ -1101,6 +1123,10 @@ document.addEventListener('DOMContentLoaded', function () {
       if (rejectModal && rejectModal.style.display === 'flex') rejectModal.style.display = 'none';
       var resetModal = document.getElementById('resetModal');
       if (resetModal && resetModal.style.display === 'flex') closeResetModal();
+      var majorModal = document.getElementById('majorDeleteModal');
+      if (majorModal && majorModal.style.display === 'flex') window.closeMajorDelete();
+      var periodModal = document.getElementById('periodDeleteModal');
+      if (periodModal && periodModal.style.display === 'flex') window.closePeriodDelete();
     }
   });
 

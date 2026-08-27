@@ -151,6 +151,8 @@ Route::middleware(['auth', 'role:Admin'])->prefix('admin')->name('admin.')->grou
     Route::post('/re-registrations/{reRegistration}/verify', [AdminReRegistrationController::class, 'verify'])->name('re-registrations.verify');
 
     Route::get('/activity-logs', [AdminActivityLogController::class, 'index'])->name('activity-logs.index');
+    Route::get('/activity-logs/export/csv', [AdminActivityLogController::class, 'exportCsv'])->name('activity-logs.export.csv');
+    Route::get('/activity-logs/export/xlsx', [AdminActivityLogController::class, 'exportXlsx'])->name('activity-logs.export.xlsx');
 
     Route::get('/tracks', [AdminTrackSettingController::class, 'index'])->name('tracks.index');
     Route::patch('/tracks/{track}/level/{level}', [AdminTrackSettingController::class, 'update'])->name('tracks.update');

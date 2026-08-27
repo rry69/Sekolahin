@@ -15,7 +15,7 @@ return new class extends Migration
             ->whereNull('deadline_at')
             ->whereIn('status', ['pending', 'verified'])
             ->update([
-                'deadline_at' => DB::raw("datetime('now', '+{$registrationDeadlineHours} hours')"),
+                'deadline_at' => DB::raw("NOW() + INTERVAL {$registrationDeadlineHours} HOUR"),
             ]);
     }
 

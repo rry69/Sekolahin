@@ -15,7 +15,7 @@ return new class extends Migration
             $table->foreignId('school_level_id')->constrained()->cascadeOnDelete();
             $table->boolean('is_active')->default(true);
             $table->timestamps();
-            $table->unique(['registration_track_id', 'school_level_id']);
+            $table->unique(['registration_track_id', 'school_level_id'], 'rtsl_track_level_unique');
         });
 
         $tracks = DB::table('registration_tracks')->pluck('id');
