@@ -8,14 +8,13 @@
             || old('name') !== null;
         $loginActive = ! $registerActive;
 
-        // Kelas input minimalist: transparan, hanya garis bawah, fokus -> garis indigo
-        $inputBase = 'h-11 w-full rounded-none border-0 border-b-2 border-gray-200 bg-transparent px-1 text-sm text-gray-900 placeholder-gray-400 transition-colors duration-200 focus:border-[#6C78F5] focus:outline-none focus:ring-0';
-        $inputErr  = ' focus:border-red-400';
+        // Kelas input: rounded, background putih lembut, fokus -> outline coral
+        $inputBase = 'h-11 w-full rounded-xl border border-gray-200 bg-white px-4 text-sm text-gray-900 placeholder-gray-400 shadow-sm transition-all duration-200 focus:border-[#FF6B6B] focus:outline-none focus:ring-4 focus:ring-[#FF6B6B]/10';
+        $inputErr  = ' border-red-300 bg-red-50 focus:border-red-400 focus:ring-red-100';
     @endphp
 
     <style>
-        /* Switcher Masuk <-> Register: kedua panel di-stack (grid), transisi murni CSS.
-           Panel non-aktif disembunyikan via visibility + opacity + transform, tanpa timer. */
+        /* Switcher Masuk <-> Register: kedua panel di-stack (grid), transisi murni CSS. */
         #auth-switcher { display: grid; }
         #auth-switcher > .auth-panel {
             grid-area: 1 / 1;
@@ -52,8 +51,8 @@
             padding: .55rem 1rem;
             font-size: .875rem;
             font-weight: 600;
-            color: #4B5563;
-            border-radius: .75rem;
+            color: #9CA3AF;
+            border-radius: .65rem;
             transition: color .2s ease-out;
             text-align: center;
         }
@@ -64,9 +63,9 @@
             position: absolute;
             top: 4px; bottom: 4px;
             width: calc(50% - 4px);
-            border-radius: .7rem;
-            background: linear-gradient(135deg, #6C78F5, #4A54C9);
-            box-shadow: 0 4px 12px -4px rgba(108,120,245,.55);
+            border-radius: .65rem;
+            background: linear-gradient(135deg, #FF6B6B, #FF8E6E);
+            box-shadow: 0 4px 12px -4px rgba(255,107,107,.6);
             transition: left .25s ease-out;
         }
         #tab-indicator.pos-login { left: 4px; }
@@ -80,12 +79,11 @@
         .pw-bar { height: 5px; border-radius: 9999px; background: #E5E7EB; transition: background-color .2s ease-out; }
     </style>
 
-    {{-- Form tanpa kartu: langsung di atas background lembut (soft-field style) --}}
-    <div class="px-1 py-2 sm:px-2">
+    <div class="px-1 py-1">
 
         {{-- ===== Tab pil: Masuk | Daftar ===== --}}
         <div id="auth-tabs" role="tablist" aria-label="Mode autentikasi"
-             class="relative mb-7 flex rounded-xl p-1" style="background: #EEF0FB;">
+             class="relative mb-7 flex rounded-xl p-1" style="background: #FFF0EE;">
             <span id="tab-indicator" class="{{ $loginActive ? 'pos-login' : 'pos-register' }}" aria-hidden="true"></span>
             <button type="button" id="tab-login" role="tab" aria-selected="{{ $loginActive ? 'true' : 'false' }}"
                     onclick="return switchMode('login')"
@@ -101,27 +99,27 @@
             <div id="panel-login" class="auth-panel {{ $loginActive ? 'is-active' : 'is-out-right' }}" role="tabpanel">
 
                 @if (session('status'))
-                    <div class="mb-4 flex items-center gap-2 rounded-md px-4 py-3 text-sm font-medium text-green-700" style="background: #E1F5F1; border: 1px solid rgba(45,201,156,.3);">
+                    <div class="mb-4 flex items-center gap-2 rounded-xl px-4 py-3 text-sm font-medium text-green-700" style="background: #E1F5F1; border: 1px solid rgba(45,201,156,.3);">
                         <i class="fa-solid fa-circle-check text-green-600"></i>
                         {{ session('status') }}
                     </div>
                 @endif
 
-                <div class="mb-7">
-                    <h1 class="text-[26px] font-extrabold tracking-tight text-gray-900">Masuk ke akun Anda</h1>
-                    <p class="mt-2 text-sm text-gray-500">Masukkan email dan kata sandi untuk melanjutkan.</p>
+                <div class="mb-6">
+                    <h1 class="text-[24px] font-extrabold tracking-tight text-gray-900">Masuk ke akun Anda</h1>
+                    <p class="mt-1.5 text-sm text-gray-500">Masukkan email dan kata sandi untuk melanjutkan.</p>
                 </div>
 
-                <form method="POST" action="{{ route('login') }}" class="space-y-5">
+                <form method="POST" action="{{ route('login') }}" class="space-y-4">
                     @csrf
 
                     <!-- Email Address -->
                     <div>
                         <label for="login-email" class="mb-1.5 block text-xs font-semibold text-gray-700">{{ __('Email') }}</label>
                         <div class="relative">
+                            <span class="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400"><i class="fa-regular fa-envelope text-sm"></i></span>
                             <input id="login-email" type="email" name="email" :value="old('email')" required autocomplete="username" placeholder="nama@email.com"
-                                   class="{{ $inputBase }} pr-3.5 {{ $errors->has('email') ? $inputErr : '' }}"
-                                  >
+                                   class="{{ $inputBase }} pl-10 {{ $errors->has('email') ? $inputErr : '' }}">
                         </div>
                         @error('email')
                             <p class="mt-1.5 flex items-center gap-1.5 text-xs text-red-500"><i class="fa-solid fa-circle-exclamation"></i> {{ $message }}</p>
@@ -132,9 +130,10 @@
                     <div>
                         <label for="login-password" class="mb-1.5 block text-xs font-semibold text-gray-700">{{ __('Kata Sandi') }}</label>
                         <div class="relative">
+                            <span class="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400"><i class="fa-solid fa-lock text-sm"></i></span>
                             <input id="login-password" type="password" name="password" required autocomplete="current-password" placeholder="Masukkan kata sandi"
-                                   class="{{ $inputBase }} pr-11 {{ $errors->has('password') ? $inputErr : '' }}">
-                            <button type="button" onclick="togglePassword(this)" class="absolute right-2.5 top-1/2 flex h-8 w-8 -translate-y-1/2 cursor-pointer items-center justify-center rounded-lg text-gray-400 transition hover:bg-[#EEF0FB] hover:text-[#6C78F5]" aria-label="Tampilkan kata sandi">
+                                   class="{{ $inputBase }} pl-10 pr-11 {{ $errors->has('password') ? $inputErr : '' }}">
+                            <button type="button" onclick="togglePassword(this)" class="absolute right-2 top-1/2 flex h-8 w-8 -translate-y-1/2 cursor-pointer items-center justify-center rounded-lg text-gray-400 transition hover:bg-[#FFF0EE] hover:text-[#FF6B6B]" aria-label="Tampilkan kata sandi">
                                 <i class="fa-regular fa-eye text-sm"></i>
                             </button>
                         </div>
@@ -144,22 +143,22 @@
                     </div>
 
                     <!-- Remember Me & Forgot -->
-                    <div class="flex items-center justify-between">
+                    <div class="flex items-center justify-between pt-1">
                         <label for="remember_me" class="inline-flex cursor-pointer items-center gap-2 text-[13px] text-gray-500">
                             <input id="remember_me" type="checkbox" name="remember"
-                                   class="h-4 w-4 cursor-pointer rounded border-gray-300 shadow-sm focus:ring-[#8B96F5]" style="accent-color:#6C78F5;">
+                                   class="h-4 w-4 cursor-pointer rounded border-gray-300 shadow-sm focus:ring-[#FF8E6E]" style="accent-color:#FF6B6B;">
                             {{ __('Ingat saya') }}
                         </label>
 
                         @if (Route::has('password.request'))
-                            <a href="{{ route('password.request') }}" class="text-[13px] font-semibold text-[#6C78F5] hover:text-[#5A64E8] hover:underline">
+                            <a href="{{ route('password.request') }}" class="text-[13px] font-semibold text-[#FF6B6B] hover:text-[#E8555B] hover:underline">
                                 {{ __('Lupa kata sandi?') }}
                             </a>
                         @endif
                     </div>
 
-                    <button type="submit" class="btn-submit flex h-12 w-full cursor-pointer items-center justify-center gap-2 rounded-full text-[15px] font-semibold text-white transition active:scale-[.985] focus:outline-none focus-visible:ring-4 focus-visible:ring-[#8B96F5]/40"
-                            style="background: linear-gradient(135deg, #6C78F5, #4A54C9); box-shadow: 0 10px 20px -8px rgba(108,120,245,.6);">
+                    <button type="submit" class="btn-submit flex h-12 w-full cursor-pointer items-center justify-center gap-2 rounded-xl text-[15px] font-semibold text-white transition active:scale-[.985] focus:outline-none focus-visible:ring-4 focus-visible:ring-[#FF8E6E]/40"
+                            style="background: linear-gradient(135deg, #FF6B6B, #FF8E6E); box-shadow: 0 10px 20px -8px rgba(255,107,107,.6);">
                         {{ __('Masuk') }} <i class="fa-solid fa-arrow-right"></i>
                     </button>
                 </form>
@@ -168,20 +167,21 @@
             {{-- ================= PANEL REGISTER ================= --}}
             <div id="panel-register" class="auth-panel {{ $registerActive ? 'is-active' : 'is-out-left' }}" role="tabpanel">
 
-                <div class="mb-7">
-                    <h1 class="text-[26px] font-extrabold tracking-tight text-gray-900">Buat akun Sekolahin</h1>
-                    <p class="mt-2 text-sm text-gray-500">Isi data diri Anda untuk memulai pendaftaran.</p>
+                <div class="mb-6">
+                    <h1 class="text-[24px] font-extrabold tracking-tight text-gray-900">Buat akun Sekolahin</h1>
+                    <p class="mt-1.5 text-sm text-gray-500">Isi data diri Anda untuk memulai pendaftaran.</p>
                 </div>
 
-                <form method="POST" action="{{ route('register') }}" class="space-y-5">
+                <form method="POST" action="{{ route('register') }}" class="space-y-4">
                     @csrf
 
                     <!-- Name -->
                     <div>
                         <label for="reg-name" class="mb-1.5 block text-xs font-semibold text-gray-700">{{ __('Nama Lengkap') }}</label>
                         <div class="relative">
+                            <span class="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400"><i class="fa-regular fa-user text-sm"></i></span>
                             <input id="reg-name" type="text" name="name" :value="old('name')" required autocomplete="name" placeholder="Nama sesuai identitas"
-                                   class="{{ $inputBase }} pr-3.5 {{ $errors->has('name') ? $inputErr : '' }}">
+                                   class="{{ $inputBase }} pl-10 {{ $errors->has('name') ? $inputErr : '' }}">
                         </div>
                         @error('name')
                             <p class="mt-1.5 flex items-center gap-1.5 text-xs text-red-500"><i class="fa-solid fa-circle-exclamation"></i> {{ $message }}</p>
@@ -192,8 +192,9 @@
                     <div>
                         <label for="reg-email" class="mb-1.5 block text-xs font-semibold text-gray-700">{{ __('Email') }}</label>
                         <div class="relative">
+                            <span class="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400"><i class="fa-regular fa-envelope text-sm"></i></span>
                             <input id="reg-email" type="email" name="email" :value="old('email')" required autocomplete="username" placeholder="nama@email.com"
-                                   class="{{ $inputBase }} pr-3.5 {{ $errors->has('email') ? $inputErr : '' }}">
+                                   class="{{ $inputBase }} pl-10 {{ $errors->has('email') ? $inputErr : '' }}">
                         </div>
                         @error('email')
                             <p class="mt-1.5 flex items-center gap-1.5 text-xs text-red-500"><i class="fa-solid fa-circle-exclamation"></i> {{ $message }}</p>
@@ -204,10 +205,11 @@
                     <div>
                         <label for="reg-password" class="mb-1.5 block text-xs font-semibold text-gray-700">{{ __('Kata Sandi') }}</label>
                         <div class="relative">
+                            <span class="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400"><i class="fa-solid fa-lock text-sm"></i></span>
                             <input id="reg-password" type="password" name="password" required autocomplete="new-password" placeholder="Minimal 8 karakter"
-                                   class="{{ $inputBase }} pr-11 {{ $errors->has('password') ? $inputErr : '' }}"
+                                   class="{{ $inputBase }} pl-10 pr-11 {{ $errors->has('password') ? $inputErr : '' }}"
                                    oninput="updateStrength(this.value)">
-                            <button type="button" onclick="togglePassword(this)" class="absolute right-2.5 top-1/2 flex h-8 w-8 -translate-y-1/2 cursor-pointer items-center justify-center rounded-lg text-gray-400 transition hover:bg-[#EEF0FB] hover:text-[#6C78F5]" aria-label="Tampilkan kata sandi">
+                            <button type="button" onclick="togglePassword(this)" class="absolute right-2 top-1/2 flex h-8 w-8 -translate-y-1/2 cursor-pointer items-center justify-center rounded-lg text-gray-400 transition hover:bg-[#FFF0EE] hover:text-[#FF6B6B]" aria-label="Tampilkan kata sandi">
                                 <i class="fa-regular fa-eye text-sm"></i>
                             </button>
                         </div>
@@ -227,9 +229,10 @@
                     <div>
                         <label for="reg-password_confirmation" class="mb-1.5 block text-xs font-semibold text-gray-700">{{ __('Ulangi Kata Sandi') }}</label>
                         <div class="relative">
+                            <span class="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400"><i class="fa-solid fa-lock text-sm"></i></span>
                             <input id="reg-password_confirmation" type="password" name="password_confirmation" required autocomplete="new-password" placeholder="Ketik ulang kata sandi"
-                                   class="{{ $inputBase }} pr-11 {{ $errors->has('password_confirmation') ? $inputErr : '' }}">
-                            <button type="button" onclick="togglePassword(this)" class="absolute right-2.5 top-1/2 flex h-8 w-8 -translate-y-1/2 cursor-pointer items-center justify-center rounded-lg text-gray-400 transition hover:bg-[#EEF0FB] hover:text-[#6C78F5]" aria-label="Tampilkan kata sandi">
+                                   class="{{ $inputBase }} pl-10 pr-11 {{ $errors->has('password_confirmation') ? $inputErr : '' }}">
+                            <button type="button" onclick="togglePassword(this)" class="absolute right-2 top-1/2 flex h-8 w-8 -translate-y-1/2 cursor-pointer items-center justify-center rounded-lg text-gray-400 transition hover:bg-[#FFF0EE] hover:text-[#FF6B6B]" aria-label="Tampilkan kata sandi">
                                 <i class="fa-regular fa-eye text-sm"></i>
                             </button>
                         </div>
@@ -241,12 +244,12 @@
                     <!-- Terms -->
                     <label class="flex cursor-pointer items-start gap-2 text-[13px] text-gray-500">
                         <input type="checkbox" required
-                               class="mt-0.5 h-4 w-4 cursor-pointer rounded border-gray-300 shadow-sm focus:ring-[#8B96F5]" style="accent-color:#6C78F5;">
-                        <span>Saya menyetujui <a href="#" class="font-semibold text-[#6C78F5] hover:underline">syarat &amp; ketentuan</a></span>
+                               class="mt-0.5 h-4 w-4 cursor-pointer rounded border-gray-300 shadow-sm focus:ring-[#FF8E6E]" style="accent-color:#FF6B6B;">
+                        <span>Saya menyetujui <a href="#" class="font-semibold text-[#FF6B6B] hover:underline">syarat &amp; ketentuan</a></span>
                     </label>
 
-                    <button type="submit" class="btn-submit flex h-12 w-full cursor-pointer items-center justify-center gap-2 rounded-full text-[15px] font-semibold text-white transition active:scale-[.985] focus:outline-none focus-visible:ring-4 focus-visible:ring-[#8B96F5]/40"
-                            style="background: linear-gradient(135deg, #6C78F5, #4A54C9); box-shadow: 0 10px 20px -8px rgba(108,120,245,.6);">
+                    <button type="submit" class="btn-submit flex h-12 w-full cursor-pointer items-center justify-center gap-2 rounded-xl text-[15px] font-semibold text-white transition active:scale-[.985] focus:outline-none focus-visible:ring-4 focus-visible:ring-[#FF8E6E]/40"
+                            style="background: linear-gradient(135deg, #FF6B6B, #FF8E6E); box-shadow: 0 10px 20px -8px rgba(255,107,107,.6);">
                         {{ __('Daftar') }} <i class="fa-solid fa-arrow-right"></i>
                     </button>
                 </form>
