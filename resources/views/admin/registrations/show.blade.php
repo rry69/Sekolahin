@@ -1,535 +1,867 @@
 @extends('layouts.dashboard')
 @section('title', 'Detail Pendaftaran')
 @section('content')
-<div class="py-12">
-    <div class="max-w-5xl mx-auto sm:px-6 lg:px-8">
-        @if (session('success'))
-            <div class="mb-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded">
-                {{ session('success') }}
-            </div>
-        @endif
+<style>
+  /* ===================== DETAIL PENDAFTARAN — Bringova (no cards, scoped) ===================== */
+  .det {
+    --coral: #FF6B6B;
+    --coral-soft: #FFE5E3;
+    --coral-2: #FF8E6E;
+    --amber: #F59E0B;
+    --amber-soft: #FEF3C7;
+    --green: #10B981;
+    --green-soft: #D1FAE5;
+    --blue: #3B82F6;
+    --blue-soft: #DBEAFE;
+    --purple: #8B5CF6;
+    --purple-soft: #EDE9FE;
+    --red: #EF4444;
+    --red-soft: #FEE2E2;
+    --gray: #6b7280;
+    --gray-soft: #F3F4F6;
+    --ink: #1a1a2e;
+    --muted: #8a8f9d;
+    --divider: rgba(26, 26, 46, 0.10);
 
-        @if (session('error'))
-            <div class="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
-                {{ session('error') }}
-            </div>
-        @endif
+    position: relative;
+    border-radius: 24px;
+    padding: 28px 28px 44px;
+    background: #f6f7fb;
+  }
 
-        <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-            <div class="p-6">
-                <div class="flex justify-between items-start mb-6">
-                    <div>
-                        <h3 class="text-2xl font-bold text-gray-900">Detail Pendaftaran</h3>
-                        <p class="text-sm text-gray-600 mt-1">No. Registrasi: {{ $registration->registration_number }}</p>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <x-status-badge :status="$registration->status" type="registration" class="border px-3 py-1" />
-                        @if ($registration->deadline_at && $registration->status === 'pending')
-                            @php
-                                $hoursRemaining = $registration->getDeadlineHoursRemaining();
-                            @endphp
-                            <span class="text-xs text-gray-500">
-                                Batas waktu: {{ $registration->deadline_at->format('d M Y H:i') }}
-                                @if ($hoursRemaining !== null)
-                                    ({{ $hoursRemaining }} jam tersisa)
-                                @endif
-                            </span>
-                        @endif
-                        @if ($registration->canceled_at)
-                            <span class="text-xs text-gray-500">
-                                Dibatalkan: {{ $registration->canceled_at->format('d M Y H:i') }}
-                            </span>
-                        @endif
-                        @if ($registration->withdrawn_at)
-                            <span class="text-xs text-gray-500">
-                                Mengundurkan diri: {{ $registration->withdrawn_at->format('d M Y H:i') }}
-                            </span>
-                        @endif
-                        <form action="{{ route('admin.registrations.reset-password', $registration) }}" method="POST" class="inline-block" onsubmit="return confirm('Yakin ingin mereset password akun {{ $registration->applicant?->user?->email ?? '' }}? Password baru akan dikirim ke email siswa.');">
-                            @csrf
-                            <button type="submit" class="px-3 py-1 text-sm font-semibold rounded bg-amber-500 text-white hover:bg-amber-600">
-                                Reset Password
-                            </button>
-                        </form>
-                        @if (! $registration->isAccepted())
-                        <form action="{{ route('admin.registrations.delete-account', $registration) }}" method="POST" onsubmit="return confirm('Hapus akun siswa {{ $registration->applicant?->full_name ?? '' }}? Seluruh data pendaftaran dan pembayarannya akan ikut terhapus permanen.')">
-                            @csrf
-                            <button type="submit" class="px-3 py-1 text-sm font-semibold rounded bg-red-600 text-white hover:bg-red-700">
-                                Hapus Akun
-                            </button>
-                        </form>
-                        @endif
-                    </div>
-                </div>
+  /* ---------- header ---------- */
+  .det .d-crumb { display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: var(--muted); margin-bottom: 6px; font-weight: 500; }
+  .det .d-crumb a { color: var(--coral); text-decoration: none; }
+  .det .d-crumb a:hover { text-decoration: underline; }
+  .det .d-crumb .sep { color: #d3d6de; }
+  .det .d-title { font-size: 26px; font-weight: 800; color: var(--ink); letter-spacing: -0.01em; margin-bottom: 2px; }
+  .det .d-meta { font-size: 13px; color: var(--muted); }
+  .det .d-meta b { color: var(--ink); font-weight: 600; }
+  .det .d-head-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
 
-                <div class="border-b pb-6 mb-6">
-                    <h4 class="text-sm font-medium text-gray-500 uppercase mb-3">Informasi Pendaftar</h4>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div>
-                            <p class="text-sm text-gray-600">Nama Lengkap</p>
-                            <p class="font-medium text-gray-900">{{ $registration->applicant->full_name ?? '-' }}</p>
-                        </div>
-                        <div>
-                            <p class="text-sm text-gray-600">NISN</p>
-                            <p class="font-medium text-gray-900">{{ $registration->applicant->nisn ?? '-' }}</p>
-                        </div>
-                        <div>
-                            <p class="text-sm text-gray-600">Verifikasi NISN</p>
-                            <p class="font-medium text-gray-900">
-                                @php $vstatus = $registration->applicant->nisn_verification_status ?? null; @endphp
-                                @if ($vstatus === 'verified')
-                                    <span class="text-green-600">✓ Terverifikasi</span>
-                                    @if ($registration->applicant->nisn_verified_at)
-                                        <span class="text-xs text-gray-500">({{ $registration->applicant->nisn_verified_at->format('d M Y H:i') }})</span>
-                                    @endif
-                                @elseif ($vstatus === 'unavailable')
-                                    <span class="text-yellow-600">Menunggu (server NISN tidak dapat diakses)</span>
-                                @elseif ($vstatus === 'failed')
-                                    <span class="text-red-600">Gagal</span>
-                                @else
-                                    <span class="text-gray-400">Belum diverifikasi</span>
-                                @endif
-                            </p>
-                            @if ($registration->applicant->nisn_verified_name)
-                                <p class="text-xs text-gray-500">Nama di Kemendikdasmen: {{ $registration->applicant->nisn_verified_name }}</p>
-                            @endif
-                        </div>
-                        <div>
-                            <p class="text-sm text-gray-600">NIK</p>
-                            <p class="font-medium text-gray-900">{{ $registration->applicant->nik ?? '-' }}</p>
-                        </div>
-                        <div>
-                            <p class="text-sm text-gray-600">Email</p>
-                            <p class="font-medium text-gray-900">{{ $registration->applicant->user->email ?? '-' }}</p>
-                        </div>
-                        <div>
-                            <p class="text-sm text-gray-600">Password Akun</p>
-                            <p class="font-medium text-gray-900">
-                                @if ($registration->applicant->user && !empty(session('reset_password_' . $registration->applicant->user->id)))
-                                    <span class="text-green-700">{{ session('reset_password_' . $registration->applicant->user->id) }}</span>
-                                    <span class="text-xs text-gray-400">(baru saja direset)</span>
-                                @else
-                                    <span class="text-gray-400">Tersembunyi</span>
-                                    <span class="text-xs text-gray-500">— klik "Reset Password" untuk membuat password baru</span>
-                                @endif
-                            </p>
-                        </div>
-                        <div>
-                            <p class="text-sm text-gray-600">Jenis Kelamin</p>
-                            <p class="font-medium text-gray-900">{{ $registration->applicant->gender ?? '-' }}</p>
-                        </div>
-                        <div>
-                            <p class="text-sm text-gray-600">Tempat/Tanggal Lahir</p>
-                            <p class="font-medium text-gray-900">{{ $registration->applicant->birth_place ?? '-' }}, {{ $registration->applicant->birth_date ? $registration->applicant->birth_date->format('d M Y') : '-' }}</p>
-                        </div>
-                    </div>
-                </div>
+  /* ---------- alerts (flash) ---------- */
+  .det .d-alert { display: flex; align-items: flex-start; gap: 10px; padding: 12px 16px; border-radius: 12px; font-size: 13px; margin-bottom: 16px; font-weight: 500; }
+  .det .d-alert i { margin-top: 2px; }
+  .det .d-alert.success { background: var(--green-soft); color: var(--green); }
+  .det .d-alert.error   { background: var(--red-soft);   color: var(--red); }
+  .det .d-alert.info    { background: var(--blue-soft);  color: var(--blue); }
 
-                <div class="border-b pb-6 mb-6">
-                    <h4 class="text-sm font-medium text-gray-500 uppercase mb-3">Pilihan Sekolah & Jurusan</h4>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <p class="text-sm text-gray-600">Sekolah</p>
-                            <p class="font-medium text-gray-900">{{ $registration->school->name ?? '-' }}</p>
-                        </div>
-                        <div>
-                            <p class="text-sm text-gray-600">Jalur</p>
-                            <p class="font-medium text-gray-900">{{ $registration->registrationTrack->name ?? '-' }}</p>
-                        </div>
-                        <div>
-                            <p class="text-sm text-gray-600">Jurusan Pilihan</p>
-                            <p class="font-medium text-gray-900">{{ $registration->major->name ?? '-' }}</p>
-                        </div>
-                        <div>
-                            <p class="text-sm text-gray-600">Jurusan Diterima</p>
-                            <p class="font-medium text-gray-900">{{ $registration->finalMajor->name ?? '-' }}</p>
-                        </div>
-                    </div>
-                </div>
+  /* ---------- section (divider, no card) ---------- */
+  .det .d-sec { border-top: 1px solid var(--divider); padding: 26px 0 4px; margin-top: 4px; }
+  .det .d-sec:first-of-type { border-top: none; padding-top: 4px; }
+  .det .d-sec-title { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; color: var(--ink); text-transform: uppercase; letter-spacing: .4px; margin-bottom: 18px; }
+  .det .d-sec-title i { color: var(--coral); font-size: 13px; }
+  .det .d-sec-title .tag { margin-left: 6px; }
 
-                <div class="border-b pb-6 mb-6">
-                    <h4 class="text-sm font-medium text-gray-500 uppercase mb-3">Verifikasi Dokumen</h4>
-                    @forelse ($registration->documents as $doc)
-                        <div class="py-3 border-b border-gray-100 last:border-0" id="doc-row-{{ $doc->id }}">
-                            <div class="flex items-center justify-between">
-                                <div>
-                                    <p class="text-sm font-medium text-gray-900">{{ $doc->document_type }}</p>
-                                    <p class="text-xs text-gray-500">{{ $doc->file_name }}</p>
-                                    @if($doc->verification_notes)
-                                        <p class="text-xs text-red-600 mt-1 bg-red-50 border border-red-200 rounded p-1.5">Alasan: {{ $doc->verification_notes }}</p>
-                                    @endif
-                                </div>
-                                <div class="flex items-center gap-2 flex-wrap justify-end" id="doc-actions-{{ $doc->id }}">
-                                    <button type="button" onclick="showFileModal('{{ route('registration.documents.download', [$registration, $doc]) }}', '{{ $doc->document_type }}')" class="text-sm text-blue-600 hover:underline">Lihat</button>
-                                    @if($doc->verified_at)
-                                        <span id="doc-badge-{{ $doc->id }}" class="px-2 py-1 text-xs bg-green-100 text-green-800 rounded">Terverifikasi</span>
-                                        <span id="doc-verify-btns-{{ $doc->id }}" class="hidden items-center gap-2">
-                                            <button type="button" onclick="openDocVerifyModal({{ $doc->id }}, '{{ addslashes($doc->document_type) }}')" class="px-3 py-1 bg-green-600 text-white text-xs font-medium rounded hover:bg-green-700">✓ Verifikasi</button>
-                                            <button type="button" onclick="toggleDocReject({{ $doc->id }})" class="px-3 py-1 bg-red-600 text-white text-xs font-medium rounded hover:bg-red-700">✕ Tolak</button>
-                                        </span>
-                                        <span id="doc-verified-btns-{{ $doc->id }}" class="inline-flex items-center gap-2">
-                                            <button type="button" onclick="openDocUnverifyModal({{ $doc->id }}, '{{ addslashes($doc->document_type) }}')" class="px-3 py-1 bg-amber-500 text-white text-xs font-medium rounded hover:bg-amber-600">↩ Batal Verifikasi</button>
-                                        </span>
-                                    @elseif($doc->verification_notes)
-                                        <span id="doc-badge-{{ $doc->id }}" class="px-2 py-1 text-xs bg-red-100 text-red-800 rounded font-medium">Ditolak</span>
-                                        <span id="doc-verify-btns-{{ $doc->id }}" class="hidden items-center gap-2"></span>
-                                        <span id="doc-verified-btns-{{ $doc->id }}" class="hidden"></span>
-                                    @else
-                                        <span id="doc-badge-{{ $doc->id }}" class="px-2 py-1 text-xs bg-yellow-100 text-yellow-800 rounded">Menunggu</span>
-                                        <span id="doc-verify-btns-{{ $doc->id }}" class="inline-flex items-center gap-2">
-                                            <button type="button" onclick="openDocVerifyModal({{ $doc->id }}, '{{ addslashes($doc->document_type) }}')" class="px-3 py-1 bg-green-600 text-white text-xs font-medium rounded hover:bg-green-700">✓ Verifikasi</button>
-                                            <button type="button" onclick="toggleDocReject({{ $doc->id }})" class="px-3 py-1 bg-red-600 text-white text-xs font-medium rounded hover:bg-red-700">✕ Tolak</button>
-                                        </span>
-                                        <span id="doc-verified-btns-{{ $doc->id }}" class="hidden items-center gap-2">
-                                            <button type="button" onclick="openDocUnverifyModal({{ $doc->id }}, '{{ addslashes($doc->document_type) }}')" class="px-3 py-1 bg-amber-500 text-white text-xs font-medium rounded hover:bg-amber-600">↩ Batal Verifikasi</button>
-                                        </span>
-                                    @endif
-                                </div>
-                            </div>
-                            @if(!$doc->verified_at && !$doc->verification_notes)
-                                <div id="doc-reject-{{ $doc->id }}" class="hidden mt-3 bg-red-50 border border-red-200 rounded p-3">
-                                    <p class="text-xs font-medium text-red-800 mb-2">Tolak dokumen — beri alasan (file akan dihapus):</p>
-                                    <form action="{{ route('admin.documents.reject', $doc) }}" method="POST" class="flex gap-2 items-center">
-                                        @csrf
-                                        @method('PATCH')
-                                        <input type="text" name="verification_notes" placeholder="Alasan penolakan (wajib)" required maxlength="500" class="flex-1 border-gray-300 rounded-md shadow-sm text-sm px-3 py-2">
-                                        <button type="submit" class="px-3 py-2 bg-red-600 text-white text-xs font-medium rounded hover:bg-red-700">Kirim</button>
-                                        <button type="button" onclick="toggleDocReject({{ $doc->id }})" class="px-3 py-2 text-xs text-gray-600 hover:text-gray-800">Batal</button>
-                                    </form>
-                                </div>
-                            @endif
-                        </div>
-                    @empty
-                        <p class="text-sm text-gray-500">Belum ada dokumen</p>
-                    @endforelse
-                </div>
+  /* ---------- info grid (label-value) ---------- */
+  .det .d-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px 22px; }
+  .det .d-grid.cols-2 { grid-template-columns: repeat(2, 1fr); }
+  .det .d-item .d-lbl { font-size: 11.5px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: .3px; margin-bottom: 3px; }
+  .det .d-item .d-val { font-size: 14px; color: var(--ink); font-weight: 600; }
+  .det .d-item .d-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
 
-                <div class="border-b pb-6 mb-6">
-                    <h4 class="text-sm font-medium text-gray-500 uppercase mb-3">Verifikasi Pendaftaran</h4>
-                    @if ($registration->status === 'pending' || $registration->status === 'rejected')
-                        @php
-                            $docsVerified = $registration->hasAllDocumentsVerified();
-                            $requiredDocs = $registration->requiredDocumentTypes();
-                        @endphp
-                        @if(!$docsVerified)
-                            <div id="docVerifyLock" class="mb-3 bg-amber-50 border border-amber-200 rounded p-3 text-sm text-amber-800">
-                                ⚠ Verifikasi pendaftaran terkunci sampai <span class="font-semibold">semua dokumen wajib</span> diverifikasi. Dokumen diverifikasi satu per satu di bagian Verifikasi Dokumen di atas.
-                            </div>
-                        @else
-                            <div id="docVerifyLock" class="hidden mb-3 bg-amber-50 border border-amber-200 rounded p-3 text-sm text-amber-800">⚠ Verifikasi pendaftaran terkunci sampai semua dokumen wajib diverifikasi.</div>
-                        @endif
-                        @php
-                            $isRegulerVerify = strtolower($registration->registrationTrack->name ?? '') === 'reguler';
-                            $verifyFee = $registration->payment_amount;
-                            if ($verifyFee === null && $isRegulerVerify) {
-                                $raw = \App\Models\Setting::get('fee_' . ($registration->registrationPeriod->school_level_id ?? '') . '_' . $registration->registration_track_id);
-                                $verifyFee = ($raw !== null && $raw !== '' && is_numeric($raw)) ? (float) $raw : 500000;
-                            }
-                        @endphp
-                        <form action="{{ route('admin.registrations.verify', $registration) }}" method="POST" class="space-y-3">
-                            @csrf
-                            <div class="flex flex-wrap gap-4 items-center">
-                                <select name="status" class="border-gray-300 rounded-md shadow-sm text-sm">
-                                    <option value="verified">Verifikasi (Terima Berkas)</option>
-                                    <option value="rejected">Tolak</option>
-                                </select>
-                                @if(!$isRegulerVerify)
-                                    <div>
-                                        <label class="block text-xs font-medium text-gray-600 mb-1">Biaya Pendaftaran (Rp)</label>
-                                        <input type="number" name="payment_amount" value="{{ old('payment_amount', $verifyFee) }}" min="0" step="1000" placeholder="0 = gratis" class="border-gray-300 rounded-md shadow-sm text-sm w-44">
-                                    </div>
-                                @else
-                                    <span class="text-sm text-gray-600">Biaya: <span class="font-semibold text-gray-900">Rp {{ number_format($verifyFee, 0, ',', '.') }}</span> <span class="text-xs text-gray-500">(otomatis dari Setting)</span></span>
-                                @endif
-                                <input type="text" name="verified_notes" placeholder="Catatan verifikasi" class="flex-1 border-gray-300 rounded-md shadow-sm text-sm min-w-[180px]">
-                                <button type="submit" class="px-4 py-2 bg-blue-600 text-white text-sm rounded hover:bg-blue-700">Simpan</button>
-                            </div>
-                            @if(!$isRegulerVerify)
-                                <p class="text-xs text-gray-500">Isi nominal per siswa (tiap siswa bisa beda). Isi <code>0</code> untuk gratis → langsung lunas tanpa siswa bayar.</p>
-                            @else
-                                <p class="text-xs text-gray-500">Biaya Reguler otomatis dari menu Setting. Tidak perlu input manual.</p>
-                            @endif
-                        </form>
-                    @else
-                        <p class="text-sm text-gray-600">Diverifikasi oleh <span class="font-medium">{{ $registration->verifiedBy->name ?? '-' }}</span>
-                            @if($registration->verified_notes)
-                                — {{ $registration->verified_notes }}
-                            @endif
-                        </p>
-                    @endif
-                </div>
+  /* ---------- pills ---------- */
+  .det .d-pill { display: inline-flex; align-items: center; gap: 6px; padding: 4px 11px; border-radius: 20px; font-size: 11.5px; font-weight: 700; white-space: nowrap; }
+  .det .d-pill.green  { background: var(--green-soft);  color: var(--green); }
+  .det .d-pill.amber  { background: var(--amber-soft);  color: #b45309; }
+  .det .d-pill.blue   { background: var(--blue-soft);   color: var(--blue); }
+  .det .d-pill.red    { background: var(--red-soft);    color: var(--red); }
+  .det .d-pill.gray   { background: var(--gray-soft);   color: var(--gray); }
+  .det .d-pill.coral  { background: var(--coral-soft);  color: var(--coral); }
 
-                @if ($registration->status === 'verified')
-                <div class="border-b pb-6 mb-6">
-                    <h4 class="text-sm font-medium text-gray-500 uppercase mb-3">Status Diterima (Otomatis)</h4>
-                    <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                        <p class="text-sm text-gray-800">Siswa otomatis terdaftar sebagai siswa setelah <span class="font-semibold">berkas diverifikasi</span> dan <span class="font-semibold">pembayaran lunas</span>. NIS diterbitkan otomatis saat itu.</p>
-                    </div>
-                </div>
-                @endif
+  /* ---------- buttons ---------- */
+  .det .d-btn { display: inline-flex; align-items: center; gap: 6px; border: none; cursor: pointer; border-radius: 11px; padding: 9px 15px; font-size: 12.5px; font-weight: 700; transition: transform .15s ease, filter .15s ease, background-color .15s ease, color .15s ease; }
+  .det .d-btn:hover { transform: translateY(-1px); }
+  .det .d-btn.coral { background: linear-gradient(135deg, var(--coral), var(--coral-2)); color: #fff; box-shadow: 0 6px 16px -8px rgba(255,107,107,0.6); }
+  .det .d-btn.coral:hover { filter: brightness(1.04); }
+  .det .d-btn.amber { background: var(--amber); color: #fff; }
+  .det .d-btn.amber:hover { background: #d97706; }
+  .det .d-btn.red { background: var(--red); color: #fff; }
+  .det .d-btn.red:hover { background: #dc2626; }
+  .det .d-btn.green { background: var(--green); color: #fff; }
+  .det .d-btn.green:hover { background: #059669; }
+  .det .d-btn.blue { background: var(--blue); color: #fff; }
+  .det .d-btn.blue:hover { background: #2563eb; }
+  .det .d-btn.ghost { background: rgba(255,255,255,0.6); color: var(--ink); box-shadow: 0 2px 10px -8px rgba(26,26,46,0.3); }
+  .det .d-btn.ghost:hover { background: #fff; color: var(--coral); }
+  .det .d-btn.sm { padding: 6px 11px; font-size: 11.5px; border-radius: 9px; }
 
-                <div class="border-b pb-6 mb-6">
-                    <h4 class="text-sm font-medium text-gray-500 uppercase mb-3">Status Pembayaran</h4>
-                    @php
-                        $payColors = [
-                            'unpaid' => 'bg-gray-100 text-gray-800 border-gray-300',
-                            'pending' => 'bg-yellow-100 text-yellow-800 border-yellow-300',
-                            'paid' => 'bg-green-100 text-green-800 border-green-300',
-                            'failed' => 'bg-red-100 text-red-800 border-red-300',
-                        ];
-                    @endphp
-                    <div class="flex flex-wrap items-center gap-2">
-                        <span class="px-3 py-1 text-sm font-semibold rounded border {{ $payColors[$registration->payment_status] ?? 'bg-gray-100 text-gray-800 border-gray-300' }}">
-                            {{ ucfirst($registration->payment_status) }}
-                        </span>
-                        @if ($registration->payment_amount !== null)
-                            <span class="text-sm text-gray-700">Rp {{ number_format($registration->payment_amount, 0, ',', '.') }}</span>
-                        @else
-                            <span class="text-xs px-2 py-1 bg-amber-100 text-amber-800 rounded">Belum ditentukan — akan muncul setelah Terverifikasi</span>
-                        @endif
-                    </div>
-                    @php
-                        $pendingPayment = $registration->payments->where('status', 'pending')->sortByDesc('id')->first();
-                        $proofPayment = $registration->payments->filter(fn ($p) => !empty($p->proof_file))->sortByDesc('id')->first();
-                        $invoicePayment = $latestVerifiedPayment ?? $registration->payments->whereNotNull('invoice_pdf')->sortByDesc('id')->first();
-                    @endphp
-                    <div class="mt-4 flex flex-wrap items-center gap-2">
-                        @if($invoicePayment)
-                            <a href="{{ route('payments.invoice.view', $invoicePayment) }}" target="_blank" class="inline-flex items-center gap-1.5 px-4 py-2 bg-green-600 text-white text-sm font-medium rounded hover:bg-green-700">Lihat Invoice</a>
-                        @endif
-                        @if($proofPayment)
-                            <button type="button" onclick="showFileModal('{{ route('payments.proof', $proofPayment) }}', 'Bukti Pembayaran')" class="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded hover:bg-blue-700">Lihat Bukti</button>
-                        @endif
-                        @if($pendingPayment)
-                            <form action="{{ route('admin.payments.verify', $pendingPayment) }}" method="POST" class="inline">
-                                @csrf
-                                <button type="submit" class="px-4 py-2 bg-emerald-600 text-white text-sm font-medium rounded hover:bg-emerald-700">Verifikasi Pembayaran</button>
-                            </form>
-                        @endif
-                        @if(!$pendingPayment && !$invoicePayment && !$proofPayment)
-                            <span class="text-xs text-gray-500">Belum ada pembayaran untuk diverifikasi.</span>
-                        @endif
-                    </div>
-                </div>
+  /* ---------- document rows ---------- */
+  .det .d-doc { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 14px 4px; border-bottom: 1px solid var(--divider); }
+  .det .d-doc:last-child { border-bottom: none; }
+  .det .d-doc-info { display: flex; align-items: center; gap: 12px; min-width: 0; }
+  .det .d-doc-ic { flex: 0 0 auto; width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 15px; background: var(--coral-soft); color: var(--coral); }
+  .det .d-doc-name { font-size: 13.5px; font-weight: 600; color: var(--ink); }
+  .det .d-doc-file { font-size: 12px; color: var(--muted); }
+  .det .d-doc-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+  .det .d-doc-note { margin-top: 6px; font-size: 12px; color: var(--red); background: var(--red-soft); border: 1px solid rgba(239,68,68,0.2); border-radius: 8px; padding: 6px 10px; }
 
-                @php
-                    $successPayments = $registration->payments->filter(fn ($p) => ! \App\Models\Payment::isAbandonedOnline($p))->sortByDesc('created_at');
-                    $hiddenInvoicesAdmin = $registration->payments->filter(fn ($p) => \App\Models\Payment::isAbandonedOnline($p))->count();
-                @endphp
-                <div class="mb-6">
-                    <h4 class="text-sm font-medium text-gray-500 uppercase mb-3">Riwayat Pembayaran</h4>
-                    @if($successPayments->isEmpty())
-                        <p class="text-sm text-gray-500">Belum ada riwayat pembayaran</p>
-                    @else
-                    @forelse ($successPayments as $payment)
-                        <div class="flex justify-between py-2 border-b border-gray-100 last:border-0">
-                            <div class="flex-1">
-                                <p class="text-sm font-medium text-gray-900">Rp {{ number_format($payment->amount, 0, ',', '.') }}</p>
-                                <p class="text-xs text-gray-500">{{ ucfirst(str_replace('_', ' ', $payment->payment_type)) }} · {{ ucfirst(str_replace('_', ' ', $payment->payment_method ?? '-')) }}</p>
-                                @if($payment->payment_method === 'online' && $payment->xendit_payment_method)
-                                    <p class="text-xs text-gray-600 mt-1">Channel: <span class="font-medium">{{ \App\Services\XenditService::friendlyXenditMethod($payment->xendit_payment_method) }}</span> <span class="text-gray-400">({{ $payment->xendit_payment_method }})</span> via Xendit</p>
-                                @endif
-                                @if($payment->invoice_pdf)
-                                    <a href="{{ route('payments.invoice', $payment) }}" target="_blank" class="text-xs text-blue-600 hover:underline">Invoice (PDF) →</a>
-                                @endif
-                                @if($payment->notes)
-                                    <p class="text-xs text-gray-600 mt-1 bg-gray-50 p-1.5 rounded">{{ $payment->notes }}</p>
-                                @endif
-                                @if($payment->xendit_paid_at)
-                                    <p class="text-xs text-gray-500 mt-0.5">Dibayar: {{ $payment->xendit_paid_at->format('d M Y H:i') }}</p>
-                                @endif
-                            </div>
-                            <div class="flex items-center gap-2 ml-3">
-                                @if ($payment->proof_file)
-                                    <button type="button"
-                                        onclick="showFileModal('{{ route('payments.proof', $payment) }}', 'Bukti Pembayaran')"
-                                        class="px-3 py-1 bg-blue-600 text-white text-xs rounded hover:bg-blue-700">
-                                        Lihat Bukti
-                                    </button>
-                                @endif
-                                @php $adminPaymentLabels = ['pending' => 'Pending', 'verified' => 'Lunas', 'rejected' => 'Ditolak']; @endphp
-                                <span class="px-2 py-1 text-xs rounded {{ $payment->status === 'verified' ? 'bg-green-100 text-green-800' : ($payment->status === 'rejected' ? 'bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800') }}">
-                                    {{ $adminPaymentLabels[$payment->status] ?? ucfirst($payment->status) }}
-                                </span>
-                            </div>
-                        </div>
-                    @empty
-                        <p class="text-sm text-gray-500">Belum ada riwayat pembayaran</p>
-                    @endforelse
-                    @if($hiddenInvoicesAdmin > 0)
-                        <p class="text-xs text-gray-500 mt-2">{{ $hiddenInvoicesAdmin }} invoice online yang tidak dilanjutkan disembunyikan.</p>
-                    @endif
-                    @endif
-                </div>
+  /* ---------- reject panel ---------- */
+  .det .d-reject { margin-top: 10px; margin-left: 52px; background: var(--red-soft); border: 1px solid rgba(239,68,68,0.2); border-radius: 12px; padding: 12px; }
+  .det .d-reject p { font-size: 12px; font-weight: 600; color: var(--red); margin-bottom: 8px; }
+  .det .d-reject form { display: flex; gap: 8px; align-items: center; }
+  .det .d-reject input { flex: 1; border: 1px solid rgba(26,26,46,0.14); border-radius: 9px; font-size: 13px; padding: 9px 12px; color: var(--ink); background: #fff; }
+  .det .d-reject input:focus { outline: none; border-color: var(--red); box-shadow: 0 0 0 3px rgba(239,68,68,0.12); }
 
-                <div class="mt-6">
-                    <a href="{{ route('admin.registrations.index') }}" class="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300">Kembali</a>
-                </div>
-            </div>
-        </div>
+  /* ---------- verify (lock + form) ---------- */
+  .det .d-lock { display: flex; align-items: flex-start; gap: 10px; padding: 12px 15px; border-radius: 12px; font-size: 13px; margin-bottom: 16px; background: var(--amber-soft); color: #b45309; }
+  .det .d-lock i { margin-top: 2px; }
+  .det .d-lock b { font-weight: 700; }
+  .det .d-verify-form { display: flex; flex-direction: column; gap: 18px; }
+  .det .d-verify-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+  .det .d-field { display: flex; flex-direction: column; gap: 6px; }
+  .det .d-field label { font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .3px; }
+  .det .d-input { border: 1px solid rgba(26,26,46,0.14); border-radius: 10px; font-size: 13px; padding: 10px 12px; color: var(--ink); background: rgba(255,255,255,0.55); transition: border-color .18s ease, box-shadow .18s ease, background-color .18s ease; }
+  .det .d-input:focus { outline: none; border-color: var(--coral); box-shadow: 0 0 0 3px rgba(255,107,107,0.12); background: #fff; }
+  .det .d-input.w-44 { width: 100%; }
+  .det .d-input.flex-1 { flex: 1; min-width: 180px; }
+  .det .d-hint { font-size: 11.5px; color: var(--muted); margin-top: 6px; }
+  .det .d-hint code { background: var(--gray-soft); padding: 1px 5px; border-radius: 5px; font-size: 11px; }
+  .det .d-verify-foot { display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; border-top: 1px solid var(--divider); padding-top: 16px; }
+
+  /* ---------- picker trigger (pengganti <select>) ---------- */
+  .det .r-pick {
+    display: inline-flex; align-items: center; gap: 8px; flex-wrap: nowrap;
+    padding: 9px 4px; border: none; border-bottom: 1px solid rgba(26,26,46,0.18); border-radius: 0;
+    font-size: 13px; color: var(--ink); background: transparent; min-width: 200px;
+    cursor: pointer; text-align: left; min-height: 38px; max-width: 100%;
+    transition: border-color .18s ease, color .18s ease;
+  }
+  .det .r-pick:hover { border-bottom-color: var(--coral); }
+  .det .r-pick:focus { outline: none; border-bottom-color: var(--coral); }
+  .det .r-pick .pick-label { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .det .r-pick .pick-label.is-placeholder { color: var(--muted); }
+  .det .r-pick .pick-caret { display: none; }
+  .det .r-pick .pick-clear {
+    flex: 0 0 auto;
+    display: none; align-items: center; justify-content: center;
+    width: 18px; height: 18px; border-radius: 6px; background: var(--gray-soft);
+    color: var(--gray); cursor: pointer; font-size: 9px; user-select: none;
+  }
+  .det .r-pick .pick-clear:hover { background: var(--red-soft); color: var(--red); }
+  .det .r-pick.has-value .pick-clear { display: inline-flex; }
+  .det .r-pick.has-value .pick-label.is-placeholder { display: none; }
+
+  /* ---------- modal picker (Bringova) ---------- */
+  .det .picker-backdrop {
+    position: fixed; inset: 0; z-index: 80;
+    background: rgba(26,26,46,0.32);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    display: none; align-items: flex-start; justify-content: center;
+    padding: 80px 16px 16px;
+    animation: dPickerFade .18s ease-out;
+  }
+  .det .picker-backdrop.is-open { display: flex; }
+  @keyframes dPickerFade { from { opacity: 0; } to { opacity: 1; } }
+
+  .det .picker-panel {
+    width: 100%; max-width: 380px; max-height: min(520px, calc(100vh - 120px));
+    display: flex; flex-direction: column;
+    background: #fff; border-radius: 18px;
+    box-shadow: 0 20px 50px -16px rgba(26,26,46,0.35), 0 0 0 1px rgba(26,26,46,0.06);
+    overflow: hidden;
+    animation: dPickerPop .22s cubic-bezier(.22,1.2,.36,1);
+  }
+  @keyframes dPickerPop { from { opacity: 0; transform: translateY(-6px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+
+  .det .picker-head { display: flex; align-items: center; gap: 10px; padding: 14px 16px; border-bottom: 1px solid var(--divider); }
+  .det .picker-head .picker-title { font-size: 14px; font-weight: 700; color: var(--ink); flex: 1; }
+  .det .picker-head .picker-close { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; border-radius: 8px; border: none; background: transparent; color: var(--muted); cursor: pointer; font-size: 12px; transition: background-color .15s ease, color .15s ease; }
+  .det .picker-head .picker-close:hover { background: var(--gray-soft); color: var(--ink); }
+
+  .det .picker-search { position: relative; padding: 10px 14px; border-bottom: 1px solid var(--divider); }
+  .det .picker-search i { position: absolute; left: 24px; top: 50%; transform: translateY(-50%); color: var(--muted); font-size: 12px; pointer-events: none; }
+  .det .picker-search input { width: 100%; padding: 9px 12px 9px 32px; border: 1px solid rgba(26,26,46,0.14); border-radius: 10px; font-size: 13px; color: var(--ink); background: rgba(255,255,255,0.7); transition: border-color .18s ease, box-shadow .18s ease, background-color .18s ease; }
+  .det .picker-search input:focus { outline: none; border-color: var(--coral); background: #fff; box-shadow: 0 0 0 3px rgba(255,107,107,0.12); }
+
+  .det .picker-list { flex: 1; overflow-y: auto; padding: 6px 8px; }
+  .det .picker-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 10px; font-size: 13px; color: var(--ink); cursor: pointer; user-select: none; transition: background-color .15s ease, color .15s ease; }
+  .det .picker-item:hover, .det .picker-item.is-active { background: var(--coral-soft); color: var(--coral); }
+  .det .picker-item.is-selected { background: var(--coral); color: #fff; font-weight: 600; }
+  .det .picker-item.is-selected:hover { background: var(--coral); }
+  .det .picker-item .pi-label { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .det .picker-item .pi-check { font-size: 11px; opacity: 0; }
+  .det .picker-item.is-selected .pi-check { opacity: 1; }
+  .det .picker-empty { padding: 26px 12px; text-align: center; color: var(--muted); font-size: 12.5px; }
+  .det .picker-empty i { display: block; font-size: 20px; margin-bottom: 6px; color: #d3d6de; }
+
+  .det .picker-foot { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 10px 14px; border-top: 1px solid var(--divider); background: rgba(255,255,255,0.5); }
+  .det .picker-foot .picker-clear-all { display: inline-flex; align-items: center; gap: 6px; padding: 7px 12px; border-radius: 9px; border: none; background: transparent; color: var(--muted); font-size: 12px; font-weight: 600; cursor: pointer; transition: color .15s ease, background-color .15s ease; }
+  .det .picker-foot .picker-clear-all:hover { color: var(--red); background: var(--red-soft); }
+  .det .picker-foot .picker-done { display: inline-flex; align-items: center; gap: 6px; padding: 7px 16px; border-radius: 9px; border: none; background: linear-gradient(135deg, var(--coral), var(--coral-2)); color: #fff; font-size: 12px; font-weight: 700; cursor: pointer; box-shadow: 0 6px 14px -6px rgba(255,107,107,0.55); transition: filter .15s ease, transform .15s ease; }
+  .det .picker-foot .picker-done:hover { filter: brightness(1.04); transform: translateY(-1px); }
+
+  /* ---------- payment / history ---------- */
+  .det .d-pay-summary { display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; padding: 14px 16px; border: 1px solid var(--divider); border-radius: 14px; background: rgba(255,255,255,0.40); }
+  .det .d-pay-summary-left { display: flex; align-items: center; gap: 14px; min-width: 0; }
+  .det .d-pay-big { font-size: 19px; font-weight: 800; color: var(--ink); letter-spacing: -0.01em; }
+  .det .d-pay-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+  .det .d-pay-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 4px; border-bottom: 1px solid var(--divider); }
+  .det .d-pay-row:last-child { border-bottom: none; }
+  .det .d-pay-main { flex: 1; min-width: 0; }
+  .det .d-pay-amount { font-size: 14px; font-weight: 700; color: var(--ink); }
+  .det .d-pay-sub { font-size: 12px; color: var(--muted); }
+  .det .d-pay-note { font-size: 12px; color: var(--gray); background: var(--gray-soft); padding: 6px 10px; border-radius: 8px; margin-top: 4px; }
+  .det .d-pay-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+  .det .d-empty { text-align: center; color: var(--muted); font-size: 13px; padding: 18px 0; }
+
+  .det .d-back { margin-top: 28px; }
+
+  /* ---------- custom confirm modal (Bringova) ---------- */
+  .det .d-modal-backdrop { position: fixed; inset: 0; z-index: 90; background: rgba(26,26,46,0.36); backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px); display: none; align-items: center; justify-content: center; padding: 16px; }
+  .det .d-modal-backdrop.is-open { display: flex; }
+  .det .d-modal { width: 100%; max-width: 400px; background: #fff; border-radius: 18px; padding: 22px; box-shadow: 0 24px 60px -18px rgba(26,26,46,0.4); animation: dModalPop .2s cubic-bezier(.22,1.2,.36,1); }
+  @keyframes dModalPop { from { opacity: 0; transform: scale(0.97) translateY(4px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+  .det .d-modal-body { display: flex; align-items: flex-start; gap: 13px; margin-bottom: 18px; }
+  .det .d-modal-ic { flex: 0 0 auto; width: 42px; height: 42px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+  .det .d-modal-ic.green { background: var(--green-soft); color: var(--green); }
+  .det .d-modal-ic.amber { background: var(--amber-soft); color: #b45309; }
+  .det .d-modal-ic.red { background: var(--red-soft); color: var(--red); }
+  .det .d-modal-title { font-size: 15px; font-weight: 700; color: var(--ink); }
+  .det .d-modal-msg { font-size: 13px; color: var(--muted); margin-top: 3px; line-height: 1.5; }
+  .det .d-modal-actions { display: flex; justify-content: flex-end; gap: 8px; }
+  .det .d-modal-actions .d-btn-ghost { background: transparent; color: var(--muted); }
+  .det .d-modal-actions .d-btn-ghost:hover { color: var(--ink); }
+
+  /* ---------- toast (Bringova) ---------- */
+  .det .d-toast { position: fixed; top: 20px; right: 20px; z-index: 100; display: none; align-items: center; gap: 8px; padding: 12px 16px; border-radius: 12px; font-size: 13px; font-weight: 600; box-shadow: 0 12px 30px -12px rgba(26,26,46,0.35); max-width: 320px; }
+  .det .d-toast.show { display: flex; }
+  .det .d-toast.success { background: var(--green); color: #fff; }
+  .det .d-toast.error { background: var(--red); color: #fff; }
+
+  /* ---------- responsive ---------- */
+  @media (max-width: 900px) {
+    .det .d-grid, .det .d-grid.cols-2, .det .d-verify-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 620px) {
+    .det { padding: 20px 16px 32px; }
+    .det .d-grid, .det .d-grid.cols-2, .det .d-verify-grid { grid-template-columns: 1fr; }
+    .det .d-head-actions { justify-content: flex-start; }
+    .det .d-doc, .det .d-pay-row { flex-direction: column; align-items: flex-start; }
+    .det .d-doc-actions, .det .d-pay-right { justify-content: flex-start; }
+    .det .d-pay-summary-left { flex-wrap: wrap; }
+    .det .d-reject { margin-left: 0; }
+  }
+</style>
+
+<div class="det">
+  <div class="d-crumb">
+    <a href="{{ route('admin.registrations.index') }}">Pendaftaran</a>
+    <span class="sep">/</span>
+    <span>Detail Pendaftaran</span>
+  </div>
+
+  <div class="flex flex-wrap items-start justify-between gap-4" style="margin-bottom:20px">
+    <div>
+      <h1 class="d-title">Detail Pendaftaran</h1>
+      <p class="d-meta">No. Registrasi: <b>{{ $registration->registration_number }}</b></p>
     </div>
+    <div class="d-head-actions">
+      <x-status-badge :status="$registration->status" type="registration" class="d-pill" />
+      @if ($registration->deadline_at && $registration->status === 'pending')
+        @php $hoursRemaining = $registration->getDeadlineHoursRemaining(); @endphp
+        <span class="d-pill amber"><i class="fa-regular fa-clock"></i> Batas waktu: {{ $registration->deadline_at->format('d M Y H:i') }}@if ($hoursRemaining !== null) ({{ $hoursRemaining }} jam tersisa)@endif</span>
+      @endif
+      @if ($registration->canceled_at)
+        <span class="d-pill gray">Dibatalkan: {{ $registration->canceled_at->format('d M Y H:i') }}</span>
+      @endif
+      @if ($registration->withdrawn_at)
+        <span class="d-pill gray">Mengundurkan diri: {{ $registration->withdrawn_at->format('d M Y H:i') }}</span>
+      @endif
+      <form action="{{ route('admin.registrations.reset-password', $registration) }}" method="POST" id="resetPasswordForm" class="inline-block">
+        @csrf
+        <button type="button" onclick="openActionConfirm('reset-password', '{{ addslashes($registration->applicant?->user?->email ?? '') }}')" class="d-btn amber"><i class="fa-solid fa-key"></i> Reset Password</button>
+      </form>
+      @if (! $registration->isAccepted())
+      <form action="{{ route('admin.registrations.delete-account', $registration) }}" method="POST" id="deleteAccountForm" class="inline-block">
+        @csrf
+        <button type="button" onclick="openActionConfirm('delete-account', '{{ addslashes($registration->applicant?->full_name ?? '') }}')" class="d-btn red"><i class="fa-solid fa-trash-can"></i> Hapus Akun</button>
+      </form>
+      @endif
+    </div>
+  </div>
+
+  @if (session('success'))
+    <div class="d-alert success"><i class="fa-solid fa-circle-check"></i><span>{{ session('success') }}</span></div>
+  @endif
+  @if (session('error'))
+    <div class="d-alert error"><i class="fa-solid fa-circle-exclamation"></i><span>{{ session('error') }}</span></div>
+  @endif
+
+  {{-- ================== INFORMASI PENDAFTAR ================== --}}
+  <div class="d-sec">
+    <div class="d-sec-title"><i class="fa-solid fa-user"></i> Informasi Pendaftar</div>
+    <div class="d-grid">
+      <div class="d-item">
+        <div class="d-lbl">Nama Lengkap</div>
+        <div class="d-val">{{ $registration->applicant->full_name ?? '-' }}</div>
+      </div>
+      <div class="d-item">
+        <div class="d-lbl">NISN</div>
+        <div class="d-val">{{ $registration->applicant->nisn ?? '-' }}</div>
+      </div>
+      <div class="d-item">
+        <div class="d-lbl">Verifikasi NISN</div>
+        <div class="d-val">
+          @php $vstatus = $registration->applicant->nisn_verification_status ?? null; @endphp
+          @if ($vstatus === 'verified')
+            <span class="d-pill green"><i class="fa-solid fa-check"></i> Terverifikasi</span>
+            @if ($registration->applicant->nisn_verified_at)
+              <div class="d-sub">{{ $registration->applicant->nisn_verified_at->format('d M Y H:i') }}</div>
+            @endif
+          @elseif ($vstatus === 'unavailable')
+            <span class="d-pill amber">Menunggu (server NISN tidak dapat diakses)</span>
+          @elseif ($vstatus === 'failed')
+            <span class="d-pill red">Gagal</span>
+          @else
+            <span class="d-pill gray">Belum diverifikasi</span>
+          @endif
+        </div>
+        @if ($registration->applicant->nisn_verified_name)
+          <div class="d-sub">Nama di Kemendikdasmen: {{ $registration->applicant->nisn_verified_name }}</div>
+        @endif
+      </div>
+      <div class="d-item">
+        <div class="d-lbl">NIK</div>
+        <div class="d-val">{{ $registration->applicant->nik ?? '-' }}</div>
+      </div>
+      <div class="d-item">
+        <div class="d-lbl">Email</div>
+        <div class="d-val">{{ $registration->applicant->user->email ?? '-' }}</div>
+      </div>
+      <div class="d-item">
+        <div class="d-lbl">Password Akun</div>
+        <div class="d-val">
+          @if ($registration->applicant->user && !empty(session('reset_password_' . $registration->applicant->user->id)))
+            <span style="color:var(--green)">{{ session('reset_password_' . $registration->applicant->user->id) }}</span>
+            <span class="d-sub">(baru saja direset)</span>
+          @else
+            <span class="d-pill gray">Tersembunyi</span>
+            <span class="d-sub">— klik "Reset Password" untuk membuat password baru</span>
+          @endif
+        </div>
+      </div>
+      <div class="d-item">
+        <div class="d-lbl">Jenis Kelamin</div>
+        <div class="d-val">{{ $registration->applicant->gender ?? '-' }}</div>
+      </div>
+      <div class="d-item">
+        <div class="d-lbl">Tempat/Tanggal Lahir</div>
+        <div class="d-val">{{ $registration->applicant->birth_place ?? '-' }}, {{ $registration->applicant->birth_date ? $registration->applicant->birth_date->format('d M Y') : '-' }}</div>
+      </div>
+    </div>
+  </div>
+
+  {{-- ================== PILIHAN SEKOLAH & JURUSAN ================== --}}
+  <div class="d-sec">
+    <div class="d-sec-title"><i class="fa-solid fa-school"></i> Pilihan Sekolah &amp; Jurusan</div>
+    <div class="d-grid cols-2">
+      <div class="d-item">
+        <div class="d-lbl">Sekolah</div>
+        <div class="d-val">{{ $registration->school->name ?? '-' }}</div>
+      </div>
+      <div class="d-item">
+        <div class="d-lbl">Jalur</div>
+        <div class="d-val">{{ $registration->registrationTrack->name ?? '-' }}</div>
+      </div>
+      <div class="d-item">
+        <div class="d-lbl">Jurusan Pilihan</div>
+        <div class="d-val">{{ $registration->major->name ?? '-' }}</div>
+      </div>
+      <div class="d-item">
+        <div class="d-lbl">Jurusan Diterima</div>
+        <div class="d-val">{{ $registration->finalMajor->name ?? '-' }}</div>
+      </div>
+    </div>
+  </div>
+
+  {{-- ================== VERIFIKASI DOKUMEN ================== --}}
+  <div class="d-sec">
+    <div class="d-sec-title"><i class="fa-solid fa-folder-open"></i> Verifikasi Dokumen</div>
+    @forelse ($registration->documents as $doc)
+      <div class="d-doc" id="doc-row-{{ $doc->id }}">
+        <div class="d-doc-info">
+          <span class="d-doc-ic"><i class="fa-solid fa-file-lines"></i></span>
+          <div style="min-width:0">
+            <div class="d-doc-name">{{ $doc->document_type }}</div>
+            <div class="d-doc-file">{{ $doc->file_name }}</div>
+            @if($doc->verification_notes)
+              <div class="d-doc-note"><i class="fa-solid fa-circle-exclamation"></i> Alasan: {{ $doc->verification_notes }}</div>
+            @endif
+          </div>
+        </div>
+        <div class="d-doc-actions" id="doc-actions-{{ $doc->id }}">
+          <button type="button" onclick="showFileModal('{{ route('registration.documents.download', [$registration, $doc]) }}', '{{ $doc->document_type }}')" class="d-btn ghost sm"><i class="fa-solid fa-eye"></i> Lihat</button>
+          @if($doc->verified_at)
+            <span id="doc-badge-{{ $doc->id }}" class="d-pill green"><i class="fa-solid fa-check"></i> Terverifikasi</span>
+            <span id="doc-verify-btns-{{ $doc->id }}" class="hidden items-center gap-2">
+              <button type="button" onclick="openDocVerifyModal({{ $doc->id }}, '{{ addslashes($doc->document_type) }}')" class="d-btn green sm">✓ Verifikasi</button>
+              <button type="button" onclick="toggleDocReject({{ $doc->id }})" class="d-btn red sm">✕ Tolak</button>
+            </span>
+            <span id="doc-verified-btns-{{ $doc->id }}" class="inline-flex items-center gap-2">
+              <button type="button" onclick="openDocUnverifyModal({{ $doc->id }}, '{{ addslashes($doc->document_type) }}')" class="d-btn amber sm">↩ Batal Verifikasi</button>
+            </span>
+          @elseif($doc->verification_notes)
+            <span id="doc-badge-{{ $doc->id }}" class="d-pill red">Ditolak</span>
+            <span id="doc-verify-btns-{{ $doc->id }}" class="hidden items-center gap-2"></span>
+            <span id="doc-verified-btns-{{ $doc->id }}" class="hidden"></span>
+          @else
+            <span id="doc-badge-{{ $doc->id }}" class="d-pill amber">Menunggu</span>
+            <span id="doc-verify-btns-{{ $doc->id }}" class="inline-flex items-center gap-2">
+              <button type="button" onclick="openDocVerifyModal({{ $doc->id }}, '{{ addslashes($doc->document_type) }}')" class="d-btn green sm">✓ Verifikasi</button>
+              <button type="button" onclick="toggleDocReject({{ $doc->id }})" class="d-btn red sm">✕ Tolak</button>
+            </span>
+            <span id="doc-verified-btns-{{ $doc->id }}" class="hidden items-center gap-2">
+              <button type="button" onclick="openDocUnverifyModal({{ $doc->id }}, '{{ addslashes($doc->document_type) }}')" class="d-btn amber sm">↩ Batal Verifikasi</button>
+            </span>
+          @endif
+        </div>
+      </div>
+      @if(!$doc->verified_at && !$doc->verification_notes)
+        <div id="doc-reject-{{ $doc->id }}" class="d-reject hidden">
+          <p><i class="fa-solid fa-circle-exclamation"></i> Tolak dokumen — beri alasan (file akan dihapus):</p>
+          <form action="{{ route('admin.documents.reject', $doc) }}" method="POST">
+            @csrf
+            @method('PATCH')
+            <input type="text" name="verification_notes" placeholder="Alasan penolakan (wajib)" required maxlength="500">
+            <button type="submit" class="d-btn red sm">Kirim</button>
+            <button type="button" onclick="toggleDocReject({{ $doc->id }})" class="d-btn ghost sm">Batal</button>
+          </form>
+        </div>
+      @endif
+    @empty
+      <div class="d-empty"><i class="fa-regular fa-folder-open" style="display:block;font-size:20px;margin-bottom:6px;color:#d3d6de"></i>Belum ada dokumen</div>
+    @endforelse
+  </div>
+
+  {{-- ================== VERIFIKASI PENDAFTARAN ================== --}}
+  <div class="d-sec">
+    <div class="d-sec-title"><i class="fa-solid fa-file-shield"></i> Verifikasi Pendaftaran</div>
+    @if ($registration->status === 'pending' || $registration->status === 'rejected')
+      @php
+        $docsVerified = $registration->hasAllDocumentsVerified();
+        $requiredDocs = $registration->requiredDocumentTypes();
+      @endphp
+      <div id="docVerifyLock" class="d-lock {{ $docsVerified ? 'hidden' : '' }}">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+        <span>Verifikasi pendaftaran terkunci sampai <b>semua dokumen wajib</b> diverifikasi. Dokumen diverifikasi satu per satu di bagian Verifikasi Dokumen di atas.</span>
+      </div>
+      @php
+        $isRegulerVerify = strtolower($registration->registrationTrack->name ?? '') === 'reguler';
+        $verifyFee = $registration->payment_amount;
+        if ($verifyFee === null && $isRegulerVerify) {
+          $raw = \App\Models\Setting::get('fee_' . ($registration->registrationPeriod->school_level_id ?? '') . '_' . $registration->registration_track_id);
+          $verifyFee = ($raw !== null && $raw !== '' && is_numeric($raw)) ? (float) $raw : 500000;
+        }
+      @endphp
+      <form action="{{ route('admin.registrations.verify', $registration) }}" method="POST" class="d-verify-form">
+        @csrf
+        <div class="d-verify-grid">
+          <div class="d-field">
+            <label>Status Verifikasi</label>
+            <button type="button" class="r-pick" data-picker="verify_status" aria-haspopup="listbox" aria-expanded="false">
+              <span class="pick-label is-placeholder">Pilih status…</span>
+              <span class="pick-clear" data-clear="verify_status" role="button" tabindex="0" aria-label="Bersihkan"><i class="fa-solid fa-xmark"></i></span>
+              <i class="fa-solid fa-chevron-down pick-caret"></i>
+            </button>
+            <input type="hidden" name="status" data-picker-input="verify_status" value="verified">
+          </div>
+          @if(!$isRegulerVerify)
+            <div class="d-field">
+              <label>Biaya Pendaftaran (Rp)</label>
+              <input type="number" name="payment_amount" value="{{ old('payment_amount', $verifyFee) }}" min="0" step="1000" placeholder="0 = gratis" class="d-input w-44">
+            </div>
+          @else
+            <div class="d-field">
+              <label>Biaya</label>
+              <div class="d-input" style="display:flex;align-items:center;height:38px;border:none;padding:0 2px">
+                <span style="font-size:14px;font-weight:700;color:var(--ink)">Rp {{ number_format($verifyFee, 0, ',', '.') }}</span>
+                <span class="d-sub" style="margin-left:8px">(otomatis dari Setting)</span>
+              </div>
+            </div>
+          @endif
+        </div>
+        <div class="d-field">
+          <label>Catatan Verifikasi</label>
+          <input type="text" name="verified_notes" placeholder="Catatan verifikasi" class="d-input flex-1">
+        </div>
+        <div class="d-verify-foot">
+          @if(!$isRegulerVerify)
+            <p class="d-hint" style="margin:0">Isi nominal per siswa (tiap siswa bisa beda). Isi <code>0</code> untuk gratis → langsung lunas tanpa siswa bayar.</p>
+          @else
+            <p class="d-hint" style="margin:0">Biaya Reguler otomatis dari menu Setting. Tidak perlu input manual.</p>
+          @endif
+          <button type="submit" class="d-btn coral"><i class="fa-solid fa-floppy-disk"></i> Simpan</button>
+        </div>
+      </form>
+    @else
+      <p class="d-val" style="font-size:13.5px;color:var(--ink)">Diverifikasi oleh <b>{{ $registration->verifiedBy->name ?? '-' }}</b>
+        @if($registration->verified_notes) — {{ $registration->verified_notes }} @endif
+      </p>
+    @endif
+  </div>
+
+  @if ($registration->status === 'verified')
+  <div class="d-sec">
+    <div class="d-sec-title"><i class="fa-solid fa-check-double"></i> Status Diterima (Otomatis)</div>
+    <div class="d-lock" style="background:var(--blue-soft);color:var(--blue)">
+      <i class="fa-solid fa-circle-info"></i>
+      <span>Siswa otomatis terdaftar sebagai siswa setelah <b>berkas diverifikasi</b> dan <b>pembayaran lunas</b>. NIS diterbitkan otomatis saat itu.</span>
+    </div>
+  </div>
+  @endif
+
+  {{-- ================== STATUS PEMBAYARAN ================== --}}
+  <div class="d-sec">
+    <div class="d-sec-title"><i class="fa-solid fa-money-bill-wave"></i> Status Pembayaran</div>
+    @php
+      $payPill = [
+        'unpaid' => 'gray', 'pending' => 'amber', 'paid' => 'green', 'failed' => 'red',
+      ];
+    @endphp
+    @php
+      $pendingPayment = $registration->payments->where('status', 'pending')->sortByDesc('id')->first();
+      $proofPayment = $registration->payments->filter(fn ($p) => !empty($p->proof_file))->sortByDesc('id')->first();
+      $invoicePayment = $latestVerifiedPayment ?? $registration->payments->whereNotNull('invoice_pdf')->sortByDesc('id')->first();
+    @endphp
+    <div class="d-pay-summary">
+      <div class="d-pay-summary-left">
+        <span class="d-pill {{ $payPill[$registration->payment_status] ?? 'gray' }}" style="font-size:12.5px;padding:6px 14px">{{ ucfirst($registration->payment_status) }}</span>
+        @if ($registration->payment_amount !== null)
+          <span class="d-pay-big">Rp {{ number_format($registration->payment_amount, 0, ',', '.') }}</span>
+        @else
+          <span class="d-sub">Belum ditentukan — akan muncul setelah Terverifikasi</span>
+        @endif
+      </div>
+      <div class="d-pay-actions">
+        @if($invoicePayment)
+          <a href="{{ route('payments.invoice.view', $invoicePayment) }}" target="_blank" class="d-btn green sm"><i class="fa-solid fa-file-invoice"></i> Lihat Invoice</a>
+        @endif
+        @if($proofPayment)
+          <button type="button" onclick="showFileModal('{{ route('payments.proof', $proofPayment) }}', 'Bukti Pembayaran')" class="d-btn blue sm"><i class="fa-solid fa-receipt"></i> Lihat Bukti</button>
+        @endif
+        @if($pendingPayment)
+          <form action="{{ route('admin.payments.verify', $pendingPayment) }}" method="POST" class="inline">
+            @csrf
+            <button type="submit" class="d-btn green sm"><i class="fa-solid fa-badge-check"></i> Verifikasi Pembayaran</button>
+          </form>
+        @endif
+        @if(!$pendingPayment && !$invoicePayment && !$proofPayment)
+          <span class="d-sub">Belum ada pembayaran untuk diverifikasi.</span>
+        @endif
+      </div>
+    </div>
+  </div>
+
+  {{-- ================== RIWAYAT PEMBAYARAN ================== --}}
+  @php
+    $successPayments = $registration->payments->filter(fn ($p) => ! \App\Models\Payment::isAbandonedOnline($p))->sortByDesc('created_at');
+    $hiddenInvoicesAdmin = $registration->payments->filter(fn ($p) => \App\Models\Payment::isAbandonedOnline($p))->count();
+  @endphp
+  <div class="d-sec">
+    <div class="d-sec-title"><i class="fa-solid fa-clock-rotate-left"></i> Riwayat Pembayaran</div>
+    @if($successPayments->isEmpty())
+      <div class="d-empty"><i class="fa-regular fa-credit-card" style="display:block;font-size:20px;margin-bottom:6px;color:#d3d6de"></i>Belum ada riwayat pembayaran</div>
+    @else
+      @foreach ($successPayments as $payment)
+        <div class="d-pay-row">
+          <div class="d-pay-main">
+            <div class="d-pay-amount">Rp {{ number_format($payment->amount, 0, ',', '.') }}</div>
+            <div class="d-pay-sub">{{ ucfirst(str_replace('_', ' ', $payment->payment_type)) }} · {{ ucfirst(str_replace('_', ' ', $payment->payment_method ?? '-')) }}</div>
+            @if($payment->payment_method === 'online' && $payment->xendit_payment_method)
+              <div class="d-pay-sub">Channel: <b>{{ \App\Services\XenditService::friendlyXenditMethod($payment->xendit_payment_method) }}</b> ({{ $payment->xendit_payment_method }}) via Xendit</div>
+            @endif
+            @if($payment->invoice_pdf)
+              <a href="{{ route('payments.invoice', $payment) }}" target="_blank" class="d-pay-sub" style="color:var(--blue);text-decoration:underline">Invoice (PDF) →</a>
+            @endif
+            @if($payment->notes)
+              <div class="d-pay-note">{{ $payment->notes }}</div>
+            @endif
+            @if($payment->xendit_paid_at)
+              <div class="d-pay-sub" style="margin-top:4px">Dibayar: {{ $payment->xendit_paid_at->format('d M Y H:i') }}</div>
+            @endif
+          </div>
+          <div class="d-pay-right">
+            @if ($payment->proof_file)
+              <button type="button" onclick="showFileModal('{{ route('payments.proof', $payment) }}', 'Bukti Pembayaran')" class="d-btn blue sm">Lihat Bukti</button>
+            @endif
+            @php $adminPaymentLabels = ['pending' => 'Pending', 'verified' => 'Lunas', 'rejected' => 'Ditolak']; @endphp
+            @php $payPillFor = ['pending' => 'amber', 'verified' => 'green', 'rejected' => 'red']; @endphp
+            <span class="d-pill {{ $payPillFor[$payment->status] ?? 'gray' }}">{{ $adminPaymentLabels[$payment->status] ?? ucfirst($payment->status) }}</span>
+          </div>
+        </div>
+      @endforeach
+      @if($hiddenInvoicesAdmin > 0)
+        <p class="d-sub" style="margin-top:8px">{{ $hiddenInvoicesAdmin }} invoice online yang tidak dilanjutkan disembunyikan.</p>
+      @endif
+    @endif
+  </div>
+
+  <div class="d-back">
+    <a href="{{ route('admin.registrations.index') }}" class="d-btn ghost"><i class="fa-solid fa-arrow-left"></i> Kembali</a>
+  </div>
+
+{{-- ============================================================
+     Modal Picker (Bringova) — reuse global picker system (verify_status)
+     ============================================================ --}}
+<div id="pickerBackdrop" class="picker-backdrop" aria-hidden="true">
+  <div class="picker-panel" role="dialog" aria-modal="true" aria-labelledby="pickerTitle">
+    <div class="picker-head">
+      <div class="picker-title" id="pickerTitle">Pilih item</div>
+      <button type="button" class="picker-close" onclick="closePicker()" aria-label="Tutup"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="picker-search">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input id="pickerSearch" type="search" placeholder="Cari…" autocomplete="off">
+    </div>
+    <div class="picker-list" id="pickerList" role="listbox"></div>
+    <div class="picker-foot">
+      <button type="button" class="picker-clear-all" onclick="clearCurrentPicker()"><i class="fa-solid fa-eraser"></i> Bersihkan</button>
+      <button type="button" class="picker-done" onclick="closePicker()">Selesai</button>
+    </div>
+  </div>
 </div>
 
-<!-- Modal konfirmasi custom (mengganti browser confirm) -->
-<div id="docConfirmModal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-60 z-50 items-center justify-center p-4" style="display:none">
-    <div class="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
-        <div class="flex items-start gap-3 mb-4">
-            <div id="docConfirmIcon" class="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 text-lg bg-green-100 text-green-600">✓</div>
-            <div class="flex-1">
-                <h3 id="docConfirmTitle" class="text-base font-semibold text-gray-900"></h3>
-                <p id="docConfirmMessage" class="text-sm text-gray-600 mt-1"></p>
-            </div>
-        </div>
-        <div class="flex justify-end gap-2">
-            <button type="button" onclick="closeDocConfirmModal()" class="px-4 py-2 text-sm text-gray-600 hover:text-gray-800">Batal</button>
-            <button type="button" id="docConfirmAction" class="px-4 py-2 text-sm font-medium rounded text-white bg-green-600 hover:bg-green-700">Ya</button>
-        </div>
+@php
+  $pickVerifyStatus = [
+    ['v' => 'verified', 'l' => 'Verifikasi (Terima Berkas)'],
+    ['v' => 'rejected', 'l' => 'Tolak'],
+  ];
+  $pickerJson = ['verify_status' => $pickVerifyStatus];
+  $pickerLabels = ['verify_status' => 'Pilih Status Verifikasi'];
+@endphp
+
+<div id="reg-data" hidden data-picker='@json($pickerJson)' data-picker-labels='@json($pickerLabels)'></div>
+
+{{-- ================== MODAL KONFIRMASI DOKUMEN (Bringova) ================== --}}
+<div id="docConfirmModal" class="d-modal-backdrop" aria-hidden="true">
+  <div class="d-modal" role="dialog" aria-modal="true">
+    <div class="d-modal-body">
+      <div id="docConfirmIcon" class="d-modal-ic green">✓</div>
+      <div style="flex:1;min-width:0">
+        <h3 id="docConfirmTitle" class="d-modal-title"></h3>
+        <p id="docConfirmMessage" class="d-modal-msg"></p>
+      </div>
     </div>
+    <div class="d-modal-actions">
+      <button type="button" onclick="closeDocConfirmModal()" class="d-btn ghost d-btn-ghost">Batal</button>
+      <button type="button" id="docConfirmAction" class="d-btn green">Ya</button>
+    </div>
+  </div>
 </div>
 
-<div id="docToast" class="hidden fixed top-6 right-6 z-50 bg-gray-900 text-white text-sm px-4 py-3 rounded-lg shadow-lg max-w-sm"></div>
+{{-- ================== MODAL KONFIRMASI AKSI GENERIC (Reset Password / Hapus Akun, Bringova) ================== --}}
+<div id="actionConfirmModal" class="d-modal-backdrop" aria-hidden="true">
+  <div class="d-modal" role="dialog" aria-modal="true">
+    <div class="d-modal-body">
+      <div id="actionConfirmIcon" class="d-modal-ic amber"><i class="fa-solid fa-key"></i></div>
+      <div style="flex:1;min-width:0">
+        <h3 id="actionConfirmTitle" class="d-modal-title"></h3>
+        <p id="actionConfirmMessage" class="d-modal-msg"></p>
+      </div>
+    </div>
+    <div class="d-modal-actions">
+      <button type="button" onclick="closeActionConfirm()" class="d-btn ghost d-btn-ghost">Batal</button>
+      <button type="button" id="actionConfirmAction" class="d-btn amber">Ya</button>
+    </div>
+  </div>
+</div>
+
+<div id="docToast" class="d-toast"></div>
+</div>
 
 <script>
 function toggleDocReject(id) {
-    var el = document.getElementById('doc-reject-' + id);
-    if (!el) return;
-    el.classList.toggle('hidden');
+  var el = document.getElementById('doc-reject-' + id);
+  if (!el) return;
+  el.classList.toggle('hidden');
 }
 
 (function () {
-    var pendingDocId = null;
-    var pendingAction = null; // 'verify' | 'unverify'
-    var csrf = document.querySelector('meta[name="csrf-token"]')?.content || '';
+  var pendingDocId = null;
+  var pendingAction = null; // 'verify' | 'unverify'
+  var csrf = document.querySelector('meta[name="csrf-token"]')?.content || '';
 
-    function getToken() {
-        var m = document.querySelector('meta[name="csrf-token"]');
-        return (m && m.content) || csrf;
+  function getToken() {
+    var m = document.querySelector('meta[name="csrf-token"]');
+    return (m && m.content) || csrf;
+  }
+
+  function showToast(msg, isError) {
+    var t = document.getElementById('docToast');
+    t.textContent = msg;
+    t.className = 'd-toast show ' + (isError ? 'error' : 'success');
+    setTimeout(function () { t.className = 'd-toast'; }, 3000);
+  }
+
+  window.docShowToast = showToast;
+
+  function openDocConfirmModal() {
+    var m = document.getElementById('docConfirmModal');
+    m.classList.add('is-open');
+    m.setAttribute('aria-hidden', 'false');
+  }
+
+  window.openDocVerifyModal = function (id, docType) {
+    pendingDocId = id;
+    pendingAction = 'verify';
+    document.getElementById('docConfirmTitle').textContent = 'Verifikasi dokumen?';
+    document.getElementById('docConfirmMessage').textContent = 'Verifikasi dokumen "' + docType + '"? Dokumen akan ditandai Terverifikasi.';
+    var icon = document.getElementById('docConfirmIcon');
+    icon.textContent = '✓';
+    icon.className = 'd-modal-ic green';
+    var btn = document.getElementById('docConfirmAction');
+    btn.textContent = 'Ya, Verifikasi';
+    btn.className = 'd-btn green';
+    openDocConfirmModal();
+  };
+
+  window.openDocUnverifyModal = function (id, docType) {
+    pendingDocId = id;
+    pendingAction = 'unverify';
+    document.getElementById('docConfirmTitle').textContent = 'Batalkan verifikasi?';
+    document.getElementById('docConfirmMessage').textContent = 'Batalkan verifikasi dokumen "' + docType + '"? Status akan kembali menjadi Menunggu.';
+    var icon = document.getElementById('docConfirmIcon');
+    icon.textContent = '↩';
+    icon.className = 'd-modal-ic amber';
+    var btn = document.getElementById('docConfirmAction');
+    btn.textContent = 'Ya, Batalkan';
+    btn.className = 'd-btn amber';
+    openDocConfirmModal();
+  };
+
+  window.closeDocConfirmModal = function () {
+    var m = document.getElementById('docConfirmModal');
+    m.classList.remove('is-open');
+    m.setAttribute('aria-hidden', 'true');
+    pendingDocId = null;
+    pendingAction = null;
+  };
+
+  document.getElementById('docConfirmModal').addEventListener('click', function (e) {
+    if (e.target === this) closeDocConfirmModal();
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') {
+      if (document.getElementById('docConfirmModal').classList.contains('is-open')) closeDocConfirmModal();
+    }
+  });
+
+  document.getElementById('docConfirmAction').addEventListener('click', function () {
+    if (!pendingDocId || !pendingAction) return;
+    var id = pendingDocId;
+    var action = pendingAction;
+    closeDocConfirmModal();
+    var url = action === 'verify'
+      ? '{{ url('admin/documents') }}/' + id + '/verify'
+      : '{{ url('admin/documents') }}/' + id + '/unverify';
+    var btn = document.getElementById('docConfirmAction');
+
+    fetch(url, {
+      method: 'PATCH',
+      headers: {
+        'X-CSRF-TOKEN': getToken(),
+        'X-Requested-With': 'XMLHttpRequest',
+        'Accept': 'application/json'
+      }
+    }).then(function (r) { return r.json().then(function (j) { return { ok: r.ok, body: j }; }); })
+    .then(function (res) {
+      if (!res.ok || !res.body.success) {
+        showToast(res.body.message || 'Gagal memproses dokumen', true);
+        return;
+      }
+      showToast(res.body.message || (action === 'verify' ? 'Dokumen diverifikasi' : 'Verifikasi dibatalkan'), false);
+      applyDocState(id, action === 'verify' ? 'verified' : 'pending', res.body);
+    }).catch(function () {
+      showToast('Terjadi kesalahan jaringan', true);
+    });
+  });
+
+  function applyDocState(docId, state, payload) {
+    var badge = document.getElementById('doc-badge-' + docId);
+    var verifyBtns = document.getElementById('doc-verify-btns-' + docId);
+    var verifiedBtns = document.getElementById('doc-verified-btns-' + docId);
+    var rejectPanel = document.getElementById('doc-reject-' + docId);
+    if (rejectPanel) rejectPanel.classList.add('hidden');
+
+    if (state === 'verified') {
+      if (badge) { badge.textContent = 'Terverifikasi'; badge.className = 'd-pill green'; }
+      if (verifyBtns) { verifyBtns.classList.add('hidden'); verifyBtns.classList.remove('inline-flex'); }
+      if (verifiedBtns) { verifiedBtns.classList.remove('hidden'); verifiedBtns.classList.add('inline-flex'); }
+    } else {
+      if (badge) { badge.textContent = 'Menunggu'; badge.className = 'd-pill amber'; }
+      if (verifyBtns) { verifyBtns.classList.remove('hidden'); verifyBtns.classList.add('inline-flex'); }
+      if (verifiedBtns) { verifiedBtns.classList.add('hidden'); verifiedBtns.classList.remove('inline-flex'); }
     }
 
-    function showToast(msg, isError) {
-        var t = document.getElementById('docToast');
-        t.textContent = msg;
-        t.className = 'fixed top-6 right-6 z-50 text-sm px-4 py-3 rounded-lg shadow-lg max-w-sm ' + (isError ? 'bg-red-600 text-white' : 'bg-gray-900 text-white');
-        t.classList.remove('hidden');
-        setTimeout(function () { t.classList.add('hidden'); }, 3000);
+    var lock = document.getElementById('docVerifyLock');
+    if (lock && payload) {
+      var hasAll = payload.has_all_required_verified;
+      if (hasAll === true || hasAll === 1) {
+        lock.classList.add('hidden');
+      } else if (hasAll === false || hasAll === 0) {
+        lock.classList.remove('hidden');
+      }
+    }
+  }
+})();
+
+/* ===== Modal konfirmasi aksi generic (Reset Password / Hapus Akun) ===== */
+(function () {
+  var modal = document.getElementById('actionConfirmModal');
+  var pendingAction = null; // 'reset-password' | 'delete-account'
+
+  function openActionConfirm(action, targetName) {
+    pendingAction = action;
+    var icon = document.getElementById('actionConfirmIcon');
+    var title = document.getElementById('actionConfirmTitle');
+    var msg = document.getElementById('actionConfirmMessage');
+    var btn = document.getElementById('actionConfirmAction');
+
+    if (action === 'reset-password') {
+      icon.className = 'd-modal-ic amber';
+      icon.innerHTML = '<i class="fa-solid fa-key"></i>';
+      title.textContent = 'Reset password?';
+      msg.textContent = 'Yakin ingin mereset password akun ' + (targetName || 'siswa') + '? Password baru akan dikirim ke email siswa.';
+      btn.textContent = 'Ya, Reset';
+      btn.className = 'd-btn amber';
+    } else {
+      icon.className = 'd-modal-ic red';
+      icon.innerHTML = '<i class="fa-solid fa-trash-can"></i>';
+      title.textContent = 'Hapus akun?';
+      msg.textContent = 'Hapus akun siswa ' + (targetName || 'ini') + '? Seluruh data pendaftaran dan pembayarannya akan ikut terhapus permanen.';
+      btn.textContent = 'Ya, Hapus';
+      btn.className = 'd-btn red';
     }
 
-    window.docShowToast = showToast;
+    modal.classList.add('is-open');
+    modal.setAttribute('aria-hidden', 'false');
+  }
 
-    window.openDocVerifyModal = function (id, docType) {
-        pendingDocId = id;
-        pendingAction = 'verify';
-        document.getElementById('docConfirmTitle').textContent = 'Verifikasi dokumen?';
-        document.getElementById('docConfirmMessage').textContent = 'Verifikasi dokumen "' + docType + '"? Dokumen akan ditandai Terverifikasi.';
-        var icon = document.getElementById('docConfirmIcon');
-        icon.textContent = '✓';
-        icon.className = 'w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 text-lg bg-green-100 text-green-600';
-        var btn = document.getElementById('docConfirmAction');
-        btn.textContent = 'Ya, Verifikasi';
-        btn.className = 'px-4 py-2 text-sm font-medium rounded text-white bg-green-600 hover:bg-green-700';
-        var m = document.getElementById('docConfirmModal');
-        m.style.display = 'flex';
-        m.classList.remove('hidden');
-        m.classList.add('flex');
-    };
+  window.openActionConfirm = openActionConfirm;
 
-    window.openDocUnverifyModal = function (id, docType) {
-        pendingDocId = id;
-        pendingAction = 'unverify';
-        document.getElementById('docConfirmTitle').textContent = 'Batalkan verifikasi?';
-        document.getElementById('docConfirmMessage').textContent = 'Batalkan verifikasi dokumen "' + docType + '"? Status akan kembali menjadi Menunggu.';
-        var icon = document.getElementById('docConfirmIcon');
-        icon.textContent = '↩';
-        icon.className = 'w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 text-lg bg-amber-100 text-amber-600';
-        var btn = document.getElementById('docConfirmAction');
-        btn.textContent = 'Ya, Batalkan';
-        btn.className = 'px-4 py-2 text-sm font-medium rounded text-white bg-amber-500 hover:bg-amber-600';
-        var m = document.getElementById('docConfirmModal');
-        m.style.display = 'flex';
-        m.classList.remove('hidden');
-        m.classList.add('flex');
-    };
+  window.closeActionConfirm = function () {
+    modal.classList.remove('is-open');
+    modal.setAttribute('aria-hidden', 'true');
+    pendingAction = null;
+  };
 
-    window.closeDocConfirmModal = function () {
-        var m = document.getElementById('docConfirmModal');
-        m.classList.add('hidden');
-        m.classList.remove('flex');
-        m.style.display = 'none';
-        pendingDocId = null;
-        pendingAction = null;
-    };
+  modal.addEventListener('click', function (e) {
+    if (e.target === this) closeActionConfirm();
+  });
 
-    document.getElementById('docConfirmModal').addEventListener('click', function (e) {
-        if (e.target === this) closeDocConfirmModal();
-    });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && modal.classList.contains('is-open')) closeActionConfirm();
+  });
 
-    document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape') {
-            if (!document.getElementById('docConfirmModal').classList.contains('hidden')) closeDocConfirmModal();
-        }
-    });
-
-    document.getElementById('docConfirmAction').addEventListener('click', function () {
-        if (!pendingDocId || !pendingAction) return;
-        var id = pendingDocId;
-        var action = pendingAction;
-        closeDocConfirmModal();
-        var url = action === 'verify'
-            ? '{{ url('admin/documents') }}/' + id + '/verify'
-            : '{{ url('admin/documents') }}/' + id + '/unverify';
-        var btn = document.getElementById('docConfirmAction');
-        btn.disabled = true;
-
-        fetch(url, {
-            method: 'PATCH',
-            headers: {
-                'X-CSRF-TOKEN': getToken(),
-                'X-Requested-With': 'XMLHttpRequest',
-                'Accept': 'application/json'
-            }
-        }).then(function (r) { return r.json().then(function (j) { return { ok: r.ok, body: j }; }); })
-        .then(function (res) {
-            btn.disabled = false;
-            if (!res.ok || !res.body.success) {
-                showToast(res.body.message || 'Gagal memproses dokumen', true);
-                return;
-            }
-            showToast(res.body.message || (action === 'verify' ? 'Dokumen diverifikasi' : 'Verifikasi dibatalkan'), false);
-            applyDocState(id, action === 'verify' ? 'verified' : 'pending', res.body);
-        }).catch(function () {
-            btn.disabled = false;
-            showToast('Terjadi kesalahan jaringan', true);
-        });
-    });
-
-    function applyDocState(docId, state, payload) {
-        var badge = document.getElementById('doc-badge-' + docId);
-        var verifyBtns = document.getElementById('doc-verify-btns-' + docId);
-        var verifiedBtns = document.getElementById('doc-verified-btns-' + docId);
-        var rejectPanel = document.getElementById('doc-reject-' + docId);
-        if (rejectPanel) rejectPanel.classList.add('hidden');
-
-        if (state === 'verified') {
-            if (badge) { badge.textContent = 'Terverifikasi'; badge.className = 'px-2 py-1 text-xs bg-green-100 text-green-800 rounded'; }
-            if (verifyBtns) { verifyBtns.classList.add('hidden'); verifyBtns.classList.remove('inline-flex'); }
-            if (verifiedBtns) { verifiedBtns.classList.remove('hidden'); verifiedBtns.classList.add('inline-flex'); }
-        } else {
-            if (badge) { badge.textContent = 'Menunggu'; badge.className = 'px-2 py-1 text-xs bg-yellow-100 text-yellow-800 rounded'; }
-            if (verifyBtns) { verifyBtns.classList.remove('hidden'); verifyBtns.classList.add('inline-flex'); }
-            if (verifiedBtns) { verifiedBtns.classList.add('hidden'); verifiedBtns.classList.remove('inline-flex'); }
-        }
-
-        // Kunci/buka verifikasi pendaftaran (warning kuning)
-        var lock = document.getElementById('docVerifyLock');
-        if (lock && payload) {
-            var hasAll = payload.has_all_required_verified;
-            if (hasAll === true || hasAll === 1) {
-                lock.classList.add('hidden');
-            } else if (hasAll === false || hasAll === 0) {
-                lock.classList.remove('hidden');
-            }
-        }
-    }
+  document.getElementById('actionConfirmAction').addEventListener('click', function () {
+    if (!pendingAction) return;
+    var form = document.getElementById(pendingAction === 'reset-password' ? 'resetPasswordForm' : 'deleteAccountForm');
+    closeActionConfirm();
+    if (form) form.submit();
+  });
 })();
 </script>
 @endsection
