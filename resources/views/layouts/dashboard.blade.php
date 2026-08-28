@@ -1018,10 +1018,23 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Konfirmasi hanya saat MENONAKTIFKAN — aktifkan langsung (tanpa konfirmasi).
     if (!isActive) {
+      // Pakai modal konfirmasi Bringova bila tersedia (didefinisikan partial tracks), else native confirm.
+      if (typeof window.confirmTrackDeactivate === 'function') {
+        window.confirmTrackDeactivate({
+          el: el, row: row, trackId: trackId, levelId: levelId,
+          trackName: trackName, levelName: levelName, wasActive: wasActive
+        });
+        return; // modal menangani sisanya
+      }
       var ok = window.confirm('Nonaktifkan jalur ' + trackName + ' untuk jenjang ' + levelName + '?\n\nJalur ini tidak akan muncul di form pendaftaran siswa dan ditolak di backend. Data historis pendaftar lama tetap tersimpan.');
       if (!ok) { el.checked = wasActive; return; }
     }
+    doTrackToggle(el, row, trackId, levelId, trackName, levelName, isActive, wasActive);
+  });
 
+  // Eksekusi toggle track (loading → PATCH AJAX → update UI lokal). Dipanggil dari listener
+  // langsung (saat aktifkan) atau dari modal konfirmasi Bringova (saat nonaktifkan).
+  function doTrackToggle(el, row, trackId, levelId, trackName, levelName, isActive, wasActive) {
     // Loading state: disable toggle sampai request selesai (cegah double-click).
     el.disabled = true;
     var pill = el.nextElementSibling;
@@ -1069,7 +1082,8 @@ document.addEventListener('DOMContentLoaded', function () {
       el.checked = wasActive;
       showToast('Gagal terhubung ke server');
     });
-  });
+  }
+  window.doTrackToggle = doTrackToggle;
 
   function loadContent(url, pushState) {
     if (pushState === undefined) pushState = true;
