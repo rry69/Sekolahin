@@ -136,11 +136,10 @@
   .mjr .mjr-name a:hover { text-decoration: underline; }
   .mjr .mjr-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
   .mjr .mjr-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
+  .mjr .mjr-cap { font-size: 11px; color: var(--muted); font-weight: 500; }
   .mjr .mjr-stats { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; font-size: 11.5px; color: var(--muted); align-items: center; }
   .mjr .mjr-stats b { color: var(--ink); font-weight: 700; }
-  .mjr .mjr-quotas { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
-  .mjr .mjr-quota-pill { display: inline-flex; align-items: center; gap: 4px; padding: 3px 9px; border-radius: 20px; font-size: 11px; font-weight: 600; background: var(--gray-soft); color: var(--gray); }
-  .mjr .mjr-quota-pill.has-quota { background: var(--blue-soft); color: var(--blue); }
+  .mjr .mjr-quotas-min { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; font-size: 11.5px; color: var(--muted); align-items: center; }
   .mjr .mjr-actions { display: flex; gap: 6px; align-items: center; flex-shrink: 0; flex-wrap: wrap; justify-content: flex-end; }
 
   /* ---------- empty & footer ---------- */

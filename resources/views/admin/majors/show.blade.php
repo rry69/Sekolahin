@@ -73,7 +73,7 @@
   .mjd .m-sum-ic.gray { background: var(--gray-soft); color: var(--gray); }
   .mjd .m-sum-lbl { font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .3px; }
   .mjd .m-sum-val { font-size: 19px; font-weight: 800; color: var(--ink); }
-  .mjd .m-quotas { display: flex; gap: 8px; flex-wrap: wrap; }
+  .mjd .m-quotas-min { display: flex; gap: 6px; flex-wrap: wrap; font-size: 11.5px; color: var(--muted); align-items: center; }
   .mjd .m-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px 24px; }
   .mjd .m-item { display: flex; justify-content: space-between; gap: 12px; font-size: 13px; padding: 10px 2px; border-bottom: 1px solid var(--divider); }
   .mjd .m-item:last-child { border-bottom: none; }
@@ -128,8 +128,8 @@
         <span class="m-pill {{ $major->is_active ? 'green' : 'red' }}"><i class="fa-solid {{ $major->is_active ? 'fa-circle-check' : 'fa-circle-xmark' }}"></i> {{ $major->statusLabel() }}</span>
         <span class="dot">·</span>{{ $major->school->name ?? '-' }}
         <span class="dot">·</span>{{ $major->schoolLevel->name ?? '-' }}
-        <span class="dot">·</span>Kode {{ $major->code }}
-        @if ($major->order !== null) <span class="dot">·</span>Urutan {{ $major->order }} @endif
+        <span class="dot">·</span><span style="color:var(--muted)">Kode {{ $major->code }}</span>
+        @if ($major->order !== null) <span class="dot">·</span><span style="color:var(--muted)">#{{ $major->order }}</span> @endif
       </p>
     </div>
     <div class="m-head-actions">
@@ -171,11 +171,10 @@
   @if (isset($statistics['by_track']))
   <div class="m-sec">
     <div class="m-sec-title"><i class="fa-solid fa-route"></i> Kuota per Jalur</div>
-    <div class="m-quotas">
+    <div class="m-quotas-min">
       @foreach($statistics['by_track'] as $trackName => $row)
-        <span class="m-pill blue">{{ $trackName }}: {{ $row['quota'] }}</span>
-        <span class="m-pill {{ $row['sisa'] === 0 ? 'red' : 'green' }}">Sisa {{ $row['sisa'] }}</span>
-        <span class="m-pill gray">Terisi {{ $row['accepted'] }}</span>
+        <span>{{ $trackName }} {{ $row['quota'] }} <span style="color:var(--muted)">terisi {{ $row['accepted'] }}, sisa {{ $row['sisa'] }}</span></span>
+        <span style="color:var(--divider)">·</span>
       @endforeach
     </div>
   </div>
@@ -185,11 +184,11 @@
     <div class="m-sec-title"><i class="fa-solid fa-circle-info"></i> Informasi Jurusan</div>
     <div class="m-grid">
       <div class="m-item"><span class="k">Nama Jurusan</span><span class="v">{{ $major->name }}</span></div>
-      <div class="m-item"><span class="k">Kode</span><span class="v">{{ $major->code }}</span></div>
+      <div class="m-item"><span class="k">Kode</span><span class="v"><span style="color:var(--muted)">· {{ $major->code }}</span></span></div>
       <div class="m-item"><span class="k">Jenjang</span><span class="v">{{ $major->schoolLevel->name ?? '-' }}</span></div>
       <div class="m-item"><span class="k">Sekolah</span><span class="v">{{ $major->school->name ?? '-' }}</span></div>
       <div class="m-item"><span class="k">Status</span><span class="v"><span class="m-pill {{ $major->is_active ? 'green' : 'red' }}">{{ $major->statusLabel() }}</span></span></div>
-      <div class="m-item"><span class="k">Urutan</span><span class="v">{{ $major->order ?? '-' }}</span></div>
+      <div class="m-item"><span class="k">Urutan</span><span class="v"><span style="color:var(--muted)">{{ $major->order !== null ? '#'.$major->order : '—' }}</span></span></div>
       @if($major->description)
       <div class="m-item full"><span class="k">Deskripsi</span><span class="v">{{ $major->description }}</span></div>
       @endif
@@ -208,8 +207,9 @@
             <div class="m-row-body">
               <div class="m-row-name">{{ $registration->applicant->full_name ?? '-' }}</div>
               <div class="m-row-sub">
-                <span class="m-pill blue" style="padding:2px 8px;font-size:11px">{{ $registration->registrationTrack->name ?? '-' }}</span>
-                <span class="m-pill {{ $registration->status === 'accepted' || $registration->status === 're_registration_complete' ? 'green' : ($registration->status === 'pending' ? 'amber' : ($registration->status === 'rejected' ? 'red' : 'gray')) }}" style="padding:2px 8px;font-size:11px">{{ \App\Models\Registration::statusLabel($registration->status) }}</span>
+                <span style="color:var(--muted)">{{ $registration->registrationTrack->name ?? '-' }}</span>
+                <span style="color:var(--divider)">·</span>
+                <span style="color:{{ $registration->status === 'accepted' || $registration->status === 're_registration_complete' ? 'var(--green)' : ($registration->status === 'pending' ? '#b45309' : ($registration->status === 'rejected' ? 'var(--red)' : 'var(--muted)')) }};font-weight:600">{{ \App\Models\Registration::statusLabel($registration->status) }}</span>
               </div>
             </div>
             <div class="m-row-actions">

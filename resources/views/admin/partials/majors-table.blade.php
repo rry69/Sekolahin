@@ -15,12 +15,8 @@
         <div class="mjr-body">
           <div class="mjr-name">
             <a href="{{ route('admin.majors.show', $major) }}">{{ $major->name }}</a>
-            <span class="mjr-pill gray" style="font-size:10.5px;padding:2px 8px;">{{ $major->code }}</span>
-            <span class="mjr-pill {{ $jenjangName === 'SMA' ? 'blue' : ($jenjangName === 'SMK' ? 'purple' : 'gray') }}">{{ $jenjangName }}</span>
-            <span class="mjr-pill {{ $isActive ? 'green' : 'red' }}">{{ $major->statusLabel() }}</span>
-            @if ($major->order !== null)
-              <span class="mjr-pill gray" style="font-size:10.5px;">Urutan {{ $major->order }}</span>
-            @endif
+            <span class="mjr-cap">· {{ $major->code }} · {{ $jenjangName }}@if($major->order !== null) · #{{ $major->order }}@endif</span>
+            <span class="mjr-pill {{ $isActive ? 'green' : 'red' }}" style="padding:2px 9px;font-size:10.5px">{{ $major->statusLabel() }}</span>
           </div>
           <div class="mjr-sub">
             <i class="fa-solid fa-school" style="margin-right:3px;font-size:10px;"></i>{{ $major->school->name ?? '-' }}
@@ -28,22 +24,25 @@
           <div class="mjr-stats">
             <span>Pendaftar <b>{{ $major->total_applicants }}</b></span>
             <span style="color:var(--divider)">·</span>
-            <span class="mjr-pill amber" style="padding:2px 8px;font-size:10.5px;">Pending {{ $major->pending_count }}</span>
-            <span class="mjr-pill green" style="padding:2px 8px;font-size:10.5px;">Diterima {{ $major->accepted_count }}</span>
-            <span class="mjr-pill red" style="padding:2px 8px;font-size:10.5px;">Ditolak {{ $major->rejected_count }}</span>
+            <span>Pending <b style="color:#b45309">{{ $major->pending_count }}</b></span>
+            <span style="color:var(--divider)">·</span>
+            <span>Diterima <b style="color:var(--green)">{{ $major->accepted_count }}</b></span>
+            <span style="color:var(--divider)">·</span>
+            <span>Ditolak <b style="color:var(--red)">{{ $major->rejected_count }}</b></span>
           </div>
           @php
             $totalQuota = $major->trackQuotas->sum('quota') ?: $major->quota;
             $availableQuota = $major->available_quota;
           @endphp
-          <div class="mjr-quotas">
+          <div class="mjr-quotas-min">
             @foreach($tracks as $t)
               @php $q = $major->{"quota_{$t->id}"} ?? null; $s = $major->{"sisa_{$t->id}"} ?? null; @endphp
               @if($q !== null)
-                <span class="mjr-quota-pill has-quota"><i class="fa-solid fa-layer-group" style="font-size:9px;"></i> {{ $t->name }} {{ $q }} <span style="opacity:.6">→ sisa {{ $s }}</span></span>
+                <span>{{ $t->name }} {{ $q }} <span style="color:var(--muted)">sisa {{ $s }}</span></span>
+                <span style="color:var(--divider)">·</span>
               @endif
             @endforeach
-            <span class="mjr-quota-pill has-quota" style="background:var(--coral-soft);color:var(--coral);"><i class="fa-solid fa-chart-simple" style="font-size:9px;"></i> Total {{ $totalQuota }} → Sisa {{ $availableQuota }}</span>
+            <span>Total {{ $totalQuota }} <span style="color:var(--muted)">sisa {{ $availableQuota }}</span></span>
           </div>
         </div>
         <div class="mjr-actions">
