@@ -671,7 +671,14 @@ function toggleFilterPanel() {
 
   function selectValue(v, l) {
     currentValue = v;
-    if (currentInput) currentInput.value = v;
+    if (currentInput) {
+      currentInput.value = v;
+      try { currentInput.dispatchEvent(new Event('change', { bubbles: true })); } catch(e) {}
+      // majors filter: trigger table reload when level/school picker changes
+      if (currentInput.id === 'mjrLevel' || currentInput.id === 'mjrSchool') {
+        if (typeof filterTable === 'function' && document.getElementById('mjrBody')) filterTable('majors');
+      }
+    }
     if (currentTrigger) {
       currentTrigger.querySelector('.pick-label').textContent = l;
       currentTrigger.querySelector('.pick-label').classList.remove('is-placeholder');
@@ -717,7 +724,13 @@ function toggleFilterPanel() {
   }
 
   function clearCurrent() {
-    if (currentInput) currentInput.value = '';
+    if (currentInput) {
+      currentInput.value = '';
+      try { currentInput.dispatchEvent(new Event('change', { bubbles: true })); } catch(e) {}
+      if (currentInput.id === 'mjrLevel' || currentInput.id === 'mjrSchool') {
+        if (typeof filterTable === 'function' && document.getElementById('mjrBody')) filterTable('majors');
+      }
+    }
     if (currentTrigger) {
       currentTrigger.classList.remove('has-value');
       syncTriggerLabel(currentTrigger);
@@ -731,7 +744,13 @@ function toggleFilterPanel() {
   window.clearPicker = function (key) {
     var input = document.querySelector('[data-picker-input="' + key + '"]');
     var trigger = document.querySelector('.r-pick[data-picker="' + key + '"]');
-    if (input) input.value = '';
+    if (input) {
+      input.value = '';
+      try { input.dispatchEvent(new Event('change', { bubbles: true })); } catch(e) {}
+      if (input.id === 'mjrLevel' || input.id === 'mjrSchool') {
+        if (typeof filterTable === 'function' && document.getElementById('mjrBody')) filterTable('majors');
+      }
+    }
     if (trigger) syncTriggerLabel(trigger);
   };
   window.clearCurrentPicker = clearCurrent;
@@ -1232,11 +1251,19 @@ document.addEventListener('DOMContentLoaded', function () {
     var form = document.getElementById('majorDeleteForm');
     if (nameEl) nameEl.textContent = name;
     if (form) form.action = '/admin/majors/' + id;
-    if (modal) modal.style.display = 'flex';
+    if (modal) {
+      modal.classList.add('is-open');
+      modal.setAttribute('aria-hidden', 'false');
+      modal.style.display = 'flex';
+    }
   };
   window.closeMajorDelete = function () {
     var modal = document.getElementById('majorDeleteModal');
-    if (modal) modal.style.display = 'none';
+    if (modal) {
+      modal.classList.remove('is-open');
+      modal.setAttribute('aria-hidden', 'true');
+      modal.style.display = 'none';
+    }
   };
   window.openPeriodDelete = function (id, name, count) {
     var modal = document.getElementById('periodDeleteModal');

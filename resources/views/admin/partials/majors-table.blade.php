@@ -1,82 +1,72 @@
-<div class="mjr-table-wrap">
-    <table class="data-table">
-      <thead>
-        <tr>
-          <th>Status</th>
-          <th>Jenjang</th>
-          <th>Sekolah</th>
-          <th>Kode</th>
-          <th>Jurusan</th>
-          <th>Pendaftar</th>
-          <th>Pending</th>
-          <th>Diterima</th>
-          <th>Ditolak</th>
-          @foreach($tracks as $t)<th>{{ $t->name }}</th>@endforeach
-          <th>Total Kuota</th>
-          <th>Total Sisa</th>
-          <th>Aksi</th>
-        </tr>
-      </thead>
-      <tbody>
-        @forelse ($majors as $major)
-          <tr>
-            <td>
-              <span class="status-badge status-{{ $major->is_active ? 'active' : 'inactive' }}">{{ $major->statusLabel() }}</span>
-            </td>
-            <td>{{ $major->schoolLevel->name ?? $major->school->schoolLevels->first()?->name ?? '-' }}</td>
-            <td>{{ $major->school->name ?? '-' }}</td>
-            <td>{{ $major->code }}</td>
-            <td>
-              <a href="{{ route('admin.majors.show', $major) }}" style="font-weight:600;color:var(--accent);text-decoration:none;">{{ $major->name }}</a>
-              @if ($major->order !== null)
-                <span style="display:block;font-size:10px;color:var(--tx4);">Urutan {{ $major->order }}</span>
-              @endif
-            </td>
-            <td>{{ $major->total_applicants }}</td>
-            <td><span class="status-badge status-pending">{{ $major->pending_count }}</span></td>
-            <td><span class="status-badge status-accepted">{{ $major->accepted_count }}</span></td>
-            <td><span class="status-badge status-rejected">{{ $major->rejected_count }}</span></td>
+@if ($majors->isEmpty())
+  <div class="mjr-empty">
+    <i class="fa-solid fa-folder-open"></i>
+    Tidak ada jurusan yang cocok dengan filter.
+  </div>
+@else
+  <div class="mjr-list">
+    @foreach ($majors as $major)
+      @php
+        $jenjangName = $major->schoolLevel->name ?? $major->school->schoolLevels->first()?->name ?? '-';
+        $isActive = $major->is_active;
+      @endphp
+      <div class="mjr-row">
+        <span class="mjr-ic {{ $isActive ? 'active' : 'inactive' }}"><i class="fa-solid fa-graduation-cap"></i></span>
+        <div class="mjr-body">
+          <div class="mjr-name">
+            <a href="{{ route('admin.majors.show', $major) }}">{{ $major->name }}</a>
+            <span class="mjr-pill gray" style="font-size:10.5px;padding:2px 8px;">{{ $major->code }}</span>
+            <span class="mjr-pill {{ $jenjangName === 'SMA' ? 'blue' : ($jenjangName === 'SMK' ? 'purple' : 'gray') }}">{{ $jenjangName }}</span>
+            <span class="mjr-pill {{ $isActive ? 'green' : 'red' }}">{{ $major->statusLabel() }}</span>
+            @if ($major->order !== null)
+              <span class="mjr-pill gray" style="font-size:10.5px;">Urutan {{ $major->order }}</span>
+            @endif
+          </div>
+          <div class="mjr-sub">
+            <i class="fa-solid fa-school" style="margin-right:3px;font-size:10px;"></i>{{ $major->school->name ?? '-' }}
+          </div>
+          <div class="mjr-stats">
+            <span>Pendaftar <b>{{ $major->total_applicants }}</b></span>
+            <span style="color:var(--divider)">·</span>
+            <span class="mjr-pill amber" style="padding:2px 8px;font-size:10.5px;">Pending {{ $major->pending_count }}</span>
+            <span class="mjr-pill green" style="padding:2px 8px;font-size:10.5px;">Diterima {{ $major->accepted_count }}</span>
+            <span class="mjr-pill red" style="padding:2px 8px;font-size:10.5px;">Ditolak {{ $major->rejected_count }}</span>
+          </div>
+          @php
+            $totalQuota = $major->trackQuotas->sum('quota') ?: $major->quota;
+            $availableQuota = $major->available_quota;
+          @endphp
+          <div class="mjr-quotas">
             @foreach($tracks as $t)
               @php $q = $major->{"quota_{$t->id}"} ?? null; $s = $major->{"sisa_{$t->id}"} ?? null; @endphp
-              <td>
-                @if($q !== null)
-                  <span style="font-size:12px;">{{ $q }} <span style="color:var(--tx4);">/ sisa {{ $s }}</span></span>
-                @else <span style="color:var(--tx4);">-</span> @endif
-              </td>
+              @if($q !== null)
+                <span class="mjr-quota-pill has-quota"><i class="fa-solid fa-layer-group" style="font-size:9px;"></i> {{ $t->name }} {{ $q }} <span style="opacity:.6">→ sisa {{ $s }}</span></span>
+              @endif
             @endforeach
-            <td>{{ $major->trackQuotas->sum('quota') ?: $major->quota }}</td>
-            <td>{{ $major->available_quota }}</td>
-            <td>
-              <div style="display:flex;gap:6px;flex-wrap:wrap;">
-                <a href="{{ route('admin.majors.show', $major) }}" class="btn btn-outline" title="Detail"><i class="fa-solid fa-eye" style="font-size:10px;"></i></a>
-                <a href="{{ route('admin.majors.edit', $major) }}" class="btn btn-outline" title="Edit"><i class="fa-solid fa-pen" style="font-size:10px;"></i></a>
-                <form action="{{ route('admin.majors.toggle-status', $major) }}" method="POST" style="display:inline;">
-                  @csrf
-                  <button type="submit" class="btn {{ $major->is_active ? 'btn-outline' : 'btn-primary' }}" title="{{ $major->is_active ? 'Nonaktifkan' : 'Aktifkan' }}">
-                    <i class="fa-solid fa-{{ $major->is_active ? 'toggle-on' : 'toggle-off' }}" style="font-size:11px;"></i>
-                  </button>
-                </form>
-                <button type="button" class="btn btn-danger" title="Hapus" onclick="openMajorDelete({{ $major->id }}, {{ json_encode($major->name) }})">
-                  <i class="fa-solid fa-trash-can" style="font-size:10px;"></i>
-                </button>
-              </div>
-            </td>
-          </tr>
-        @empty
-          <tr>
-            <td colspan="{{ 9 + $tracks->count() + 3 }}" class="empty-state">
-              <i class="fa-solid fa-folder-open" style="font-size:24px;color:var(--tx4);display:block;margin-bottom:8px;"></i>
-              Tidak ada jurusan yang cocok dengan filter.
-            </td>
-          </tr>
-        @endforelse
-      </tbody>
-    </table>
+            <span class="mjr-quota-pill has-quota" style="background:var(--coral-soft);color:var(--coral);"><i class="fa-solid fa-chart-simple" style="font-size:9px;"></i> Total {{ $totalQuota }} → Sisa {{ $availableQuota }}</span>
+          </div>
+        </div>
+        <div class="mjr-actions">
+          <a href="{{ route('admin.majors.show', $major) }}" class="mjr-btn ghost sm" title="Detail"><i class="fa-solid fa-eye" style="font-size:10px;"></i> Detail</a>
+          <a href="{{ route('admin.majors.edit', $major) }}" class="mjr-btn amber sm" title="Edit"><i class="fa-solid fa-pen" style="font-size:10px;"></i> Edit</a>
+          <form action="{{ route('admin.majors.toggle-status', $major) }}" method="POST" style="display:inline;">
+            @csrf
+            <button type="submit" class="mjr-btn {{ $isActive ? 'ghost' : 'green' }} sm" title="{{ $isActive ? 'Nonaktifkan' : 'Aktifkan' }}">
+              <i class="fa-solid fa-{{ $isActive ? 'toggle-on' : 'toggle-off' }}" style="font-size:11px;"></i> {{ $isActive ? 'Nonaktif' : 'Aktif' }}
+            </button>
+          </form>
+          <button type="button" class="mjr-btn red sm" title="Hapus" onclick="openMajorDelete({{ $major->id }}, {{ json_encode($major->name) }})">
+            <i class="fa-solid fa-trash-can" style="font-size:10px;"></i> Hapus
+          </button>
+        </div>
+      </div>
+    @endforeach
   </div>
+@endif
 
-  <div class="mjr-footer">
-    <span style="font-size:12px;color:var(--tx3);">Menampilkan {{ $majors->firstItem() ?? 0 }}–{{ $majors->lastItem() ?? 0 }} dari {{ $majors->total() }}</span>
-    <div class="pager">
-      {{ $majors->links('vendor.pagination.egglore') }}
-    </div>
+<div class="mjr-footer">
+  <span>Menampilkan {{ $majors->firstItem() ?? 0 }}–{{ $majors->lastItem() ?? 0 }} dari {{ $majors->total() }}</span>
+  <div class="pager">
+    {{ $majors->links('vendor.pagination.bringova') }}
   </div>
+</div>
