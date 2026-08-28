@@ -37,8 +37,24 @@ class RegisteredUserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'terms' => ['accepted'],
         ], [
-            'email.unique' => 'Email sudah terdaftar',
+            // Pesan spesifik untuk kolom tertentu (override dari lang/id/validation.php)
+            'name.required'              => 'Nama lengkap wajib diisi.',
+            'name.max'                   => 'Nama lengkap tidak boleh lebih dari :max karakter.',
+            'email.required'             => 'Email wajib diisi.',
+            'email.email'                => 'Format email tidak valid. Contoh: nama@email.com',
+            'email.lowercase'            => 'Email harus ditulis dengan huruf kecil semua, tanpa huruf besar.',
+            'email.max'                  => 'Email tidak boleh lebih dari :max karakter.',
+            'email.unique'               => 'Email ini sudah terdaftar. Silakan gunakan email lain atau masuk jika Anda sudah punya akun.',
+            'password.required'          => 'Kata sandi wajib diisi.',
+            'password.confirmed'         => 'Konfirmasi kata sandi tidak cocok. Pastikan pengulangan kata sandi sama.',
+            'password.min'               => 'Kata sandi minimal :min karakter.',
+            'password.letters'           => 'Kata sandi harus mengandung minimal satu huruf.',
+            'password.mixed'             => 'Kata sandi harus mengandung huruf besar dan huruf kecil.',
+            'password.numbers'           => 'Kata sandi harus mengandung minimal satu angka.',
+            'password.symbols'           => 'Kata sandi harus mengandung minimal satu simbol seperti !@#$%.',
+            'terms.accepted'             => 'Anda harus menyetujui syarat & ketentuan terlebih dahulu untuk membuat akun.',
         ]);
 
         $applicantRole = Role::where('name', 'Siswa')->first();

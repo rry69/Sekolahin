@@ -32,6 +32,47 @@ class ProfileController extends Controller
     }
 
     /**
+     * Upload a new profile photo.
+     */
+    public function updateAvatar(Request $request)
+    {
+        $request->validate([
+            'avatar' => ['required', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
+        ]);
+
+        $user = $request->user();
+
+        // Hapus avatar lama bila ada
+        if ($user->avatar_path && \Illuminate\Support\Facades\Storage::disk('public')->exists($user->avatar_path)) {
+            \Illuminate\Support\Facades\Storage::disk('public')->delete($user->avatar_path);
+        }
+
+        $path = $request->file('avatar')->store('avatars', 'public');
+        $user->forceFill(['avatar_path' => $path])->save();
+
+        if ($request->ajax()) {
+            return response()->json(['success' => true, 'message' => 'Foto profil berhasil diperbarui.', 'avatar_url' => $user->avatar_url]);
+        }
+
+        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+    }
+
+    /**
+     * Toggle two-factor authentication status.
+     */
+    public function toggleTwoFactor(Request $request)
+    {
+        $user = $request->user();
+        $user->forceFill(['two_factor_enabled' => ! $user->two_factor_enabled])->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => $user->two_factor_enabled ? 'Autentikasi dua faktor diaktifkan.' : 'Autentikasi dua faktor dinonaktifkan.',
+            'two_factor_enabled' => $user->two_factor_enabled,
+        ]);
+    }
+
+    /**
      * Update the user's profile information.
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse

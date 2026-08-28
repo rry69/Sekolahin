@@ -22,6 +22,9 @@ class User extends Authenticatable implements MustVerifyEmail
         'email',
         'password',
         'role_id',
+        'avatar_path',
+        'last_login_at',
+        'two_factor_enabled',
     ];
 
     /**
@@ -44,12 +47,24 @@ class User extends Authenticatable implements MustVerifyEmail
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'last_login_at' => 'datetime',
+            'two_factor_enabled' => 'boolean',
         ];
     }
 
     public function role()
     {
         return $this->belongsTo(Role::class);
+    }
+
+    /**
+     * Get the public URL for the user's avatar, or null.
+     */
+    public function getAvatarUrlAttribute(): ?string
+    {
+        return $this->avatar_path
+            ? '/storage/' . ltrim($this->avatar_path, '/')
+            : null;
     }
 
     public function applicant()

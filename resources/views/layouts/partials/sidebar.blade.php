@@ -11,7 +11,10 @@
 <aside class="sidebar expanded" id="sidebar" aria-label="Navigasi utama">
 
   <header class="sb-head">
-    <span class="avatar" aria-hidden="true">{{ mb_strtoupper(mb_substr(Auth::user()->name, 0, 2)) }}</span>
+    <span class="avatar" aria-hidden="true">
+      <img id="sidebar-avatar-img" src="{{ Auth::user()->avatar_url }}" alt="" style="{{ Auth::user()->avatar_url ? 'width:100%;height:100%;object-fit:cover;border-radius:12px;display:block' : 'display:none' }}">
+      <span id="sidebar-avatar-ini" style="{{ Auth::user()->avatar_url ? 'display:none' : '' }}">{{ mb_strtoupper(mb_substr(Auth::user()->name, 0, 2)) }}</span>
+    </span>
     <div class="who">
       <span class="flabel name">{{ Auth::user()->name }}</span>
       <span class="flabel mail">{{ Auth::user()->email }}</span>

@@ -5,6 +5,7 @@
             || $errors->has('name')
             || $errors->has('password')
             || $errors->has('password_confirmation')
+            || $errors->has('terms')
             || old('name') !== null;
         $loginActive = ! $registerActive;
 
@@ -243,9 +244,9 @@
 
                     <!-- Terms -->
                     <label class="flex cursor-pointer items-start gap-2 text-[13px] text-gray-500">
-                        <input type="checkbox" required
+                        <input type="checkbox" name="terms" value="1" required
                                class="mt-0.5 h-4 w-4 cursor-pointer rounded border-gray-300 shadow-sm focus:ring-[#FF8E6E]" style="accent-color:#FF6B6B;">
-                        <span>Saya menyetujui <a href="#" class="font-semibold text-[#FF6B6B] hover:underline">syarat &amp; ketentuan</a></span>
+                        <span>Saya menyetujui <a href="{{ route('terms') }}" target="_blank" rel="noopener" class="font-semibold text-[#FF6B6B] hover:underline">syarat &amp; ketentuan</a></span>
                     </label>
 
                     <button type="submit" class="btn-submit flex h-12 w-full cursor-pointer items-center justify-center gap-2 rounded-xl text-[15px] font-semibold text-white transition active:scale-[.985] focus:outline-none focus-visible:ring-4 focus-visible:ring-[#FF8E6E]/40"

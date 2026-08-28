@@ -36,18 +36,20 @@ class RegistrationController extends Controller
     {
         $applicant = auth()->user()->applicant;
 
-        if (!$applicant || !$applicant->isProfileComplete()) {
-            return redirect()->route('applicant.profile')->with('error', 'Lengkapi data diri terlebih dahulu sebelum mendaftar');
-        }
+        // Tampilkan halaman (bukan redirect) walau biodata belum lengkap,
+        // sehingga pengguna bisa melihat banner prasyarat + alur pendaftaran.
+        $profileComplete = $applicant ? $applicant->isProfileComplete() : false;
 
-        $registrations = $applicant->registrations()->with([
-            'registrationPeriod.schoolLevel',
-            'registrationTrack',
-            'school',
-            'major',
-            'finalMajor',
-            'documents',
-        ])->latest()->get();
+        $registrations = $applicant
+            ? $applicant->registrations()->with([
+                'registrationPeriod.schoolLevel',
+                'registrationTrack',
+                'school',
+                'major',
+                'finalMajor',
+                'documents',
+            ])->latest()->get()
+            : collect();
 
         $activeRegistration = $registrations->first();
 
@@ -75,7 +77,7 @@ class RegistrationController extends Controller
             ];
         }
 
-        return view('registration.index', compact('registrations', 'activeRegistration', 'docStats', 'deadline'));
+        return view('registration.index', compact('registrations', 'activeRegistration', 'docStats', 'deadline', 'applicant', 'profileComplete'));
     }
 
     public function create()

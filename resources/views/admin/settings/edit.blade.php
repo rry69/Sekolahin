@@ -57,10 +57,15 @@
   .ste .ste-field { display:flex; flex-direction:column; gap:6px; }
   .ste .ste-label { font-size:12px; font-weight:600; color:var(--ink); }
   .ste .ste-hint { font-size:11px; color:var(--muted); margin-top:2px; }
-  .ste .ste-input-line { width:100%; padding:9px 4px; border:none; border-bottom:1px solid rgba(26,26,46,0.18); border-radius:0; font-size:13px; color:var(--ink); background:transparent; box-sizing:border-box; transition:border-color .18s; }
-  .ste .ste-input-line:focus { outline:none; border-bottom-color:var(--coral); }
-  .ste .ste-input-box { width:100%; padding:9px 12px; border:1px solid rgba(26,26,46,0.14); border-radius:10px; font-size:13px; color:var(--ink); background:rgba(255,255,255,0.55); box-sizing:border-box; transition:border-color .18s, background .18s, box-shadow .18s; }
+  .ste .ste-input-line { width:100%; padding:9px 4px; border:none; border-bottom:1px solid rgba(26,26,46,0.18); border-radius:0; font-size:13px; color:var(--ink); background:transparent; box-sizing:border-box; outline:none; -webkit-tap-highlight-color:transparent; transition:border-color .18s; }
+  .ste .ste-input-line:focus { outline:none; box-shadow:none; border-bottom-color:var(--coral); }
+  .ste .ste-input-line:focus-visible { outline:none; box-shadow:none; border-bottom-color:var(--coral); }
+  .ste .ste-input-box { width:100%; padding:9px 12px; border:1px solid rgba(26,26,46,0.14); border-radius:10px; font-size:13px; color:var(--ink); background:rgba(255,255,255,0.55); box-sizing:border-box; outline:none; -webkit-tap-highlight-color:transparent; transition:border-color .18s, background .18s, box-shadow .18s; }
   .ste .ste-input-box:focus { outline:none; border-color:var(--coral); background:#fff; box-shadow:0 0 0 3px rgba(255,107,107,0.12); }
+  /* jaga-jaga: hilangkan ring biru bawaan browser di semua input settings */
+  .ste input[type="text"], .ste input[type="number"], .ste input[type="date"], .ste input[type="email"], .ste input[type="password"] { outline:none; -webkit-tap-highlight-color:transparent; }
+  .ste input[type="text"]:focus, .ste input[type="number"]:focus, .ste input[type="date"]:focus, .ste input[type="email"]:focus, .ste input[type="password"]:focus { outline:none; box-shadow:none; }
+  .ste input[type="text"]:focus-visible, .ste input[type="number"]:focus-visible, .ste input[type="date"]:focus-visible, .ste input[type="email"]:focus-visible, .ste input[type="password"]:focus-visible { outline:none; box-shadow:none; }
   /* biaya — card grid per jenjang */
   .ste .ste-biaya-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:14px; margin-bottom:18px; }
   .ste .ste-biaya-card{ background:rgba(255,255,255,.55); border:1px solid rgba(26,26,46,.08); border-radius:14px; padding:14px 14px 12px; }

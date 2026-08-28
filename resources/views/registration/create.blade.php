@@ -1,42 +1,178 @@
-<x-app-layout>
-    <x-slot name="header">
-        <div class="flex items-center gap-3">
-            <div class="flex h-11 w-11 items-center justify-center rounded-card bg-eggplore-primary-50 text-eggplore-primary-500">
-                <i class="fa-solid fa-file-circle-plus text-lg"></i>
-            </div>
-            <div>
-                <h2 class="text-2xl font-bold text-eggplore-neutral-900 leading-tight">
-                    Buat Pendaftaran Baru
-                </h2>
-                <p class="mt-0.5 text-sm text-eggplore-neutral-500">
-                    Lengkapi data pendaftaran kamu di bawah ini.
-                </p>
-            </div>
+<x-student-layout title="Buat Pendaftaran Baru">
+  <style>
+    .cre { --coral:#FF6B6B; --coral-2:#FF8E6E; --coral-soft:#FFE5E3; --ink:#1a1a2e; --muted:#8a8f9d; --divider:rgba(26,26,46,.10); --green:#10B981; --green-soft:#D1FAE5; --red:#EF4444; --red-soft:#FEE2E2; --amber:#D97706; --amber-soft:#FEF3C7; --blue:#2563EB; --blue-soft:#DBEAFE; --indigo:#6366F1; --indigo-soft:#E0E7FF; position:relative; border-radius:24px; padding:28px 28px 44px; background:#f6f7fb; }
+    .cre .cre-inner { max-width:1120px; margin:0 auto; }
+    .cre-crumb { font-size:12.5px; color:var(--muted); margin-bottom:6px; display:flex; align-items:center; gap:7px; flex-wrap:wrap; }
+    .cre-crumb a { color:var(--coral); font-weight:600; } .cre-crumb a:hover { text-decoration:underline; }
+    .cre-title { font-size:26px; font-weight:800; color:var(--ink); letter-spacing:-0.01em; line-height:1.2; }
+    .cre-meta { font-size:13px; color:var(--muted); margin-top:6px; }
+
+    /* alerts */
+    .cre-alert { display:flex; gap:13px; align-items:flex-start; border-radius:14px; padding:14px 16px; margin-top:20px; border:1px solid transparent; }
+    .cre-alert i.cre-alert-ic { width:22px; height:22px; border-radius:7px; display:flex; align-items:center; justify-content:center; font-size:11px; flex:0 0 auto; margin-top:1px; }
+    .cre-alert .cre-alert-body { flex:1; min-width:0; }
+    .cre-alert .cre-alert-t { font-weight:700; font-size:13.5px; }
+    .cre-alert .cre-alert-p { font-size:13px; margin-top:2px; opacity:.92; }
+    .cre-alert.red { background:var(--red-soft); border-color:rgba(239,68,68,.25); }
+    .cre-alert.red i.cre-alert-ic { background:var(--red); color:#fff; }
+    .cre-alert.red .cre-alert-t, .cre-alert.red .cre-alert-p { color:#B91C1C; }
+    .cre-alert.amber { background:var(--amber-soft); border-color:rgba(217,119,6,.3); }
+    .cre-alert.amber i.cre-alert-ic { background:var(--amber); color:#fff; }
+    .cre-alert.amber .cre-alert-t, .cre-alert.amber .cre-alert-p { color:#B45309; }
+    .cre-alert.info { background:var(--indigo-soft); border-color:rgba(99,102,241,.25); }
+    .cre-alert.info i.cre-alert-ic { background:var(--indigo); color:#fff; }
+    .cre-alert.info .cre-alert-t, .cre-alert.info .cre-alert-p { color:#4338CA; }
+
+    /* section */
+    .cre-sec { border-top:1px solid var(--divider); padding:26px 0 6px; }
+    .cre-sec:first-of-type { border-top:none; padding-top:22px; }
+    .cre-sec-head { display:flex; align-items:center; gap:12px; margin-bottom:6px; }
+    .cre-sec-ic { width:42px; height:42px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:17px; flex:0 0 auto; }
+    .cre-sec-ic.coral { background:var(--coral-soft); color:var(--coral); }
+    .cre-sec-ic.blue { background:var(--blue-soft); color:var(--blue); }
+    .cre-sec-ic.amber { background:var(--amber-soft); color:var(--amber); }
+    .cre-sec-ic.green { background:var(--green-soft); color:var(--green); }
+    .cre-sec-ttl { font-size:14px; font-weight:800; color:var(--ink); }
+    .cre-sec-desc { font-size:12px; color:var(--muted); margin-top:1px; }
+
+    /* wizard stepper */
+    .cre-step { display:flex; align-items:center; gap:8px; margin-top:20px; padding:16px 18px; border-top:1px solid var(--divider); border-bottom:1px solid var(--divider); }
+    .cre-step-item { display:flex; align-items:center; gap:9px; cursor:pointer; flex:1; min-width:0; padding:4px 6px; border-radius:10px; }
+    .cre-step-item:hover { background:var(--coral-soft); }
+    .cre-step-num { width:26px; height:26px; border-radius:50%; background:#E5E7EB; color:var(--muted); display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:800; flex:0 0 auto; transition:all .2s; }
+    .cre-step-item.done .cre-step-num { background:var(--green); color:#fff; }
+    .cre-step-item.active .cre-step-num { background:linear-gradient(135deg,var(--coral),var(--coral-2)); color:#fff; box-shadow:0 6px 14px -6px rgba(255,107,107,.6); }
+    .cre-step-label { font-size:12px; font-weight:700; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; transition:color .2s; }
+    .cre-step-item.active .cre-step-label, .cre-step-item.done .cre-step-label { color:var(--ink); }
+    .cre-step-sep { flex:0 0 auto; width:18px; height:1px; background:var(--divider); }
+
+    /* two-column layout */
+    .cre-grid { display:grid; grid-template-columns:minmax(0,1fr) 320px; gap:28px; align-items:start; margin-top:6px; }
+    .cre-main { min-width:0; }
+    .cre-side { position:sticky; top:88px; }
+
+    /* summary card */
+    .cre-sum { background:transparent; border:1px solid var(--divider); border-radius:18px; padding:20px; border-left:3px solid var(--coral); }
+    .cre-sum-hd { display:flex; align-items:center; gap:11px; padding-bottom:16px; border-bottom:1px solid var(--divider); margin-bottom:14px; }
+    .cre-sum-ava { width:42px; height:42px; border-radius:50%; background:linear-gradient(135deg,var(--coral),var(--coral-2)); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:15px; flex:0 0 auto; }
+    .cre-sum-name { font-size:13.5px; font-weight:800; color:var(--ink); }
+    .cre-sum-role { font-size:11px; color:var(--muted); margin-top:1px; }
+    .cre-sum-age { margin-left:auto; font-size:10.5px; font-weight:700; color:#047857; background:var(--green-soft); padding:3px 9px; border-radius:99px; white-space:nowrap; }
+    .cre-sum-rows { display:flex; flex-direction:column; }
+    .cre-sum-row { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; padding:10px 0; border-top:1px solid var(--divider); }
+    .cre-sum-row:first-of-type { border-top:none; padding-top:0; }
+    .cre-sum-row .lb { font-size:11.5px; color:var(--muted); display:flex; align-items:center; gap:6px; flex:0 0 auto; }
+    .cre-sum-row .lb i { color:var(--coral); font-size:11px; width:13px; text-align:center; }
+    .cre-sum-row .val { font-size:12px; font-weight:700; color:var(--ink); text-align:right; }
+    .cre-sum-row .val.placeholder { color:var(--muted); font-weight:600; }
+    .cre-sum-row .val .q-badge { font-size:9.5px; font-weight:700; padding:1px 7px; border-radius:99px; margin-left:5px; }
+    .cre-sum-row .val .q-badge.green { background:var(--green-soft); color:#047857; }
+    .cre-sum-row .val .q-badge.red { background:var(--red-soft); color:#B91C1C; }
+    .cre-sum-foot { margin-top:14px; padding-top:16px; border-top:1px solid var(--divider); display:flex; flex-direction:column; gap:10px; }
+    .cre-sum .cre-btn.coral { width:100%; padding:13px 16px; font-size:13.5px; }
+    .cre-sum .cre-btn.ghost { width:100%; }
+    .cre-sum-err { font-size:11.5px; color:var(--red); display:flex; align-items:flex-start; gap:6px; }
+
+    /* mobile sticky action bar */
+    .cre-bar { display:none; position:sticky; bottom:0; z-index:40; background:rgba(246,247,251,.94); backdrop-filter:blur(6px); border-top:1px solid var(--divider); padding:12px 4px 8px; margin-top:10px; gap:10px; }
+    .cre-bar .cre-btn { flex:1; }
+
+    /* NO-WHITE-CARD overrides (neutralize Tailwind white cards to transparent + divider) */
+    .cre .period-item, .cre .track-item { background:transparent !important; border:none !important; border-radius:0 !important; padding:18px 4px; border-top:1px solid var(--divider); }
+    .cre .period-item:first-of-type, .cre .track-item:first-of-type { border-top:none; padding-top:6px; }
+    .cre .period-item.bg-eggplore-primary-50, .cre .period-item.bg-white, .cre .track-item.bg-eggplore-primary-50, .cre .track-item.bg-white { background:transparent !important; }
+    .cre .period-item.ring-2, .cre .track-item.ring-2 { box-shadow:none !important; }
+    .cre .period-item:has(.period-radio:checked), .cre .track-item:has(.track-radio:checked) { background:var(--coral-soft) !important; border-radius:14px !important; border-top-color:transparent !important; }
+    .cre .period-item.bg-eggplore-danger-soft { background:var(--red-soft) !important; border-radius:14px !important; }
+    .cre .period-item.bg-eggplore-neutral-100 { background:#F3F4F6 !important; border-radius:14px !important; }
+
+    /* custom dropdown triggers + panels -> non-white, divider-based */
+    .cre .school-trigger, .cre .major-trigger { background:transparent !important; border:none !important; border-bottom:1px solid rgba(26,26,46,.18) !important; border-radius:0 !important; padding:10px 4px !important; outline:none; -webkit-tap-highlight-color:transparent; box-shadow:none !important; }
+    .cre .school-trigger:focus, .cre .school-trigger:focus-visible, .cre .school-trigger:focus-within,
+    .cre .major-trigger:focus, .cre .major-trigger:focus-visible, .cre .major-trigger:focus-within { border-bottom-color:var(--coral) !important; outline:none !important; box-shadow:none !important; }
+    .cre .period-radio:focus, .cre .period-radio:focus-visible { outline:none !important; box-shadow:none !important; }
+    .cre #school-panel, .cre #major-panel { }
+    .cre #school-panel .rounded-2xl, .cre #major-panel .rounded-2xl { background:transparent !important; border:none !important; padding:0 !important; }
+    .cre .school-option, .cre .major-option { border-radius:10px; }
+    .cre .school-option:hover, .cre .major-option:hover { background:var(--coral-soft) !important; box-shadow:none !important; }
+    .cre .school-option.bg-eggplore-primary-50, .cre .school-option.bg-eggplore-primary-100, .cre .major-option.bg-eggplore-primary-50, .cre .major-option.bg-eggplore-primary-100 { background:var(--coral-soft) !important; }
+
+    /* pills */
+    .cre-pill { display:inline-flex; align-items:center; gap:6px; padding:4px 11px; border-radius:99px; font-size:11px; font-weight:700; }
+    .cre-pill.green { background:var(--green-soft); color:#047857; }
+    .cre-pill.amber { background:var(--amber-soft); color:#B45309; }
+    .cre-pill.red { background:var(--red-soft); color:#B91C1C; }
+    .cre-pill.blue { background:var(--blue-soft); color:#1D4ED8; }
+    .cre-pill.gray { background:#F3F4F6; color:var(--gray, #6b7280); }
+    .cre-pill.indigo { background:var(--indigo-soft); color:#4338CA; }
+
+    /* buttons */
+    .cre-btn { display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:11px 18px; border-radius:11px; font-size:13px; font-weight:700; transition:transform .15s, box-shadow .15s; }
+    .cre-btn.coral { background:linear-gradient(135deg,var(--coral),var(--coral-2)); color:#fff; box-shadow:0 10px 22px -10px rgba(255,107,107,.65); }
+    .cre-btn.coral:hover { transform:translateY(-1px); box-shadow:0 14px 26px -10px rgba(255,107,107,.7); }
+    .cre-btn.ghost { background:transparent; color:var(--coral); border:1.5px solid var(--coral); }
+    .cre-btn.ghost:hover { background:var(--coral-soft); }
+    .cre-btn.sm { padding:9px 15px; font-size:12.5px; border-radius:10px; }
+    .cre-btn:disabled { background:var(--muted); color:#fff; box-shadow:none; cursor:not-allowed; opacity:.55; }
+
+    /* footer actions */
+    .cre-foot { display:flex; align-items:center; justify-content:space-between; gap:14px; margin-top:6px; padding-top:22px; border-top:1px solid var(--divider); }
+    @media (max-width:640px) {
+      .cre-foot { flex-direction:column-reverse; align-items:stretch; }
+      .cre-foot .cre-btn { width:100%; }
+    }
+
+    /* hint / error */
+    .cre-hint { display:flex; align-items:center; gap:6px; font-size:12px; }
+    .cre-err { display:flex; align-items:flex-start; gap:6px; font-size:12px; color:var(--red); margin-top:8px; }
+
+    /* empty state */
+    .cre-empty { margin-top:22px; text-align:center; padding:44px 24px; border-top:1px solid var(--divider); }
+    .cre-empty-ic { width:76px; height:76px; margin:0 auto; border-radius:22px; background:linear-gradient(135deg,var(--coral),var(--coral-2)); color:#fff; display:flex; align-items:center; justify-content:center; font-size:30px; box-shadow:0 18px 40px -16px rgba(255,107,107,.65); }
+    .cre-empty p { max-width:400px; margin:14px auto 0; font-size:14px; color:var(--muted); }
+    .cre-empty .cre-btn { margin-top:22px; }
+
+    @media (max-width:1024px) {
+      .cre-grid { grid-template-columns:1fr; gap:20px; }
+      .cre-side { position:static; }
+      .cre-sum { order:0; }
+    }
+    @media (max-width:640px) {
+      .cre { padding:20px 18px 32px; border-radius:18px; }
+      .cre-sec-head { margin-bottom:2px; }
+      .cre-step { flex-direction:column; align-items:stretch; gap:6px; padding:14px 12px; }
+      .cre-step-sep { display:none; }
+      .cre-step-item { justify-content:flex-start; }
+      .cre-bar { display:flex; flex-direction:column-reverse; }
+      .cre-sum .cre-btn.coral { display:none; }
+    }
+  </style>
+
+  <div class="cre">
+    <div class="cre-inner">
+      {{-- Crumbs + title --}}
+      <div class="cre-crumb">
+        <a href="{{ route('registration.index') }}">Pendaftaran</a>
+        <i class="fa-solid fa-chevron-right" style="font-size:9px"></i>
+        <span>Buat Pendaftaran Baru</span>
+      </div>
+      <h1 class="cre-title">Buat Pendaftaran Baru</h1>
+      <p class="cre-meta">Lengkapi data pendaftaran kamu di bawah ini.</p>
+
+      @if (session('error'))
+        <div class="cre-alert red">
+          <i class="fa-solid fa-circle-exclamation cre-alert-ic"></i>
+          <div class="cre-alert-body"><p class="cre-alert-p">{{ session('error') }}</p></div>
         </div>
-    </x-slot>
+      @endif
 
-    <div class="py-10">
-        <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm rounded-card">
-                <div class="p-6 sm:p-8 text-eggplore-neutral-900">
-                    @if (session('error'))
-                        <div class="mb-6 flex items-start gap-3 rounded-card border border-eggplore-danger bg-eggplore-danger-soft px-4 py-3">
-                            <i class="fa-solid fa-circle-exclamation mt-0.5 text-eggplore-danger"></i>
-                            <p class="text-sm text-eggplore-neutral-700">{{ session('error') }}</p>
-                        </div>
-                    @endif
-
-                    @if ($periods->isEmpty())
-                        <div class="text-center py-10">
-                            <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-eggplore-neutral-100 text-eggplore-neutral-400">
-                                <i class="fa-regular fa-calendar-xmark text-2xl"></i>
-                            </div>
-                            <p class="mt-4 text-sm text-eggplore-neutral-500">Tidak ada periode pendaftaran yang aktif saat ini.</p>
-                            <a href="{{ route('registration.index') }}" class="mt-5 inline-flex items-center gap-2 rounded-btn border-[1.5px] border-eggplore-primary-500 bg-transparent px-6 h-11 text-sm font-semibold text-eggplore-primary-500 hover:bg-eggplore-primary-50 active:bg-eggplore-primary-100 transition-colors">
-                                <i class="fa-solid fa-arrow-left text-xs"></i> Kembali ke Daftar Pendaftaran
-                            </a>
-                        </div>
-                    @else
+      @if ($periods->isEmpty())
+        <div class="cre-empty">
+          <div class="cre-empty-ic"><i class="fa-regular fa-calendar-xmark"></i></div>
+          <p>Tidak ada periode pendaftaran yang aktif saat ini.</p>
+          <a href="{{ route('registration.index') }}" class="cre-btn ghost sm"><i class="fa-solid fa-arrow-left"></i> Kembali ke Daftar Pendaftaran</a>
+        </div>
+      @else
                         @php
                             $hasAge = isset($applicantAge) && $applicantAge !== null;
                             $openCount = $periods->filter(fn($p) => $p->registrationStatus() === 'open')->count();
@@ -45,46 +181,72 @@
                         @endphp
                         @if($openCount === 0)
                             @if($notStartedCount > 0 && $closedCount === 0)
-                                <div class="mb-6 flex items-start gap-3 rounded-card border border-eggplore-warning bg-eggplore-warning-soft px-4 py-3">
-                                    <i class="fa-solid fa-hourglass-half mt-0.5 text-eggplore-warning"></i>
-                                    <div>
-                                        <p class="text-sm font-semibold text-eggplore-neutral-900">Pendaftaran Belum Dibuka</p>
-                                        <p class="mt-0.5 text-sm text-eggplore-neutral-700">Periode pendaftaran belum dimulai. Silakan kembali lagi sesuai jadwal yang tertera di bawah. Pendaftaran tidak dapat dilakukan sebelum tanggal mulai.</p>
+                                <div class="cre-alert amber">
+                                    <i class="fa-solid fa-hourglass-half cre-alert-ic"></i>
+                                    <div class="cre-alert-body">
+                                        <p class="cre-alert-t">Pendaftaran Belum Dibuka</p>
+                                        <p class="cre-alert-p">Periode pendaftaran belum dimulai. Silakan kembali lagi sesuai jadwal yang tertera di bawah. Pendaftaran tidak dapat dilakukan sebelum tanggal mulai.</p>
                                     </div>
                                 </div>
                             @elseif($closedCount > 0 && $notStartedCount === 0)
-                                <div class="mb-6 flex items-start gap-3 rounded-card border border-eggplore-danger bg-eggplore-danger-soft px-4 py-3">
-                                    <i class="fa-solid fa-circle-xmark mt-0.5 text-eggplore-danger"></i>
-                                    <div>
-                                        <p class="text-sm font-semibold text-eggplore-neutral-900">Pendaftaran Sudah Ditutup</p>
-                                        <p class="mt-0.5 text-sm text-eggplore-neutral-700">Periode pendaftaran telah berakhir. Pendaftaran baru tidak dapat dilakukan lagi.</p>
+                                <div class="cre-alert red">
+                                    <i class="fa-solid fa-circle-xmark cre-alert-ic"></i>
+                                    <div class="cre-alert-body">
+                                        <p class="cre-alert-t">Pendaftaran Sudah Ditutup</p>
+                                        <p class="cre-alert-p">Periode pendaftaran telah berakhir. Pendaftaran baru tidak dapat dilakukan lagi.</p>
                                     </div>
                                 </div>
                             @else
-                                <div class="mb-6 flex items-start gap-3 rounded-card border border-eggplore-warning bg-eggplore-warning-soft px-4 py-3">
-                                    <i class="fa-solid fa-circle-info mt-0.5 text-eggplore-warning"></i>
-                                    <div>
-                                        <p class="text-sm font-semibold text-eggplore-neutral-900">Pendaftaran Tidak Tersedia Saat Ini</p>
-                                        <p class="mt-0.5 text-sm text-eggplore-neutral-700">Tidak ada periode pendaftaran yang sedang dibuka. Periksa jadwal di bawah — ada yang belum dibuka atau sudah ditutup.</p>
+                                <div class="cre-alert amber">
+                                    <i class="fa-solid fa-circle-info cre-alert-ic"></i>
+                                    <div class="cre-alert-body">
+                                        <p class="cre-alert-t">Pendaftaran Tidak Tersedia Saat Ini</p>
+                                        <p class="cre-alert-p">Tidak ada periode pendaftaran yang sedang dibuka. Periksa jadwal di bawah — ada yang belum dibuka atau sudah ditutup.</p>
                                     </div>
                                 </div>
                             @endif
                         @endif
-                        <form method="POST" action="{{ route('registration.store') }}" novalidate>
+
+                        {{-- Wizard stepper --}}
+                        <div class="cre-step" id="cre-step">
+                          <div class="cre-step-item active" data-step="1" data-target="step-jenjang" role="button" tabindex="0">
+                            <span class="cre-step-num">1</span>
+                            <span class="cre-step-label">Pilih Jenjang &amp; Jalur</span>
+                          </div>
+                          <div class="cre-step-sep"></div>
+                          <div class="cre-step-item" data-step="2" data-target="school-dd" role="button" tabindex="0">
+                            <span class="cre-step-num">2</span>
+                            <span class="cre-step-label">Pilih Sekolah &amp; Jurusan</span>
+                          </div>
+                          <div class="cre-step-sep"></div>
+                          <div class="cre-step-item" data-step="3" data-target="cre-side" role="button" tabindex="0">
+                            <span class="cre-step-num">3</span>
+                            <span class="cre-step-label">Ringkasan &amp; Konfirmasi</span>
+                          </div>
+                        </div>
+
+                        <form method="POST" action="{{ route('registration.store') }}" novalidate id="reg-form">
                             @csrf
+                            <div class="cre-grid">
+                            <div class="cre-main">
                             @if($hasAge)
-                                <div class="mb-6 flex items-center gap-2 rounded-card border border-eggplore-primary-100 bg-eggplore-primary-50 px-4 py-3 text-sm text-eggplore-neutral-700">
-                                    <i class="fa-solid fa-cake-candles text-eggplore-primary-500"></i>
-                                    Usia Anda saat ini: <span class="font-semibold text-eggplore-neutral-900">{{ $applicantAge }} tahun</span>
-                                    <span class="text-eggplore-neutral-400">(dari tanggal lahir di profil)</span>
+                                <div class="cre-alert info">
+                                    <i class="fa-solid fa-cake-candles cre-alert-ic"></i>
+                                    <div class="cre-alert-body">
+                                        <p class="cre-alert-t">Usia Anda saat ini: <span style="color:var(--ink)">{{ $applicantAge }} tahun</span></p>
+                                        <p class="cre-alert-p">(dari tanggal lahir di profil)</p>
+                                    </div>
                                 </div>
                             @endif
 
                             {{-- Pilih Jenjang & Periode --}}
-                            <div class="mb-8">
-                                <div class="mb-3 flex items-center gap-2">
-                                    <label class="block text-xs font-semibold text-eggplore-neutral-700">Pilih Jenjang & Periode</label>
-                                    <span class="text-eggplore-danger">*</span>
+                            <div class="cre-sec" id="step-jenjang">
+                                <div class="cre-sec-head">
+                                    <div class="cre-sec-ic coral"><i class="fa-solid fa-school"></i></div>
+                                    <div>
+                                        <p class="cre-sec-ttl">Pilih Jenjang &amp; Periode <span style="color:var(--red)">*</span></p>
+                                        <p class="cre-sec-desc">Pilih jenjang dan gelombang pendaftaran yang sedang dibuka.</p>
+                                    </div>
                                 </div>
                                 <div class="space-y-3">
                                     @foreach ($periods as $period)
@@ -117,7 +279,7 @@
                                         <label class="period-item relative flex items-start gap-4 rounded-card border p-4 transition-all cursor-pointer {{ $isDisabled ? 'bg-eggplore-neutral-100 border-eggplore-neutral-200 opacity-70 cursor-not-allowed' : ($blockedByAge ? 'bg-eggplore-danger-soft border-eggplore-danger/30' : 'bg-white border-eggplore-neutral-200 hover:border-eggplore-primary-400 hover:bg-eggplore-primary-50/40') }}">
                                             <input type="radio" name="registration_period_id" value="{{ $period->id }}" required {{ $isDisabled ? 'disabled' : '' }} {{ $isChecked ? 'checked' : '' }}
                                                 class="period-radio mt-0.5 h-[18px] w-[18px] shrink-0 accent-eggplore-primary-500 focus:ring-2 focus:ring-eggplore-primary-400 focus:ring-offset-1"
-                                                data-status="{{ $pStatus }}" data-start="{{ $period->start_date->format('Y-m-d') }}" data-end="{{ $period->end_date->format('Y-m-d') }}" data-level="{{ $period->school_level_id }}">
+                                                data-status="{{ $pStatus }}" data-start="{{ $period->start_date->format('Y-m-d') }}" data-end="{{ $period->end_date->format('Y-m-d') }}" data-level="{{ $period->school_level_id }}" data-name="{{ $period->schoolLevel->name }} - {{ $period->name }}">
                                             <span class="flex-1 min-w-0">
                                                 <span class="flex flex-wrap items-center gap-2">
                                                     <span class="text-sm font-semibold text-eggplore-neutral-900">{{ $period->schoolLevel->name }}</span>
@@ -153,10 +315,13 @@
                             </div>
 
                             {{-- Pilih Jalur Pendaftaran --}}
-                            <div class="mb-8">
-                                <div class="mb-3 flex items-center gap-2">
-                                    <label class="block text-xs font-semibold text-eggplore-neutral-700">Pilih Jalur Pendaftaran</label>
-                                    <span class="text-eggplore-danger">*</span>
+                            <div class="cre-sec">
+                                <div class="cre-sec-head">
+                                    <div class="cre-sec-ic blue"><i class="fa-solid fa-route"></i></div>
+                                    <div>
+                                        <p class="cre-sec-ttl">Pilih Jalur Pendaftaran <span style="color:var(--red)">*</span></p>
+                                        <p class="cre-sec-desc">Pilih jalur masuk sesuai minat dan prestasimu.</p>
+                                    </div>
                                 </div>
                                 <div class="space-y-3" id="track-list">
                                     @foreach ($tracks as $track)
@@ -178,7 +343,7 @@
                                                 ? 'bg-eggplore-primary-50 text-eggplore-primary-700 border-eggplore-primary-200'
                                                 : 'bg-eggplore-neutral-100 text-eggplore-neutral-500 border-eggplore-neutral-200';
                                         @endphp
-                                        <label class="track-item relative flex items-start gap-4 rounded-card border border-eggplore-neutral-200 bg-white p-4 transition-all cursor-pointer hover:border-eggplore-primary-400 hover:bg-eggplore-primary-50/40" data-track-id="{{ $track->id }}">
+                                        <label class="track-item relative flex items-start gap-4 rounded-card border border-eggplore-neutral-200 bg-white p-4 transition-all cursor-pointer hover:border-eggplore-primary-400 hover:bg-eggplore-primary-50/40" data-track-id="{{ $track->id }}" data-name="{{ $track->name }}">
                                             <input type="radio" name="registration_track_id" value="{{ $track->id }}" required
                                                 class="track-radio sr-only">
                                             <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-input {{ $trackIconCls }}">
@@ -205,13 +370,15 @@
                                 @enderror
                             </div>
 
-                            {{-- Pilih Sekolah --}}
-                            <div class="mb-8" id="school-dd">
-                                <div class="mb-1.5 flex items-center gap-2">
-                                    <label for="school-trigger" class="block text-xs font-semibold text-eggplore-neutral-700">Pilih Sekolah</label>
-                                    <span class="text-eggplore-danger">*</span>
-                                    <span class="text-xs font-normal text-eggplore-neutral-400">(otomatis sesuai jenjang)</span>
-                                </div>
+      {{-- Pilih Sekolah --}}
+      <div class="cre-sec" id="school-dd">
+        <div class="cre-sec-head">
+          <div class="cre-sec-ic blue"><i class="fa-solid fa-building-columns"></i></div>
+          <div>
+            <p class="cre-sec-ttl">Pilih Sekolah <span style="color:var(--red)">*</span></p>
+            <p class="cre-sec-desc">Pilih sekolah tujuan sesuai jenjang pilihan.</p>
+          </div>
+        </div>
 
                                 {{-- Trigger (closed state) --}}
                                 <button type="button" id="school-trigger"
@@ -275,12 +442,15 @@
                                 @enderror
                             </div>
 
-                            {{-- Jurusan Pilihan --}}
-                            <div id="major-section" class="mb-8">
-                                <div class="mb-1.5 flex items-center gap-2">
-                                    <label for="major-trigger" class="block text-xs font-semibold text-eggplore-neutral-700">Jurusan Pilihan</label>
-                                    <span id="major-required-label" class="text-xs font-normal text-eggplore-neutral-400">(wajib)</span>
-                                </div>
+                {{-- Jurusan Pilihan --}}
+                <div id="major-section" class="cre-sec">
+                    <div class="cre-sec-head">
+                        <div class="cre-sec-ic amber"><i class="fa-solid fa-book-open"></i></div>
+                        <div>
+                            <p class="cre-sec-ttl">Jurusan Pilihan <span style="color:var(--red)">*</span></p>
+                            <p class="cre-sec-desc">Pilih jurusan yang tersedia di sekolah tujuan.</p>
+                        </div>
+                    </div>
 
                                 {{-- Trigger (closed state) --}}
                                 <button type="button" id="major-trigger"
@@ -325,29 +495,65 @@
                                 @enderror
                             </div>
 
-                            <div class="flex flex-col-reverse sm:flex-row justify-between items-stretch sm:items-center gap-3 pt-6 border-t border-eggplore-neutral-150">
-                                <a href="{{ route('registration.index') }}"
-                                   class="inline-flex items-center justify-center gap-2 rounded-btn border-[1.5px] border-eggplore-primary-500 bg-transparent px-6 h-11 text-sm font-semibold text-eggplore-primary-500 transition-colors hover:bg-eggplore-primary-50 active:bg-eggplore-primary-100 focus:outline-none focus:ring-2 focus:ring-eggplore-primary-400 focus:ring-offset-2">
-                                    <i class="fa-solid fa-arrow-left text-xs"></i> Kembali
-                                </a>
-                                <button type="submit" id="submit-registration"
-                                    class="inline-flex items-center justify-center gap-2 rounded-btn bg-eggplore-primary px-7 h-12 text-sm font-semibold text-white shadow-brand transition-all hover:bg-eggplore-primary-600 active:bg-eggplore-primary-700 active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-eggplore-primary-400 focus:ring-offset-2 disabled:bg-eggplore-neutral-100 disabled:text-eggplore-neutral-400 disabled:shadow-none disabled:cursor-not-allowed"
-                                    @if($openCount === 0) disabled @endif>
+                            </div>{{-- /cre-main --}}
+
+                            <aside class="cre-side" id="cre-side">
+                              <div class="cre-sum">
+                                <div class="cre-sum-hd">
+                                  <div class="cre-sum-ava">{{ strtoupper(substr(auth()->user()->name, 0, 1)) }}</div>
+                                  <div>
+                                    <p class="cre-sum-name">{{ auth()->user()->name }}</p>
+                                    <p class="cre-sum-role">Pendaftar</p>
+                                  </div>
+                                  @if($hasAge)
+                                    <span class="cre-sum-age"><i class="fa-solid fa-cake-candles"></i> {{ $applicantAge }} th</span>
+                                  @endif
+                                </div>
+                                <div class="cre-sum-rows">
+                                  <div class="cre-sum-row">
+                                    <span class="lb"><i class="fa-solid fa-school"></i> Jenjang</span>
+                                    <span class="val placeholder" id="sum-period">Belum dipilih</span>
+                                  </div>
+                                  <div class="cre-sum-row">
+                                    <span class="lb"><i class="fa-solid fa-route"></i> Jalur</span>
+                                    <span class="val placeholder" id="sum-track">Belum dipilih</span>
+                                  </div>
+                                  <div class="cre-sum-row">
+                                    <span class="lb"><i class="fa-solid fa-building-columns"></i> Sekolah</span>
+                                    <span class="val placeholder" id="sum-school">Belum dipilih</span>
+                                  </div>
+                                  <div class="cre-sum-row">
+                                    <span class="lb"><i class="fa-solid fa-book-open"></i> Jurusan</span>
+                                    <span class="val placeholder" id="sum-major">Belum dipilih</span>
+                                  </div>
+                                </div>
+                                <div class="cre-sum-foot">
+                                  @if($openCount === 0)
+                                    <p class="cre-sum-err"><i class="fa-solid fa-circle-exclamation"></i> Tidak ada periode yang sedang dibuka — pendaftaran tidak dapat dilanjutkan.</p>
+                                  @endif
+                                  <a href="{{ route('registration.index') }}" class="cre-btn ghost sm">
+                                    <i class="fa-solid fa-arrow-left"></i> Kembali
+                                  </a>
+                                  <button type="submit" id="submit-registration" class="cre-btn coral" @if($openCount === 0) disabled @endif>
                                     <i class="fa-solid fa-paper-plane"></i> Lanjut ke Review
-                                </button>
+                                  </button>
+                                </div>
+                              </div>
+                            </aside>
+                            </div>{{-- /cre-grid --}}
+
+                            <div class="cre-bar">
+                              <a href="{{ route('registration.index') }}" class="cre-btn ghost sm">
+                                <i class="fa-solid fa-arrow-left"></i> Kembali
+                              </a>
+                              <button type="submit" form="reg-form" id="submit-bar" class="cre-btn coral" @if($openCount === 0) disabled @endif>
+                                <i class="fa-solid fa-paper-plane"></i> Lanjut ke Review
+                              </button>
                             </div>
-                            @if($openCount === 0)
-                                <p class="mt-3 flex items-center justify-end gap-1.5 text-xs text-eggplore-danger">
-                                    <i class="fa-solid fa-circle-exclamation"></i>
-                                    Tidak ada periode yang sedang dibuka — pendaftaran tidak dapat dilanjutkan.
-                                </p>
-                            @endif
                         </form>
                     @endif
                 </div>
             </div>
-        </div>
-    </div>
 
     @push('scripts')
     <script>
@@ -410,6 +616,8 @@
         const sel = selectedPeriod();
         const hasOpen = openCount > 0 && sel !== null && sel.getAttribute('data-status') === 'open';
         submitBtn.disabled = !hasOpen;
+        const barBtn = document.getElementById('submit-bar');
+        if(barBtn) barBtn.disabled = submitBtn.disabled;
       }
 
       function syncCards(){
@@ -901,4 +1109,100 @@
     })();
     </script>
     @endpush
-</x-app-layout>
+
+    @push('scripts')
+    <script>
+    (function(){
+      // ---------- Ringkasan Pendaftaran (sidebar) real-time ----------
+      var $sum = {
+        period: document.getElementById('sum-period'),
+        track:  document.getElementById('sum-track'),
+        school: document.getElementById('sum-school'),
+        major:  document.getElementById('sum-major')
+      };
+      function setVal(el, text){
+        if(!el) return;
+        if(text){
+          el.textContent = text;
+          el.classList.remove('placeholder');
+        } else {
+          el.textContent = 'Belum dipilih';
+          el.classList.add('placeholder');
+        }
+      }
+      function updateSummary(){
+        var pr = document.querySelector('input[name="registration_period_id"]:checked:not(:disabled)');
+        setVal($sum.period, pr ? (pr.getAttribute('data-name') || 'Dipilih') : '');
+        var tr = document.querySelector('input[name="registration_track_id"]:checked');
+        var trItem = tr ? tr.closest('.track-item') : null;
+        setVal($sum.track, trItem ? (trItem.getAttribute('data-name') || 'Dipilih') : '');
+        var sl = document.getElementById('school-label');
+        setVal($sum.school, sl && sl.textContent && sl.textContent.indexOf('Pilih Sekolah') === -1 ? sl.textContent.trim() : '');
+        var ml = document.getElementById('major-label');
+        setVal($sum.major, ml && ml.textContent && ml.textContent.indexOf('Pilih Jurusan') === -1 ? ml.textContent.trim() : '');
+      }
+      var form = document.getElementById('reg-form');
+      if(form){
+        form.addEventListener('change', function(e){
+          var t = e.target;
+          if(t && t.name === 'registration_period_id') updateSummary();
+          else if(t && t.name === 'registration_track_id') updateSummary();
+          else if(t && (t.id === 'school-select' || t.name === 'school_id')) updateSummary();
+          else if(t && (t.id === 'major-select' || t.name === 'major_id')) updateSummary();
+        });
+      }
+      // init
+      updateSummary();
+
+      // ---------- Wizard stepper ----------
+      var steps = Array.prototype.slice.call(document.querySelectorAll('.cre-step-item[data-target]'));
+      var targets = {};
+      steps.forEach(function(s){
+        var id = s.getAttribute('data-target');
+        var el = document.getElementById(id);
+        if(el) targets[id] = el;
+        s.addEventListener('click', function(){
+          var target = document.getElementById(id);
+          if(target) target.scrollIntoView({behavior:'smooth', block:'start'});
+        });
+        s.addEventListener('keydown', function(e){
+          if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); s.click(); }
+        });
+      });
+      function setActive(id){
+        steps.forEach(function(s){
+          var on = s.getAttribute('data-target') === id;
+          s.classList.toggle('active', on);
+          var done = !on;
+          s.classList.toggle('done', done);
+        });
+      }
+      // Scroll-based active detection
+      var secs = [
+        {id:'step-jenjang', step:'step-jenjang'},
+        {id:'school-dd', step:'school-dd'},
+        {id:'major-section', step:'cre-side'}
+      ];
+      var lastActive = 'step-jenjang';
+      function onScroll(){
+        var vh = window.innerHeight;
+        var cur = lastActive;
+        secs.forEach(function(s){
+          var el = document.getElementById(s.id);
+          if(!el) return;
+          var r = el.getBoundingClientRect();
+          // step 1 covers top+jenjang section; step 2 covers school section; step 3 sidebar
+          if(r.top < vh * 0.45 && r.bottom > 0) cur = s.step;
+        });
+        if(cur !== lastActive){
+          lastActive = cur;
+          setActive(cur);
+        }
+      }
+      window.addEventListener('scroll', onScroll, {passive:true});
+      // initial active = step 1
+      setActive('step-jenjang');
+    })();
+    </script>
+    @endpush
+    </x-student-layout>
