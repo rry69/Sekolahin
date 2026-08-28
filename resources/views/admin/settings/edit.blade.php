@@ -9,11 +9,12 @@
         'jenjang'       => ['age_min'],
     ];
     $activeTab = request()->query('tab');
+    $__errBag = $errors ?? new \Illuminate\Support\ViewErrorBag;
     if (!array_key_exists($activeTab, $errorTabs)) {
         $activeTab = null;
         foreach ($errorTabs as $tabKey => $fields) {
             foreach ($fields as $field) {
-                if ($errors->has($field) || $errors->has("{$field}.*")) { $activeTab = $tabKey; break 2; }
+                if ($__errBag->has($field) || $__errBag->has("{$field}.*")) { $activeTab = $tabKey; break 2; }
             }
         }
         $activeTab = $activeTab ?? 'pembayaran';
@@ -85,8 +86,8 @@
   @if (session('success'))
     <div class="ste-alert success"><i class="fa-solid fa-circle-check"></i><span>{{ session('success') }}</span></div>
   @endif
-  @if ($errors->any())
-    <div class="ste-alert error"><i class="fa-solid fa-circle-exclamation"></i><span>Ada {{ $errors->count() }} kesalahan validasi — tab yang bermasalah sudah dibuka otomatis.</span></div>
+  @if (($__errBag ?? $errors ?? new \Illuminate\Support\ViewErrorBag)->any())
+    <div class="ste-alert error"><i class="fa-solid fa-circle-exclamation"></i><span>Ada {{ ($__errBag ?? $errors ?? new \Illuminate\Support\ViewErrorBag)->count() }} kesalahan validasi — tab yang bermasalah sudah dibuka otomatis.</span></div>
   @endif
 
   <div class="ste-tabs" id="settings-tabs">
@@ -213,7 +214,7 @@
               @endphp
               <tr>
                 <td style="font-weight:700;">{{ $level->name }} <span style="font-weight:400;color:var(--muted);">({{ $level->description }})</span>@if($periodEndLabel)<br><span style="font-size:11px;color:var(--muted);">Periode berakhir {{ $periodEndLabel }}</span>@endif</td>
-                <td><x-date-picker name="re_registration_start[{{ $level->id }}]" id="re_reg_start_{{ $level->id }}" :value="$sVal" :min="$reRegMin" label="Mulai" />@error("re_registration_start.{$level->id}")<p style="color:var(--red);font-size:12px;">{{ $message }}</p>@enderror@if($reRegMin)<span class="ste-hint">Paling awal {{ $reRegMin }}</span>@endif</td>
+                <td><x-date-picker name="re_registration_start[{{ $level->id }}]" id="re_reg_start_{{ $level->id }}" :value="$sVal" :min="$reRegMin" label="Mulai" />@error("re_registration_start.{$level->id}")<p style="color:var(--red);font-size:12px;">{{ $message }}</p>@enderror @if($reRegMin)<span class="ste-hint">Paling awal {{ $reRegMin }}</span>@endif</td>
                 <td><x-date-picker name="re_registration_end[{{ $level->id }}]" id="re_reg_end_{{ $level->id }}" :value="$eVal" :min="$reRegMin" label="Selesai" />@error("re_registration_end.{$level->id}")<p style="color:var(--red);font-size:12px;">{{ $message }}</p>@enderror</td>
               </tr>
             @endforeach
@@ -377,7 +378,7 @@
             form.action = '{{ route('admin.schools.levels.update') }}';
             var csrf = document.createElement('input'); csrf.type='hidden'; csrf.name='_token'; csrf.value='{{ csrf_token() }}';
             form.appendChild(csrf);
-            document.querySelectorAll('input[name^=\"is_active\"]:checked').forEach(function(el){
+            document.querySelectorAll('input[name^="is_active"]:checked').forEach(function(el){
                 var i = document.createElement('input'); i.type='hidden'; i.name=el.name; i.value='1'; form.appendChild(i);
             });
             document.body.appendChild(form);
