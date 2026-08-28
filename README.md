@@ -18,6 +18,7 @@
 ## 📑 Daftar Isi
 
 - [✨ Fitur](#-fitur)
+- [🎨 Design System Bringova](#-design-system--bringova)
 - [🖼️ Screenshot](#️-screenshot)
 - [🚀 Alur Pendaftaran](#-alur-pendaftaran)
 - [🧱 Arsitektur](#-arsitektur)
@@ -43,13 +44,32 @@
 ### 🛠️ Untuk Admin
 - **Dashboard** dengan statistik & kartu klik-able (data-driven dari `config/admin-menu.php`).
 - **Kelola pendaftaran**: verifikasi berkas, terima/tolak, kuota per jurusan per jalur, periode & deadline otomatis.
-- **Kelola master data**: sekolah, jenjang, jurusan, jalur (aktif/nonaktif per jenjang), dan pengaturan biaya.
-- **Audit log** (`ActivityLog`) untuk seluruh aktivitas penting.
+- **Kelola master data**: sekolah, jenjang, jurusan, jalur (aktif/nonaktif per jenjang via toggle AJAX), dan pengaturan biaya.
+- **Rekap siswa diterima** dengan tombol detail per baris, **pembayaran**, & **daftar ulang** (verifikasi/tolak dengan filter).
+- **Detail page** untuk sekolah, jurusan, dan akun siswa.
+- **Audit log** (`ActivityLog`) untuk seluruh aktivitas penting + notifikasi in-app untuk perubahan status.
 
 ### 🔒 Keamanan
 - Webhook Xendit **fail-closed** (token divalidasi dengan `hash_equals`).
 - Upload tervalidasi (mime whitelist + nama file acak) & file sensitif di **disk privat**.
 - Password policy kuat (min 10, mixed case, angka, simbol, `uncompromised()`).
+
+---
+
+## 🎨 Design System — Bringova
+
+Seluruh antarmuka frontend (admin, siswa, dan auth) dibangun di atas **Design System Bringova** sebagai default. Sumber kebenaran ada di [`design-system/bringova.md`](design-system/bringova.md).
+
+Prinsip inti:
+
+- **Tanpa kartu putih** — konten menyatu dengan background `#f6f7fb`, dipisah garis divider (`border-top`), bukan `bg-white shadow rounded`.
+- **Scoped per halaman** — setiap partial punya wrapper class unik (`.dash`, `.reg`, `.det`, `.acc`, `.rre`, `.pay`, `.sch`, `.mjr`, `.ste`, …) dengan CSS di dalam scope.
+- **Modal & picker di dalam scope** — closing `</div>` wrapper selalu paling akhir (setelah modal & `#reg-data`).
+- **Hapus native controls** — semua `<select>`/`confirm()` diganti **modal picker Bringova** (search + list) dan **modal konfirmasi** (backdrop blur + rounded 18).
+- **Fully responsive** — grid/grid mobile vs tablet/desktop untuk seluruh halaman (registrations, rekap, schools, majors, periods, accounts, settings, dst).
+- Auth memakai **blob-variant** (gradient coral `135deg #FF6B6B → #FF8E6E`, card transparan `backdrop-blur`).
+
+Halaman yang sudah dimakeover: dashboard, sidebar, login/register, profil, daftar pendaftaran (+ detail), rekap siswa diterima, pembayaran, daftar ulang, sekolah (+ edit), jurusan (+ detail), periode, jalur pendaftaran, akun siswa (+ detail), log aktivitas, dan pengaturan (5 tab).
 
 ---
 
@@ -117,8 +137,8 @@ app/
 |---|---|
 | Framework | Laravel 11.55 (auth Breeze) |
 | PHP | 8.2+ (dikembangkan di 8.3) |
-| Frontend | Blade + Tailwind CSS 3 + Alpine.js + Vite |
-| Database | SQLite (default) / MySQL (via env) |
+| Frontend | Blade + Design System **Bringova** + Tailwind CSS 3 + Alpine.js + Font Awesome + Vite |
+| Database | MySQL (default) / SQLite (via env) |
 | Payment | Xendit API (invoice online) |
 | PDF | barryvdh/laravel-dompdf |
 | Spreadsheet | maatwebsite/excel |
