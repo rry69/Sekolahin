@@ -57,12 +57,53 @@
   .sed .s-grid .full { grid-column: 1 / -1; }
   .sed .s-field label { display: block; font-size: 13px; font-weight: 600; color: var(--ink); margin-bottom: 6px; }
   .sed .s-field label .req { color: var(--red); }
-  .sed .s-input, .sed .s-select { width: 100%; padding: 10px 14px; border: 1px solid rgba(26,26,46,0.14); border-radius: 11px; font-size: 13px; background: rgba(255,255,255,0.55); color: var(--ink); box-sizing: border-box; transition: border-color .18s ease, box-shadow .18s ease, background-color .18s ease; }
+  .sed .s-input, .sed .s-select { width: 100%; padding: 9px 4px; border: none; border-bottom: 1px solid rgba(26,26,46,0.18); border-radius: 0; font-size: 13px; background: transparent; color: var(--ink); box-sizing: border-box; transition: border-color .18s ease; }
   .sed .s-input::placeholder { color: var(--muted); }
-  .sed .s-input:focus, .sed .s-select:focus { outline: none; border-color: var(--coral); background: #fff; box-shadow: 0 0 0 4px rgba(255,107,107,0.12); }
-  .sed textarea.s-input { resize: vertical; min-height: 80px; }
+  .sed .s-input:focus, .sed .s-select:focus { outline: none; border-bottom-color: var(--coral); background: transparent; box-shadow: none; }
+  .sed textarea.s-input { resize: vertical; min-height: 80px; border: none; border-bottom: 1px solid rgba(26,26,46,0.18); border-radius: 0; padding: 9px 4px; background: transparent; }
+  .sed textarea.s-input:focus { border-bottom-color: var(--coral); background: transparent; box-shadow: none; }
   .sed .s-hint { font-size: 11.5px; color: var(--muted); margin-top: 5px; }
   .sed .s-err { font-size: 12px; color: var(--red); margin-top: 5px; }
+  /* ---------- picker trigger (border-bawah, konsisten field) ---------- */
+  .sed .r-pick { display: inline-flex; align-items: center; gap: 8px; flex-wrap: nowrap; padding: 9px 4px; border: none; border-bottom: 1px solid rgba(26,26,46,0.18); border-radius: 0; font-size: 13px; color: var(--ink); background: transparent; width: 100%; cursor: pointer; text-align: left; min-height: 38px; transition: border-color .18s ease, color .18s ease; }
+  .sed .r-pick:hover { border-bottom-color: var(--coral); }
+  .sed .r-pick:focus { outline: none; border-bottom-color: var(--coral); }
+  .sed .r-pick .pick-label { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .sed .r-pick .pick-label.is-placeholder { color: var(--muted); }
+  .sed .r-pick .pick-caret { display: none; }
+  .sed .r-pick .pick-clear { flex: 0 0 auto; display: none; align-items: center; justify-content: center; width: 18px; height: 18px; border-radius: 6px; background: var(--gray-soft); color: var(--gray); cursor: pointer; font-size: 9px; user-select: none; }
+  .sed .r-pick .pick-clear:hover { background: var(--red-soft); color: var(--red); }
+  .sed .r-pick.has-value .pick-clear { display: inline-flex; }
+  .sed .r-pick.has-value .pick-label.is-placeholder { display: none; }
+  /* ---------- picker modal ---------- */
+  .sed .picker-backdrop { position: fixed; inset: 0; z-index: 80; background: rgba(26,26,46,0.32); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); display: none; align-items: flex-start; justify-content: center; padding: 80px 16px 16px; animation: sedPickerFade .18s ease-out; }
+  .sed .picker-backdrop.is-open { display: flex; }
+  @keyframes sedPickerFade { from { opacity: 0; } to { opacity: 1; } }
+  .sed .picker-panel { width: 100%; max-width: 380px; max-height: min(520px, calc(100vh - 120px)); display: flex; flex-direction: column; background: #fff; border-radius: 18px; box-shadow: 0 20px 50px -16px rgba(26,26,46,0.35), 0 0 0 1px rgba(26,26,46,0.06); overflow: hidden; animation: sedPickerPop .22s cubic-bezier(.22,1.2,.36,1); }
+  @keyframes sedPickerPop { from { opacity: 0; transform: translateY(-6px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+  .sed .picker-head { display: flex; align-items: center; gap: 10px; padding: 14px 16px; border-bottom: 1px solid var(--divider); }
+  .sed .picker-head .picker-title { font-size: 14px; font-weight: 700; color: var(--ink); flex: 1; }
+  .sed .picker-head .picker-close { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; border-radius: 8px; border: none; background: transparent; color: var(--muted); cursor: pointer; font-size: 12px; transition: background-color .15s ease, color .15s ease; }
+  .sed .picker-head .picker-close:hover { background: var(--gray-soft); color: var(--ink); }
+  .sed .picker-search { position: relative; padding: 10px 14px; border-bottom: 1px solid var(--divider); }
+  .sed .picker-search i { position: absolute; left: 24px; top: 50%; transform: translateY(-50%); color: var(--muted); font-size: 12px; pointer-events: none; }
+  .sed .picker-search input { width: 100%; padding: 9px 12px 9px 32px; border: 1px solid rgba(26,26,46,0.14); border-radius: 10px; font-size: 13px; color: var(--ink); background: rgba(255,255,255,0.7); transition: border-color .18s ease, box-shadow .18s ease, background-color .18s ease; }
+  .sed .picker-search input:focus { outline: none; border-color: var(--coral); background: #fff; box-shadow: 0 0 0 3px rgba(255,107,107,0.12); }
+  .sed .picker-list { flex: 1; overflow-y: auto; padding: 6px 8px; }
+  .sed .picker-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 10px; font-size: 13px; color: var(--ink); cursor: pointer; user-select: none; transition: background-color .15s ease, color .15s ease; }
+  .sed .picker-item:hover, .sed .picker-item.is-active { background: var(--coral-soft); color: var(--coral); }
+  .sed .picker-item.is-selected { background: var(--coral); color: #fff; font-weight: 600; }
+  .sed .picker-item.is-selected:hover { background: var(--coral); }
+  .sed .picker-item .pi-label { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .sed .picker-item .pi-check { font-size: 11px; opacity: 0; }
+  .sed .picker-item.is-selected .pi-check { opacity: 1; }
+  .sed .picker-empty { padding: 26px 12px; text-align: center; color: var(--muted); font-size: 12.5px; }
+  .sed .picker-empty i { display: block; font-size: 20px; margin-bottom: 6px; color: #d3d6de; }
+  .sed .picker-foot { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 10px 14px; border-top: 1px solid var(--divider); background: rgba(255,255,255,0.5); }
+  .sed .picker-foot .picker-clear-all { display: inline-flex; align-items: center; gap: 6px; padding: 7px 12px; border-radius: 9px; border: none; background: transparent; color: var(--muted); font-size: 12px; font-weight: 600; cursor: pointer; transition: color .15s ease, background-color .15s ease; }
+  .sed .picker-foot .picker-clear-all:hover { color: var(--red); background: var(--red-soft); }
+  .sed .picker-foot .picker-done { display: inline-flex; align-items: center; gap: 6px; padding: 7px 16px; border-radius: 9px; border: none; background: linear-gradient(135deg, var(--coral), var(--coral-2)); color: #fff; font-size: 12px; font-weight: 700; cursor: pointer; box-shadow: 0 6px 14px -6px rgba(255,107,107,0.55); transition: filter .15s ease, transform .15s ease; }
+  .sed .picker-foot .picker-done:hover { filter: brightness(1.04); transform: translateY(-1px); }
   .sed .s-check { display: inline-flex; align-items: center; gap: 8px; border: 1px solid rgba(26,26,46,0.12); border-radius: 10px; padding: 9px 14px; cursor: pointer; background: rgba(255,255,255,0.55); transition: border-color .15s ease, background-color .15s ease; }
   .sed .s-check:hover { border-color: var(--coral); background: #fff; }
   .sed .s-check:has(input:checked) { border-color: var(--coral); background: var(--coral-soft); }
@@ -143,21 +184,22 @@
         </div>
         <div class="s-field">
           <label>Status Sekolah</label>
-          <select name="school_status" class="s-select">
-            <option value="">-- Pilih Status --</option>
-            <option value="negeri" {{ old('school_status', $school->school_status) === 'negeri' ? 'selected' : '' }}>Negeri</option>
-            <option value="swasta" {{ old('school_status', $school->school_status) === 'swasta' ? 'selected' : '' }}>Swasta</option>
-          </select>
+          <button type="button" class="r-pick" data-picker="school_status" aria-haspopup="listbox" aria-expanded="false">
+            <span class="pick-label is-placeholder">-- Pilih Status --</span>
+            <span class="pick-clear" data-clear="school_status" role="button" tabindex="0" aria-label="Bersihkan"><i class="fa-solid fa-xmark"></i></span>
+            <i class="fa-solid fa-chevron-down pick-caret"></i>
+          </button>
+          <input type="hidden" name="school_status" data-picker-input="school_status" value="{{ old('school_status', $school->school_status) }}">
           @error('school_status')<p class="s-err">{{ $message }}</p>@enderror
         </div>
         <div class="s-field">
           <label>Akreditasi</label>
-          <select name="accreditation" class="s-select">
-            <option value="">-- Pilih Akreditasi --</option>
-            @foreach (['A', 'B', 'C', 'Belum Terakreditasi'] as $acc)
-              <option value="{{ $acc }}" {{ old('accreditation', $school->accreditation) === $acc ? 'selected' : '' }}>{{ $acc }}</option>
-            @endforeach
-          </select>
+          <button type="button" class="r-pick" data-picker="accreditation" aria-haspopup="listbox" aria-expanded="false">
+            <span class="pick-label is-placeholder">-- Pilih Akreditasi --</span>
+            <span class="pick-clear" data-clear="accreditation" role="button" tabindex="0" aria-label="Bersihkan"><i class="fa-solid fa-xmark"></i></span>
+            <i class="fa-solid fa-chevron-down pick-caret"></i>
+          </button>
+          <input type="hidden" name="accreditation" data-picker-input="accreditation" value="{{ old('accreditation', $school->accreditation) }}">
           @error('accreditation')<p class="s-err">{{ $message }}</p>@enderror
         </div>
         <div class="s-field full">
@@ -293,6 +335,33 @@
       </button>
     </div>
   </form>
+
+{{-- ===================== Modal Picker (Bringova) — reuse global picker ===================== --}}
+<div id="pickerBackdrop" class="picker-backdrop" aria-hidden="true">
+  <div class="picker-panel" role="dialog" aria-modal="true" aria-labelledby="pickerTitle">
+    <div class="picker-head">
+      <div class="picker-title" id="pickerTitle">Pilih item</div>
+      <button type="button" class="picker-close" onclick="closePicker()" aria-label="Tutup"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="picker-search">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input id="pickerSearch" type="search" placeholder="Cari…" autocomplete="off">
+    </div>
+    <div class="picker-list" id="pickerList" role="listbox"></div>
+    <div class="picker-foot">
+      <button type="button" class="picker-clear-all" onclick="clearCurrentPicker()"><i class="fa-solid fa-eraser"></i> Bersihkan</button>
+      <button type="button" class="picker-done" onclick="closePicker()">Selesai</button>
+    </div>
+  </div>
+</div>
+
+@php
+  $pickStatus = [['v'=>'','l'=>'-- Pilih Status --'],['v'=>'negeri','l'=>'Negeri'],['v'=>'swasta','l'=>'Swasta']];
+  $pickAcc = [['v'=>'','l'=>'-- Pilih Akreditasi --'],['v'=>'A','l'=>'A'],['v'=>'B','l'=>'B'],['v'=>'C','l'=>'C'],['v'=>'Belum Terakreditasi','l'=>'Belum Terakreditasi']];
+  $pickerJson = ['school_status'=>$pickStatus,'accreditation'=>$pickAcc];
+  $pickerLabels = ['school_status'=>'Pilih Status Sekolah','accreditation'=>'Pilih Akreditasi'];
+@endphp
+<div id="reg-data" hidden data-picker='@json($pickerJson)' data-picker-labels='@json($pickerLabels)'></div>
 </div>
 
 <script>
