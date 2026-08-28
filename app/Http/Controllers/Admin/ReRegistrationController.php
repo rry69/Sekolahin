@@ -33,11 +33,11 @@ class ReRegistrationController extends Controller
 
         $reRegistrations = $query->orderBy('submitted_at', 'desc')->paginate(20);
 
-        if ($request->ajax()) {
-            return response()->json(['html' => view('admin.partials.re-registrations-index', compact('reRegistrations'))->render()]);
-        }
-
         $schoolLevels = SchoolLevel::orderBy('name')->get();
+
+        if ($request->ajax()) {
+            return response()->json(['html' => view('admin.partials.re-registrations-index', compact('reRegistrations', 'schoolLevels'))->render()]);
+        }
 
         return view('admin.re-registrations.index', compact('reRegistrations', 'schoolLevels'));
     }
