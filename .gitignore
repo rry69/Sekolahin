@@ -58,6 +58,7 @@ yarn-error.log
 /sidebar.html
 /tests/reports/
 /design-system
+!/design-system/bringova.md
 /tests/Feature/XenditOnlinePaymentAfterHardeningTest.php
 
 # Sketch/mockup lokal
