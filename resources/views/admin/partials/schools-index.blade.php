@@ -25,6 +25,7 @@
     padding: 28px 28px 44px;
     background: #f6f7fb;
   }
+  .sch .s-inner { width: 100%; max-width: 1080px; margin: 0 auto; }
 
   /* ---------- header ---------- */
   .sch .s-crumb { display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: var(--muted); margin-bottom: 6px; font-weight: 500; }
@@ -115,6 +116,7 @@
 </style>
 
 <div class="sch">
+  <div class="s-inner">
   <div class="s-crumb">
     <a href="{{ route('admin.dashboard') }}">Dashboard</a>
     <span class="sep">/</span>
@@ -207,6 +209,7 @@
       <a href="{{ route('admin.settings.edit', ['tab' => 'jenjang']) }}" class="s-btn ghost sm"><i class="fa-solid fa-gear"></i> Buka Pengaturan Jenjang</a>
     </div>
   @endif
+  </div>
 
 {{-- ================== DELETE SCHOOL CONFIRM MODAL (Bringova) ================== --}}
 <div id="schoolDeleteModal" class="s-modal-backdrop" aria-hidden="true">
