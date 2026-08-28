@@ -1,184 +1,268 @@
 @extends('layouts.dashboard')
 @section('title', 'Detail Jurusan')
 @section('content')
-
 <style>
-  .mjr-card { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; }
-  .mjr-card-body { padding: 22px; }
-  .mjr-stat { flex: 1; min-width: 150px; background: var(--panel-2); border: 1px solid var(--border); border-radius: 10px; padding: 16px; }
-  .mjr-stat .lbl { font-size: 12px; color: var(--tx3); margin-bottom: 4px; }
-  .mjr-stat .val { font-size: 22px; font-weight: 700; color: var(--tx1); }
-  .mjr-stat .val.green { color: var(--badge-accepted-fg); }
-  .mjr-stat .val.yellow { color: var(--badge-pending-fg); }
-  .mjr-stat .val.red { color: var(--badge-rejected-fg); }
-  .mjr-stat .val.blue { color: var(--badge-verified-fg); }
-  .mjr-info { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px 24px; }
-  .mjr-info .item { display: flex; justify-content: space-between; gap: 12px; font-size: 13px; padding: 8px 0; border-bottom: 1px solid var(--hairline); }
-  .mjr-info .item .k { color: var(--tx3); }
-  .mjr-info .item .v { font-weight: 500; color: var(--tx1); text-align: right; }
-  .status-active { background: var(--badge-accepted-bg); color: var(--badge-accepted-fg); }
-  .status-inactive { background: var(--badge-rejected-bg); color: var(--badge-rejected-fg); }
-  @media (max-width: 640px) { .mjr-info { grid-template-columns: 1fr; } }
+  /* ===================== DETAIL JURUSAN — Bringova (no cards, scoped) ===================== */
+  .mjd {
+    --coral: #FF6B6B;
+    --coral-soft: #FFE5E3;
+    --coral-2: #FF8E6E;
+    --amber: #F59E0B;
+    --amber-soft: #FEF3C7;
+    --green: #10B981;
+    --green-soft: #D1FAE5;
+    --blue: #3B82F6;
+    --blue-soft: #DBEAFE;
+    --purple: #8B5CF6;
+    --purple-soft: #EDE9FE;
+    --red: #EF4444;
+    --red-soft: #FEE2E2;
+    --gray: #6b7280;
+    --gray-soft: #F3F4F6;
+    --ink: #1a1a2e;
+    --muted: #8a8f9d;
+    --divider: rgba(26, 26, 46, 0.10);
+    position: relative;
+    border-radius: 24px;
+    padding: 28px 28px 40px;
+    background: #f6f7fb;
+  }
+  .mjd .m-crumb { display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: var(--muted); margin-bottom: 6px; font-weight: 500; }
+  .mjd .m-crumb a { color: var(--coral); text-decoration: none; }
+  .mjd .m-crumb a:hover { text-decoration: underline; }
+  .mjd .m-crumb .sep { color: #d3d6de; }
+  .mjd .m-title { font-size: 26px; font-weight: 800; color: var(--ink); letter-spacing: -0.01em; margin-bottom: 2px; }
+  .mjd .m-meta { font-size: 13px; color: var(--muted); line-height: 1.5; }
+  .mjd .m-meta .dot { color: #d3d6de; margin: 0 4px; }
+  .mjd .m-alert { display: flex; align-items: flex-start; gap: 10px; padding: 12px 16px; border-radius: 12px; font-size: 13px; margin-bottom: 16px; font-weight: 500; }
+  .mjd .m-alert i { margin-top: 2px; }
+  .mjd .m-alert.success { background: var(--green-soft); color: var(--green); }
+  .mjd .m-alert.error { background: var(--red-soft); color: var(--red); }
+  .mjd .m-head { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 22px; }
+  .mjd .m-head-actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .mjd .m-btn { display: inline-flex; align-items: center; gap: 7px; border: none; cursor: pointer; border-radius: 11px; padding: 10px 17px; font-size: 13px; font-weight: 700; text-decoration: none; transition: transform .15s ease, filter .15s ease, background-color .15s ease; }
+  .mjd .m-btn:hover { transform: translateY(-1px); }
+  .mjd .m-btn.coral { background: linear-gradient(135deg, var(--coral), var(--coral-2)); color: #fff; box-shadow: 0 8px 18px -8px rgba(255,107,107,0.6); }
+  .mjd .m-btn.coral:hover { filter: brightness(1.04); }
+  .mjd .m-btn.ghost { background: rgba(255,255,255,0.65); color: var(--ink); box-shadow: 0 2px 10px -8px rgba(26,26,46,0.3); }
+  .mjd .m-btn.ghost:hover { background: #fff; color: var(--coral); }
+  .mjd .m-btn.red { background: var(--red); color: #fff; }
+  .mjd .m-btn.red:hover { background: #dc2626; }
+  .mjd .m-btn.amber { background: var(--amber); color: #fff; }
+  .mjd .m-btn.amber:hover { background: #d97706; }
+  .mjd .m-btn.sm { padding: 7px 12px; font-size: 12px; border-radius: 9px; }
+  .mjd .m-pill { display: inline-flex; align-items: center; gap: 6px; padding: 4px 11px; border-radius: 20px; font-size: 11.5px; font-weight: 700; white-space: nowrap; }
+  .mjd .m-pill.green { background: var(--green-soft); color: var(--green); }
+  .mjd .m-pill.red { background: var(--red-soft); color: var(--red); }
+  .mjd .m-pill.blue { background: var(--blue-soft); color: var(--blue); }
+  .mjd .m-pill.amber { background: var(--amber-soft); color: #b45309; }
+  .mjd .m-pill.gray { background: var(--gray-soft); color: var(--gray); }
+  .mjd .m-pill.coral { background: var(--coral-soft); color: var(--coral); }
+  .mjd .m-sec { border-top: 1px solid var(--divider); padding: 24px 0 6px; }
+  .mjd .m-sec:first-of-type { border-top: none; padding-top: 4px; }
+  .mjd .m-sec-title { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; color: var(--ink); text-transform: uppercase; letter-spacing: .4px; margin-bottom: 16px; }
+  .mjd .m-sec-title i { color: var(--coral); font-size: 13px; }
+  .mjd .m-summary { display: flex; gap: 18px; flex-wrap: wrap; }
+  .mjd .m-sum { display: flex; align-items: center; gap: 12px; }
+  .mjd .m-sum-ic { flex: 0 0 auto; width: 46px; height: 46px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+  .mjd .m-sum-ic.coral { background: var(--coral-soft); color: var(--coral); }
+  .mjd .m-sum-ic.green { background: var(--green-soft); color: var(--green); }
+  .mjd .m-sum-ic.amber { background: var(--amber-soft); color: #b45309; }
+  .mjd .m-sum-ic.blue { background: var(--blue-soft); color: var(--blue); }
+  .mjd .m-sum-ic.red { background: var(--red-soft); color: var(--red); }
+  .mjd .m-sum-ic.gray { background: var(--gray-soft); color: var(--gray); }
+  .mjd .m-sum-lbl { font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .3px; }
+  .mjd .m-sum-val { font-size: 19px; font-weight: 800; color: var(--ink); }
+  .mjd .m-quotas { display: flex; gap: 8px; flex-wrap: wrap; }
+  .mjd .m-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px 24px; }
+  .mjd .m-item { display: flex; justify-content: space-between; gap: 12px; font-size: 13px; padding: 10px 2px; border-bottom: 1px solid var(--divider); }
+  .mjd .m-item:last-child { border-bottom: none; }
+  .mjd .m-item .k { color: var(--muted); font-weight: 500; }
+  .mjd .m-item .v { font-weight: 600; color: var(--ink); text-align: right; }
+  .mjd .m-item.full { grid-column: 1 / -1; flex-direction: column; align-items: flex-start; }
+  .mjd .m-item.full .v { text-align: left; font-weight: 400; }
+  .mjd .m-list { display: flex; flex-direction: column; }
+  .mjd .m-row { display: flex; align-items: center; gap: 14px; padding: 14px 4px; border-bottom: 1px solid var(--divider); }
+  .mjd .m-row:last-child { border-bottom: none; }
+  .mjd .m-row-ic { flex: 0 0 auto; width: 42px; height: 42px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 15px; background: var(--gray-soft); color: var(--gray); }
+  .mjd .m-row-body { flex: 1; min-width: 0; }
+  .mjd .m-row-name { font-size: 13.5px; font-weight: 700; color: var(--ink); }
+  .mjd .m-row-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .mjd .m-row-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+  .mjd .m-empty { text-align: center; color: var(--muted); font-size: 13px; padding: 28px 0; }
+  .mjd .m-empty i { display: block; font-size: 24px; margin-bottom: 8px; color: #d3d6de; }
+  .mjd .m-pager { margin-top: 18px; display: flex; justify-content: center; }
+  .mjd .m-pager > nav { display: flex; justify-content: center; }
+  .mjd .m-modal-backdrop { position: fixed; inset: 0; z-index: 90; background: rgba(26,26,46,0.36); backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px); display: none; align-items: center; justify-content: center; padding: 16px; }
+  .mjd .m-modal-backdrop.is-open { display: flex; }
+  .mjd .m-modal { width: 100%; max-width: 400px; background: #fff; border-radius: 18px; padding: 22px; box-shadow: 0 24px 60px -18px rgba(26,26,46,0.4); animation: mModalPop .2s cubic-bezier(.22,1.2,.36,1); }
+  @keyframes mModalPop { from { opacity: 0; transform: scale(0.97) translateY(4px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+  .mjd .m-modal-body { display: flex; align-items: flex-start; gap: 13px; margin-bottom: 18px; }
+  .mjd .m-modal-ic { flex: 0 0 auto; width: 42px; height: 42px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 17px; background: var(--red-soft); color: var(--red); }
+  .mjd .m-modal-title { font-size: 15px; font-weight: 700; color: var(--ink); }
+  .mjd .m-modal-msg { font-size: 13px; color: var(--muted); margin-top: 3px; line-height: 1.5; }
+  .mjd .m-modal-actions { display: flex; justify-content: flex-end; gap: 8px; }
+  .mjd .m-modal-actions .m-btn-ghost { background: transparent; color: var(--muted); }
+  .mjd .m-modal-actions .m-btn-ghost:hover { color: var(--ink); }
+  @media (max-width: 720px) {
+    .mjd { padding: 20px 16px 32px; }
+    .mjd .m-grid { grid-template-columns: 1fr; }
+    .mjd .m-row { flex-wrap: wrap; }
+    .mjd .m-row-actions { width: 100%; justify-content: flex-end; }
+  }
 </style>
 
-<div class="breadcrumb">
-  <a href="{{ route('admin.dashboard') }}">Dashboard</a>
-  <span class="sep">/</span>
-  <a href="{{ route('admin.majors.index') }}">Kelola Jurusan</a>
-  <span class="sep">/</span>
-  <span>Detail Jurusan</span>
-</div>
-
-@if (session('success'))
-<div class="alert alert-success">{{ session('success') }}</div>
-@endif
-@if (session('error'))
-<div class="alert alert-error">{{ session('error') }}</div>
-@endif
-
-<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:18px;">
-  <div>
-    <h1 class="page-title" style="margin-bottom:2px;">{{ $major->name }}</h1>
-    <p style="font-size:13px;color:var(--tx2);">
-      <span class="status-badge status-{{ $major->is_active ? 'active' : 'inactive' }}">{{ $major->statusLabel() }}</span>
-      &nbsp;{{ $major->school->name ?? '-' }} · {{ $major->schoolLevel->name ?? '-' }} · Kode {{ $major->code }}
-      @if ($major->order !== null) · Urutan {{ $major->order }} @endif
-    </p>
+<div class="mjd">
+  <div class="m-crumb">
+    <a href="{{ route('admin.dashboard') }}">Dashboard</a>
+    <span class="sep">/</span>
+    <a href="{{ route('admin.majors.index') }}">Kelola Jurusan</a>
+    <span class="sep">/</span>
+    <span>Detail Jurusan</span>
   </div>
-  <div style="display:flex;gap:8px;flex-wrap:wrap;">
-    <a href="{{ route('admin.majors.index') }}" class="btn btn-outline"><i class="fa-solid fa-arrow-left" style="font-size:10px;"></i> Kembali</a>
-    <a href="{{ route('admin.majors.edit', $major) }}" class="btn btn-outline"><i class="fa-solid fa-pen" style="font-size:10px;"></i> Edit</a>
-    <form action="{{ route('admin.majors.toggle-status', $major) }}" method="POST" style="display:inline;">
-      @csrf
-      <button type="submit" class="btn {{ $major->is_active ? 'btn-outline' : 'btn-primary' }}">
-        <i class="fa-solid fa-{{ $major->is_active ? 'toggle-on' : 'toggle-off' }}" style="font-size:11px;"></i>
-        {{ $major->is_active ? 'Nonaktifkan' : 'Aktifkan' }}
+
+  <div class="m-head">
+    <div>
+      <h1 class="m-title">{{ $major->name }}</h1>
+      <p class="m-meta">
+        <span class="m-pill {{ $major->is_active ? 'green' : 'red' }}"><i class="fa-solid {{ $major->is_active ? 'fa-circle-check' : 'fa-circle-xmark' }}"></i> {{ $major->statusLabel() }}</span>
+        <span class="dot">·</span>{{ $major->school->name ?? '-' }}
+        <span class="dot">·</span>{{ $major->schoolLevel->name ?? '-' }}
+        <span class="dot">·</span>Kode {{ $major->code }}
+        @if ($major->order !== null) <span class="dot">·</span>Urutan {{ $major->order }} @endif
+      </p>
+    </div>
+    <div class="m-head-actions">
+      <a href="{{ route('admin.majors.index') }}" class="m-btn ghost sm"><i class="fa-solid fa-arrow-left"></i> Kembali</a>
+      <a href="{{ route('admin.majors.edit', $major) }}" class="m-btn ghost sm"><i class="fa-solid fa-pen"></i> Edit</a>
+      <form action="{{ route('admin.majors.toggle-status', $major) }}" method="POST" style="display:inline;">
+        @csrf
+        <button type="submit" class="m-btn {{ $major->is_active ? 'ghost' : 'coral' }} sm">
+          <i class="fa-solid fa-{{ $major->is_active ? 'toggle-on' : 'toggle-off' }}"></i>
+          {{ $major->is_active ? 'Nonaktifkan' : 'Aktifkan' }}
+        </button>
+      </form>
+      <button type="button" class="m-btn red sm" onclick="openMajorDelete({{ $major->id }}, {{ json_encode($major->name) }})">
+        <i class="fa-solid fa-trash-can"></i> Hapus
       </button>
-    </form>
-    <button type="button" class="btn btn-danger" onclick="openMajorDelete({{ $major->id }}, {{ json_encode($major->name) }})">
-      <i class="fa-solid fa-trash-can" style="font-size:10px;"></i> Hapus
-    </button>
-  </div>
-</div>
-
-<div class="mjr-card" style="margin-bottom:16px;">
-  <div class="mjr-card-body">
-    <h4 style="margin:0 0 14px;font-size:13px;font-weight:600;color:var(--tx3);text-transform:uppercase;letter-spacing:.4px;">Ringkasan Pendaftar</h4>
-    <div style="display:flex;gap:12px;flex-wrap:wrap;">
-      <div class="mjr-stat"><div class="lbl">Total Kuota</div><div class="val">{{ $statistics['total_quota'] }}</div></div>
-      <div class="mjr-stat"><div class="lbl">Sisa Kuota</div><div class="val">{{ $statistics['available_quota'] }}</div></div>
-      <div class="mjr-stat"><div class="lbl">Total Pendaftar</div><div class="val">{{ $statistics['total_applicants'] }}</div></div>
-      <div class="mjr-stat"><div class="lbl">Pending</div><div class="val yellow">{{ $statistics['pending'] }}</div></div>
-      <div class="mjr-stat"><div class="lbl">Terverifikasi</div><div class="val blue">{{ $statistics['verified'] }}</div></div>
-      <div class="mjr-stat"><div class="lbl">Diterima</div><div class="val green">{{ $statistics['accepted'] }}</div></div>
-      <div class="mjr-stat"><div class="lbl">Ditolak</div><div class="val red">{{ $statistics['rejected'] }}</div></div>
     </div>
   </div>
-</div>
 
-@if (isset($statistics['by_track']))
-<div class="mjr-card" style="margin-bottom:16px;">
-  <div class="mjr-card-body">
-    <h4 style="margin:0 0 14px;font-size:13px;font-weight:600;color:var(--tx3);text-transform:uppercase;letter-spacing:.4px;">Kuota per Jalur</h4>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;">
+  @if (session('success'))
+    <div class="m-alert success"><i class="fa-solid fa-circle-check"></i><span>{{ session('success') }}</span></div>
+  @endif
+  @if (session('error'))
+    <div class="m-alert error"><i class="fa-solid fa-circle-exclamation"></i><span>{{ session('error') }}</span></div>
+  @endif
+
+  <div class="m-sec">
+    <div class="m-sec-title"><i class="fa-solid fa-chart-simple"></i> Ringkasan Pendaftar</div>
+    <div class="m-summary">
+      <div class="m-sum"><span class="m-sum-ic coral"><i class="fa-solid fa-layer-group"></i></span><div><div class="m-sum-lbl">Total Kuota</div><div class="m-sum-val">{{ $statistics['total_quota'] }}</div></div></div>
+      <div class="m-sum"><span class="m-sum-ic green"><i class="fa-solid fa-check"></i></span><div><div class="m-sum-lbl">Sisa Kuota</div><div class="m-sum-val">{{ $statistics['available_quota'] }}</div></div></div>
+      <div class="m-sum"><span class="m-sum-ic gray"><i class="fa-solid fa-users"></i></span><div><div class="m-sum-lbl">Total Pendaftar</div><div class="m-sum-val">{{ $statistics['total_applicants'] }}</div></div></div>
+      <div class="m-sum"><span class="m-sum-ic amber"><i class="fa-solid fa-clock"></i></span><div><div class="m-sum-lbl">Pending</div><div class="m-sum-val">{{ $statistics['pending'] }}</div></div></div>
+      <div class="m-sum"><span class="m-sum-ic blue"><i class="fa-solid fa-file-circle-check"></i></span><div><div class="m-sum-lbl">Terverifikasi</div><div class="m-sum-val">{{ $statistics['verified'] }}</div></div></div>
+      <div class="m-sum"><span class="m-sum-ic green"><i class="fa-solid fa-user-check"></i></span><div><div class="m-sum-lbl">Diterima</div><div class="m-sum-val">{{ $statistics['accepted'] }}</div></div></div>
+      <div class="m-sum"><span class="m-sum-ic red"><i class="fa-solid fa-user-xmark"></i></span><div><div class="m-sum-lbl">Ditolak</div><div class="m-sum-val">{{ $statistics['rejected'] }}</div></div></div>
+    </div>
+  </div>
+
+  @if (isset($statistics['by_track']))
+  <div class="m-sec">
+    <div class="m-sec-title"><i class="fa-solid fa-route"></i> Kuota per Jalur</div>
+    <div class="m-quotas">
       @foreach($statistics['by_track'] as $trackName => $row)
-        <div class="mjr-stat" style="background:var(--panel);">
-          <div class="lbl">{{ $trackName }}</div>
-          <div class="val" style="font-size:16px;">{{ $row['quota'] }}</div>
-          <div style="font-size:12px;color:var(--tx3);margin-top:4px;">Terisi {{ $row['accepted'] }} · Sisa <span style="font-weight:600;color:{{ $row['sisa']===0 ? 'var(--badge-rejected-fg)' : 'var(--badge-accepted-fg)' }};">{{ $row['sisa'] }}</span></div>
-        </div>
+        <span class="m-pill blue">{{ $trackName }}: {{ $row['quota'] }}</span>
+        <span class="m-pill {{ $row['sisa'] === 0 ? 'red' : 'green' }}">Sisa {{ $row['sisa'] }}</span>
+        <span class="m-pill gray">Terisi {{ $row['accepted'] }}</span>
       @endforeach
     </div>
   </div>
-</div>
-@endif
+  @endif
 
-<div class="mjr-card" style="margin-bottom:16px;">
-  <div class="mjr-card-body">
-    <h4 style="margin:0 0 14px;font-size:13px;font-weight:600;color:var(--tx3);text-transform:uppercase;letter-spacing:.4px;">Informasi Jurusan</h4>
-    <div class="mjr-info">
-      <div class="item"><span class="k">Nama Jurusan</span><span class="v">{{ $major->name }}</span></div>
-      <div class="item"><span class="k">Kode</span><span class="v">{{ $major->code }}</span></div>
-      <div class="item"><span class="k">Jenjang</span><span class="v">{{ $major->schoolLevel->name ?? '-' }}</span></div>
-      <div class="item"><span class="k">Sekolah</span><span class="v">{{ $major->school->name ?? '-' }}</span></div>
-      <div class="item"><span class="k">Status</span><span class="v">{{ $major->statusLabel() }}</span></div>
-      <div class="item"><span class="k">Urutan</span><span class="v">{{ $major->order ?? '-' }}</span></div>
+  <div class="m-sec">
+    <div class="m-sec-title"><i class="fa-solid fa-circle-info"></i> Informasi Jurusan</div>
+    <div class="m-grid">
+      <div class="m-item"><span class="k">Nama Jurusan</span><span class="v">{{ $major->name }}</span></div>
+      <div class="m-item"><span class="k">Kode</span><span class="v">{{ $major->code }}</span></div>
+      <div class="m-item"><span class="k">Jenjang</span><span class="v">{{ $major->schoolLevel->name ?? '-' }}</span></div>
+      <div class="m-item"><span class="k">Sekolah</span><span class="v">{{ $major->school->name ?? '-' }}</span></div>
+      <div class="m-item"><span class="k">Status</span><span class="v"><span class="m-pill {{ $major->is_active ? 'green' : 'red' }}">{{ $major->statusLabel() }}</span></span></div>
+      <div class="m-item"><span class="k">Urutan</span><span class="v">{{ $major->order ?? '-' }}</span></div>
       @if($major->description)
-      <div class="item" style="grid-column:1/-1;flex-direction:column;align-items:flex-start;">
-        <span class="k">Deskripsi</span>
-        <span class="v" style="text-align:left;font-weight:400;">{{ $major->description }}</span>
-      </div>
+      <div class="m-item full"><span class="k">Deskripsi</span><span class="v">{{ $major->description }}</span></div>
       @endif
     </div>
   </div>
-</div>
 
-<div class="mjr-card">
-  <div class="mjr-card-body">
-    <h4 style="margin:0 0 14px;font-size:13px;font-weight:600;color:var(--tx3);text-transform:uppercase;letter-spacing:.4px;">Daftar Pendaftar</h4>
-    <div style="overflow-x:auto;">
-      <table class="data-table">
-        <thead>
-          <tr><th>Nama</th><th>Jalur</th><th>Status</th></tr>
-        </thead>
-        <tbody>
-          @forelse ($registrations as $registration)
-            <tr>
-              <td>{{ $registration->applicant->full_name ?? '-' }}</td>
-              <td>{{ $registration->registrationTrack->name ?? '-' }}</td>
-              <td><span class="status-badge status-{{ $registration->status }}">{{ \App\Models\Registration::statusLabel($registration->status) }}</span></td>
-            </tr>
-          @empty
-            <tr><td colspan="3" class="empty-state">Belum ada pendaftar</td></tr>
-          @endforelse
-        </tbody>
-      </table>
-    </div>
-    <div style="margin-top:14px;">{{ $registrations->links('vendor.pagination.egglore') }}</div>
+  <div class="m-sec">
+    <div class="m-sec-title"><i class="fa-solid fa-users"></i> Daftar Pendaftar</div>
+    @if ($registrations->isEmpty())
+      <div class="m-empty"><i class="fa-regular fa-folder-open"></i>Belum ada pendaftar</div>
+    @else
+      <div class="m-list">
+        @foreach ($registrations as $registration)
+          <div class="m-row">
+            <span class="m-row-ic"><i class="fa-solid fa-user"></i></span>
+            <div class="m-row-body">
+              <div class="m-row-name">{{ $registration->applicant->full_name ?? '-' }}</div>
+              <div class="m-row-sub">
+                <span class="m-pill blue" style="padding:2px 8px;font-size:11px">{{ $registration->registrationTrack->name ?? '-' }}</span>
+                <span class="m-pill {{ $registration->status === 'accepted' || $registration->status === 're_registration_complete' ? 'green' : ($registration->status === 'pending' ? 'amber' : ($registration->status === 'rejected' ? 'red' : 'gray')) }}" style="padding:2px 8px;font-size:11px">{{ \App\Models\Registration::statusLabel($registration->status) }}</span>
+              </div>
+            </div>
+            <div class="m-row-actions">
+              <a href="{{ route('admin.registrations.show', $registration) }}" class="m-btn ghost sm"><i class="fa-solid fa-eye"></i> Detail</a>
+            </div>
+          </div>
+        @endforeach
+      </div>
+      <div class="m-pager">{{ $registrations->links('vendor.pagination.bringova') }}</div>
+    @endif
   </div>
-</div>
 
-{{-- Modal konfirmasi hapus --}}
-<div id="majorDeleteModal" class="modal-overlay" style="display:none;">
-  <div class="modal-card">
-    <div class="modal-head">
-      <div class="modal-icon modal-icon-amber">🗑️</div>
-      <div>
-        <h3 class="modal-title">Hapus jurusan?</h3>
-        <p class="modal-text">Yakin ingin menghapus jurusan <strong id="majorDeleteName"></strong>? Aksi ini tidak dapat dibatalkan.</p>
-        <p class="modal-sub">Jurusan yang masih memiliki pendaftar tidak dapat dihapus — nonaktifkan saja.</p>
+{{-- ================== MODAL HAPUS (Bringova) ================== --}}
+<div id="majorDeleteModal" class="m-modal-backdrop" aria-hidden="true">
+  <div class="m-modal" role="dialog" aria-modal="true">
+    <div class="m-modal-body">
+      <div class="m-modal-ic"><i class="fa-solid fa-trash-can"></i></div>
+      <div style="flex:1;min-width:0">
+        <h3 class="m-modal-title">Hapus jurusan?</h3>
+        <p class="m-modal-text" style="font-size:13px;color:var(--muted);margin-top:3px">Yakin ingin menghapus jurusan <strong id="majorDeleteName" style="color:var(--ink)"></strong>? Aksi ini tidak dapat dibatalkan.</p>
+        <p style="font-size:12px;color:var(--muted);margin-top:6px">Jurusan yang masih memiliki pendaftar tidak dapat dihapus — nonaktifkan saja.</p>
       </div>
     </div>
-    <div class="modal-actions">
-      <button type="button" onclick="closeMajorDelete()" class="modal-btn-cancel">Batal</button>
+    <div class="m-modal-actions">
+      <button type="button" onclick="closeMajorDelete()" class="m-btn ghost sm m-btn-ghost">Batal</button>
       <form id="majorDeleteForm" method="POST" style="display:inline;">
         @csrf
         @method('DELETE')
-        <button type="submit" class="btn btn-danger">Ya, Hapus</button>
+        <button type="submit" class="m-btn red sm">Ya, Hapus</button>
       </form>
     </div>
   </div>
 </div>
+</div>
 
 <script>
-function openMajorDelete(id, name) {
+(function(){
+  var pending = null;
+  window.openMajorDelete = function(id, name){
+    var modal = document.getElementById('majorDeleteModal');
+    var nameEl = document.getElementById('majorDeleteName');
+    var form = document.getElementById('majorDeleteForm');
+    if(nameEl) nameEl.textContent = name;
+    if(form) form.action = '/admin/majors/' + id;
+    if(modal){ modal.classList.add('is-open'); modal.setAttribute('aria-hidden','false'); modal.style.display='flex'; }
+  };
+  window.closeMajorDelete = function(){
+    var modal = document.getElementById('majorDeleteModal');
+    if(modal){ modal.classList.remove('is-open'); modal.setAttribute('aria-hidden','true'); modal.style.display='none'; }
+  };
   var modal = document.getElementById('majorDeleteModal');
-  var nameEl = document.getElementById('majorDeleteName');
-  var form = document.getElementById('majorDeleteForm');
-  if (nameEl) nameEl.textContent = name;
-  if (form) form.action = '/admin/majors/' + id;
-  if (modal) modal.style.display = 'flex';
-}
-function closeMajorDelete() {
-  var modal = document.getElementById('majorDeleteModal');
-  if (modal) modal.style.display = 'none';
-}
-document.addEventListener('click', function (e) {
-  var modal = document.getElementById('majorDeleteModal');
-  if (modal && modal.style.display === 'flex' && e.target === modal) closeMajorDelete();
-});
-document.addEventListener('keydown', function (e) {
-  if (e.key === 'Escape') closeMajorDelete();
-});
+  if(modal) modal.addEventListener('click', function(e){ if(e.target===this) closeMajorDelete(); });
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ var m=document.getElementById('majorDeleteModal'); if(m&&m.classList.contains('is-open')) closeMajorDelete(); }});
+})();
 </script>
 @endsection
