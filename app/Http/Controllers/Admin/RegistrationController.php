@@ -66,25 +66,32 @@ class RegistrationController extends Controller
         }
 
         if ($request->filled('search')) {
-            $search = $request->search;
-            $query->whereHas('applicant', function($q) use ($search) {
-                $q->where('full_name', 'like', "%{$search}%")
-                  ->orWhere('nik', 'like', "%{$search}%")
-                  ->orWhere('nisn', 'like', "%{$search}%");
-            })->orWhere('registration_number', 'like', "%{$search}%");
+            $search = trim($request->search);
+            // Bungkus dalam grup where agar pencarian tidak meniadakan filter status/pembayaran/deadline.
+            // Batasi panjang agar query LIKE tetap aman & cepat.
+            if ($search !== '') {
+                $search = mb_substr($search, 0, 100);
+                $query->where(function ($q) use ($search) {
+                    $q->whereHas('applicant', function ($a) use ($search) {
+                        $a->where('full_name', 'like', "%{$search}%")
+                          ->orWhere('nik', 'like', "%{$search}%")
+                          ->orWhere('nisn', 'like', "%{$search}%");
+                    })->orWhere('registration_number', 'like', "%{$search}%");
+                });
+            }
         }
 
         $registrations = $query->latest()->paginate(20);
-
-        if ($request->ajax()) {
-            $html = view('admin.partials.registrations-index', compact('registrations'))->render();
-            return response()->json(['html' => $html]);
-        }
 
         $periods = RegistrationPeriod::all();
         $tracks = RegistrationTrack::all();
         $schools = School::all();
         $majors = Major::with('school')->get();
+
+        if ($request->ajax()) {
+            $html = view('admin.partials.registrations-index', compact('registrations', 'periods', 'tracks', 'schools', 'majors'))->render();
+            return response()->json(['html' => $html]);
+        }
 
         return view('admin.registrations.index', compact(
             'registrations',

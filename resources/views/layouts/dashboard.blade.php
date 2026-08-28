@@ -586,6 +586,10 @@ function toggleFilterForm() {
   var f = document.getElementById('filterForm');
   if (f) f.style.display = f.style.display === 'none' ? 'block' : 'none';
 }
+function toggleFilterPanel() {
+  var p = document.getElementById('filterPanel');
+  if (p) p.style.display = p.style.display === 'none' ? 'flex' : 'none';
+}
 
 // === Toast ===
 function showToast(msg) {
