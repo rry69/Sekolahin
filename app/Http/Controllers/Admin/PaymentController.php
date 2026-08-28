@@ -21,13 +21,51 @@ class PaymentController extends Controller
             $query->where('status', $request->status);
         }
 
-        $payments = $query->orderBy('created_at', 'desc')->paginate(20);
-
-        if ($request->ajax()) {
-            return response()->json(['html' => view('admin.partials.payments-index', compact('payments'))->render()]);
+        // Pencarian: no registrasi / nama pendaftar / email
+        $search = trim((string) $request->input('search'));
+        if ($search !== '') {
+            $search = mb_substr($search, 0, 100);
+            $query->where(function ($q) use ($search) {
+                $q->whereHas('registration', function ($r) use ($search) {
+                    $r->where('registration_number', 'like', "%{$search}%")
+                        ->orWhereHas('applicant', function ($a) use ($search) {
+                            $a->where('full_name', 'like', "%{$search}%")
+                                ->orWhereHas('user', function ($u) use ($search) {
+                                    $u->where('email', 'like', "%{$search}%");
+                                });
+                        });
+                });
+            });
         }
 
-        return view('admin.payments.index', compact('payments'));
+        if ($request->has('payment_type') && in_array($request->payment_type, ['registration_fee', 're_registration_fee'], true)) {
+            $query->where('payment_type', $request->payment_type);
+        }
+
+        if ($request->has('payment_method') && in_array($request->payment_method, ['bank_transfer', 'cash', 'online'], true)) {
+            $query->where('payment_method', $request->payment_method);
+        }
+
+        $payments = $query->orderBy('created_at', 'desc')->paginate(20);
+
+        // Data filter untuk modal picker (tersedia di full render & AJAX)
+        $paymentTypes = [
+            ['v' => '', 'l' => 'Semua Tipe'],
+            ['v' => 'registration_fee', 'l' => 'Biaya Pendaftaran'],
+            ['v' => 're_registration_fee', 'l' => 'Biaya Daftar Ulang'],
+        ];
+        $paymentMethods = [
+            ['v' => '', 'l' => 'Semua Metode'],
+            ['v' => 'bank_transfer', 'l' => 'Transfer Bank'],
+            ['v' => 'cash', 'l' => 'Tunai'],
+            ['v' => 'online', 'l' => 'Online'],
+        ];
+
+        if ($request->ajax()) {
+            return response()->json(['html' => view('admin.partials.payments-index', compact('payments', 'paymentTypes', 'paymentMethods'))->render()]);
+        }
+
+        return view('admin.payments.index', compact('payments', 'paymentTypes', 'paymentMethods'));
     }
 
     public function verify(Payment $payment)
