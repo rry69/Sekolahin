@@ -945,9 +945,11 @@ document.addEventListener('DOMContentLoaded', function () {
   // ================= AJAX NAVIGATION =================
   document.querySelectorAll('.sb-nav [data-menu-item], .sb-foot [data-menu-item]').forEach(function (navLink) {
     navLink.addEventListener('click', function (e) {
+      var href = navLink.getAttribute('href') || '';
+      if (href.indexOf('/admin/settings') !== -1) return;
       e.preventDefault();
       if (isMobile() && state.mobileOpen) closeDrawer();
-      loadContent(navLink.getAttribute('href'));
+      loadContent(href);
     });
   });
 
@@ -1180,7 +1182,10 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   window.addEventListener('popstate', function (e) {
-    if (e.state && e.state.url) loadContent(e.state.url, false);
+    if (e.state && e.state.url) {
+      if (e.state.url.indexOf('/admin/settings') !== -1) { window.location.href = e.state.url; return; }
+      loadContent(e.state.url, false);
+    }
   });
   history.replaceState({ url: window.location.href }, '', window.location.href);
 
