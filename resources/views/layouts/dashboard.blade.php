@@ -591,6 +591,211 @@ function toggleFilterPanel() {
   if (p) p.style.display = p.style.display === 'none' ? 'flex' : 'none';
 }
 
+// ===================== Picker Bringova (dropdown modal) =====================
+(function () {
+  var currentKey = null;
+  var currentTrigger = null;
+  var currentInput = null;
+  var currentValue = null;
+
+  function $(sel, root) { return (root || document).querySelector(sel); }
+  function $all(sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); }
+
+  function getBackdrop() { return document.getElementById('pickerBackdrop'); }
+  function getPanel()    { return $('.reg .picker-panel'); }
+  function getList()     { return document.getElementById('pickerList'); }
+  function getSearch()   { return document.getElementById('pickerSearch'); }
+  function getTitle()    { return document.getElementById('pickerTitle'); }
+
+  function findByValue(arr, val) {
+    if (val === null || val === undefined) return null;
+    var sv = String(val);
+    for (var i = 0; i < arr.length; i++) {
+      if (String(arr[i].v) === sv) return arr[i];
+    }
+    return null;
+  }
+
+  function syncTriggerLabel(trigger) {
+    if (!trigger) return;
+    var key = trigger.getAttribute('data-picker');
+    var input = document.querySelector('[data-picker-input="' + key + '"]');
+    var data = (window.__pickerData || {})[key] || [];
+    var labelEl = trigger.querySelector('.pick-label');
+    var v = input ? input.value : '';
+    var found = findByValue(data, v);
+    if (found && String(found.v) !== '') {
+      labelEl.textContent = found.l;
+      labelEl.classList.remove('is-placeholder');
+      trigger.classList.add('has-value');
+    } else {
+      labelEl.textContent = 'Pilih ' + ((window.__pickerLabels || {})[key] || 'item').toLowerCase().replace(/^pilih\s/, '') + '…';
+      labelEl.classList.add('is-placeholder');
+      trigger.classList.remove('has-value');
+    }
+  }
+
+  function renderList(filter) {
+    var data = (window.__pickerData || {})[currentKey] || [];
+    var list = getList();
+    if (!list) return;
+    list.innerHTML = '';
+    var f = (filter || '').toLowerCase().trim();
+    var rows = data.filter(function (it) {
+      if (!f) return true;
+      return String(it.l).toLowerCase().indexOf(f) !== -1;
+    });
+    if (rows.length === 0) {
+      var empty = document.createElement('div');
+      empty.className = 'picker-empty';
+      empty.innerHTML = '<i class="fa-regular fa-folder-open"></i> Tidak ada item yang cocok';
+      list.appendChild(empty);
+      return;
+    }
+    rows.forEach(function (it) {
+      var div = document.createElement('div');
+      div.className = 'picker-item' + (String(it.v) === String(currentValue) ? ' is-selected' : '');
+      div.setAttribute('role', 'option');
+      div.setAttribute('data-value', it.v);
+      div.innerHTML = '<span class="pi-label">' + escapeHtml(it.l) + '</span><i class="fa-solid fa-check pi-check"></i>';
+      div.addEventListener('click', function () { selectValue(it.v, it.l); });
+      list.appendChild(div);
+    });
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
+  function selectValue(v, l) {
+    currentValue = v;
+    if (currentInput) currentInput.value = v;
+    if (currentTrigger) {
+      currentTrigger.querySelector('.pick-label').textContent = l;
+      currentTrigger.querySelector('.pick-label').classList.remove('is-placeholder');
+      if (String(v) !== '') currentTrigger.classList.add('has-value');
+      else currentTrigger.classList.remove('has-value');
+    }
+    // Update selected highlight
+    $all('.picker-item', getList()).forEach(function (el) {
+      el.classList.toggle('is-selected', el.getAttribute('data-value') === String(v));
+    });
+  }
+
+  function openPicker(key, trigger) {
+    currentKey = key;
+    currentTrigger = trigger;
+    currentInput = document.querySelector('[data-picker-input="' + key + '"]');
+    currentValue = currentInput ? currentInput.value : '';
+    var data = (window.__pickerData || {})[key] || [];
+    if (getTitle()) getTitle().textContent = (window.__pickerLabels || {})[key] || 'Pilih item';
+    if (getSearch()) { getSearch().value = ''; }
+    renderList('');
+    var bd = getBackdrop();
+    if (bd) {
+      bd.classList.add('is-open');
+      bd.setAttribute('aria-hidden', 'false');
+    }
+    $all('.r-pick', document).forEach(function (t) { t.setAttribute('aria-expanded', t === trigger ? 'true' : 'false'); });
+    // Focus search
+    setTimeout(function () { if (getSearch()) getSearch().focus(); }, 30);
+  }
+
+  function closePicker() {
+    var bd = getBackdrop();
+    if (bd) {
+      bd.classList.remove('is-open');
+      bd.setAttribute('aria-hidden', 'true');
+    }
+    $all('.r-pick', document).forEach(function (t) { t.setAttribute('aria-expanded', 'false'); });
+    currentKey = null;
+    currentTrigger = null;
+    currentInput = null;
+    currentValue = null;
+  }
+
+  function clearCurrent() {
+    if (currentInput) currentInput.value = '';
+    if (currentTrigger) {
+      currentTrigger.classList.remove('has-value');
+      syncTriggerLabel(currentTrigger);
+    }
+    currentValue = '';
+    renderList(getSearch() ? getSearch().value : '');
+  }
+
+  window.openPicker = function (key, trigger) { openPicker(key, trigger); };
+  window.closePicker = closePicker;
+  window.clearPicker = function (key) {
+    var input = document.querySelector('[data-picker-input="' + key + '"]');
+    var trigger = document.querySelector('.r-pick[data-picker="' + key + '"]');
+    if (input) input.value = '';
+    if (trigger) syncTriggerLabel(trigger);
+  };
+  window.clearCurrentPicker = clearCurrent;
+
+  // Init: bind trigger click + search input + backdrop click + ESC key
+  function init() {
+    // Ambil data dari kontainer #reg-data (yang ada di partial, baik full render maupun AJAX)
+    var dataEl = document.getElementById('reg-data');
+    if (dataEl) {
+      try {
+        window.__pickerData   = JSON.parse(dataEl.getAttribute('data-picker') || '{}');
+        window.__pickerLabels = JSON.parse(dataEl.getAttribute('data-picker-labels') || '{}');
+      } catch (e) {
+        window.__pickerData = window.__pickerData || {};
+        window.__pickerLabels = window.__pickerLabels || {};
+      }
+    }
+    $all('.r-pick[data-picker]').forEach(function (trigger) {
+      if (trigger.__pickerBound) return;
+      trigger.__pickerBound = true;
+      var key = trigger.getAttribute('data-picker');
+      syncTriggerLabel(trigger);
+      trigger.addEventListener('click', function (e) {
+        var clearEl = e.target.closest('.pick-clear');
+        if (clearEl) {
+          e.preventDefault();
+          e.stopPropagation();
+          clearPicker(key);
+          return;
+        }
+        openPicker(key, trigger);
+      });
+    });
+    var search = getSearch();
+    if (search && !search.__pickerBound) {
+      search.__pickerBound = true;
+      search.addEventListener('input', function () { renderList(search.value); });
+    }
+    var bd = getBackdrop();
+    if (bd && !bd.__pickerBound) {
+      bd.__pickerBound = true;
+      bd.addEventListener('click', function (e) {
+        if (e.target === bd) closePicker();
+      });
+    }
+    if (!window.__pickerKeyBound) {
+      window.__pickerKeyBound = true;
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && getBackdrop() && getBackdrop().classList.contains('is-open')) {
+          closePicker();
+        }
+      });
+    }
+  }
+
+  window.pickerInitAll = function () { init(); };
+  // Auto-init on first load
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+
 // === Toast ===
 function showToast(msg) {
   var t = document.getElementById('toast');
@@ -890,6 +1095,7 @@ document.addEventListener('DOMContentLoaded', function () {
         updateSidebar(url);
         window.scrollTo(0, 0);
         if (typeof window.datepickerInitAll === 'function') window.datepickerInitAll();
+        if (typeof window.pickerInitAll === 'function') window.pickerInitAll();
         var alert = contentArea.querySelector('.ajax-success');
         if (alert) setTimeout(function () { alert.remove(); }, 3000);
       })

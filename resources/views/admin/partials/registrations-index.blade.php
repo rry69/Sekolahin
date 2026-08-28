@@ -74,12 +74,118 @@
   }
   .reg .r-field { display: flex; flex-direction: column; gap: 5px; }
   .reg .r-field label { font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .3px; }
-  .reg .r-field select, .reg .r-field input {
-    padding: 9px 12px; border: 1px solid rgba(26,26,46,0.14); border-radius: 10px;
-    font-size: 13px; color: var(--ink); background: #fff; min-width: 150px;
-    transition: border-color .18s ease, box-shadow .18s ease;
+  .reg .r-field input[type="text"]:focus, .reg .r-field input[type="search"]:focus { outline: none; border-color: var(--coral); box-shadow: 0 0 0 3px rgba(255,107,107,0.12); }
+
+  /* ---------- picker trigger (pengganti <select>) ---------- */
+  .reg .r-pick {
+    display: inline-flex; align-items: center; gap: 8px; flex-wrap: nowrap;
+    padding: 9px 4px; border: none; border-bottom: 1px solid rgba(26,26,46,0.18); border-radius: 0;
+    font-size: 13px; color: var(--ink); background: transparent; min-width: 150px;
+    cursor: pointer; text-align: left; min-height: 38px; max-width: 100%;
+    transition: border-color .18s ease, color .18s ease;
   }
-  .reg .r-field select:focus, .reg .r-field input:focus { outline: none; border-color: var(--coral); box-shadow: 0 0 0 3px rgba(255,107,107,0.12); }
+  .reg .r-pick:hover { border-bottom-color: var(--coral); }
+  .reg .r-pick:focus { outline: none; border-bottom-color: var(--coral); }
+  .reg .r-pick .pick-label { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .reg .r-pick .pick-label.is-placeholder { color: var(--muted); }
+  .reg .r-pick .pick-caret { display: none; }
+  .reg .r-pick .pick-clear {
+    flex: 0 0 auto;
+    display: none; align-items: center; justify-content: center;
+    width: 18px; height: 18px; border-radius: 6px; background: var(--gray-soft);
+    color: var(--gray); cursor: pointer; font-size: 9px; user-select: none;
+  }
+  .reg .r-pick .pick-clear:hover { background: var(--red-soft); color: var(--red); }
+  .reg .r-pick.has-value .pick-clear { display: inline-flex; }
+  .reg .r-pick.has-value .pick-label.is-placeholder { display: none; }
+
+  /* ---------- modal picker (Bringova) ---------- */
+  .reg .picker-backdrop {
+    position: fixed; inset: 0; z-index: 80;
+    background: rgba(26,26,46,0.32);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    display: none; align-items: flex-start; justify-content: center;
+    padding: 80px 16px 16px;
+    animation: rPickerFade .18s ease-out;
+  }
+  .reg .picker-backdrop.is-open { display: flex; }
+  @keyframes rPickerFade { from { opacity: 0; } to { opacity: 1; } }
+
+  .reg .picker-panel {
+    width: 100%; max-width: 380px; max-height: min(520px, calc(100vh - 120px));
+    display: flex; flex-direction: column;
+    background: #fff; border-radius: 18px;
+    box-shadow: 0 20px 50px -16px rgba(26,26,46,0.35), 0 0 0 1px rgba(26,26,46,0.06);
+    overflow: hidden;
+    animation: rPickerPop .22s cubic-bezier(.22,1.2,.36,1);
+  }
+  @keyframes rPickerPop { from { opacity: 0; transform: translateY(-6px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+
+  .reg .picker-head {
+    display: flex; align-items: center; gap: 10px;
+    padding: 14px 16px; border-bottom: 1px solid var(--divider);
+  }
+  .reg .picker-head .picker-title { font-size: 14px; font-weight: 700; color: var(--ink); flex: 1; }
+  .reg .picker-head .picker-close {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 30px; height: 30px; border-radius: 8px; border: none; background: transparent;
+    color: var(--muted); cursor: pointer; font-size: 12px;
+    transition: background-color .15s ease, color .15s ease;
+  }
+  .reg .picker-head .picker-close:hover { background: var(--gray-soft); color: var(--ink); }
+
+  .reg .picker-search {
+    position: relative; padding: 10px 14px; border-bottom: 1px solid var(--divider);
+  }
+  .reg .picker-search i {
+    position: absolute; left: 24px; top: 50%; transform: translateY(-50%);
+    color: var(--muted); font-size: 12px; pointer-events: none;
+  }
+  .reg .picker-search input {
+    width: 100%; padding: 9px 12px 9px 32px;
+    border: 1px solid rgba(26,26,46,0.14); border-radius: 10px;
+    font-size: 13px; color: var(--ink); background: rgba(255,255,255,0.7);
+    transition: border-color .18s ease, box-shadow .18s ease, background-color .18s ease;
+  }
+  .reg .picker-search input:focus { outline: none; border-color: var(--coral); background: #fff; box-shadow: 0 0 0 3px rgba(255,107,107,0.12); }
+
+  .reg .picker-list { flex: 1; overflow-y: auto; padding: 6px 8px; }
+  .reg .picker-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 12px; border-radius: 10px;
+    font-size: 13px; color: var(--ink); cursor: pointer; user-select: none;
+    transition: background-color .15s ease, color .15s ease;
+  }
+  .reg .picker-item:hover, .reg .picker-item.is-active { background: var(--coral-soft); color: var(--coral); }
+  .reg .picker-item.is-selected { background: var(--coral); color: #fff; font-weight: 600; }
+  .reg .picker-item.is-selected:hover { background: var(--coral); }
+  .reg .picker-item .pi-label { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .reg .picker-item .pi-check { font-size: 11px; opacity: 0; }
+  .reg .picker-item.is-selected .pi-check { opacity: 1; }
+  .reg .picker-empty { padding: 26px 12px; text-align: center; color: var(--muted); font-size: 12.5px; }
+  .reg .picker-empty i { display: block; font-size: 20px; margin-bottom: 6px; color: #d3d6de; }
+
+  .reg .picker-foot {
+    display: flex; align-items: center; justify-content: space-between; gap: 8px;
+    padding: 10px 14px; border-top: 1px solid var(--divider); background: rgba(255,255,255,0.5);
+  }
+  .reg .picker-foot .picker-clear-all {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 7px 12px; border-radius: 9px; border: none; background: transparent;
+    color: var(--muted); font-size: 12px; font-weight: 600; cursor: pointer;
+    transition: color .15s ease, background-color .15s ease;
+  }
+  .reg .picker-foot .picker-clear-all:hover { color: var(--red); background: var(--red-soft); }
+  .reg .picker-foot .picker-done {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 7px 16px; border-radius: 9px; border: none;
+    background: linear-gradient(135deg, var(--coral), var(--coral-2)); color: #fff;
+    font-size: 12px; font-weight: 700; cursor: pointer;
+    box-shadow: 0 6px 14px -6px rgba(255,107,107,0.55);
+    transition: filter .15s ease, transform .15s ease;
+  }
+  .reg .picker-foot .picker-done:hover { filter: brightness(1.04); transform: translateY(-1px); }
 
   /* ---------- tabs (underline, no box) ---------- */
   .reg .r-tabs { display: flex; gap: 18px; border-bottom: 1px solid var(--divider); margin-bottom: 22px; flex-wrap: wrap; }
@@ -175,54 +281,137 @@
     </div>
 
     <div id="filterPanel" class="r-filters" style="display:none;">
+      @php
+        // Sumber data untuk picker
+        $pickStatus = [
+          ['v' => '',         'l' => 'Semua Status'],
+          ['v' => 'pending',  'l' => 'Pending'],
+          ['v' => 'verified', 'l' => 'Terverifikasi'],
+          ['v' => 'rejected', 'l' => 'Ditolak'],
+          ['v' => 'accepted', 'l' => 'Diterima'],
+          ['v' => 're_registration_complete', 'l' => 'Daftar Ulang Selesai'],
+        ];
+        $pickPay = [
+          ['v' => '',       'l' => 'Semua Status'],
+          ['v' => 'unpaid', 'l' => 'Belum Dibayar'],
+          ['v' => 'pending','l' => 'Menunggu Konfirmasi'],
+          ['v' => 'paid',   'l' => 'Lunas'],
+          ['v' => 'failed', 'l' => 'Gagal'],
+        ];
+        $pickDeadline = [
+          ['v' => '', 'l' => 'Semua'],
+          ['v' => '1','l' => 'Ada Batas Waktu'],
+        ];
+        $pickTracks = [['v' => '', 'l' => 'Semua Jalur']];
+        foreach (($tracks ?? collect()) as $trk) {
+          $pickTracks[] = ['v' => (string) $trk->id, 'l' => $trk->name];
+        }
+        $pickMajors = [['v' => '', 'l' => 'Semua Jurusan']];
+        foreach (($majors ?? collect()) as $mjr) {
+          $pickMajors[] = ['v' => (string) $mjr->id, 'l' => $mjr->name];
+        }
+      @endphp
+
+      {{-- Trigger: Status --}}
       <div class="r-field">
         <label>Status</label>
-        <select name="status">
-          <option value="">Semua Status</option>
-          <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
-          <option value="verified" {{ request('status') == 'verified' ? 'selected' : '' }}>Terverifikasi</option>
-          <option value="rejected" {{ request('status') == 'rejected' ? 'selected' : '' }}>Ditolak</option>
-          <option value="accepted" {{ request('status') == 'accepted' ? 'selected' : '' }}>Diterima</option>
-          <option value="re_registration_complete" {{ request('status') == 're_registration_complete' ? 'selected' : '' }}>Daftar Ulang Selesai</option>
-        </select>
+        <button type="button" class="r-pick" data-picker="status" aria-haspopup="listbox" aria-expanded="false">
+          <span class="pick-label is-placeholder">Pilih status…</span>
+          <span class="pick-clear" data-clear="status" role="button" tabindex="0" aria-label="Bersihkan"><i class="fa-solid fa-xmark"></i></span>
+          <i class="fa-solid fa-chevron-down pick-caret"></i>
+        </button>
+        <input type="hidden" name="status" data-picker-input="status" value="{{ request('status') }}">
       </div>
+
+      {{-- Trigger: Pembayaran --}}
       <div class="r-field">
         <label>Pembayaran</label>
-        <select name="payment_status">
-          <option value="">Semua Status</option>
-          <option value="unpaid" {{ request('payment_status') == 'unpaid' ? 'selected' : '' }}>Belum Dibayar</option>
-          <option value="pending" {{ request('payment_status') == 'pending' ? 'selected' : '' }}>Menunggu Konfirmasi</option>
-          <option value="paid" {{ request('payment_status') == 'paid' ? 'selected' : '' }}>Lunas</option>
-          <option value="failed" {{ request('payment_status') == 'failed' ? 'selected' : '' }}>Gagal</option>
-        </select>
+        <button type="button" class="r-pick" data-picker="payment" aria-haspopup="listbox" aria-expanded="false">
+          <span class="pick-label is-placeholder">Pilih pembayaran…</span>
+          <span class="pick-clear" data-clear="payment" role="button" tabindex="0" aria-label="Bersihkan"><i class="fa-solid fa-xmark"></i></span>
+          <i class="fa-solid fa-chevron-down pick-caret"></i>
+        </button>
+        <input type="hidden" name="payment_status" data-picker-input="payment" value="{{ request('payment_status') }}">
       </div>
+
+      {{-- Trigger: Deadline --}}
       <div class="r-field">
         <label>Deadline</label>
-        <select name="deadline">
-          <option value="">Semua</option>
-          <option value="1" {{ request('deadline') == '1' ? 'selected' : '' }}>Ada Batas Waktu</option>
-        </select>
+        <button type="button" class="r-pick" data-picker="deadline" aria-haspopup="listbox" aria-expanded="false">
+          <span class="pick-label is-placeholder">Pilih deadline…</span>
+          <span class="pick-clear" data-clear="deadline" role="button" tabindex="0" aria-label="Bersihkan"><i class="fa-solid fa-xmark"></i></span>
+          <i class="fa-solid fa-chevron-down pick-caret"></i>
+        </button>
+        <input type="hidden" name="deadline" data-picker-input="deadline" value="{{ request('deadline') }}">
       </div>
+
+      {{-- Trigger: Jalur --}}
       <div class="r-field">
         <label>Jalur</label>
-        <select name="track_id">
-          <option value="">Semua Jalur</option>
-          @foreach (($tracks ?? collect()) as $trk)
-            <option value="{{ $trk->id }}" {{ request('track_id') == $trk->id ? 'selected' : '' }}>{{ $trk->name }}</option>
-          @endforeach
-        </select>
+        <button type="button" class="r-pick" data-picker="track" aria-haspopup="listbox" aria-expanded="false">
+          <span class="pick-label is-placeholder">Pilih jalur…</span>
+          <span class="pick-clear" data-clear="track" role="button" tabindex="0" aria-label="Bersihkan"><i class="fa-solid fa-xmark"></i></span>
+          <i class="fa-solid fa-chevron-down pick-caret"></i>
+        </button>
+        <input type="hidden" name="track_id" data-picker-input="track" value="{{ request('track_id') }}">
       </div>
+
+      {{-- Trigger: Jurusan --}}
       <div class="r-field">
         <label>Jurusan</label>
-        <select name="major_id">
-          <option value="">Semua Jurusan</option>
-          @foreach (($majors ?? collect()) as $mjr)
-            <option value="{{ $mjr->id }}" {{ request('major_id') == $mjr->id ? 'selected' : '' }}>{{ $mjr->name }}</option>
-          @endforeach
-        </select>
+        <button type="button" class="r-pick" data-picker="major" aria-haspopup="listbox" aria-expanded="false">
+          <span class="pick-label is-placeholder">Pilih jurusan…</span>
+          <span class="pick-clear" data-clear="major" role="button" tabindex="0" aria-label="Bersihkan"><i class="fa-solid fa-xmark"></i></span>
+          <i class="fa-solid fa-chevron-down pick-caret"></i>
+        </button>
+        <input type="hidden" name="major_id" data-picker-input="major" value="{{ request('major_id') }}">
       </div>
     </div>
   </form>
+
+  {{-- ============================================================
+       Modal Pickers (Bringova) — satu modal reusable untuk semua picker
+       ============================================================ --}}
+  <div id="pickerBackdrop" class="picker-backdrop" aria-hidden="true">
+    <div class="picker-panel" role="dialog" aria-modal="true" aria-labelledby="pickerTitle">
+      <div class="picker-head">
+        <div class="picker-title" id="pickerTitle">Pilih item</div>
+        <button type="button" class="picker-close" onclick="closePicker()" aria-label="Tutup"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="picker-search">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input id="pickerSearch" type="search" placeholder="Cari…" autocomplete="off">
+      </div>
+      <div class="picker-list" id="pickerList" role="listbox"></div>
+      <div class="picker-foot">
+        <button type="button" class="picker-clear-all" onclick="clearCurrentPicker()"><i class="fa-solid fa-eraser"></i> Bersihkan</button>
+        <button type="button" class="picker-done" onclick="closePicker()">Selesai</button>
+      </div>
+    </div>
+  </div>
+
+  @php
+    // Siapkan data JSON untuk picker (di-encode sekali, dipakai oleh JS)
+    $pickerJson = [
+      'status'   => $pickStatus,
+      'payment'  => $pickPay,
+      'deadline' => $pickDeadline,
+      'track'    => $pickTracks,
+      'major'    => $pickMajors,
+    ];
+    $pickerLabels = [
+      'status'   => 'Pilih Status Pendaftaran',
+      'payment'  => 'Pilih Status Pembayaran',
+      'deadline' => 'Pilih Filter Deadline',
+      'track'    => 'Pilih Jalur Pendaftaran',
+      'major'    => 'Pilih Jurusan',
+    ];
+  @endphp
+
+  {{-- Data picker ditempel di kontainer agar JS di layout bisa membacanya saat AJAX --}}
+  <div id="reg-data" hidden
+       data-picker='@json($pickerJson)'
+       data-picker-labels='@json($pickerLabels)'></div>
 
   <div class="r-tabs">
     <a href="{{ route('admin.registrations.index') }}" class="r-tab doc-tab {{ !request('status') && !request('payment_status') && !request('deadline') && !request('search') && !request('track_id') && !request('major_id') ? 'active' : '' }}">Semua</a>
