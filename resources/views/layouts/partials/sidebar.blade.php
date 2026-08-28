@@ -8,20 +8,7 @@
 
 <div class="backdrop" id="backdrop" aria-hidden="true"></div>
 
-<aside class="sidebar" id="sidebar" aria-label="Navigasi utama">
-
-  <button type="button" class="sb-toggle" aria-label="Perluas atau ciutkan sidebar">
-    <span class="ico-expand">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="3" y="3" width="18" height="18" rx="2"></rect><path d="M9 3v18"></path><path d="m13 9 3 3-3 3"></path>
-      </svg>
-    </span>
-    <span class="ico-collapse">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="3" y="3" width="18" height="18" rx="2"></rect><path d="M9 3v18"></path><path d="m11 9-3 3 3 3"></path>
-      </svg>
-    </span>
-  </button>
+<aside class="sidebar expanded" id="sidebar" aria-label="Navigasi utama">
 
   <header class="sb-head">
     <span class="avatar" aria-hidden="true">{{ mb_strtoupper(mb_substr(Auth::user()->name, 0, 2)) }}</span>
