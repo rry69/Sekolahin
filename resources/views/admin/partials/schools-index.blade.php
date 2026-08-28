@@ -83,7 +83,8 @@
   .sch .s-name { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 14px; font-weight: 700; color: var(--ink); }
   .sch .s-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
   .sch .s-tags { display: flex; gap: 7px; flex-wrap: wrap; margin-top: 6px; }
-  .sch .s-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; flex-wrap: wrap; justify-content: flex-end; }
+  .sch .s-actions { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; flex-shrink: 0; }
+  .sch .s-actions-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
   .sch .s-empty { text-align: center; color: var(--muted); font-size: 13px; padding: 18px 0; }
 
   /* ---------- info row (pengaturan jenjang) ---------- */
@@ -149,10 +150,6 @@
             <div class="s-sec-desc">{{ $level->description }}</div>
           @endif
         </div>
-        <span class="s-pill {{ $level->is_active ? 'green' : 'gray' }}">
-          <i class="fa-solid {{ $level->is_active ? 'fa-circle-check' : 'fa-circle-xmark' }}"></i>
-          {{ $level->is_active ? 'Jenjang Aktif' : 'Jenjang Nonaktif' }}
-        </span>
       </div>
 
       @if ($levelSchools->isNotEmpty())
@@ -181,12 +178,18 @@
                 </div>
               </div>
               <div class="s-actions">
-                <a href="{{ route('admin.schools.edit', $school) }}" class="s-btn sm" style="background:var(--amber-soft);color:#b45309"><i class="fa-solid fa-pen"></i> Edit</a>
-                <button type="button" class="s-btn sm" style="background:var(--red-soft);color:var(--red)" onclick="openSchoolDelete({{ $school->id }}, '{{ addslashes($school->name) }}')"><i class="fa-solid fa-trash-can"></i> Hapus</button>
-                <form id="schoolDeleteForm-{{ $school->id }}" method="POST" action="{{ route('admin.schools.destroy', $school) }}" style="display:none">
-                  @csrf
-                  @method('DELETE')
-                </form>
+                <span class="s-pill {{ $level->is_active ? 'green' : 'gray' }}">
+                  <i class="fa-solid {{ $level->is_active ? 'fa-circle-check' : 'fa-circle-xmark' }}"></i>
+                  {{ $level->is_active ? 'Jenjang Aktif' : 'Jenjang Nonaktif' }}
+                </span>
+                <div class="s-actions-row">
+                  <a href="{{ route('admin.schools.edit', $school) }}" class="s-btn sm" style="background:var(--amber-soft);color:#b45309"><i class="fa-solid fa-pen"></i> Edit</a>
+                  <button type="button" class="s-btn sm" style="background:var(--red-soft);color:var(--red)" onclick="openSchoolDelete({{ $school->id }}, '{{ addslashes($school->name) }}')"><i class="fa-solid fa-trash-can"></i> Hapus</button>
+                  <form id="schoolDeleteForm-{{ $school->id }}" method="POST" action="{{ route('admin.schools.destroy', $school) }}" style="display:none">
+                    @csrf
+                    @method('DELETE')
+                  </form>
+                </div>
               </div>
             </div>
           @endforeach
