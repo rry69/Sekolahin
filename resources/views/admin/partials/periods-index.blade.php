@@ -130,8 +130,31 @@
   .prd .prd-modal-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 16px; flex-wrap: wrap; }
   .prd .prd-modal-actions .prd-btn-ghost { background: transparent; color: var(--muted); }
   .prd .prd-modal-actions .prd-btn-ghost:hover { color: var(--ink); }
-  @media (max-width: 720px) {
-    .prd { padding: 20px 16px 32px; }
+  /* ---------- responsive: tablet (641-1024px) ---------- */
+  @media (min-width: 641px) and (max-width: 1024px) {
+    .prd { padding: 24px 20px 32px; }
+    /* header: title + button tetap baris tapi button tidak gepeng */
+    .prd > div[style*="display:flex"] { gap: 12px; }
+    /* toolbar: search fullwidth + 3 picker 2 kolom */
+    .prd .prd-toolbar { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: end; }
+    .prd .prd-search { grid-column: 1 / -1; min-width: 0; flex: none; }
+    .prd .prd-field { min-width: 0; }
+    .prd .prd-field .r-pick { min-width: 0; max-width: none; width: 100%; }
+    .prd .prd-row { flex-wrap: wrap; }
+    .prd .prd-actions { justify-content: flex-end; width: auto; }
+  }
+  /* ---------- responsive: mobile (≤640px) ---------- */
+  @media (max-width: 640px) {
+    .prd { padding: 18px 14px 28px; overflow: hidden; }
+    .prd .prd-crumb { margin-top: 8px; padding-left: 48px; box-sizing: border-box; }
+    .prd .prd-title { font-size: 22px; box-sizing: border-box; }
+    .prd > div[style*="display:flex"] { flex-direction: column; align-items: stretch !important; }
+    .prd > div[style*="display:flex"] .prd-btn.coral { width: 100%; justify-content: center; min-height: 44px; white-space: nowrap; }
+    /* toolbar: stack vertikal — search + 3 picker fullwidth */
+    .prd .prd-toolbar { flex-direction: column; align-items: stretch; gap: 10px; }
+    .prd .prd-search { min-width: 0; flex: none; width: 100%; }
+    .prd .prd-field { min-width: 0; width: 100%; }
+    .prd .prd-field .r-pick { width: 100%; max-width: none; min-width: 0; background: rgba(255,255,255,.6); border: 1px solid rgba(26,26,46,.08); border-bottom: 1px solid rgba(26,26,46,.12); border-radius: 11px; padding: 11px 12px; }
     .prd .prd-row { flex-wrap: wrap; }
     .prd .prd-actions { justify-content: flex-start; width: 100%; }
   }

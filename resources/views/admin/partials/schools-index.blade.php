@@ -24,8 +24,11 @@
     border-radius: 24px;
     padding: 28px 28px 44px;
     background: #f6f7fb;
+    max-width: 100%;
+    overflow: hidden;
+    box-sizing: border-box;
   }
-  .sch .s-inner { width: 100%; max-width: 1080px; margin: 0 auto; }
+  .sch .s-inner { width: 100%; max-width: 1080px; margin: 0 auto; max-width: 100%; overflow: hidden; box-sizing: border-box; }
 
   /* ---------- header ---------- */
   .sch .s-crumb { display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: var(--muted); margin-bottom: 6px; font-weight: 500; }
@@ -79,12 +82,13 @@
     display: flex; align-items: center; justify-content: center; font-size: 17px;
     background: var(--gray-soft); color: var(--gray);
   }
-  .sch .s-body { flex: 1; min-width: 0; }
-  .sch .s-name { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 14px; font-weight: 700; color: var(--ink); }
-  .sch .s-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
-  .sch .s-tags { display: flex; gap: 7px; flex-wrap: wrap; margin-top: 6px; }
-  .sch .s-actions { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; flex-shrink: 0; }
-  .sch .s-actions-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+  .sch .s-body { flex: 1; min-width: 0; overflow: hidden; }
+  .sch .s-name { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 14px; font-weight: 700; color: var(--ink); word-break: break-word; overflow-wrap: anywhere; }
+  .sch .s-sub { font-size: 12px; color: var(--muted); margin-top: 2px; word-break: break-word; overflow-wrap: anywhere; line-height: 1.5; }
+  .sch .s-tags { display: flex; gap: 7px; flex-wrap: wrap; margin-top: 6px; max-width: 100%; }
+  .sch .s-actions { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; flex-shrink: 0; min-width: 0; max-width: 100%; }
+  .sch .s-actions-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: flex-end; max-width: 100%; }
+  .sch .s-actions .s-pill { max-width: 100%; white-space: normal; word-break: break-word; }
   .sch .s-empty { text-align: center; color: var(--muted); font-size: 13px; padding: 18px 0; }
 
   /* ---------- info row (pengaturan jenjang) ---------- */
@@ -107,12 +111,98 @@
   .sch .s-modal-actions .s-btn-ghost { background: transparent; color: var(--muted); }
   .sch .s-modal-actions .s-btn-ghost:hover { color: var(--ink); }
 
-  /* ---------- responsive ---------- */
-  @media (max-width: 720px) {
-    .sch { padding: 20px 16px 32px; }
-    .sch .s-row { flex-wrap: wrap; }
-    .sch .s-actions { justify-content: flex-start; width: 100%; margin-left: 61px; }
-    .sch .s-info { flex-direction: column; align-items: flex-start; }
+  /* ---------- responsive: tablet (641-1024px) ---------- */
+  @media (min-width: 641px) and (max-width: 1024px) {
+    .sch { padding: 24px 20px 32px; }
+    .sch .s-head { gap: 14px; }
+    .sch .s-row { flex-wrap: wrap; gap: 12px 14px; align-items: flex-start; padding: 15px 4px; }
+    .sch .s-body { flex: 1 1 280px; min-width: 200px; }
+    .sch .s-sub { display: flex; flex-wrap: wrap; gap: 4px 6px; align-items: center; }
+    .sch .s-actions { flex: 0 1 180px; align-items: flex-end; }
+    .sch .s-info { gap: 14px; }
+  }
+  /* ---------- responsive: mobile (≤640px) — fix header overlap, overflow, card layout ---------- */
+  @media (max-width: 640px) {
+    .sch { padding: 20px 14px 28px; overflow: hidden; }
+    /* header: beri ruang aman dari hamburger floating (top-left) */
+    .sch .s-head {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 12px;
+      margin-top: 12px;
+      padding-left: 48px; /* safe area hamburger 40px + gap */
+      box-sizing: border-box;
+    }
+    .sch .s-title { font-size: 22px; }
+    .sch .s-meta { font-size: 12.5px; }
+    .sch .s-head .s-btn.coral {
+      width: 100%;
+      justify-content: center;
+      min-height: 44px;
+      font-size: 13.5px;
+      box-sizing: border-box;
+    }
+    .sch .s-sec { padding: 18px 0 6px; overflow: hidden; }
+    .sch .s-sec-head { gap: 10px; }
+    /* card grid: icon+body di baris 1, actions full-width di baris 2 */
+    .sch .s-row {
+      display: grid;
+      grid-template-columns: 46px 1fr;
+      grid-template-areas:
+        "ic body"
+        "actions actions";
+      gap: 0;
+      align-items: start;
+      padding: 14px 0 16px;
+      max-width: 100%;
+      overflow: hidden;
+      box-sizing: border-box;
+    }
+    .sch .s-row-ic { grid-area: ic; align-self: start; }
+    .sch .s-body { grid-area: body; min-width: 0; overflow: hidden; padding-left: 2px; }
+    .sch .s-name { font-size: 14.5px; line-height: 1.3; }
+    .sch .s-sub {
+      display: flex; flex-wrap: wrap; gap: 4px 6px;
+      font-size: 12.5px; line-height: 1.45;
+      margin-top: 4px;
+      align-items: center;
+    }
+    .sch .s-tags { margin-top: 8px; gap: 6px; }
+    .sch .s-pill { font-size: 11.5px; padding: 5px 11px; }
+    .sch .s-actions {
+      grid-area: actions;
+      width: 100%;
+      margin-left: 0;
+      margin-top: 12px;
+      align-items: stretch;
+      gap: 10px;
+    }
+    .sch .s-actions .s-pill {
+      align-self: flex-start;
+      max-width: 100%;
+      white-space: normal;
+      font-size: 11.5px;
+    }
+    .sch .s-actions-row {
+      width: 100%;
+      justify-content: flex-end;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .sch .s-actions-row .s-btn {
+      flex: 0 1 auto;
+      min-height: 38px;
+      padding: 8px 14px;
+      font-size: 12.5px;
+    }
+    .sch .s-info { flex-direction: column; align-items: stretch; gap: 12px; padding: 14px; }
+    .sch .s-info .s-btn { width: 100%; justify-content: center; }
+  }
+  /* extra-narrow ≤360px */
+  @media (max-width: 360px) {
+    .sch .s-head { padding-left: 44px; }
+    .sch .s-actions-row { justify-content: stretch; }
+    .sch .s-actions-row .s-btn { flex: 1 1 0; justify-content: center; }
   }
 </style>
 

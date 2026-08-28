@@ -163,8 +163,10 @@
   .rkp .k-ic { flex: 0 0 auto; width: 46px; height: 46px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 17px; background: var(--green-soft); color: var(--green); }
   .rkp .k-body { flex: 1; min-width: 0; }
   .rkp .k-name { font-size: 14px; font-weight: 700; color: var(--ink); }
-  .rkp .k-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
-  .rkp .k-sub b { color: var(--ink); font-weight: 600; }
+  .rkp .k-sub { font-size: 12px; color: var(--muted); margin-top: 2px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+  .rkp .k-sub .k-reg { color: var(--ink); font-weight: 700; font-size: 11.5px; letter-spacing: .02em; }
+  .rkp .k-sub .k-dot { color: var(--muted); }
+  .rkp .k-sub .k-email { color: var(--muted); word-break: break-all; }
   .rkp .k-mid { flex: 0 0 140px; min-width: 140px; }
   .rkp .k-mid .k-mid-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .3px; font-weight: 600; }
   .rkp .k-mid .k-mid-val { font-size: 13px; color: var(--ink); font-weight: 600; }
@@ -175,6 +177,8 @@
   .rkp .k-pill.coral { background: var(--coral-soft); color: var(--coral); }
   .rkp .k-pill.amber { background: var(--amber-soft); color: #b45309; }
   .rkp .k-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; min-width: 200px; justify-content: flex-end; }
+  /* mobile tabs -> dropdown */
+  .rkp .k-tabs-mobile { display: none; }
 
   /* ---------- empty ---------- */
   .rkp .k-empty { text-align: center; color: var(--muted); font-size: 13.5px; padding: 40px 0; }
@@ -184,14 +188,84 @@
   .rkp .k-pager { margin-top: 22px; display: flex; justify-content: center; }
   .rkp .k-pager > nav { display: flex; justify-content: center; }
 
-  /* ---------- responsive ---------- */
-  @media (max-width: 720px) {
-    .rkp { padding: 20px 16px 32px; }
-    .rkp .k-row { flex-direction: column; align-items: flex-start; gap: 10px; }
-    .rkp .k-mid { min-width: 0; }
-    .rkp .k-actions { width: 100%; justify-content: flex-end; }
-    .rkp .k-tabs-row { flex-direction: column; align-items: flex-start; }
-    .rkp .k-tools { padding-bottom: 0; }
+  /* ---------- responsive: tablet (641-1024) ---------- */
+  @media (min-width: 641px) and (max-width: 1024px) {
+    .rkp .k-row { flex-wrap: wrap; gap: 12px 14px; padding: 16px 4px; }
+    .rkp .k-body { flex: 1 1 280px; min-width: 220px; }
+    .rkp .k-mid { flex: 0 0 120px; min-width: 100px; }
+    .rkp .k-actions { flex: 0 0 auto; margin-left: auto; min-width: 0; }
+    .rkp .k-sub { flex-wrap: wrap; gap: 4px 8px; }
+    .rkp .k-tabs-row { gap: 12px; }
+  }
+  /* ---------- responsive: mobile (≤640px) — hierarchy Nama → REG/Email → Tags → NIS → Status+Action ---------- */
+  @media (max-width: 640px) {
+    .rkp { padding: 18px 14px 28px; }
+    .rkp .k-title { font-size: 22px; }
+    .rkp .k-meta { font-size: 12.5px; }
+    .rkp .k-summary { padding: 12px 0; }
+    .rkp .k-tabs { display: none; }
+    .rkp .k-tabs-mobile { display: flex; align-items: center; width: 100%; }
+    .rkp .k-tabs-mobile .r-pick { width: 100%; min-width: 0; background: rgba(255,255,255,.65); border: 1px solid rgba(26,26,46,.08); border-bottom: 1px solid rgba(26,26,46,.12); border-radius: 12px; padding: 11px 14px; font-weight: 600; }
+    .rkp .k-tabs-mobile .r-pick .pick-label { font-weight: 700; }
+    .rkp .k-tabs-row { flex-direction: column; align-items: stretch; gap: 12px; }
+    .rkp .k-tools { padding-bottom: 0; flex-wrap: wrap; }
+    .rkp .k-toolbar { gap: 8px; }
+    .rkp .k-search { min-width: 0; flex: 1 1 100%; }
+    .rkp .k-fbtn, .rkp .k-gobtn { flex: 1 1 auto; justify-content: center; min-height: 42px; }
+    .rkp .k-filters { padding: 14px; }
+    .rkp .k-field { flex: 1 1 100%; }
+    .rkp .k-field .r-pick { min-width: 0; width: 100%; }
+
+    .rkp .k-list { gap: 0; }
+    .rkp .k-row {
+      display: grid;
+      grid-template-columns: 46px 1fr;
+      grid-template-areas:
+        "ic body"
+        "mid mid"
+        "actions actions";
+      gap: 0;
+      align-items: start;
+      padding: 18px 0 16px;
+    }
+    .rkp .k-ic { grid-area: ic; align-self: start; margin-top: 2px; }
+    .rkp .k-body { grid-area: body; padding-left: 2px; min-width: 0; }
+    .rkp .k-name { font-size: 15px; line-height: 1.25; }
+    .rkp .k-sub {
+      display: flex; flex-wrap: wrap; gap: 4px 6px;
+      font-size: 12.5px; line-height: 1.45; margin-top: 4px;
+      word-break: break-word;
+    }
+    .rkp .k-sub b { font-size: 11.5px; letter-spacing: .02em; }
+    .rkp .k-tags { margin-top: 10px; gap: 7px; }
+    .rkp .k-pill { font-size: 11.5px; padding: 5px 11px; }
+    .rkp .k-mid {
+      grid-area: mid;
+      min-width: 0;
+      flex: none;
+      display: flex; align-items: baseline; gap: 8px;
+      margin-top: 14px;
+      background: rgba(255,255,255,.50);
+      border: 1px solid rgba(26,26,46,.06);
+      border-radius: 10px;
+      padding: 10px 12px;
+    }
+    .rkp .k-mid .k-mid-label { font-size: 10.5px; white-space: nowrap; }
+    .rkp .k-mid .k-mid-val { font-size: 13.5px; font-weight: 700; word-break: break-all; }
+    .rkp .k-actions {
+      grid-area: actions;
+      width: 100%; min-width: 0;
+      display: flex; align-items: center; justify-content: space-between; gap: 10px;
+      margin-top: 14px; padding-top: 14px;
+      border-top: 1px solid var(--divider);
+    }
+    .rkp .k-actions .k-pill.green { font-size: 12px; padding: 6px 14px; border-radius: 20px; }
+    .rkp .k-actions .k-btn.coral-soft {
+      flex: 0 0 auto;
+      min-height: 42px; padding: 10px 18px;
+      font-size: 13px; font-weight: 700; border-radius: 11px;
+      justify-content: center;
+    }
   }
 </style>
 
@@ -231,6 +305,15 @@
           {{ $major->name }} <span class="badge">{{ $statsPerMajor[$major->id] ?? 0 }}</span>
         </a>
       @endforeach
+    </div>
+    {{-- Mobile: dropdown picker pengganti tabs --}}
+    <div class="k-tabs-mobile">
+      <button type="button" class="r-pick" data-picker="majorTab" aria-haspopup="listbox" aria-expanded="false">
+        <i class="fa-solid fa-layer-group" style="color:var(--muted);font-size:12px"></i>
+        <span class="pick-label is-placeholder">Semua Jurusan</span>
+        <span class="pick-clear" data-clear="majorTab" role="button" tabindex="0" aria-label="Bersihkan"><i class="fa-solid fa-xmark"></i></span>
+      </button>
+      <input type="hidden" data-picker-input="majorTab" value="{{ request('major_id') }}">
     </div>
     <div class="k-tools">
       <button class="k-btn ghost sm" onclick="toggleFilterForm()"><i class="fa-solid fa-filter" style="font-size:10px"></i> Filter</button>
@@ -274,8 +357,8 @@
         <div class="k-body">
           <div class="k-name">{{ $reg->applicant->full_name ?? '-' }}</div>
           <div class="k-sub">
-            <b>{{ $reg->registration_number }}</b>
-            @if ($reg->applicant->user?->email) · {{ $reg->applicant->user->email }} @endif
+            <span class="k-reg">{{ $reg->registration_number }}</span>
+            @if ($reg->applicant->user?->email)<span class="k-dot">·</span><span class="k-email">{{ $reg->applicant->user->email }}</span>@endif
           </div>
           <div class="k-tags">
             <span class="k-pill coral"><i class="fa-solid fa-layer-group"></i> {{ $reg->finalMajor->name ?? '-' }}</span>
@@ -323,9 +406,66 @@
   foreach ($periods as $period) {
     $pickPeriods[] = ['v' => $period->id, 'l' => $period->name];
   }
-  $pickerJson = ['period' => $pickPeriods];
-  $pickerLabels = ['period' => 'Pilih Periode'];
+  $pickMajorsTab = [['v' => '', 'l' => 'Semua Jurusan']];
+  foreach ($majors as $mj) {
+    $pickMajorsTab[] = ['v' => (string) $mj->id, 'l' => $mj->name . ' (' . ($statsPerMajor[$mj->id] ?? 0) . ')'];
+  }
+  $pickerJson = ['period' => $pickPeriods, 'majorTab' => $pickMajorsTab];
+  $pickerLabels = ['period' => 'Pilih Periode', 'majorTab' => 'Pilih Jurusan'];
 @endphp
 
 <div id="reg-data" hidden data-picker='@json($pickerJson)' data-picker-labels='@json($pickerLabels)'></div>
+
+<script>
+(function(){
+  function goMajorTab(v){
+    var params = new URLSearchParams(window.location.search);
+    if(v) params.set('major_id', v); else params.delete('major_id');
+    params.delete('page');
+    // keep period_id & search if present
+    var base = "{{ route('admin.rekap.index') }}";
+    var q = params.toString();
+    var url = base + (q ? '?' + q : '');
+    if(window.loadContent){
+      // AJAX partial
+      window.loadContent(url);
+      history.pushState({}, '', url);
+    } else {
+      window.location.href = url;
+    }
+    if(window.closePicker) window.closePicker();
+  }
+  function bindMajorTab(){
+    var input = document.querySelector('[data-picker-input="majorTab"]');
+    if(!input || input.__boundMajorTab) return;
+    input.__boundMajorTab = true;
+    var last = input.value;
+    // observe change dari picker
+    input.addEventListener('change', function(){
+      if(this.value !== last){
+        last = this.value;
+        goMajorTab(this.value);
+      }
+    });
+    // clear button (×) juga navigasi ke Semua
+    var pick = document.querySelector('.r-pick[data-picker="majorTab"] .pick-clear');
+    if(pick){
+      pick.addEventListener('click', function(e){
+        e.preventDefault(); e.stopPropagation();
+        input.value = '';
+        if(window.clearPicker) window.clearPicker('majorTab');
+        goMajorTab('');
+      });
+    }
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bindMajorTab);
+  else bindMajorTab();
+  // re-bind after AJAX loadContent
+  var origPickerInit = window.pickerInitAll;
+  window.pickerInitAll = function(){
+    if(origPickerInit) origPickerInit();
+    setTimeout(bindMajorTab, 50);
+  };
+})();
+</script>
 </div>

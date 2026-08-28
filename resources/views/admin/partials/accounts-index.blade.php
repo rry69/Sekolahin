@@ -34,9 +34,10 @@
   .acc .acc-alert i { margin-top: 2px; }
   .acc .acc-alert.success { background: var(--green-soft); color: var(--green); }
   .acc .acc-alert.error { background: var(--red-soft); color: var(--red); }
-  /* tabs underline — reset doc-tab */
-  .acc .acc-tabs { display: flex; align-items: center; gap: 0; flex-wrap: wrap; border-bottom: 1px solid var(--divider); margin-bottom: 16px; }
-  .acc .acc-tabs a.doc-tab, .acc .acc-tabs a.acc-tab { all: unset; display: inline-flex; align-items: center; gap: 6px; padding: 10px 14px 11px; font-size: 13px; font-weight: 600; color: var(--muted); cursor: pointer; border-bottom: 2.5px solid transparent; margin-bottom: -1px; transition: color .18s, border-color .18s; white-space: nowrap; }
+  /* tabs underline — scrollable on mobile */
+  .acc .acc-tabs { display: flex; align-items: center; gap: 4px; flex-wrap: nowrap; overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; scrollbar-width: none; border-bottom: 1px solid var(--divider); margin-bottom: 16px; padding-bottom: 2px; }
+  .acc .acc-tabs::-webkit-scrollbar { display: none; }
+  .acc .acc-tabs a.doc-tab, .acc .acc-tabs a.acc-tab { all: unset; flex: 0 0 auto; display: inline-flex; align-items: center; gap: 6px; padding: 10px 14px 11px; font-size: 13px; font-weight: 600; color: var(--muted); cursor: pointer; border-bottom: 2.5px solid transparent; margin-bottom: -1px; transition: color .18s, border-color .18s; white-space: nowrap; }
   .acc .acc-tabs a.doc-tab:hover, .acc .acc-tabs a.acc-tab:hover { color: var(--ink); }
   .acc .acc-tabs a.doc-tab.active, .acc .acc-tabs a.acc-tab.active { color: var(--coral); border-bottom-color: var(--coral); }
   .acc .acc-tabs .acc-tools { margin-left: auto; display: flex; align-items: center; gap: 8px; padding-bottom: 6px; }
@@ -47,9 +48,9 @@
   .acc .acc-search input { width: 100%; padding: 10px 14px 10px 36px; border: 1px solid rgba(26,26,46,0.14); border-radius: 11px; font-size: 13px; color: var(--ink); background: rgba(255,255,255,0.55); box-sizing: border-box; transition: border-color .18s, box-shadow .18s, background .18s; }
   .acc .acc-search input::placeholder { color: var(--muted); }
   .acc .acc-search input:focus { outline: none; border-color: var(--coral); box-shadow: 0 0 0 4px rgba(255,107,107,0.14); background: #fff; }
-  .acc .acc-fbtn { display: inline-flex; align-items: center; gap: 6px; padding: 9px 14px; border-radius: 10px; border: 1px solid var(--divider); font-size: 12.5px; font-weight: 600; color: var(--muted); background: rgba(255,255,255,0.6); cursor: pointer; transition: all .15s; }
+  .acc .acc-fbtn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 9px 14px; border-radius: 10px; border: 1px solid var(--divider); font-size: 12.5px; font-weight: 600; color: var(--muted); background: rgba(255,255,255,0.6); cursor: pointer; transition: all .15s; white-space: nowrap; }
   .acc .acc-fbtn:hover { background: #fff; color: var(--coral); border-color: var(--coral); }
-  .acc .acc-gobtn { display: inline-flex; align-items: center; gap: 6px; padding: 10px 18px; border-radius: 11px; border: none; font-size: 13px; font-weight: 700; color: #fff; background: linear-gradient(135deg, var(--coral), var(--coral-2)); cursor: pointer; box-shadow: 0 8px 18px -8px rgba(255,107,107,0.6); transition: filter .15s, transform .15s; }
+  .acc .acc-gobtn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 10px 18px; border-radius: 11px; border: none; font-size: 13px; font-weight: 700; color: #fff; background: linear-gradient(135deg, var(--coral), var(--coral-2)); cursor: pointer; box-shadow: 0 8px 18px -8px rgba(255,107,107,0.6); transition: filter .15s, transform .15s; white-space: nowrap; }
   .acc .acc-gobtn:hover { filter: brightness(1.04); transform: translateY(-1px); }
   .acc .acc-filters { display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-end; padding: 14px 16px; border: 1px dashed rgba(26,26,46,0.14); border-radius: 14px; background: rgba(255,255,255,0.35); margin-bottom: 12px; }
   .acc .acc-field { display: flex; flex-direction: column; gap: 5px; min-width: 160px; }
@@ -93,18 +94,23 @@
   .acc .picker-foot .picker-clear-all:hover { color: var(--red); background: var(--red-soft); }
   .acc .picker-foot .picker-done { display: inline-flex; align-items: center; gap: 6px; padding: 7px 16px; border-radius: 9px; border: none; background: linear-gradient(135deg, var(--coral), var(--coral-2)); color: #fff; font-size: 12px; font-weight: 700; cursor: pointer; box-shadow: 0 6px 14px -6px rgba(255,107,107,0.55); transition: filter .15s, transform .15s; }
   .acc .picker-foot .picker-done:hover { filter: brightness(1.04); transform: translateY(-1px); }
-  /* list rows */
+  /* list rows — desktop flex */
   .acc .acc-list { display: flex; flex-direction: column; }
   .acc .acc-row { display: flex; align-items: center; gap: 15px; padding: 15px 4px; border-bottom: 1px solid var(--divider); }
   .acc .acc-row:last-child { border-bottom: none; }
   .acc .acc-ic { flex: 0 0 auto; width: 46px; height: 46px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 17px; background: var(--gray-soft); color: var(--gray); }
   .acc .acc-body { flex: 1; min-width: 0; }
+  .acc .acc-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
   .acc .acc-name { font-size: 14px; font-weight: 700; color: var(--ink); }
-  .acc .acc-sub { font-size: 12px; color: var(--muted); margin-top: 2px; display: flex; flex-wrap: wrap; gap: 6px; }
-  .acc .acc-sub .dot { color: #d3d6de; }
-  .acc .acc-sub b { color: var(--ink); font-weight: 600; }
+  .acc .acc-count-badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 9px; border-radius: 20px; font-size: 11.5px; font-weight: 600; color: var(--ink); background: var(--gray-soft); white-space: nowrap; }
+  .acc .acc-count-badge b { font-size: 12.5px; font-weight: 800; color: var(--ink); }
+  /* legacy count (hidden on mobile, visible desktop fallback) */
   .acc .acc-count { flex: 0 0 auto; display: flex; align-items: center; gap: 6px; font-size: 12.5px; color: var(--muted); }
   .acc .acc-count b { color: var(--ink); font-size: 15px; }
+  .acc .acc-meta-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 16px; margin-top: 6px; }
+  .acc .acc-meta-item { font-size: 12px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .acc .acc-meta-item b { color: var(--ink); font-weight: 600; }
+  .acc .acc-meta-item i { font-size: 10px; margin-right: 3px; color: var(--muted); }
   .acc .acc-actions { display: flex; gap: 6px; align-items: center; flex-shrink: 0; flex-wrap: wrap; justify-content: flex-end; }
   /* buttons */
   .acc .acc-btn { display: inline-flex; align-items: center; gap: 6px; border: none; cursor: pointer; border-radius: 11px; padding: 8px 14px; font-size: 12.5px; font-weight: 700; text-decoration: none; transition: transform .15s, filter .15s, background-color .15s; }
@@ -132,10 +138,65 @@
   .acc .acc-modal-actions { display: flex; justify-content: flex-end; gap: 8px; }
   .acc .acc-modal-actions .acc-btn-ghost { background: transparent; color: var(--muted); }
   .acc .acc-modal-actions .acc-btn-ghost:hover { color: var(--ink); }
-  @media (max-width: 720px) {
-    .acc { padding: 20px 16px 32px; }
-    .acc .acc-row { flex-wrap: wrap; }
-    .acc .acc-actions { justify-content: flex-start; width: 100%; margin-left: 61px; }
+  /* ---------- desktop restore (≥1025px): original inline layout ---------- */
+  @media (min-width: 1025px) {
+    .acc .acc-head { display: block; }
+    .acc .acc-count-badge { display: none !important; }
+    .acc .acc-count { display: flex !important; }
+    .acc .acc-meta-grid { display: flex; flex-wrap: wrap; gap: 0 6px; margin-top: 2px; align-items: center; }
+    .acc .acc-meta-grid .acc-meta-item { white-space: nowrap; overflow: visible; text-overflow: clip; }
+    .acc .acc-meta-grid .acc-meta-item:nth-child(4) { flex-basis: 100%; margin-top: 3px; }
+    .acc .acc-meta-grid .acc-meta-item:nth-child(1)::after,
+    .acc .acc-meta-grid .acc-meta-item:nth-child(2)::after { content: "  \00B7"; color: #d3d6de; margin-left: 4px; white-space: pre; }
+  }
+  /* ---------- responsive: tablet (641-1024px) ---------- */
+  @media (min-width: 641px) and (max-width: 1024px) {
+    .acc { padding: 24px 20px 32px; }
+    .acc .acc-toolbar { gap: 10px; }
+    .acc .acc-search { min-width: 160px; }
+    .acc .acc-filters { gap: 10px; }
+    .acc .acc-row { flex-wrap: wrap; gap: 12px 14px; align-items: flex-start; }
+    .acc .acc-body { flex: 1 1 280px; min-width: 220px; }
+    .acc .acc-meta-grid { grid-template-columns: 1fr 1fr; gap: 4px 14px; }
+    .acc .acc-count { display: none !important; }
+    .acc .acc-count-badge { display: inline-flex !important; }
+    .acc .acc-actions { flex: 1 1 100%; justify-content: flex-end; gap: 8px; }
+  }
+  /* ---------- responsive: mobile (≤640px) ---------- */
+  @media (max-width: 640px) {
+    .acc { padding: 18px 14px 28px; overflow: hidden; }
+    .acc .acc-crumb { margin-top: 8px; padding-left: 48px; box-sizing: border-box; }
+    .acc .acc-title { font-size: 22px; box-sizing: border-box; }
+    /* tabs: keep scroll single-line with bottom indicator */
+    .acc .acc-tabs { gap: 0; padding-bottom: 0; margin-bottom: 14px; }
+    .acc .acc-tabs a.doc-tab, .acc .acc-tabs a.acc-tab { padding: 9px 12px 10px; font-size: 12.5px; }
+    /* toolbar: search full width, buttons 2-col grid below */
+    .acc .acc-toolbar { display: grid; grid-template-columns: 1fr 1fr; grid-template-areas: "search search" "fbtn gobtn"; gap: 8px; }
+    .acc .acc-search { grid-area: search; min-width: 0; flex: none; width: 100%; }
+    .acc .acc-fbtn { grid-area: fbtn; width: 100%; min-height: 42px; }
+    .acc .acc-gobtn { grid-area: gobtn; width: 100%; min-height: 42px; justify-content: center; }
+    /* alias for toolbar variation: handle both button orders */
+    .acc .acc-toolbar .acc-fbtn { width: 100%; }
+    .acc .acc-toolbar .acc-gobtn { width: 100%; }
+    .acc .acc-filters { flex-direction: column; align-items: stretch; padding: 12px; gap: 10px; }
+    .acc .acc-field { min-width: 0; width: 100%; }
+    .acc .acc-field .r-pick { width: 100%; max-width: none; min-width: 0; background: rgba(255,255,255,.6); border: 1px solid rgba(26,26,46,.08); border-bottom: 1px solid rgba(26,26,46,.12); border-radius: 11px; padding: 11px 12px; }
+    /* card grid: icon | body, actions full width below */
+    .acc .acc-row { display: grid; grid-template-columns: 46px 1fr; grid-template-areas: "ic body" "actions actions"; column-gap: 12px; row-gap: 0; align-items: start; padding: 14px 0 16px; }
+    .acc .acc-ic { grid-area: ic; align-self: start; }
+    .acc .acc-body { grid-area: body; min-width: 0; overflow: hidden; }
+    .acc .acc-head { align-items: flex-start; gap: 8px; }
+    .acc .acc-name { font-size: 14.5px; line-height: 1.3; }
+    .acc .acc-count { display: none; }
+    .acc .acc-count-badge { font-size: 11px; padding: 3px 8px; }
+    .acc .acc-meta-grid { grid-template-columns: 1fr; gap: 3px; margin-top: 8px; }
+    .acc .acc-meta-item { white-space: normal; word-break: break-word; overflow-wrap: anywhere; line-height: 1.4; }
+    .acc .acc-actions { grid-area: actions; width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; margin-left: 0; justify-content: stretch; }
+    .acc .acc-actions .acc-btn { width: 100%; justify-content: center; min-height: 40px; font-size: 12.5px; box-sizing: border-box; }
+    .acc .acc-actions form { display: none; }
+  }
+  @media (max-width: 360px) {
+    .acc .acc-meta-grid { grid-template-columns: 1fr; }
   }
 </style>
 
@@ -206,21 +267,18 @@
         <div class="acc-row">
           <span class="acc-ic"><i class="fa-solid fa-user"></i></span>
           <div class="acc-body">
-            <div class="acc-name">{{ $fullName }}</div>
-            <div class="acc-sub">
-              <span>{{ $account->email }}</span>
-              <span class="dot">·</span>
-              <span><b>NIK</b> {{ $account->applicant->nik ?? '-' }}</span>
-              <span class="dot">·</span>
-              <span><b>NISN</b> {{ $account->applicant->nisn ?? '-' }}</span>
+            <div class="acc-head">
+              <div class="acc-name">{{ $fullName }}</div>
+              <span class="acc-count-badge"><b>{{ $account->applicant->registrations_count ?? 0 }}</b> pendaftaran</span>
             </div>
-            <div class="acc-sub" style="margin-top:3px;">
-              <span>Terdaftar {{ $account->created_at->format('d M Y') }}</span>
+            <div class="acc-meta-grid">
+              <span class="acc-meta-item"><i class="fa-regular fa-envelope"></i>{{ $account->email }}</span>
+              <span class="acc-meta-item"><b>NIK</b> {{ $account->applicant->nik ?? '-' }}</span>
+              <span class="acc-meta-item"><b>NISN</b> {{ $account->applicant->nisn ?? '-' }}</span>
+              <span class="acc-meta-item"><i class="fa-regular fa-calendar"></i>Terdaftar {{ $account->created_at->format('d M Y') }}</span>
             </div>
           </div>
-          <div class="acc-count">
-            <span><b>{{ $account->applicant->registrations_count ?? 0 }}</b> pendaftaran</span>
-          </div>
+          <div class="acc-count"><span><b>{{ $account->applicant->registrations_count ?? 0 }}</b> pendaftaran</span></div>
           <div class="acc-actions">
             <a href="{{ route('admin.accounts.show', $account) }}" class="acc-btn ghost sm"><i class="fa-regular fa-eye" style="font-size:10px;"></i> Detail</a>
             @if (! $hasAccepted)

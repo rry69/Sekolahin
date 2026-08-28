@@ -23,11 +23,11 @@
           </div>
           <div class="mjr-stats">
             <span>Pendaftar <b>{{ $major->total_applicants }}</b></span>
-            <span style="color:var(--divider)">·</span>
+            <span class="mjr-dot" style="color:var(--divider)">·</span>
             <span>Pending <b style="color:#b45309">{{ $major->pending_count }}</b></span>
-            <span style="color:var(--divider)">·</span>
+            <span class="mjr-dot" style="color:var(--divider)">·</span>
             <span>Diterima <b style="color:var(--green)">{{ $major->accepted_count }}</b></span>
-            <span style="color:var(--divider)">·</span>
+            <span class="mjr-dot" style="color:var(--divider)">·</span>
             <span>Ditolak <b style="color:var(--red)">{{ $major->rejected_count }}</b></span>
           </div>
           @php
@@ -39,7 +39,7 @@
               @php $q = $major->{"quota_{$t->id}"} ?? null; $s = $major->{"sisa_{$t->id}"} ?? null; @endphp
               @if($q !== null)
                 <span>{{ $t->name }} {{ $q }} <span style="color:var(--muted)">sisa {{ $s }}</span></span>
-                <span style="color:var(--divider)">·</span>
+                <span class="mjr-dot" style="color:var(--divider)">·</span>
               @endif
             @endforeach
             <span>Total {{ $totalQuota }} <span style="color:var(--muted)">sisa {{ $availableQuota }}</span></span>

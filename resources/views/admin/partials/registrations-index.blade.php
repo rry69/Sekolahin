@@ -217,11 +217,13 @@
   .reg .r-ic.blue   { background: var(--blue-soft);   color: var(--blue); }
   .reg .r-ic.purple { background: var(--purple-soft); color: var(--purple); }
   .reg .r-ic.red    { background: var(--red-soft);    color: var(--red); }
-  .reg .r-body { flex: 1; min-width: 0; }
-  .reg .r-name { font-size: 14px; font-weight: 700; color: var(--ink); display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-  .reg .r-num { font-size: 11px; color: var(--muted); font-weight: 500; }
-  .reg .r-sub { font-size: 12px; color: var(--muted); margin-top: 3px; }
-  .reg .r-sub span { margin: 0 4px; }
+  .reg .r-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+  .reg .r-name { font-size: 14px; font-weight: 700; color: var(--ink); line-height: 1.25; }
+  .reg .r-num { font-size: 11px; color: var(--muted); font-weight: 600; letter-spacing: .02em; }
+  .reg .r-sub { font-size: 12px; color: var(--muted); margin-top: 4px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+  .reg .r-sub-item { display: inline-flex; align-items: center; gap: 5px; }
+  .reg .r-sub-item i { font-size: 11px; opacity: .7; }
+  .reg .r-sub-dot { display: none; }
   .reg .r-badges { display: flex; gap: 7px; flex-wrap: wrap; justify-content: flex-end; }
   .reg .r-pill { font-size: 11px; font-weight: 700; padding: 5px 11px; border-radius: 20px; white-space: nowrap; }
   .reg .r-pill.p-pending  { background: var(--amber-soft); color: var(--amber); }
@@ -247,10 +249,102 @@
   .reg .r-pager { margin-top: 22px; display: flex; justify-content: center; }
   .reg .r-pager > nav { display: flex; justify-content: center; }
 
-  @media (max-width: 720px) {
-    .reg { padding: 20px 16px; }
-    .reg .r-row { flex-wrap: wrap; }
-    .reg .r-badges { justify-content: flex-start; }
+  /* ---------- responsive: tablet (641-1024) ---------- */
+  @media (min-width: 641px) and (max-width: 1024px) {
+    .reg .r-row { flex-wrap: wrap; gap: 12px 14px; padding: 16px 4px; }
+    .reg .r-body { flex: 1 1 280px; min-width: 220px; }
+    .reg .r-badges { flex: 0 1 auto; justify-content: flex-start; }
+    .reg .r-actions { flex: 0 0 auto; margin-left: auto; }
+    .reg .r-sub { display: flex; flex-wrap: wrap; gap: 4px 8px; align-items: center; }
+    .reg .r-sub-item { display: inline-flex; align-items: center; gap: 4px; }
+    .reg .r-sub-dot { display: inline; }
+  }
+  /* ---------- responsive: mobile (≤640px) — hierarchy Nama → No REG → Info → Status → Action ---------- */
+  @media (max-width: 640px) {
+    .reg { padding: 18px 14px 28px; }
+    .reg .r-title { font-size: 22px; }
+    .reg .r-meta { font-size: 12.5px; }
+    .reg .r-toolbar { gap: 8px; }
+    .reg .r-search { min-width: 0; flex: 1 1 100%; }
+    .reg .r-fbtn, .reg .r-gobtn { flex: 1 1 auto; justify-content: center; min-height: 42px; }
+
+    .reg .r-row {
+      display: grid;
+      grid-template-columns: 46px 1fr;
+      grid-template-areas:
+        "ic body"
+        "badges badges"
+        "actions actions";
+      gap: 0;
+      align-items: start;
+      padding: 18px 0 16px;
+    }
+    .reg .r-ic { grid-area: ic; align-self: start; margin-top: 2px; }
+    .reg .r-body { grid-area: body; padding-left: 2px; }
+    .reg .r-name {
+      font-size: 15px;
+      line-height: 1.25;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 2px;
+    }
+    .reg .r-num {
+      display: block;
+      font-size: 11.5px;
+      font-weight: 600;
+      letter-spacing: .02em;
+      color: var(--muted);
+      margin-top: 1px;
+    }
+    .reg .r-sub {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      margin-top: 10px;
+      font-size: 12.5px;
+      line-height: 1.45;
+    }
+    .reg .r-sub-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--muted);
+      word-break: break-all;
+    }
+    .reg .r-sub-item.major { color: var(--ink); font-weight: 500; word-break: break-word; }
+    .reg .r-sub-item.date { font-size: 12px; }
+    .reg .r-sub-item i { font-size: 11px; opacity: .7; flex: 0 0 auto; }
+    .reg .r-sub-dot { display: none; }
+
+    .reg .r-badges {
+      grid-area: badges;
+      justify-content: flex-start;
+      gap: 7px;
+      margin-top: 14px;
+    }
+    .reg .r-pill { font-size: 11.5px; padding: 6px 12px; }
+
+    .reg .r-actions {
+      grid-area: actions;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 14px;
+      width: 100%;
+    }
+    .reg .r-act {
+      justify-content: center;
+      min-height: 44px;
+      padding: 11px 14px;
+      font-size: 13px;
+      border-radius: 11px;
+      font-weight: 700;
+    }
+    .reg .r-tabs { gap: 14px; overflow-x: auto; flex-wrap: nowrap; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+    .reg .r-tabs::-webkit-scrollbar { display: none; }
+    .reg .r-filters { padding: 14px; }
+    .reg .r-field { flex: 1 1 100%; }
+    .reg .r-field .r-pick { min-width: 0; width: 100%; }
   }
 </style>
 
@@ -454,15 +548,12 @@
           <i class="fa-regular fa-file-lines"></i>
         </span>
         <div class="r-body">
-          <div class="r-name">
-            {{ $name }}
-            <span class="r-num">{{ $reg->registration_number }}</span>
-          </div>
+          <div class="r-name">{{ $name }}</div>
+          <div class="r-num">{{ $reg->registration_number }}</div>
           <div class="r-sub">
-            {{ $email }}
-            <span>&middot;</span>{{ $track }}
-            <span>&middot;</span>{{ $major }}
-            <span>&middot;</span>{{ $reg->created_at->format('d M Y H:i') }}
+            <span class="r-sub-item email"><i class="fa-regular fa-envelope"></i> {{ $email }}</span>
+            <span class="r-sub-item major"><i class="fa-solid fa-graduation-cap"></i> {{ $track }} &middot; {{ $major }}</span>
+            <span class="r-sub-item date"><i class="fa-regular fa-clock"></i> {{ $reg->created_at->format('d M Y H:i') }}</span>
           </div>
         </div>
         <div class="r-badges">
