@@ -165,7 +165,7 @@
   .rkp .k-name { font-size: 14px; font-weight: 700; color: var(--ink); }
   .rkp .k-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
   .rkp .k-sub b { color: var(--ink); font-weight: 600; }
-  .rkp .k-mid { flex-shrink: 0; min-width: 140px; }
+  .rkp .k-mid { flex: 0 0 140px; min-width: 140px; }
   .rkp .k-mid .k-mid-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .3px; font-weight: 600; }
   .rkp .k-mid .k-mid-val { font-size: 13px; color: var(--ink); font-weight: 600; }
   .rkp .k-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 5px; }
@@ -174,7 +174,7 @@
   .rkp .k-pill.blue  { background: var(--blue-soft);  color: var(--blue); }
   .rkp .k-pill.coral { background: var(--coral-soft); color: var(--coral); }
   .rkp .k-pill.amber { background: var(--amber-soft); color: #b45309; }
-  .rkp .k-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+  .rkp .k-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; min-width: 200px; justify-content: flex-end; }
 
   /* ---------- empty ---------- */
   .rkp .k-empty { text-align: center; color: var(--muted); font-size: 13.5px; padding: 40px 0; }
@@ -298,7 +298,6 @@
       {{ $registrations->appends(request()->query())->links('vendor.pagination.bringova') }}
     </div>
   @endif
-</div>
 
 {{-- ===================== Modal Picker (Bringova) — reuse global picker ===================== --}}
 <div id="pickerBackdrop" class="picker-backdrop" aria-hidden="true">
@@ -329,3 +328,4 @@
 @endphp
 
 <div id="reg-data" hidden data-picker='@json($pickerJson)' data-picker-labels='@json($pickerLabels)'></div>
+</div>
