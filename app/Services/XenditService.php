@@ -135,7 +135,9 @@ class XenditService
                     'xendit_paid_at' => $paidAt ? now()->parse($paidAt) : now(),
                     'xendit_payment_method' => $paymentMethod,
                     'verified_at' => now(),
-                    'notes' => 'Pembayaran berhasil melalui ' . $friendlyMethod . ' via Xendit',
+                    // Hindari dobel "via Xendit": friendlyXenditMethod() sudah bisa
+                    // mengembalikan "... via Xendit" untuk metode yang tidak dikenal.
+                    'notes' => 'Pembayaran berhasil melalui ' . (str_contains($friendlyMethod, 'Xendit') ? $friendlyMethod : $friendlyMethod . ' via Xendit'),
                 ]);
 
                 $registration->update(['payment_status' => 'paid']);

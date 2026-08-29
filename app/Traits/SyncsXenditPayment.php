@@ -19,7 +19,9 @@ trait SyncsXenditPayment
         $raw = XenditService::invoiceMethodValue($result['invoice']);
         $friendly = XenditService::friendlyXenditMethod($raw);
         if ($status === 'PAID' || $status === 'SETTLED') {
-            $payment->update(['status'=>'verified','xendit_paid_at'=>now(),'xendit_payment_method'=>$raw,'verified_at'=>now(),'notes'=>'Pembayaran berhasil melalui '.$friendly.' via Xendit']);
+            // Hindari dobel "via Xendit" — friendlyXenditMethod() sudah menyertakan "via Xendit" utk metode tak dikenal.
+            $note = 'Pembayaran berhasil melalui ' . (str_contains($friendly, 'Xendit') ? $friendly : $friendly . ' via Xendit');
+            $payment->update(['status'=>'verified','xendit_paid_at'=>now(),'xendit_payment_method'=>$raw,'verified_at'=>now(),'notes'=>$note]);
             $registration->update(['payment_status'=>'paid']);
             ActivityLogger::statusChange('registration.payment_status','Pembayaran LUNAS via '.$friendly.' (Xendit, sinkronisasi): '.$registration->registration_number,$registration,$registration->getOriginal('payment_status')??'pending','paid',['registration_number'=>$registration->registration_number,'xendit_payment_method'=>$raw,'friendly_method'=>$friendly]);
             $registration->refresh(); $this->enrollIfReady($registration);

@@ -126,15 +126,16 @@ function filePdfNext() {
 function showFileModal(url, title) {
     var body = document.getElementById('filePreviewBody');
     document.getElementById('filePreviewTitle').textContent = title || 'Pratinjau Dokumen';
-
     var clean = url.toLowerCase().split('?')[0];
+    var nameClean = String(title || '').toLowerCase().split('?')[0];
+    var isPdf = clean.endsWith('.pdf') || nameClean.endsWith('.pdf');
+    var isImage = /\.(jpg|jpeg|png|gif|webp|bmp|svg)$/.test(clean) || /\.(jpg|jpeg|png|gif|webp|bmp|svg)$/.test(nameClean);
     fileZoomScale = 1;
     filePdfDoc = null;
     filePdfPageNum = 1;
     fileSetToolbar(false, false);
     document.getElementById('filePreviewModal').classList.remove('hidden');
-
-    if (clean.endsWith('.pdf')) {
+    if (isPdf) {
         filePreviewMode = 'pdf';
         if (!window.pdfjsLib) {
             body.innerHTML = '<div class="p-8 text-center text-sm text-gray-600">Gagal memuat penampil PDF.</div>';
@@ -149,16 +150,16 @@ function showFileModal(url, title) {
             body.innerHTML = '<canvas id="filePdfCanvas" class="shadow rounded bg-white" style="cursor:grab"></canvas>';
             filePdfRender();
         }).catch(function () {
-            body.innerHTML = '<div class="p-8 text-center text-sm text-red-600">Dokumen PDF gagal dibuka.</div>';
+            body.innerHTML = '<div class="p-8 text-center text-sm text-red-600">Dokumen PDF gagal dibuka. <a href="' + url + '" target="_blank" class="underline">Buka di tab baru</a></div>';
         });
-    } else if (/\.(jpg|jpeg|png|gif|webp|bmp|svg)$/.test(clean)) {
+    } else if (isImage) {
         filePreviewMode = 'image';
-        body.innerHTML = '<img id="filePreviewImage" src="' + url + '" alt="Pratinjau" class="max-w-full h-auto rounded" style="transition:transform .15s ease-out;cursor:grab">';
+        body.innerHTML = '<img id="filePreviewImage" src="' + url + '" alt="Pratinjau" class="max-w-full h-auto rounded" style="transition:transform .15s ease-out;cursor:grab" onerror="this.outerHTML=\'<div class=p-8 text-center text-sm text-red-600>Gagal memuat gambar. <a href=' + url + ' target=_blank class=underline>Buka di tab baru</a></div>\'">';
         fileSetToolbar(true, false);
         fileApplyZoom();
     } else {
         filePreviewMode = null;
-        body.innerHTML = '<div class="p-8 text-center text-sm text-gray-600">Format file tidak dapat ditampilkan.</div>';
+        body.innerHTML = '<div class="p-8 text-center text-sm text-gray-600">Format file tidak dapat ditampilkan. <a href="' + url + '" target="_blank" class="underline">Buka / unduh file</a></div>';
     }
 }
 

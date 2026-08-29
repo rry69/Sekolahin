@@ -591,6 +591,81 @@ function toggleFilterPanel() {
   if (p) p.style.display = p.style.display === 'none' ? 'flex' : 'none';
 }
 
+// ===================== Payment Verify / Reset (global — works with AJAX nav) =====================
+// Halaman /admin/payments dimuat via AJAX (loadContent → innerHTML), sehingga <script>
+// di dalam partial TIDAK dieksekusi. Fungsi-fungsi ini didefinisikan di layout agar
+// selalu tersedia, baik saat full render maupun saat konten dimuat via AJAX.
+var _payVerifyId = null;
+var _payResetId = null;
+
+function _payShowModal(el) { if (el) { el.classList.add('is-open'); el.setAttribute('aria-hidden', 'false'); } }
+function _payHideModal(el) { if (el) { el.classList.remove('is-open'); el.setAttribute('aria-hidden', 'true'); } }
+
+window.openPayVerify = function (id, regNumber) {
+  _payVerifyId = id;
+  var msg = document.getElementById('payVerifyMsg');
+  if (msg) msg.textContent = 'Verifikasi pembayaran ' + (regNumber || '') + ' sebagai lunas?';
+  _payShowModal(document.getElementById('payVerifyModal'));
+};
+window.closePayVerify = function () { _payVerifyId = null; _payHideModal(document.getElementById('payVerifyModal')); };
+window.submitPayVerify = function () {
+  if (!_payVerifyId) return;
+  var btn = document.getElementById('payVerifyAction');
+  if (btn) btn.disabled = true;
+  var csrf = document.querySelector('meta[name="csrf-token"]') ? document.querySelector('meta[name="csrf-token"]').content : '';
+  fetch('/admin/payments/' + _payVerifyId + '/verify', {
+    method: 'POST',
+    headers: { 'X-CSRF-TOKEN': csrf, 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json' }
+  })
+  .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, body: j }; }); })
+  .then(function (res) {
+    if (btn) btn.disabled = false;
+    closePayVerify();
+    if (!res.ok || !res.body.success) { alert(res.body.message || 'Gagal memverifikasi pembayaran'); return; }
+    location.reload();
+  })
+  .catch(function () { if (btn) btn.disabled = false; closePayVerify(); alert('Terjadi kesalahan jaringan'); });
+};
+
+window.openPayReset = function (id, regNumber) {
+  _payResetId = id;
+  var msg = document.getElementById('payResetMsg');
+  if (msg) msg.textContent = 'Kembalikan pembayaran ' + (regNumber || '') + ' ke status pending? Data pembayaran terkait akan dihapus.';
+  _payShowModal(document.getElementById('payResetModal'));
+};
+window.closePayReset = function () { _payResetId = null; _payHideModal(document.getElementById('payResetModal')); };
+window.submitPayReset = function () {
+  if (!_payResetId) return;
+  var btn = document.getElementById('payResetAction');
+  if (btn) btn.disabled = true;
+  var csrf = document.querySelector('meta[name="csrf-token"]') ? document.querySelector('meta[name="csrf-token"]').content : '';
+  fetch('/admin/payments/' + _payResetId + '/reset', {
+    method: 'POST',
+    headers: { 'X-CSRF-TOKEN': csrf, 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json' }
+  })
+  .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, body: j }; }); })
+  .then(function (res) {
+    if (btn) btn.disabled = false;
+    closePayReset();
+    if (!res.ok || !res.body.success) { alert(res.body.message || 'Gagal mereset pembayaran'); return; }
+    location.reload();
+  })
+  .catch(function () { if (btn) btn.disabled = false; closePayReset(); alert('Terjadi kesalahan jaringan'); });
+};
+
+// Backdrop click + Enter shortcut — delegated agar tetap bekerja untuk konten hasil AJAX
+document.addEventListener('click', function (e) {
+  if (e.target && e.target.id === 'payVerifyModal') closePayVerify();
+  if (e.target && e.target.id === 'payResetModal') closePayReset();
+});
+document.addEventListener('keydown', function (e) {
+  if (e.key !== 'Enter') return;
+  var v = document.getElementById('payVerifyModal');
+  var r = document.getElementById('payResetModal');
+  if (v && v.classList.contains('is-open')) { e.preventDefault(); submitPayVerify(); }
+  else if (r && r.classList.contains('is-open')) { e.preventDefault(); submitPayReset(); }
+});
+
 // ===================== Picker Bringova (dropdown modal) =====================
 (function () {
   var currentKey = null;

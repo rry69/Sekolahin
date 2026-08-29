@@ -392,7 +392,7 @@
           </div>
         </div>
         <div class="d-doc-actions" id="doc-actions-{{ $doc->id }}">
-          <button type="button" onclick="showFileModal('{{ route('registration.documents.download', [$registration, $doc]) }}', '{{ $doc->document_type }}')" class="d-btn ghost sm"><i class="fa-solid fa-eye"></i> Lihat</button>
+          <button type="button" onclick="showFileModal('{{ route('registration.documents.download', [$registration, $doc]) }}', '{{ addslashes($doc->file_name) }}')" class="d-btn ghost sm"><i class="fa-solid fa-eye"></i> Lihat</button>
           @if($doc->verified_at)
             <span id="doc-badge-{{ $doc->id }}" class="d-pill green"><i class="fa-solid fa-check"></i> Terverifikasi</span>
             <span id="doc-verify-btns-{{ $doc->id }}" class="hidden items-center gap-2">
@@ -539,7 +539,7 @@
           <a href="{{ route('payments.invoice.view', $invoicePayment) }}" target="_blank" class="d-btn green sm"><i class="fa-solid fa-file-invoice"></i> Lihat Invoice</a>
         @endif
         @if($proofPayment)
-          <button type="button" onclick="showFileModal('{{ route('payments.proof', $proofPayment) }}', 'Bukti Pembayaran')" class="d-btn blue sm"><i class="fa-solid fa-receipt"></i> Lihat Bukti</button>
+          <button type="button" onclick="showFileModal('{{ route('payments.proof', $proofPayment) }}', '{{ addslashes($proofPayment->proof_file ? basename($proofPayment->proof_file) : 'Bukti Pembayaran') }}')" class="d-btn blue sm"><i class="fa-solid fa-receipt"></i> Lihat Bukti</button>
         @endif
         @if($pendingPayment)
           <form action="{{ route('admin.payments.verify', $pendingPayment) }}" method="POST" class="inline">
@@ -584,7 +584,7 @@
           </div>
           <div class="d-pay-right">
             @if ($payment->proof_file)
-              <button type="button" onclick="showFileModal('{{ route('payments.proof', $payment) }}', 'Bukti Pembayaran')" class="d-btn blue sm">Lihat Bukti</button>
+              <button type="button" onclick="showFileModal('{{ route('payments.proof', $payment) }}', '{{ addslashes(basename($payment->proof_file)) }}')" class="d-btn blue sm">Lihat Bukti</button>
             @endif
             @php $adminPaymentLabels = ['pending' => 'Pending', 'verified' => 'Lunas', 'rejected' => 'Ditolak']; @endphp
             @php $payPillFor = ['pending' => 'amber', 'verified' => 'green', 'rejected' => 'red']; @endphp

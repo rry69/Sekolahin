@@ -22,6 +22,9 @@ class Payment extends Model
         'external_id',
         'xendit_payment_method',
         'xendit_paid_at',
+        'invoice_number',
+        'invoice_pdf',
+        'invoice_issued_at',
     ];
 
     protected function casts(): array
@@ -30,6 +33,7 @@ class Payment extends Model
             'amount' => 'decimal:2',
             'verified_at' => 'datetime',
             'xendit_paid_at' => 'datetime',
+            'invoice_issued_at' => 'datetime',
         ];
     }
 

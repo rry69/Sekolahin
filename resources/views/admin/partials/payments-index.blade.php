@@ -341,7 +341,7 @@
     </div>
     <div class="p-modal-actions">
       <button type="button" onclick="closePayVerify()" class="p-btn ghost p-btn-ghost">Batal</button>
-      <button type="button" id="payVerifyAction" class="p-btn green"><i class="fa-solid fa-check"></i> Ya, Verifikasi</button>
+      <button type="button" onclick="submitPayVerify()" id="payVerifyAction" class="p-btn green"><i class="fa-solid fa-check"></i> Ya, Verifikasi</button>
     </div>
   </div>
 </div>
@@ -358,7 +358,7 @@
     </div>
     <div class="p-modal-actions">
       <button type="button" onclick="closePayReset()" class="p-btn ghost p-btn-ghost">Batal</button>
-      <button type="button" id="payResetAction" class="p-btn amber"><i class="fa-solid fa-rotate-left"></i> Ya, Reset</button>
+      <button type="button" onclick="submitPayReset()" id="payResetAction" class="p-btn amber"><i class="fa-solid fa-rotate-left"></i> Ya, Reset</button>
     </div>
   </div>
 </div>
@@ -385,88 +385,4 @@
       </div>
     </form>
   </div>
-</div>
-
-<script>
-(function () {
-  var csrf = document.querySelector('meta[name="csrf-token"]')?.content || '';
-  var pendingVerifyId = null;
-  var pendingResetId = null;
-
-  function showModal(el) { if (!el) return; el.classList.add('is-open'); el.setAttribute('aria-hidden', 'false'); }
-  function hideModal(el) { if (!el) return; el.classList.remove('is-open'); el.setAttribute('aria-hidden', 'true'); }
-
-  // ---- Verify ----
-  window.openPayVerify = function (id, regNumber) {
-    pendingVerifyId = id;
-    var msg = document.getElementById('payVerifyMsg');
-    if (msg) msg.textContent = 'Verifikasi pembayaran ' + regNumber + ' sebagai lunas?';
-    showModal(document.getElementById('payVerifyModal'));
-  };
-  window.closePayVerify = function () { pendingVerifyId = null; hideModal(document.getElementById('payVerifyModal')); };
-  window.submitPayVerify = function () {
-    if (!pendingVerifyId) return;
-    var btn = document.getElementById('payVerifyAction');
-    btn.disabled = true;
-    var url = '/admin/payments/' + pendingVerifyId + '/verify';
-    fetch(url, {
-      method: 'POST',
-      headers: { 'X-CSRF-TOKEN': csrf, 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json' }
-    }).then(function (r) { return r.json().then(function (j) { return { ok: r.ok, body: j }; }); })
-    .then(function (res) {
-      btn.disabled = false;
-      closePayVerify();
-      if (!res.ok || !res.body.success) {
-        alert(res.body.message || 'Gagal memverifikasi pembayaran');
-        return;
-      }
-      location.reload();
-    }).catch(function () { btn.disabled = false; closePayVerify(); alert('Terjadi kesalahan jaringan'); });
-  };
-
-  // ---- Reset ----
-  window.openPayReset = function (id, regNumber) {
-    pendingResetId = id;
-    var msg = document.getElementById('payResetMsg');
-    if (msg) msg.textContent = 'Kembalikan pembayaran ' + regNumber + ' ke status pending? Data pembayaran terkait akan dihapus.';
-    showModal(document.getElementById('payResetModal'));
-  };
-  window.closePayReset = function () { pendingResetId = null; hideModal(document.getElementById('payResetModal')); };
-  window.submitPayReset = function () {
-    if (!pendingResetId) return;
-    var btn = document.getElementById('payResetAction');
-    btn.disabled = true;
-    var url = '/admin/payments/' + pendingResetId + '/reset';
-    fetch(url, {
-      method: 'POST',
-      headers: { 'X-CSRF-TOKEN': csrf, 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'application/json' }
-    }).then(function (r) { return r.json().then(function (j) { return { ok: r.ok, body: j }; }); })
-    .then(function (res) {
-      btn.disabled = false;
-      closePayReset();
-      if (!res.ok || !res.body.success) {
-        alert(res.body.message || 'Gagal mereset pembayaran');
-        return;
-      }
-      location.reload();
-    }).catch(function () { btn.disabled = false; closePayReset(); alert('Terjadi kesalahan jaringan'); });
-  };
-
-  // ---- Backdrop click + ESC ----
-  document.getElementById('payVerifyModal').addEventListener('click', function (e) { if (e.target === this) closePayVerify(); });
-  document.getElementById('payResetModal').addEventListener('click', function (e) { if (e.target === this) closePayReset(); });
-
-  // ---- Enter shortcut: jika modal verify/reset terbuka, Enter = submit ----
-  document.addEventListener('keydown', function (e) {
-    if (e.key !== 'Enter') return;
-    var v = document.getElementById('payVerifyModal');
-    var r = document.getElementById('payResetModal');
-    if (v && v.classList.contains('is-open')) { e.preventDefault(); submitPayVerify(); }
-    else if (r && r.classList.contains('is-open')) { e.preventDefault(); submitPayReset(); }
-  });
-
-  document.getElementById('payVerifyAction').addEventListener('click', submitPayVerify);
-  document.getElementById('payResetAction').addEventListener('click', submitPayReset);
-})();
-</script>
 </div>

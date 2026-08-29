@@ -7,11 +7,14 @@ use App\Models\Registration;
 use App\Services\ActivityLogger;
 use App\Services\InvoiceService;
 use App\Services\XenditService;
+use App\Traits\SyncsXenditPayment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class PaymentController extends Controller
 {
+    use SyncsXenditPayment;
+
     protected $xenditService;
     protected $invoiceService;
 
@@ -228,7 +231,21 @@ class PaymentController extends Controller
             abort(404, 'Invoice belum tersedia');
         }
 
-        return Storage::disk('private')->download($payment->invoice_pdf, 'invoice-' . ($payment->invoice_number ?? $payment->id) . '.pdf');
+        // Render ulang PDF dengan status TERBARU sebelum diunduh.
+        // PDF disimpan sebagai file statis saat issue(); tanpa ini, invoice yang
+        // dibuat saat MENUNGGU akan tetap bertuliskan MENUNGGU walau sudah LUNAS.
+        // (issue() idempotent — hanya memperbarui file + nomor jika kosong.)
+        try {
+            app(\App\Services\InvoiceService::class)->issue($payment);
+            $payment->refresh();
+        } catch (\Throwable $e) {
+            report($e);
+        }
+
+        return Storage::disk('private')->download(
+            $payment->invoice_pdf,
+            'invoice-' . str_replace(['/', '\\'], '-', $payment->invoice_number ?? $payment->id) . '.pdf'
+        );
     }
 
     /**
@@ -239,13 +256,59 @@ class PaymentController extends Controller
     {
         $this->authorizePaymentAccess($payment);
 
+        // Sinkronkan status Xendit (idempotent — webhook mungkin telat / halaman dibuka
+        // dari tab lama). Hanya menyentuh payment online yang pending; tidak mengubah
+        // logika pembayaran manual / status lain.
+        $this->syncXenditPayment($payment->registration);
+        $payment->refresh();
+
+        // Invoice milik sistem: pastikan nomor + PDF tersedia.
+        // Idempotent — issue() tidak mengubah status/logika pembayaran/Xendit.
+        if (! $payment->invoice_number || ! $payment->invoice_pdf) {
+            try {
+                app(\App\Services\InvoiceService::class)->issue($payment);
+                $payment->refresh();
+            } catch (\Throwable $e) {
+                report($e);
+            }
+        }
+
         $registration = $payment->registration;
 
         $canPayOnline = $payment->payment_method === 'online'
             && $payment->status === 'pending'
             && $payment->xendit_invoice_url;
 
-        return view('payments.invoice', compact('payment', 'registration', 'canPayOnline'));
+        // Tombol cetak invoice:
+        // - Online (Xendit): hanya setelah LUNAS (verified).
+        // - Manual (bank_transfer): selalu tampil — PDF selalu dibuat, dan siswa
+        //   butuh bukti tagihan baik sebelum maupun sesudah verifikasi.
+        $canPrintInvoice = $payment->payment_method === 'online'
+            ? $payment->status === 'verified'
+            : (bool) $payment->invoice_pdf;
+
+        return view('payments.invoice', compact('payment', 'registration', 'canPayOnline', 'canPrintInvoice'));
+    }
+
+    /**
+     * Endpoint status untuk polling halaman invoice (tanpa reload).
+     * Menyinkronkan status Xendit, lalu mengembalikan status terkini.
+     */
+    public function invoiceStatus(Payment $payment)
+    {
+        $this->authorizePaymentAccess($payment);
+
+        $this->syncXenditPayment($payment->registration);
+        $payment->refresh();
+
+        return response()->json([
+            'payment_status' => $payment->status,
+            'registration_payment_status' => $payment->registration->payment_status,
+            'has_proof' => (bool) $payment->proof_file,
+            'can_print_invoice' => $payment->payment_method === 'online'
+                ? $payment->status === 'verified'
+                : (bool) $payment->invoice_pdf,
+        ]);
     }
 
     /**

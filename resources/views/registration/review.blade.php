@@ -1,193 +1,348 @@
-<x-app-layout>
-    <x-slot name="header">
-        <div class="flex items-center gap-3">
-            <a href="{{ route('registration.create') }}" class="inline-flex items-center p-2 -ml-2 rounded-md text-eggplore-neutral-400 hover:text-eggplore-neutral-700 hover:bg-eggplore-primary-50 transition-colors" aria-label="Kembali ke pilihan">
-                <i class="fa-solid fa-arrow-left text-lg"></i>
-            </a>
-            <div>
-                <p class="text-[11px] font-semibold uppercase tracking-[0.08em] text-eggplore-neutral-400">Langkah 2 dari 2</p>
-                <h2 class="font-bold text-xl md:text-2xl text-eggplore-neutral-900 leading-tight tracking-tight">Review Pendaftaran</h2>
+<x-student-layout title="Review Pendaftaran">
+  <style>
+    .rvw { --coral:#FF6B6B; --coral-2:#FF8E6E; --coral-soft:#FFE5E3; --ink:#1a1a2e; --muted:#8a8f9d; --divider:rgba(26,26,46,.10); --green:#10B981; --green-soft:#D1FAE5; --red:#EF4444; --red-soft:#FEE2E2; --amber:#D97706; --amber-soft:#FEF3C7; --blue:#2563EB; --blue-soft:#DBEAFE; --indigo:#6366F1; --indigo-soft:#E0E7FF; position:relative; border-radius:24px; padding:28px 28px 48px; background:#f6f7fb; }
+    .rvw .rvw-inner { max-width:1000px; margin:0 auto; }
+    .rvw-crumb { font-size:12.5px; color:var(--muted); margin-bottom:6px; display:flex; align-items:center; gap:7px; flex-wrap:wrap; }
+    .rvw-crumb a { color:var(--coral); font-weight:600; } .rvw-crumb a:hover { text-decoration:underline; }
+    .rvw-title { font-size:26px; font-weight:800; color:var(--ink); letter-spacing:-0.01em; line-height:1.2; }
+    .rvw-meta { font-size:13px; color:var(--muted); margin-top:6px; }
+
+    /* wizard stepper (2 langkah) */
+    .rvw-step { display:flex; align-items:center; gap:10px; margin-top:22px; padding:16px 18px; border-top:1px solid var(--divider); border-bottom:1px solid var(--divider); }
+    .rvw-step-item { display:flex; align-items:center; gap:9px; flex:1; min-width:0; }
+    .rvw-step-num { width:26px; height:26px; border-radius:50%; background:#E5E7EB; color:var(--muted); display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:800; flex:0 0 auto; }
+    .rvw-step-item.done .rvw-step-num { background:var(--green); color:#fff; }
+    .rvw-step-item.active .rvw-step-num { background:linear-gradient(135deg,var(--coral),var(--coral-2)); color:#fff; box-shadow:0 6px 14px -6px rgba(255,107,107,.6); }
+    .rvw-step-label { font-size:12px; font-weight:700; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .rvw-step-item.active .rvw-step-label, .rvw-step-item.done .rvw-step-label { color:var(--ink); }
+    .rvw-step-sep { flex:0 0 auto; width:18px; height:1px; background:var(--divider); }
+
+    /* alert */
+    .rvw-alert { display:flex; gap:13px; align-items:flex-start; border-radius:14px; padding:14px 16px; margin-top:20px; border:1px solid transparent; }
+    .rvw-alert i.rvw-alert-ic { width:22px; height:22px; border-radius:7px; display:flex; align-items:center; justify-content:center; font-size:11px; flex:0 0 auto; margin-top:1px; }
+    .rvw-alert .rvw-alert-body { flex:1; min-width:0; }
+    .rvw-alert .rvw-alert-t { font-weight:700; font-size:13.5px; }
+    .rvw-alert .rvw-alert-p { font-size:13px; margin-top:2px; opacity:.92; }
+    .rvw-alert.red { background:var(--red-soft); border-color:rgba(239,68,68,.25); }
+    .rvw-alert.red i.rvw-alert-ic { background:var(--red); color:#fff; }
+    .rvw-alert.red .rvw-alert-t, .rvw-alert.red .rvw-alert-p { color:#B91C1C; }
+
+    /* Pilihan Pendaftaran */
+    .rvw-sec { border-top:1px solid var(--divider); padding:26px 0 6px; }
+    .rvw-sec:first-of-type { border-top:none; padding-top:24px; }
+    .rvw-sec-head { display:flex; align-items:center; gap:12px; margin-bottom:14px; }
+    .rvw-sec-ic { width:42px; height:42px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:17px; flex:0 0 auto; }
+    .rvw-sec-ic.coral { background:var(--coral-soft); color:var(--coral); }
+    .rvw-sec-ic.blue { background:var(--blue-soft); color:var(--blue); }
+    .rvw-sec-ic.amber { background:var(--amber-soft); color:var(--amber); }
+    .rvw-sec-ic.green { background:var(--green-soft); color:var(--green); }
+    .rvw-sec-ttl { font-size:14px; font-weight:800; color:var(--ink); }
+    .rvw-sec-desc { font-size:12px; color:var(--muted); margin-top:1px; }
+    .rvw-sec-edit { margin-left:auto; display:inline-flex; align-items:center; gap:6px; padding:7px 12px; border-radius:9px; font-size:11.5px; font-weight:700; color:var(--coral); background:var(--coral-soft); transition:background .15s, color .15s; }
+    .rvw-sec-edit:hover { background:var(--coral); color:#fff; }
+    .rvw-sec-edit i { font-size:10px; }
+
+    /* selection grid (2x2) */
+    .rvw-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+    .rvw-tile { display:flex; align-items:flex-start; gap:12px; padding:14px; border:1px solid var(--divider); border-radius:14px; background:transparent; position:relative; }
+    .rvw-tile-ic { width:40px; height:40px; border-radius:11px; display:flex; align-items:center; justify-content:center; font-size:16px; flex:0 0 auto; }
+    .rvw-tile-ic.school { background:var(--blue-soft); color:var(--blue); }
+    .rvw-tile-ic.track { background:var(--amber-soft); color:var(--amber); }
+    .rvw-tile-ic.major { background:var(--amber-soft); color:var(--amber); }
+    .rvw-tile-ic.period { background:#F3F4F6; color:var(--muted); }
+    .rvw-tile-label { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); display:flex; align-items:center; gap:6px; }
+    .rvw-tile-val { margin-top:3px; font-size:14px; font-weight:700; color:var(--ink); word-break:break-word; }
+    .rvw-pop { display:inline-flex; align-items:center; gap:4px; padding:2px 8px; border-radius:99px; background:linear-gradient(135deg,var(--coral),var(--coral-2)); color:#fff; font-size:9px; font-weight:800; text-transform:uppercase; letter-spacing:.04em; }
+
+    /* field sections */
+    .rvw-fields { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px 28px; }
+    .rvw-fields .rvw-field-wide { grid-column:1 / -1; }
+    .rvw-field .rvw-f-label { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); }
+    .rvw-field .rvw-f-val { margin-top:3px; font-size:14px; font-weight:600; color:var(--ink); line-height:1.45; }
+    .rvw-field .rvw-f-val.mono { font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:13px; }
+    .rvw-field .rvw-f-val.empty { color:var(--muted); font-weight:500; }
+
+    /* confirmation box */
+    .rvw-confirm { margin-top:28px; display:flex; align-items:flex-start; gap:14px; padding:18px 20px; border:1px solid rgba(16,185,129,.35); border-left:3px solid var(--green); border-radius:16px; background:var(--green-soft); }
+    .rvw-confirm i { color:var(--green); font-size:20px; margin-top:1px; }
+    .rvw-confirm-t { font-size:14px; font-weight:800; color:#065F46; }
+    .rvw-confirm-p { margin-top:3px; font-size:13px; line-height:1.6; color:#047857; }
+
+    /* sticky action bar (all breakpoints) */
+    .rvw-bar { position:fixed; left:0; right:0; bottom:0; z-index:50; background:rgba(246,247,251,.94); backdrop-filter:blur(6px); border-top:1px solid var(--divider); padding:12px 16px; }
+    .rvw-bar-inner { max-width:1000px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+    .rvw-btn { display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:13px 20px; border-radius:12px; font-size:14px; font-weight:700; transition:transform .15s, box-shadow .15s; min-height:44px; }
+    .rvw-btn.coral { background:linear-gradient(135deg,var(--coral),var(--coral-2)); color:#fff; box-shadow:0 10px 22px -10px rgba(255,107,107,.65); }
+    .rvw-btn.coral:hover { transform:translateY(-1px); box-shadow:0 14px 26px -10px rgba(255,107,107,.7); }
+    .rvw-btn.coral:disabled { background:var(--muted); box-shadow:none; cursor:not-allowed; opacity:.55; transform:none; }
+    .rvw-btn.ghost { background:transparent; color:var(--coral); border:1.5px solid var(--coral); }
+    .rvw-btn.ghost:hover { background:var(--coral-soft); }
+
+    @media (max-width:640px) {
+      .rvw { padding:20px 18px 96px; border-radius:18px; }
+      .rvw-step { flex-direction:column; align-items:stretch; gap:6px; padding:14px 12px; }
+      .rvw-step-sep { display:none; }
+      .rvw-grid { grid-template-columns:1fr; }
+      .rvw-fields { grid-template-columns:1fr; }
+      .rvw-fields .rvw-field-wide { grid-column:auto; }
+    }
+  </style>
+
+  <div class="rvw">
+    <div class="rvw-inner">
+      {{-- Crumbs + title --}}
+      <div class="rvw-crumb">
+        <a href="{{ route('registration.index') }}">Pendaftaran</a>
+        <i class="fa-solid fa-chevron-right" style="font-size:9px"></i>
+        <span>Review Pendaftaran</span>
+      </div>
+      <h1 class="rvw-title">Review Pendaftaran</h1>
+      <p class="rvw-meta">Periksa kembali seluruh data sebelum mengonfirmasi pendaftaran.</p>
+
+      {{-- Wizard stepper --}}
+      <div class="rvw-step">
+        <div class="rvw-step-item done">
+          <span class="rvw-step-num"><i class="fa-solid fa-check" style="font-size:11px"></i></span>
+          <span class="rvw-step-label">Pilih &amp; Isi</span>
+        </div>
+        <div class="rvw-step-sep"></div>
+        <div class="rvw-step-item active">
+          <span class="rvw-step-num">2</span>
+          <span class="rvw-step-label">Review &amp; Konfirmasi</span>
+        </div>
+      </div>
+
+      @if (session('error'))
+        <div class="rvw-alert red">
+          <i class="fa-solid fa-circle-exclamation rvw-alert-ic"></i>
+          <div class="rvw-alert-body"><p class="rvw-alert-p">{{ session('error') }}</p></div>
+        </div>
+      @endif
+
+      {{-- ===== PILIHAN PENDAFTARAN ===== --}}
+      <section class="rvw-sec">
+        <div class="rvw-sec-head">
+          <div class="rvw-sec-ic coral"><i class="fa-solid fa-clipboard-list"></i></div>
+          <div>
+            <p class="rvw-sec-ttl">Pilihan Pendaftaran</p>
+            <p class="rvw-sec-desc">Sekolah, jalur, jurusan, dan periode yang kamu pilih.</p>
+          </div>
+          <a href="{{ route('registration.create') }}" class="rvw-sec-edit"><i class="fa-solid fa-pen"></i> Edit</a>
+        </div>
+
+        <div class="rvw-grid">
+          {{-- Sekolah --}}
+          <div class="rvw-tile">
+            <span class="rvw-tile-ic school"><i class="fa-solid fa-school"></i></span>
+            <div class="min-w-0">
+              <p class="rvw-tile-label">Sekolah</p>
+              <p class="rvw-tile-val">{{ $school->name }}</p>
             </div>
+            <span class="rvw-pop" style="margin-left:auto;align-self:flex-start"><i class="fa-solid fa-bolt"></i> Populer</span>
+          </div>
+
+          {{-- Jalur --}}
+          <div class="rvw-tile">
+            <span class="rvw-tile-ic track"><i class="fa-solid fa-route"></i></span>
+            <div class="min-w-0">
+              <p class="rvw-tile-label">Jalur</p>
+              <p class="rvw-tile-val">{{ $track->name }}</p>
+            </div>
+          </div>
+
+          @if($major)
+          {{-- Jurusan --}}
+          <div class="rvw-tile">
+            <span class="rvw-tile-ic major"><i class="fa-solid fa-book-open"></i></span>
+            <div class="min-w-0">
+              <p class="rvw-tile-label">Jurusan</p>
+              <p class="rvw-tile-val">{{ $major->name }}</p>
+            </div>
+          </div>
+          @endif
+
+          {{-- Periode --}}
+          <div class="rvw-tile">
+            <span class="rvw-tile-ic period"><i class="fa-solid fa-calendar-days"></i></span>
+            <div class="min-w-0">
+              <p class="rvw-tile-label">Periode</p>
+              <p class="rvw-tile-val">{{ $period->name }}</p>
+            </div>
+          </div>
         </div>
-    </x-slot>
+      </section>
 
-    <div class="py-8 md:py-12 pb-28">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-
-            @if (session('error'))
-                <div class="mb-6 border-l-2 border-eggplore-danger pl-4 py-1 text-sm text-eggplore-danger">
-                    {{ session('error') }}
-                </div>
-            @endif
-
-            {{-- ===== HERO SELECTION CARD ===== --}}
-            <section class="rounded-2xl border border-eggplore-neutral-150 bg-white shadow-sm overflow-hidden">
-                <div class="px-5 py-6 sm:px-7">
-                    <div class="flex items-center justify-between mb-4">
-                        <p class="text-[11px] font-semibold uppercase tracking-[0.08em] text-eggplore-neutral-400">Pilihan Pendaftaran</p>
-                        <span class="inline-flex items-center gap-1.5 rounded-full bg-eggplore-warning-soft px-2.5 py-1 text-[11px] font-semibold text-[#B98A2E]">
-                            <i class="fa-solid fa-bolt text-[9px]"></i> POPULER
-                        </span>
-                    </div>
-
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        {{-- Sekolah --}}
-                        <div class="flex items-center gap-3 rounded-xl bg-eggplore-primary-50/60 p-3">
-                            <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-eggplore-primary-100 text-eggplore-primary">
-                                <i class="fa-solid fa-school text-lg"></i>
-                            </span>
-                            <div class="min-w-0">
-                                <p class="text-[11px] font-semibold uppercase tracking-wide text-eggplore-neutral-400">Sekolah</p>
-                                <p class="truncate text-sm font-semibold text-eggplore-neutral-900">{{ $school->name }}</p>
-                            </div>
-                        </div>
-
-                        {{-- Jalur --}}
-                        <div class="flex items-center gap-3 rounded-xl bg-eggplore-warning-soft/50 p-3">
-                            <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-eggplore-warning-soft text-[#B98A2E]">
-                                <i class="fa-solid fa-route text-lg"></i>
-                            </span>
-                            <div class="min-w-0">
-                                <p class="text-[11px] font-semibold uppercase tracking-wide text-eggplore-neutral-400">Jalur</p>
-                                <p class="truncate text-sm font-semibold text-eggplore-neutral-900">{{ $track->name }}</p>
-                            </div>
-                        </div>
-
-                        @if($major)
-                        {{-- Jurusan --}}
-                        <div class="flex items-center gap-3 rounded-xl bg-eggplore-warning-soft/50 p-3">
-                            <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-eggplore-warning-soft text-[#B98A2E]">
-                                <i class="fa-solid fa-book-open text-lg"></i>
-                            </span>
-                            <div class="min-w-0">
-                                <p class="text-[11px] font-semibold uppercase tracking-wide text-eggplore-neutral-400">Jurusan</p>
-                                <p class="truncate text-sm font-semibold text-eggplore-neutral-900">{{ $major->name }}</p>
-                            </div>
-                        </div>
-                        @endif
-
-                        {{-- Periode --}}
-                        <div class="flex items-center gap-3 rounded-xl bg-eggplore-neutral-100/70 p-3">
-                            <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white text-eggplore-neutral-500 border border-eggplore-neutral-150">
-                                <i class="fa-solid fa-calendar-days text-lg"></i>
-                            </span>
-                            <div class="min-w-0">
-                                <p class="text-[11px] font-semibold uppercase tracking-wide text-eggplore-neutral-400">Periode</p>
-                                <p class="truncate text-sm font-semibold text-eggplore-neutral-900">{{ $period->name }}</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            {{-- ===== DATA PRIBADI ===== --}}
-            <section class="mt-10">
-                <header class="flex items-center gap-3 mb-6">
-                    <span class="h-5 w-[2px] rounded-full bg-eggplore-primary-500" aria-hidden="true"></span>
-                    <h3 class="text-lg font-bold text-eggplore-neutral-900 tracking-tight">Data Pribadi</h3>
-                    <span class="flex-1 h-px bg-eggplore-neutral-150"></span>
-                </header>
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-6 max-w-3xl">
-                    <x-review-item label="Nama Lengkap" value="{{ $applicant->full_name }}" wide />
-                    <x-review-item label="NIK" value="{{ $applicant->nik }}" mono />
-                    <x-review-item label="NISN" value="{{ $applicant->nisn ?? null }}" mono />
-                    <x-review-item label="Tempat, Tanggal Lahir" value="{{ $applicant->birth_place }}, {{ $applicant->birth_date?->format('d M Y') }}" wide />
-                    <x-review-item label="Jenis Kelamin" value="{{ $applicant->gender === 'L' ? 'Laki-laki' : 'Perempuan' }}" />
-                    <x-review-item label="Agama" value="{{ $applicant->religion }}" />
-                    <x-review-item label="No. Telepon" value="{{ $applicant->phone }}" mono />
-                    <x-review-item label="Sekolah Asal" value="{{ $applicant->previous_school }}" wide />
-                </div>
-            </section>
-
-            <div class="border-t border-eggplore-neutral-150 mt-10"></div>
-
-            {{-- ===== ALAMAT ===== --}}
-            <section class="mt-10">
-                <header class="flex items-center gap-3 mb-6">
-                    <span class="h-5 w-[2px] rounded-full bg-eggplore-primary-500" aria-hidden="true"></span>
-                    <h3 class="text-lg font-bold text-eggplore-neutral-900 tracking-tight">Alamat</h3>
-                    <span class="flex-1 h-px bg-eggplore-neutral-150"></span>
-                </header>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-6 max-w-3xl">
-                    <x-review-item label="Alamat Lengkap" value="{{ $applicant->address }}" wide />
-                    <x-review-item label="RT / RW" value="{{ ($applicant->rt ?? null) && ($applicant->rw ?? null) ? $applicant->rt . ' / ' . $applicant->rw : null }}" mono />
-                    <x-review-item label="Kelurahan / Desa" value="{{ $applicant->village ?? null }}" />
-                    <x-review-item label="Kecamatan" value="{{ $applicant->district ?? null }}" />
-                    <x-review-item label="Kabupaten / Kota" value="{{ $applicant->city ?? null }}" />
-                    <x-review-item label="Provinsi" value="{{ $applicant->province ?? null }}" />
-                    <x-review-item label="Kode Pos" value="{{ $applicant->postal_code ?? null }}" mono />
-                </div>
-            </section>
-
-            <div class="border-t border-eggplore-neutral-150 mt-10"></div>
-
-            {{-- ===== ORANG TUA / WALI ===== --}}
-            <section class="mt-10">
-                <header class="flex items-center gap-3 mb-6">
-                    <span class="h-5 w-[2px] rounded-full bg-eggplore-primary-500" aria-hidden="true"></span>
-                    <h3 class="text-lg font-bold text-eggplore-neutral-900 tracking-tight">Orang Tua / Wali</h3>
-                    <span class="flex-1 h-px bg-eggplore-neutral-150"></span>
-                </header>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-6 max-w-3xl">
-                    <x-review-item label="Nama Ayah" value="{{ $applicant->father_name ?? null }}" />
-                    <x-review-item label="Pekerjaan Ayah" value="{{ $applicant->father_occupation ?? null }}" />
-                    <x-review-item label="Nama Ibu" value="{{ $applicant->mother_name ?? null }}" />
-                    <x-review-item label="Pekerjaan Ibu" value="{{ $applicant->mother_occupation ?? null }}" />
-                    <x-review-item label="Nama Wali" value="{{ $applicant->parent_name ?? null }}" />
-                    <x-review-item label="No. HP Orang Tua / Wali" value="{{ $applicant->parent_phone ?? null }}" mono />
-                </div>
-            </section>
-
-            {{-- ===== CONFIRMATION BOX ===== --}}
-            <section class="mt-10 rounded-2xl border border-eggplore-primary-200 bg-eggplore-primary-50/70 p-5 sm:p-6">
-                <div class="flex items-start gap-3">
-                    <i class="fa-solid fa-circle-check text-eggplore-primary mt-0.5 text-xl"></i>
-                    <div>
-                        <p class="text-sm font-semibold text-eggplore-neutral-900">Pastikan seluruh data di atas sudah benar.</p>
-                        <p class="mt-1 text-sm text-eggplore-neutral-500 leading-relaxed">Setelah dikonfirmasi, pendaftaran Anda akan dikirim dan <span class="font-medium text-eggplore-neutral-700">tidak dapat diubah</span>. Periksa kembali sebelum menekan tombol konfirmasi.</p>
-                    </div>
-                </div>
-            </section>
-
+      {{-- ===== DATA PRIBADI ===== --}}
+      <section class="rvw-sec">
+        <div class="rvw-sec-head">
+          <div class="rvw-sec-ic blue"><i class="fa-solid fa-id-card"></i></div>
+          <div>
+            <p class="rvw-sec-ttl">Data Pribadi</p>
+            <p class="rvw-sec-desc">Informasi diri dari biodata kamu.</p>
+          </div>
+          <a href="{{ route('applicant.profile') }}" class="rvw-sec-edit"><i class="fa-solid fa-pen"></i> Edit</a>
         </div>
+        <div class="rvw-fields">
+          <div class="rvw-field rvw-field-wide">
+            <p class="rvw-f-label">Nama Lengkap</p>
+            <p class="rvw-f-val">{{ $applicant->full_name }}</p>
+          </div>
+          <div class="rvw-field">
+            <p class="rvw-f-label">NIK</p>
+            <p class="rvw-f-val mono">{{ $applicant->nik }}</p>
+          </div>
+          <div class="rvw-field">
+            <p class="rvw-f-label">NISN</p>
+            <p class="rvw-f-val mono">{{ $applicant->nisn ?? '—' }}</p>
+          </div>
+          <div class="rvw-field rvw-field-wide">
+            <p class="rvw-f-label">Tempat, Tanggal Lahir</p>
+            <p class="rvw-f-val">{{ $applicant->birth_place }}, {{ $applicant->birth_date?->format('d M Y') }}</p>
+          </div>
+          <div class="rvw-field">
+            <p class="rvw-f-label">Jenis Kelamin</p>
+            <p class="rvw-f-val">{{ $applicant->gender === 'L' ? 'Laki-laki' : 'Perempuan' }}</p>
+          </div>
+          <div class="rvw-field">
+            <p class="rvw-f-label">Agama</p>
+            <p class="rvw-f-val">{{ $applicant->religion }}</p>
+          </div>
+          <div class="rvw-field">
+            <p class="rvw-f-label">No. Telepon</p>
+            <p class="rvw-f-val mono">{{ $applicant->phone }}</p>
+          </div>
+          <div class="rvw-field rvw-field-wide">
+            <p class="rvw-f-label">Sekolah Asal</p>
+            <p class="rvw-f-val">{{ $applicant->previous_school }}</p>
+          </div>
+        </div>
+      </section>
+
+      {{-- ===== ALAMAT ===== --}}
+      <section class="rvw-sec">
+        <div class="rvw-sec-head">
+          <div class="rvw-sec-ic green"><i class="fa-solid fa-location-dot"></i></div>
+          <div>
+            <p class="rvw-sec-ttl">Alamat</p>
+            <p class="rvw-sec-desc">Alamat tempat tinggal kamu.</p>
+          </div>
+          <a href="{{ route('applicant.profile') }}" class="rvw-sec-edit"><i class="fa-solid fa-pen"></i> Edit</a>
+        </div>
+        <div class="rvw-fields">
+          <div class="rvw-field rvw-field-wide">
+            <p class="rvw-f-label">Alamat Lengkap</p>
+            <p class="rvw-f-val">{{ $applicant->address }}</p>
+          </div>
+          <div class="rvw-field">
+            <p class="rvw-f-label">RT / RW</p>
+            <p class="rvw-f-val mono">{{ ($applicant->rt ?? null) && ($applicant->rw ?? null) ? $applicant->rt . ' / ' . $applicant->rw : '—' }}</p>
+          </div>
+          <div class="rvw-field">
+            <p class="rvw-f-label">Kelurahan / Desa</p>
+            <p class="rvw-f-val">{{ $applicant->village ?? '—' }}</p>
+          </div>
+          <div class="rvw-field">
+            <p class="rvw-f-label">Kecamatan</p>
+            <p class="rvw-f-val">{{ $applicant->district ?? '—' }}</p>
+          </div>
+          <div class="rvw-field">
+            <p class="rvw-f-label">Kabupaten / Kota</p>
+            <p class="rvw-f-val">{{ $applicant->city ?? '—' }}</p>
+          </div>
+          <div class="rvw-field">
+            <p class="rvw-f-label">Provinsi</p>
+            <p class="rvw-f-val">{{ $applicant->province ?? '—' }}</p>
+          </div>
+          <div class="rvw-field">
+            <p class="rvw-f-label">Kode Pos</p>
+            <p class="rvw-f-val mono">{{ $applicant->postal_code ?? '—' }}</p>
+          </div>
+        </div>
+      </section>
+
+      {{-- ===== ORANG TUA / WALI ===== --}}
+      <section class="rvw-sec">
+        <div class="rvw-sec-head">
+          <div class="rvw-sec-ic amber"><i class="fa-solid fa-people-roof"></i></div>
+          <div>
+            <p class="rvw-sec-ttl">Orang Tua / Wali</p>
+            <p class="rvw-sec-desc">Informasi orang tua atau wali kamu.</p>
+          </div>
+          <a href="{{ route('applicant.profile') }}" class="rvw-sec-edit"><i class="fa-solid fa-pen"></i> Edit</a>
+        </div>
+        <div class="rvw-fields">
+          <div class="rvw-field">
+            <p class="rvw-f-label">Nama Ayah</p>
+            <p class="rvw-f-val">{{ $applicant->father_name ?? '—' }}</p>
+          </div>
+          <div class="rvw-field">
+            <p class="rvw-f-label">Pekerjaan Ayah</p>
+            <p class="rvw-f-val">{{ $applicant->father_occupation ?? '—' }}</p>
+          </div>
+          <div class="rvw-field">
+            <p class="rvw-f-label">Nama Ibu</p>
+            <p class="rvw-f-val">{{ $applicant->mother_name ?? '—' }}</p>
+          </div>
+          <div class="rvw-field">
+            <p class="rvw-f-label">Pekerjaan Ibu</p>
+            <p class="rvw-f-val">{{ $applicant->mother_occupation ?? '—' }}</p>
+          </div>
+          <div class="rvw-field">
+            <p class="rvw-f-label">Nama Wali</p>
+            <p class="rvw-f-val">{{ $applicant->parent_name ?? '—' }}</p>
+          </div>
+          <div class="rvw-field">
+            <p class="rvw-f-label">No. HP Orang Tua / Wali</p>
+            <p class="rvw-f-val mono">{{ $applicant->parent_phone ?? '—' }}</p>
+          </div>
+        </div>
+      </section>
+
+      {{-- ===== CONFIRMATION BOX ===== --}}
+      <section class="rvw-confirm">
+        <i class="fa-solid fa-circle-check"></i>
+        <div>
+          <p class="rvw-confirm-t">Pastikan seluruh data di atas sudah benar.</p>
+          <p class="rvw-confirm-p">Setelah dikonfirmasi, pendaftaran Anda akan dikirim dan <strong>tidak dapat diubah</strong>. Periksa kembali sebelum menekan tombol konfirmasi.</p>
+        </div>
+      </section>
+
+      <div style="height:28px"></div>
     </div>
+  </div>
 
-    {{-- ===== STICKY ACTION BAR ===== --}}
-    <div class="actionbar fixed inset-x-0 bottom-0 z-40 border-t border-eggplore-neutral-150 bg-white/95 backdrop-blur px-4 py-3 sm:relative sm:border-0 sm:bg-transparent sm:backdrop-blur-none sm:px-0 sm:py-0">
-        <div class="max-w-4xl mx-auto flex items-center justify-between gap-3">
-            <a href="{{ route('registration.create') }}" class="inline-flex items-center justify-center gap-2 px-5 h-10 rounded-lg border border-eggplore-neutral-200 text-sm font-medium text-eggplore-neutral-500 hover:text-eggplore-neutral-900 hover:bg-eggplore-neutral-100 transition-colors">
-                <i class="fa-solid fa-arrow-left text-xs"></i> Kembali
-            </a>
-            <form method="POST" action="{{ route('registration.confirm') }}" id="confirmForm">
-                @csrf
-                <input type="hidden" name="registration_period_id" value="{{ $validated['registration_period_id'] }}">
-                <input type="hidden" name="registration_track_id" value="{{ $validated['registration_track_id'] }}">
-                <input type="hidden" name="major_id" value="{{ $validated['major_id'] ?? '' }}">
-                <input type="hidden" name="school_id" value="{{ $validated['school_id'] }}">
-                <button type="submit" id="confirmBtn"
-                    class="inline-flex items-center justify-center gap-2 bg-eggplore-primary text-white px-6 h-10 rounded-lg hover:bg-eggplore-primary-600 active:bg-eggplore-primary-700 text-sm font-semibold shadow-sm transition-all active:scale-[0.99]">
-                    <i class="fa-solid fa-check"></i> Konfirmasi &amp; Daftar
-                </button>
-            </form>
-        </div>
+  {{-- ===== STICKY ACTION BAR (semua breakpoint) ===== --}}
+  <div class="rvw-bar">
+    <div class="rvw-bar-inner">
+      <a href="{{ route('registration.create') }}" class="rvw-btn ghost">
+        <i class="fa-solid fa-arrow-left"></i> Kembali
+      </a>
+      <form method="POST" action="{{ route('registration.confirm') }}" id="confirmForm">
+        @csrf
+        <input type="hidden" name="registration_period_id" value="{{ $validated['registration_period_id'] }}">
+        <input type="hidden" name="registration_track_id" value="{{ $validated['registration_track_id'] }}">
+        <input type="hidden" name="major_id" value="{{ $validated['major_id'] ?? '' }}">
+        <input type="hidden" name="school_id" value="{{ $validated['school_id'] }}">
+        <button type="submit" id="confirmBtn" class="rvw-btn coral">
+          <i class="fa-solid fa-check"></i> Konfirmasi &amp; Daftar
+        </button>
+      </form>
     </div>
+  </div>
 
-    @push('scripts')
-    <script>
-        // Anti double-submit + loading state
-        (function () {
-            const btn = document.getElementById('confirmBtn');
-            if (!btn) return;
-            btn.addEventListener('click', function () {
-                if (btn.disabled) return;
-                btn.disabled = true;
-                btn.classList.add('opacity-80');
-                btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Memproses...';
-                // Submit form setelah state loading tampil
-                setTimeout(() => { document.getElementById('confirmForm').submit(); }, 80);
-            });
-        })();
-    </script>
-    @endpush
-</x-app-layout>
+  @push('scripts')
+  <script>
+    // Anti double-submit + loading state
+    (function () {
+      const btn = document.getElementById('confirmBtn');
+      if (!btn) return;
+      btn.addEventListener('click', function () {
+        if (btn.disabled) return;
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Memproses...';
+        setTimeout(() => { document.getElementById('confirmForm').submit(); }, 80);
+      });
+    })();
+  </script>
+  @endpush
+</x-student-layout>

@@ -535,7 +535,14 @@ class RegistrationController extends Controller
 
         $request->validate([
             'documents' => 'required|array',
-            'documents.*' => 'file|mimes:jpg,jpeg,png,pdf|max:5120',
+            'documents.foto' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:5120',
+            'documents.kartu_keluarga' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:5120',
+            'documents.akta_lahir' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:5120',
+            'documents.ijazah_skl' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:5120',
+            'documents.sertifikat_prestasi' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:5120',
+            'documents.surat_keterangan_tidak_mampu' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:5120',
+            'documents.rapor' => 'nullable|array',
+            'documents.rapor.*' => 'file|mimes:jpg,jpeg,png,pdf|max:5120',
         ]);
 
         $uploadedCount = 0;
@@ -555,7 +562,7 @@ class RegistrationController extends Controller
                     ->get();
 
                 foreach ($oldDocs as $oldDoc) {
-                    Storage::disk('public')->delete($oldDoc->file_path);
+                    Storage::disk('private')->delete($oldDoc->file_path);
                     $oldDoc->delete();
                 }
             }
