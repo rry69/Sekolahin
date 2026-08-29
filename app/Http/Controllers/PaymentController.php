@@ -7,13 +7,14 @@ use App\Models\Registration;
 use App\Services\ActivityLogger;
 use App\Services\InvoiceService;
 use App\Services\XenditService;
+use App\Traits\EnrollsStudent;
 use App\Traits\SyncsXenditPayment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class PaymentController extends Controller
 {
-    use SyncsXenditPayment;
+    use EnrollsStudent, SyncsXenditPayment;
 
     protected $xenditService;
     protected $invoiceService;
