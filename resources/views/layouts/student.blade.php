@@ -9,6 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="icon" type="image/png" href="{{ asset('images/web_logo.png') }}">
 <script src="https://cdn.tailwindcss.com"></script>
 @vite(['resources/css/app.css', 'resources/js/app.js'])
 <style>
@@ -58,8 +59,10 @@
     backdrop-filter: saturate(140%) blur(8px);
   }
   .st-top-in { max-width: 1080px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; gap: 20px; height: 64px; }
-  .st-brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 15px; color: var(--ink); letter-spacing: -0.01em; }
-  .st-brand .st-logo { width: 34px; height: 34px; border-radius: 11px; background: linear-gradient(135deg, var(--coral), var(--coral-2)); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 16px; box-shadow: 0 6px 16px -6px rgba(255,107,107,.6); }
+  .st-brand { display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 15px; color: var(--ink); letter-spacing: -0.01em; }
+  .st-brand .st-logo-img { width: 34px; height: 34px; object-fit: contain; flex: 0 0 auto; }
+  .st-brand .st-logo-text { height: 22px; width: auto; max-width: 148px; object-fit: contain; display: block; }
+  @media (max-width: 520px){ .st-brand .st-logo-text{ display:none; } }
   .st-nav { display: flex; align-items: center; gap: 4px; margin-left: 6px; }
   .st-nav a { display: inline-flex; align-items: center; gap: 7px; padding: 8px 12px; border-radius: 10px; font-size: 13px; font-weight: 600; color: var(--tx3); transition: color .15s, background .15s; }
   .st-nav a svg.hi { font-size: 14px; opacity: .9; }
@@ -150,9 +153,9 @@
 
 <header class="st-top">
   <div class="st-top-in">
-    <a href="{{ route('dashboard') }}" class="st-brand">
-      <span class="st-logo"><x-hi icon="fa-graduation-cap" /></span>
-      <span>Sekolahin</span>
+    <a href="{{ route('dashboard') }}" class="st-brand" aria-label="Sekolahin beranda">
+      <img src="{{ asset('images/web_logo.png') }}" alt="Sekolahin" class="st-logo-img" width="34" height="34" loading="eager" decoding="async">
+      <img src="{{ asset('images/logo_text.png') }}" alt="Sekolahin" class="st-logo-text" height="22" loading="eager" decoding="async">
     </a>
     <nav class="st-nav" aria-label="Navigasi siswa">
       <a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') ? 'active' : '' }}"><x-hi icon="fa-house" /> Beranda</a>

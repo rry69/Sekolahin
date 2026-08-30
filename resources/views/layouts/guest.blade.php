@@ -13,6 +13,7 @@
         <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700,800&display=swap" rel="stylesheet" />
 
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+        <link rel="icon" type="image/png" href="{{ asset('images/web_logo.png') }}">
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         <script>
@@ -48,14 +49,10 @@
 
             {{-- ===== Konten (centered, kartu hanya outline tipis) ===== --}}
             <div class="relative z-10 w-full max-w-md">
-                {{-- Branding: logo + judul --}}
                 <div class="mb-7 flex flex-col items-center text-center">
-                    <div class="flex h-12 w-12 items-center justify-center rounded-2xl text-white shadow-lg"
-                         style="background: linear-gradient(135deg, #FF6B6B, #FF8E6E); box-shadow: 0 10px 24px -8px rgba(255,107,107,.55);">
-                        <x-hi icon="fa-graduation-cap" class="text-xl" />
-                    </div>
-                    <h1 class="mt-3 text-2xl font-extrabold tracking-tight text-gray-900">Sekolahin</h1>
-                    <p class="text-xs font-semibold uppercase tracking-[0.05em] text-gray-400">Penerimaan Murid Baru</p>
+                    <img src="{{ asset('images/web_logo.png') }}" alt="Sekolahin" class="h-14 w-14 object-contain" width="56" height="56" loading="eager">
+                    <img src="{{ asset('images/logo_text.png') }}" alt="Sekolahin" class="mt-3 h-7 w-auto max-w-[200px] object-contain" height="28" loading="eager">
+                    <p class="mt-1 text-xs font-semibold uppercase tracking-[0.05em] text-gray-400">Penerimaan Murid Baru</p>
                 </div>
 
                 {{-- Kartu outline tipis (tanpa isian putih) --}}

@@ -9,6 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="icon" type="image/png" href="{{ asset('images/web_logo.png') }}">
 <script src="https://cdn.tailwindcss.com"></script>
 @vite(['resources/css/app.css', 'resources/js/app.js'])
 <style>
@@ -152,6 +153,9 @@
     box-shadow: 0 6px 16px -6px rgba(255, 107, 107, 0.6);
     user-select: none;
   }
+  .sb-brand{ display:flex; align-items:center; gap:8px; padding:14px 16px 10px; border-bottom:1px solid var(--border); flex:0 0 auto; }
+  .sb-brand-img{ width:32px; height:32px; object-fit:contain; flex:0 0 auto; }
+  .sb-brand-text{ height:20px; width:auto; max-width:140px; object-fit:contain; display:block; }
   .who { display: flex; flex-direction: column; min-width: 0; }
   .who .name { font-size: 14px; font-weight: 600; line-height: 1.3; color: var(--tx1); }
   .who .mail { font-size: 11px; color: var(--tx3); line-height: 1.4; }
@@ -508,11 +512,11 @@
   .modal-btn-cancel { padding: 8px 16px; font-size: 13px; color: var(--tx2); background: none; border: none; cursor: pointer; }
   .modal-btn-action { padding: 8px 16px; font-size: 13px; font-weight: 500; border-radius: 6px; color: var(--accent-fg); background: var(--warning); border: none; cursor: pointer; }
 
-  /* Track toggle pill */
-  .track-pill { width: 44px; height: 24px; background: transparent; border: 1px solid currentColor; border-radius: 9999px; position: relative; transition: background .2s; }
-  .track-pill.on { background: transparent; border: 1px solid currentColor; }
-  .track-pill .track-knob { position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; background: transparent; border: 1px solid currentColor; border-radius: 9999px; transition: left .2s; box-shadow: 0 1px 2px rgba(0,0,0,0.2); }
-  .track-pill.on .track-knob { left: 22px; }
+  /* Track toggle pill — Bringova: active = green fill + white knob; off = outline gray */
+  .track-pill { width: 44px; height: 24px; background: transparent; border: 1px solid var(--gray, #9aa0ad); border-radius: 9999px; position: relative; transition: background .2s, border-color .2s; }
+  .track-pill.on { background: var(--green, #10B981); border-color: var(--green, #10B981); }
+  .track-pill .track-knob { position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; background: #fff; border: 1px solid var(--gray, #9aa0ad); border-radius: 9999px; transition: left .2s, background .2s, border-color .2s; box-shadow: 0 1px 2px rgba(0,0,0,0.2); }
+  .track-pill.on .track-knob { left: 22px; background: #fff; border-color: #fff; }
   .track-toggle:disabled + .track-pill { opacity: .55; cursor: wait; }
   .track-toggle:disabled { cursor: wait; }
 

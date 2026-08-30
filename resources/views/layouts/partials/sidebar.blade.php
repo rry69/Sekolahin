@@ -9,6 +9,10 @@
 <div class="backdrop" id="backdrop" aria-hidden="true"></div>
 
 <aside class="sidebar expanded" id="sidebar" aria-label="Navigasi utama">
+  <a href="{{ route('dashboard') }}" class="sb-brand" aria-label="Sekolahin">
+    <img src="{{ asset('images/web_logo.png') }}" alt="Sekolahin" class="sb-brand-img" width="32" height="32" loading="eager" decoding="async">
+    <img src="{{ asset('images/logo_text.png') }}" alt="Sekolahin" class="sb-brand-text" height="20" loading="eager" decoding="async">
+  </a>
 
   <header class="sb-head">
     <span class="avatar" aria-hidden="true">
