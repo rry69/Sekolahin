@@ -1,6 +1,8 @@
 @extends('layouts.dashboard')
 @section('title', 'Pengaturan')
 @php
+    $pvLicensed = $_pv['licensed'] ?? true;
+    $proLocked = ! $pvLicensed;
     $errorTabs = [
         'pembayaran'    => ['bank_name', 'bank_account_number', 'bank_account_name', 'payment_note'],
         'biaya'         => ['fees', 'notes'],
@@ -118,6 +120,16 @@
   .ste .ste-level-row:last-child { border-bottom:none; }
   /* foot per tab */
   .ste .ste-foot{ display:flex; justify-content:flex-end; gap:10px; margin-top:18px; padding-top:16px; border-top:1px solid var(--divider); }
+  /* PRO lock */
+  .ste .ste-pro-badge{ display:inline-flex; align-items:center; gap:5px; margin-left:auto; padding:4px 11px; border-radius:20px; font:700 11px; background:var(--amber-soft); color:#b45309; white-space:nowrap; }
+  .ste .ste-pro-badge i{ font-size:9px; }
+  .ste .ste-lock-box{ position:relative; border-radius:14px; }
+  .ste .ste-lock-box .ste-lock-fields{ filter:grayscale(.8); opacity:.55; pointer-events:none; user-select:none; }
+  .ste .ste-lock-shade{ position:absolute; inset:0; border-radius:14px; background:rgba(246,247,251,.40); display:flex; align-items:center; justify-content:center; cursor:pointer; z-index:2; }
+  .ste .ste-lock-chip{ display:inline-flex; align-items:center; gap:8px; padding:9px 16px; border-radius:12px; background:#fff; box-shadow:0 12px 28px -14px rgba(26,26,46,.35); font:700 13px var(--ink); border:1px solid rgba(26,26,46,.06); }
+  .ste .ste-lock-chip i{ color:var(--amber); }
+  .ste .ste-lock-chip b{ color:var(--coral); font-weight:800; }
+  .ste .ste-lock-chip:hover{ transform:translateY(-1px); }
   /* modal */
   .ste .ste-modal-backdrop { position:fixed; inset:0; z-index:90; background:rgba(26,26,46,0.36); backdrop-filter:blur(3px); display:none; align-items:center; justify-content:center; padding:16px; }
   .ste .ste-modal-backdrop.is-open { display:flex; }
@@ -249,32 +261,46 @@
           <h4 class="ste-sec-title">Rekening Pembayaran</h4>
           <p class="ste-sec-desc">Rekening manual yang ditampilkan kepada siswa saat instruksi pembayaran.</p>
         </div>
+        @if($proLocked)
+          <span class="ste-pro-badge"><x-hi name="lock" /> Fitur PRO</span>
+        @endif
       </div>
+      @if($proLocked)
+      <div class="ste-lock-box" id="billingLockBox">
+        <div class="ste-lock-fields">
+      @endif
       <div class="ste-grid2" style="margin-bottom:16px;">
         <div class="ste-field">
           <label class="ste-label">Nama Bank</label>
-          <input type="text" name="bank_name" value="{{ old('bank_name', App\Models\Setting::get('bank_name', 'BCA')) }}" required class="ste-input-line" placeholder="BCA">
+          <input type="text" name="bank_name" value="{{ old('bank_name', App\Models\Setting::get('bank_name', 'BCA')) }}" required class="ste-input-line" placeholder="BCA" @if($proLocked) disabled @endif>
           @error('bank_name')<p style="color:var(--red);font-size:12px;margin-top:4px;">{{ $message }}</p>@enderror
         </div>
         <div class="ste-field">
           <label class="ste-label">Nomor Rekening</label>
-          <input type="text" name="bank_account_number" id="bank_account_number" inputmode="numeric" pattern="\d{6,30}" value="{{ old('bank_account_number', App\Models\Setting::get('bank_account_number')) }}" required class="ste-input-line" placeholder="1234567890">
+          <input type="text" name="bank_account_number" id="bank_account_number" inputmode="numeric" pattern="\d{6,30}" value="{{ old('bank_account_number', App\Models\Setting::get('bank_account_number')) }}" required class="ste-input-line" placeholder="1234567890" @if($proLocked) disabled @endif>
           @error('bank_account_number')<p style="color:var(--red);font-size:12px;margin-top:4px;">{{ $message }}</p>@enderror
         </div>
       </div>
       <div class="ste-field" style="margin-bottom:16px;">
         <label class="ste-label">Atas Nama</label>
-        <input type="text" name="bank_account_name" value="{{ old('bank_account_name', App\Models\Setting::get('bank_account_name')) }}" required class="ste-input-line" placeholder="Yayasan Sekolahin">
+        <input type="text" name="bank_account_name" value="{{ old('bank_account_name', App\Models\Setting::get('bank_account_name')) }}" required class="ste-input-line" placeholder="Yayasan Sekolahin" @if($proLocked) disabled @endif>
         @error('bank_account_name')<p style="color:var(--red);font-size:12px;margin-top:4px;">{{ $message }}</p>@enderror
       </div>
       <div class="ste-field">
         <label class="ste-label">Catatan Pembayaran</label>
-        <textarea name="payment_note" rows="3" class="ste-input-box" placeholder="Transfer sesuai nominal tertera, konfirmasi via dashboard...">{{ old('payment_note', App\Models\Setting::get('payment_note')) }}</textarea>
+        <textarea name="payment_note" rows="3" class="ste-input-box" placeholder="Transfer sesuai nominal tertera, konfirmasi via dashboard..." @if($proLocked) disabled @endif>{{ old('payment_note', App\Models\Setting::get('payment_note')) }}</textarea>
         @error('payment_note')<p style="color:var(--red);font-size:12px;margin-top:4px;">{{ $message }}</p>@enderror
         <span class="ste-hint">Tampil di halaman instruksi pembayaran siswa.</span>
       </div>
+      @if($proLocked)
+        </div>
+        <div class="ste-lock-shade" role="button" tabindex="0" aria-label="Buka info fitur PRO" onclick="openSteProModal('Rekening pembayaran adalah fitur PRO. <b>Aktifkan lisensi</b> untuk mengubah nama bank, nomor rekening, atas nama, dan catatan pembayaran.')">
+          <span class="ste-lock-chip"><x-hi name="lock" /> Fitur <b>PRO</b> Terkunci — klik untuk info</span>
+        </div>
+      </div>
+      @endif
       <div class="ste-foot">
-        <button type="button" class="ste-btn coral btn-save-tab" data-save-msg="Simpan rekening pembayaran?"><x-hi name="save" /> Simpan Pembayaran</button>
+        <button type="button" class="ste-btn coral btn-save-tab {{ $proLocked ? 'btn-locked' : '' }}" data-save-msg="Simpan rekening pembayaran?" data-locked-msg="Rekening pembayaran adalah fitur PRO. Aktifkan lisensi untuk mengubahnya."><x-hi name="save" /> Simpan Pembayaran</button>
       </div>
     </div>
 
@@ -535,6 +561,23 @@
       </div>
     </div>
   </div>
+
+  {{-- PRO lock modal --}}
+  <div id="steProModal" class="ste-modal-backdrop" aria-hidden="true">
+    <div class="ste-modal" role="dialog" aria-modal="true">
+      <div class="ste-modal-body" style="display:flex; gap:13px; margin-bottom:16px;">
+        <div class="ste-pro-ic" style="flex:0 0 auto; width:42px; height:42px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:17px; background:var(--amber-soft); color:#b45309;"><x-hi name="lock" /></div>
+        <div>
+          <h3 style="margin:0 0 6px;">Fitur PRO Terkunci</h3>
+          <p id="steProMsg" style="margin:0; font-size:13px; color:var(--muted); line-height:1.5;"></p>
+        </div>
+      </div>
+      <div class="ste-modal-foot">
+        <button type="button" class="ste-btn ghost sm" onclick="closeSteProModal()">Tutup</button>
+        <a href="https://wa.me/" target="_blank" class="ste-btn amber sm" style="text-decoration:none;"><x-hi name="comment-01" /> Hubungi Admin</a>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -632,6 +675,34 @@
     });
     document.getElementById('steConfirmModal').addEventListener('click', function(e){ if(e.target===this) closeSteConfirm(); });
     document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ var m=document.getElementById('steConfirmModal'); if(m&&m.classList.contains('is-open')) closeSteConfirm(); }});
+    // PRO lock modal
+    window.openSteProModal = function(html){
+        document.getElementById('steProMsg').innerHTML = html;
+        var m = document.getElementById('steProModal');
+        m.classList.add('is-open'); m.setAttribute('aria-hidden','false');
+    };
+    window.closeSteProModal = function(){
+        var m = document.getElementById('steProModal');
+        m.classList.remove('is-open'); m.setAttribute('aria-hidden','true');
+    };
+    var steProModalEl = document.getElementById('steProModal');
+    if (steProModalEl) {
+        steProModalEl.addEventListener('click', function(e){ if(e.target===this) closeSteProModal(); });
+        document.addEventListener('keydown', function(e){ if(e.key==='Escape' && steProModalEl.classList.contains('is-open')) closeSteProModal(); });
+    }
+    var billingLockBox = document.getElementById('billingLockBox');
+    if (billingLockBox) {
+        billingLockBox.addEventListener('keydown', function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); billingLockBox.querySelector('.ste-lock-shade').click(); }});
+    }
+    // lock gating save button
+    document.querySelectorAll('.btn-save-tab.btn-locked').forEach(function(btn){
+        lockMsgCache[btn._n || 0] = btn.getAttribute('data-locked-msg') || 'Fitur ini memerlukan lisensi aktif.';
+        btn.addEventListener('click', function(e){
+            e.preventDefault();
+            var msg = btn.getAttribute('data-locked-msg') || 'Fitur ini memerlukan lisensi aktif.';
+            openSteProModal(msg);
+        });
+    });
     // per-tab save buttons
     document.querySelectorAll('.btn-save-tab').forEach(function(btn){
         btn.addEventListener('click', function(e){

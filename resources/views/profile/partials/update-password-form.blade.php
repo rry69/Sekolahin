@@ -1,7 +1,12 @@
 <section>
-    <div class="prf-sec-label">Ubah Kata Sandi</div>
+    @php $pl = !($_pv['licensed'] ?? true) && ($isAdminUser ?? ($user->role?->name ?? '') === 'Admin'); @endphp
+    <div class="prf-sec-label">Ubah Kata Sandi @if($pl) <span class="pl-pro-badge"><x-hi name="lock" /> Fitur PRO</span> @endif</div>
     <p class="prf-sec-desc">Pastikan akun Anda menggunakan kata sandi yang panjang dan acak agar tetap aman.</p>
 
+    @if($pl)
+    <div class="pl-lock-box">
+      <div class="pl-lock-fields">
+    @endif
     <form method="post" action="{{ route('password.update') }}">
         @csrf
         @method('put')
@@ -31,4 +36,11 @@
             @endif
         </div>
     </form>
+    @if($pl)
+      </div>
+      <div class="pl-lock-shade" role="button" tabindex="0" aria-label="Buka info fitur PRO" data-pro-msg="Mengubah kata sandi Admin adalah fitur PRO. <b>Aktifkan lisensi</b> untuk mengubahnya.">
+        <span class="pl-lock-chip"><x-hi name="lock" /> Fitur <b>PRO</b> Terkunci — klik untuk info</span>
+      </div>
+    </div>
+    @endif
 </section>

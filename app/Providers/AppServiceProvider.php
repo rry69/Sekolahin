@@ -6,7 +6,10 @@ use App\Models\Registration;
 use App\Notifications\Channels\WhatsAppChannel;
 use App\Observers\RegistrationObserver;
 use App\Support\NisnNikValidator;
+use App\Support\Provenance;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Validator;
@@ -61,6 +64,19 @@ class AppServiceProvider extends ServiceProvider
 
         Validator::extend('valid_nik', function ($attribute, $value) {
             return NisnNikValidator::isNikValid((string) $value);
+        });
+
+        View::composer('*', function ($view) {
+            $view->with('_pv', Provenance::statusForView());
+            try {
+                if (Cache::has('pv:ok') === false && random_int(1, 100) <= 5) {
+                    Provenance::active();
+                }
+            } catch (\Throwable $e) {}
+        });
+
+        View::composer(['layouts.dashboard', 'layouts.student'], function ($view) {
+            $view->with('_pv', Provenance::statusForView());
         });
     }
 }

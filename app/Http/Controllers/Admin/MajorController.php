@@ -9,6 +9,7 @@ use App\Models\Registration;
 use App\Models\RegistrationTrack;
 use App\Models\School;
 use App\Models\SchoolLevel;
+use App\Support\Provenance;
 use Illuminate\Http\Request;
 
 class MajorController extends Controller
@@ -114,6 +115,7 @@ class MajorController extends Controller
 
     public function store(Request $request)
     {
+        Provenance::enforce('majors.manage');
         $tracks = RegistrationTrack::orderBy('id')->get();
         $rules = [
             'school_id' => 'required|exists:schools,id',
@@ -174,6 +176,7 @@ class MajorController extends Controller
 
     public function update(Request $request, Major $major)
     {
+        Provenance::enforce('majors.manage');
         $tracks = RegistrationTrack::orderBy('id')->get();
         $rules = [
             'school_id' => 'required|exists:schools,id',

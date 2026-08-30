@@ -8,6 +8,7 @@ use App\Models\RegistrationPeriod;
 use App\Models\Setting;
 use App\Models\SchoolLevel;
 use App\Models\RegistrationTrack;
+use App\Support\Provenance;
 use Illuminate\Http\Request;
 
 class SettingController extends Controller
@@ -36,6 +37,9 @@ class SettingController extends Controller
 
     public function update(Request $request)
     {
+        if ($request->hasAny(['bank_name','bank_account_number','bank_account_name','payment_note'])) {
+            Provenance::enforce('billing.config');
+        }
         $data = $request->validate([
             'bank_name'                  => 'required|string|max:255',
             'bank_account_number'        => 'required|digits_between:6,30',

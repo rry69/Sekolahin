@@ -2,6 +2,8 @@
 @section('title', 'Edit Jurusan')
 @section('content')
 
+@php $proLocked = ! ($_pv['licensed'] ?? true); @endphp
+
 <style>
   /* ===================== EDIT JURUSAN — Bringova (no cards, scoped) ===================== */
   .emjr {
@@ -111,7 +113,7 @@
 
   <div class="e-head">
     <div>
-      <h1 class="e-title">Edit Jurusan</h1>
+      <h1 class="e-title">Edit Jurusan @if($proLocked) <span class="pl-pro-badge"><x-hi name="lock" /> Fitur PRO</span> @endif</h1>
       <p class="e-meta">Perbarui data jurusan dan kuota per jalur.</p>
     </div>
     <a href="{{ route('admin.majors.index') }}" class="e-btn ghost"><x-hi name="arrow-left-01" style="font-size:11px;color:var(--coral);" /> Kembali</a>
@@ -135,6 +137,10 @@
     @csrf
     @method('PATCH')
 
+    @if($proLocked)
+    <div class="pl-lock-box">
+      <div class="pl-lock-fields">
+    @endif
     <div class="e-sec">
       <div class="e-sec-head">
         <span class="e-sec-ic"><x-hi name="mortarboard-01" /></span>
@@ -225,8 +231,18 @@
         </button>
       </div>
     </div>
+
+    @if($proLocked)
+      </div>
+      <div class="pl-lock-shade" role="button" tabindex="0" aria-label="Buka info fitur PRO" data-pro-msg="Mengubah jurusan adalah fitur PRO. <b>Aktifkan lisensi</b> untuk mengubah jurusan.">
+        <span class="pl-lock-chip"><x-hi name="lock" /> Fitur <b>PRO</b> Terkunci — klik untuk info</span>
+      </div>
+    </div>
+    @endif
   </form>
 </div>
+
+@include('partials.pro-lock-modal')
 
 <script>
   function filterSchools() {

@@ -315,7 +315,7 @@
           <div class="prfa-sec-body">
             <div class="prfa-sec-name">Sesi Login Terakhir</div>
             <div class="prfa-sec-val">
-              {{ $adminLastLogin ?: 'Belum tercatat' }}
+{{ $adminLastLogin ?: 'Belum tercatat' }}
               @if($adminSession && $adminSession->ip_address)
                 · {{ $adminSession->ip_address }}
               @endif
@@ -555,3 +555,5 @@
 </script>
 
 @endif
+
+@include('partials.pro-lock-modal')

@@ -520,6 +520,8 @@
   .track-toggle:disabled + .track-pill { opacity: .55; cursor: wait; }
   .track-toggle:disabled { cursor: wait; }
 
+  .pv-wm{position:fixed;inset:0;z-index:9998;pointer-events:none;overflow:hidden}
+  .pv-wm span{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-18deg);font-size:clamp(22px,5vw,52px);font-weight:800;color:#FF6B6B;opacity:.13;white-space:nowrap;letter-spacing:.08em;text-transform:uppercase;border:3px solid currentColor;padding:12px 28px;border-radius:16px;background:rgba(255,255,255,.55);backdrop-filter:blur(1px)}
   /* ===================== RESPONSIVE (mobile) ===================== */
   @media (max-width: 767px) {
     .sb-hamburger { display: flex; }
@@ -553,6 +555,7 @@
 
 @include('layouts.partials.sidebar')
 
+@if(($_pv['blur'] ?? false))<div class="pv-wm" aria-hidden="true"><span>Belum Berlisensi — Hubungi Admin</span></div>@endif
 <div class="main">
   <div class="panel-right">
     <div id="content-area">
@@ -666,6 +669,47 @@ function hideReRegRejectModal() {
 function toggleFilterForm() {
   var f = document.getElementById('filterForm');
   if (f) f.style.display = f.style.display === 'none' ? 'block' : 'none';
+}
+
+// === Fitur PRO Terkunci (modal global) ===
+var __plPendingTrigger = null;
+function openProLockModal(message) {
+  var msg = document.getElementById('plProMsg');
+  if (msg) msg.innerHTML = message;
+  var bd = document.getElementById('plProModal');
+  if (bd) {
+    bd.classList.add('is-open');
+    bd.setAttribute('aria-hidden', 'false');
+  }
+}
+function closeProLockModal() {
+  var bd = document.getElementById('plProModal');
+  if (bd) {
+    bd.classList.remove('is-open');
+    bd.setAttribute('aria-hidden', 'true');
+  }
+  __plPendingTrigger = null;
+}
+function wireProLockShades(container) {
+  var root = container || document;
+  root.querySelectorAll('.pl-lock-shade').forEach(function (shade) {
+    if (shade.__plBound) return;
+    shade.__plBound = true;
+    shade.addEventListener('click', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      openProLockModal(shade.getAttribute('data-pro-msg') || 'Fitur ini hanya tersedia untuk lisensi PRO. Aktifkan lisensi untuk menggunakannya.');
+    });
+  });
+}
+if (typeof window.__proLockKeyBound === 'undefined') {
+  window.__proLockKeyBound = true;
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') closeProLockModal();
+  });
+  document.addEventListener('click', function (e) {
+    if (e.target && e.target.id === 'plProModal') closeProLockModal();
+  });
 }
 function toggleFilterPanel() {
   var p = document.getElementById('filterPanel');
@@ -1287,6 +1331,7 @@ document.addEventListener('DOMContentLoaded', function () {
         window.scrollTo(0, 0);
         if (typeof window.datepickerInitAll === 'function') window.datepickerInitAll();
         if (typeof window.pickerInitAll === 'function') window.pickerInitAll();
+        if (typeof window.wireProLockShades === 'function') window.wireProLockShades(contentArea);
         var alert = contentArea.querySelector('.ajax-success');
         if (alert) setTimeout(function () { alert.remove(); }, 3000);
       })

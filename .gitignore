@@ -61,5 +61,8 @@ yarn-error.log
 !/design-system/bringova.md
 /tests/Feature/XenditOnlinePaymentAfterHardeningTest.php
 
+.spmb-*.lic
+BEACON_SIGN_SEED
+/LISENSI.md
 # Sketch/mockup lokal
 sketches/

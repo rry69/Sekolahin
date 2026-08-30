@@ -6,6 +6,7 @@
 @php
     $oldLevelIds = old('school_level_ids', []);
     $oldLevelIds = is_array($oldLevelIds) ? $oldLevelIds : [];
+    $proLocked = ! ($_pv['licensed'] ?? true);
 @endphp
 
 <style>
@@ -44,7 +45,9 @@
 
 <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:18px;">
   <div>
-    <h1 class="page-title" style="margin-bottom:2px;">Tambah Sekolah</h1>
+    <h1 class="page-title" style="margin-bottom:2px;">Tambah Sekolah
+      @if($proLocked) <span class="pl-pro-badge"><x-hi name="lock" /> Fitur PRO</span> @endif
+    </h1>
     <p style="font-size:13px;color:var(--tx2);">Tambahkan profil sekolah baru yang ditampilkan pada form pendaftaran siswa.</p>
   </div>
   <a href="{{ route('admin.schools.index') }}" class="btn btn-outline">
@@ -65,6 +68,11 @@
 
 <form action="{{ route('admin.schools.store') }}" method="POST" enctype="multipart/form-data" id="schoolForm">
   @csrf
+
+  @if($proLocked)
+  <div class="pl-lock-box">
+    <div class="pl-lock-fields">
+  @endif
 
   {{-- ================== INFORMASI DASAR ================== --}}
   <div class="skl-card">
@@ -240,7 +248,17 @@
       <x-hi name="save" style="font-size:11px;" /> <span id="saveBtnText">Simpan Sekolah</span>
     </button>
   </div>
+
+  @if($proLocked)
+    </div>
+    <div class="pl-lock-shade" role="button" tabindex="0" aria-label="Buka info fitur PRO" data-pro-msg="Menambah sekolah adalah fitur PRO. <b>Aktifkan lisensi</b> untuk menambahkan sekolah baru.">
+      <span class="pl-lock-chip"><x-hi name="lock" /> Fitur <b>PRO</b> Terkunci — klik untuk info</span>
+    </div>
+  </div>
+  @endif
 </form>
+
+@include('partials.pro-lock-modal')
 
 <script>
 (function () {

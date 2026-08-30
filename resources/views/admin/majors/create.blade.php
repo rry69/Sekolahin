@@ -2,6 +2,8 @@
 @section('title', 'Tambah Jurusan')
 @section('content')
 
+@php $proLocked = ! ($_pv['licensed'] ?? true); @endphp
+
 <style>
   .mjr-card { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; }
   .mjr-card-head { padding: 18px 22px; border-bottom: 1px solid var(--hairline); }
@@ -34,7 +36,9 @@
 
 <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:18px;">
   <div>
-    <h1 class="page-title" style="margin-bottom:2px;">Tambah Jurusan</h1>
+    <h1 class="page-title" style="margin-bottom:2px;">Tambah Jurusan
+      @if($proLocked) <span class="pl-pro-badge"><x-hi name="lock" /> Fitur PRO</span> @endif
+    </h1>
     <p style="font-size:13px;color:var(--tx2);">Tambahkan jurusan baru beserta kuota per jalur.</p>
   </div>
   <a href="{{ route('admin.majors.index') }}" class="btn btn-outline"><x-hi name="arrow-left-01" style="font-size:10px;" /> Kembali</a>
@@ -53,6 +57,11 @@
 
 <form action="{{ route('admin.majors.store') }}" method="POST" id="majorForm">
   @csrf
+
+  @if($proLocked)
+  <div class="pl-lock-box">
+    <div class="pl-lock-fields">
+  @endif
   <div class="mjr-card">
     <div class="mjr-card-head">
       <h4 style="margin:0;font-size:15px;font-weight:600;color:var(--tx1);"><x-hi name="mortarboard-01" style="margin-right:6px;color:var(--accent);" /> Data Jurusan</h4>
@@ -146,7 +155,17 @@
       </div>
     </div>
   </div>
+
+  @if($proLocked)
+    </div>
+    <div class="pl-lock-shade" role="button" tabindex="0" aria-label="Buka info fitur PRO" data-pro-msg="Menambah jurusan adalah fitur PRO. <b>Aktifkan lisensi</b> untuk menambahkan jurusan baru.">
+      <span class="pl-lock-chip"><x-hi name="lock" /> Fitur <b>PRO</b> Terkunci — klik untuk info</span>
+    </div>
+  </div>
+  @endif
 </form>
+
+@include('partials.pro-lock-modal')
 
 <script>
   function filterSchools() {

@@ -136,6 +136,8 @@
   /* toast */
   #stToast { position: fixed; top: 24px; left: 50%; transform: translateX(-50%); background: var(--ink); color: #fff; padding: 12px 22px; border-radius: 12px; font-size: 13px; font-weight: 600; z-index: 999; box-shadow: 0 20px 40px rgba(0,0,0,.2); display: none; }
 
+  .pv-wm{position:fixed;inset:0;z-index:9998;pointer-events:none;overflow:hidden}
+  .pv-wm span{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-18deg);font-size:clamp(18px,4.5vw,42px);font-weight:800;color:#FF6B6B;opacity:.13;white-space:nowrap;letter-spacing:.08em;text-transform:uppercase;border:3px solid currentColor;padding:10px 22px;border-radius:14px;background:rgba(255,255,255,.55);backdrop-filter:blur(1px)}
   /* responsive */
   @media (max-width: 720px) {
     .st-top-in { padding: 0 14px; }
@@ -195,6 +197,7 @@
   </div>
 </header>
 
+@if(($_pv['blur'] ?? false))<div class="pv-wm" aria-hidden="true"><span>Belum Berlisensi — Hubungi Admin</span></div>@endif
 <main class="st-main">
   {{ $slot }}
 </main>

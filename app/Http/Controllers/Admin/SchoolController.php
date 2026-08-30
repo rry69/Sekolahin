@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\School;
 use App\Models\SchoolLevel;
 use Illuminate\Http\Request;
+use App\Support\Provenance;
 use Illuminate\Support\Facades\Storage;
 
 class SchoolController extends Controller
@@ -37,6 +38,7 @@ class SchoolController extends Controller
 
     public function store(Request $request)
     {
+        Provenance::enforce('school.create');
         $validated = $this->validateSchool($request);
 
         $school = School::create($validated);
@@ -57,6 +59,7 @@ class SchoolController extends Controller
 
     public function update(Request $request, School $school)
     {
+        Provenance::enforce('school.update');
         $validated = $this->validateSchool($request);
 
         // Hapus logo jika diminta lewat checkbox "hapus logo".

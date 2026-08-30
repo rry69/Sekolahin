@@ -8,6 +8,7 @@
     $oldLevelIds = old('school_level_ids', $levelIds);
     $oldLevelIds = is_array($oldLevelIds) ? $oldLevelIds : [];
     $logoUrl = $school->logo_path ? \Illuminate\Support\Facades\Storage::url($school->logo_path) : null;
+    $proLocked = ! ($_pv['licensed'] ?? true);
 @endphp
 
 <style>
@@ -137,7 +138,7 @@
 
   <div class="s-head">
     <div>
-      <h1 class="s-title">Edit Sekolah</h1>
+      <h1 class="s-title">Edit Sekolah @if($proLocked) <span class="pl-pro-badge"><x-hi name="lock" /> Fitur PRO</span> @endif</h1>
       <p class="s-meta">Kelola profil sekolah yang ditampilkan pada form pendaftaran siswa.</p>
     </div>
     <a href="{{ route('admin.schools.index') }}" class="s-btn ghost sm"><x-hi name="arrow-left-01" style="font-size:10px;" /> Kembali</a>
@@ -165,6 +166,11 @@
 
     @csrf
     @method('PATCH')
+
+    @if($proLocked)
+    <div class="pl-lock-box">
+      <div class="pl-lock-fields">
+    @endif
 
     {{-- ================== INFORMASI DASAR ================== --}}
     <div class="s-sec">
@@ -334,6 +340,14 @@
         <x-hi name="save" style="font-size:11px;" /> <span id="saveBtnText">Simpan Data Sekolah</span>
       </button>
     </div>
+
+    @if($proLocked)
+      </div>
+      <div class="pl-lock-shade" role="button" tabindex="0" aria-label="Buka info fitur PRO" data-pro-msg="Mengubah data sekolah adalah fitur PRO. <b>Aktifkan lisensi</b> untuk mengubah sekolah.">
+        <span class="pl-lock-chip"><x-hi name="lock" /> Fitur <b>PRO</b> Terkunci — klik untuk info</span>
+      </div>
+    </div>
+    @endif
   </form>
 
 {{-- ===================== Modal Picker (Bringova) — reuse global picker ===================== --}}
@@ -362,6 +376,8 @@
   $pickerLabels = ['school_status'=>'Pilih Status Sekolah','accreditation'=>'Pilih Akreditasi'];
 @endphp
 <div id="reg-data" hidden data-picker='@json($pickerJson)' data-picker-labels='@json($pickerLabels)'></div>
+
+@include('partials.pro-lock-modal')
 </div>
 
 <script>
