@@ -21,6 +21,31 @@ input[type='date'].native-date-hidden {
 .dp-mono { font-family: 'JetBrains Mono', monospace; }
 .dp-picker { font-family: 'Inter', sans-serif; }
 
+/* ===================== DATE PICKER — Bringova (coral, not eggplore purple) =====================
+   Scoped ke popup .dp-picker (dipakai komponen Blade + template JS-inject datepicker.js).
+   Konversi semua eggplore primary (ungu) ke coral #FF6B6B untuk admin & siswa. */
+.dp-picker .bg-eggplore-primary,
+.dp-picker [class*="bg-eggplore-primary"] { background-color: #FF6B6B !important; }
+.dp-picker .bg-eggplore-primary-50,
+.dp-picker [class*="bg-eggplore-primary-50"] { background-color: #FFE5E3 !important; }
+.dp-picker .hover\:bg-eggplore-primary-50:hover,
+.dp-picker [class*="hover:bg-eggplore-primary-50"]:hover { background-color: #FFE5E3 !important; }
+.dp-picker .hover\:bg-eggplore-primary-100:hover { background-color: #FFD7D4 !important; }
+.dp-picker .text-eggplore-primary-600,
+.dp-picker .text-eggplore-primary-500,
+.dp-picker .hover\:text-eggplore-primary-600:hover,
+.dp-picker [class*="text-eggplore-primary-6"],
+.dp-picker [class*="text-eggplore-primary-5"] { color: #FF6B6B !important; }
+.dp-picker .text-eggplore-primary-700,
+.dp-picker [class*="text-eggplore-primary-7"] { color: #b45309 !important; }
+.dp-picker .ring-eggplore-primary-400,
+.dp-picker .bg-eggplore-primary-50,
+.dp-picker .hover\:bg-eggplore-primary-50 { background-color: #FFE5E3; }
+.dp-picker [class*="ring-eggplore-primary-4"] { --tw-ring-color: rgba(255,107,107,0.4) !important; }
+.dp-picker [class*="ring-eggplore-primary-2"] { --tw-ring-color: rgba(255,180,177,0.5) !important; }
+.dp-picker [class*="border-eggplore-primary-4"],
+.dp-picker [class*="border-eggplore-primary-5"] { border-color: #FF6B6B !important; }
+
 /* ===================== ICON TREATMENT — HugeIcons (no bg, solid color, 1.4–1.6x) =====================
    Berlaku global (semua layout: student, app, guest). Konsisten dengan dashboard admin.
    Aturan:
