@@ -45,8 +45,8 @@
   }
   .dash .d-tab:hover { color: var(--ink); }
   .dash .d-tab.active { color: var(--coral); border-bottom-color: var(--coral); }
-  .dash .d-tab .badge { background: var(--coral-soft); color: var(--coral); border-radius: 20px; padding: 1px 8px; font-size: 10.5px; font-weight: 700; }
-  .dash .d-tab.active .badge { background: var(--coral); color: #fff; }
+  .dash .d-tab .badge { background: transparent; border: 1px solid currentColor; color: var(--coral); border-radius: 20px; padding: 1px 8px; font-size: 10.5px; font-weight: 700; }
+  .dash .d-tab.active .badge { background: transparent; border: 1px solid currentColor; color: #fff; }
 
   /* ---------- summary stats (no box, icon badge only) ---------- */
   .dash .d-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 8px; }
@@ -102,11 +102,11 @@
 
   /* status pills (recent) */
   .dash .d-pill { flex: 0 0 auto; font-size: 11px; font-weight: 700; padding: 5px 11px; border-radius: 20px; white-space: nowrap; }
-  .dash .d-pill.p-pending  { background: var(--amber-soft); color: var(--amber); }
-  .dash .d-pill.p-verified { background: var(--blue-soft);   color: var(--blue); }
-  .dash .d-pill.p-accepted { background: var(--green-soft);  color: var(--green); }
-  .dash .d-pill.p-rejected { background: var(--red-soft);    color: var(--red); }
-  .dash .d-pill.p-canceled { background: #eef0f4;            color: var(--muted); }
+  .dash .d-pill.p-pending  { background: transparent; border: 1px solid currentColor; color: var(--amber); }
+  .dash .d-pill.p-verified { background: transparent; border: 1px solid currentColor;   color: var(--blue); }
+  .dash .d-pill.p-accepted { background: transparent; border: 1px solid currentColor;  color: var(--green); }
+  .dash .d-pill.p-rejected { background: transparent; border: 1px solid currentColor;    color: var(--red); }
+  .dash .d-pill.p-canceled { background: transparent; border: 1px solid currentColor;            color: var(--muted); }
 
   .dash .d-empty { text-align: center; padding: 30px 16px; color: var(--muted); font-size: 13px; }
   .dash .d-link { font-size: 13px; font-weight: 600; color: var(--coral); text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
@@ -153,42 +153,42 @@
 
   <div class="d-stats">
     <a class="d-stat t-coral" href="{{ route('admin.registrations.index') }}">
-      <span class="d-ic"><i class="fa-regular fa-file-alt"></i></span>
+      <span class="d-ic"><x-hi name="file-01" /></span>
       <div class="d-body">
         <div class="d-label">Total Pendaftaran</div>
         <div class="d-value">{{ $stats['total'] }}</div>
       </div>
     </a>
     <a class="d-stat t-amber" href="{{ route('admin.registrations.index', ['status' => 'pending']) }}">
-      <span class="d-ic"><i class="fa-regular fa-clock"></i></span>
+      <span class="d-ic"><x-hi name="clock-01" /></span>
       <div class="d-body">
         <div class="d-label">Menunggu Verifikasi</div>
         <div class="d-value">{{ $stats['pending'] }}</div>
       </div>
     </a>
     <a class="d-stat t-green" href="{{ route('admin.registrations.index', ['status' => 'accepted']) }}">
-      <span class="d-ic"><i class="fa-solid fa-check"></i></span>
+      <span class="d-ic"><x-hi name="checkmark" /></span>
       <div class="d-body">
         <div class="d-label">Diterima</div>
         <div class="d-value">{{ $stats['accepted'] }}</div>
       </div>
     </a>
     <a class="d-stat t-blue" href="{{ route('admin.payments.index', ['status' => 'verified']) }}">
-      <span class="d-ic"><i class="fa-solid fa-money-bill"></i></span>
+      <span class="d-ic"><x-hi name="money-01" /></span>
       <div class="d-body">
         <div class="d-label">Pembayaran Lunas</div>
         <div class="d-value">{{ $stats['payment_paid'] }}</div>
       </div>
     </a>
     <a class="d-stat t-purple" href="{{ route('admin.registrations.index', ['status' => 're_registration_complete']) }}">
-      <span class="d-ic"><i class="fa-solid fa-user-check"></i></span>
+      <span class="d-ic"><x-hi name="user-check-01" /></span>
       <div class="d-body">
         <div class="d-label">Daftar Ulang</div>
         <div class="d-value">{{ $stats['registered'] }}</div>
       </div>
     </a>
     <a class="d-stat t-red" href="{{ route('admin.registrations.index', ['deadline' => 1]) }}">
-      <span class="d-ic"><i class="fa-solid fa-triangle-exclamation"></i></span>
+      <span class="d-ic"><x-hi name="alert-02" /></span>
       <div class="d-body">
         <div class="d-label">Deadline</div>
         <div class="d-value">{{ $deadlineTotal }}</div>
@@ -200,11 +200,11 @@
   @if ($expiredRegistrations->isNotEmpty() || $nearDeadlineRegistrations->isNotEmpty() || $upcomingDeadlineRegistrations->isNotEmpty())
     <div class="d-sec">
       <div class="d-sec-head">
-        <div class="d-sec-title"><i class="fa-solid fa-bell"></i> Notifikasi Deadline</div>
+        <div class="d-sec-title"><x-hi name="notification-01" /> Notifikasi Deadline</div>
       </div>
       @foreach ($nearDeadlineRegistrations as $reg)
         <div class="d-row warning">
-          <span class="d-row-ic"><i class="fa-solid fa-clock"></i></span>
+          <span class="d-row-ic"><x-hi name="clock-01" /></span>
           <div class="d-row-info">
             <div class="d-row-name">{{ $reg->applicant->full_name ?? 'N/A' }} <span class="num">{{ $reg->registration_number }}</span></div>
             <div class="d-row-meta">Sisa {{ $reg->getDeadlineLabel() }} &middot; batas {{ $reg->deadline_at->format('d M Y H:i') }}</div>
@@ -215,7 +215,7 @@
       @endforeach
       @foreach ($expiredRegistrations as $reg)
         <div class="d-row danger">
-          <span class="d-row-ic"><i class="fa-solid fa-triangle-exclamation"></i></span>
+          <span class="d-row-ic"><x-hi name="alert-02" /></span>
           <div class="d-row-info">
             <div class="d-row-name">{{ $reg->applicant->full_name ?? 'N/A' }} <span class="num">{{ $reg->registration_number }}</span></div>
             <div class="d-row-meta">Menunggu pembatalan otomatis &middot; batas {{ $reg->deadline_at->format('d M Y H:i') }}</div>
@@ -226,7 +226,7 @@
       @endforeach
       @foreach ($upcomingDeadlineRegistrations as $reg)
         <div class="d-row upcoming">
-          <span class="d-row-ic"><i class="fa-regular fa-calendar"></i></span>
+          <span class="d-row-ic"><x-hi name="calendar-01" /></span>
           <div class="d-row-info">
             <div class="d-row-name">{{ $reg->applicant->full_name ?? 'N/A' }} <span class="num">{{ $reg->registration_number }}</span></div>
             <div class="d-row-meta">Batas {{ $reg->deadline_at->format('d M Y H:i') }} &middot; sisa {{ $reg->getDeadlineLabel() }}</div>
@@ -240,7 +240,7 @@
 
   <div class="d-sec">
     <div class="d-sec-head">
-      <div class="d-sec-title"><i class="fa-solid fa-qrcode"></i> Verifikasi Kode Daftar Ulang (Offline)</div>
+      <div class="d-sec-title"><x-hi name="qr-code" /> Verifikasi Kode Daftar Ulang (Offline)</div>
     </div>
     @if (session('success'))
       <div class="alert alert-success" style="margin-bottom:12px;">{{ session('success') }}</div>
@@ -259,14 +259,14 @@
         <input id="verification_code" name="verification_code" type="text" required maxlength="20" placeholder="Mis. K7QZ2LMX" value="{{ old('verification_code') }}" class="d-verify-input">
         @error('verification_code')<div style="font-size:12px;color:var(--red);margin-top:5px;">{{ $message }}</div>@enderror
       </div>
-      <button type="submit" class="d-btn-coral"><i class="fa-solid fa-shield-halved"></i> Verifikasi</button>
+      <button type="submit" class="d-btn-coral"><x-hi name="shield-01" /> Verifikasi</button>
     </form>
   </div>
 
   <div class="d-sec">
     <div class="d-sec-head">
-      <div class="d-sec-title"><i class="fa-solid fa-file-lines"></i> Pendaftaran Terbaru</div>
-      <a href="{{ route('admin.registrations.index') }}" class="d-link">Lihat Semua <i class="fa-solid fa-chevron-right" style="font-size:10px"></i></a>
+      <div class="d-sec-title"><x-hi name="file-01" /> Pendaftaran Terbaru</div>
+      <a href="{{ route('admin.registrations.index') }}" class="d-link">Lihat Semua <x-hi name="arrow-right-01" style="font-size:10px" /></a>
     </div>
 
     @if ($recentRegistrations->isEmpty())
@@ -274,7 +274,7 @@
     @else
       @foreach ($recentRegistrations as $reg)
       <div class="d-row">
-        <span class="d-row-ic" style="background:var(--coral-soft);color:var(--coral);"><i class="fa-regular fa-file-lines"></i></span>
+        <span class="d-row-ic" style="background:var(--coral-soft);color:var(--coral);"><x-hi name="file-01" /></span>
         <div class="d-row-info">
           <div class="d-row-name">{{ $reg->applicant->full_name ?? 'N/A' }}</div>
           <div class="d-row-meta">{{ $reg->registration_number }}<span>&middot;</span>{{ $reg->registrationPeriod->schoolLevel->name ?? '-' }}<span>&middot;</span>{{ $reg->created_at->format('d M Y') }}</div>

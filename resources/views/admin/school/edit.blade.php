@@ -140,19 +140,19 @@
       <h1 class="s-title">Edit Sekolah</h1>
       <p class="s-meta">Kelola profil sekolah yang ditampilkan pada form pendaftaran siswa.</p>
     </div>
-    <a href="{{ route('admin.schools.index') }}" class="s-btn ghost sm"><i class="fa-solid fa-arrow-left" style="font-size:10px;"></i> Kembali</a>
+    <a href="{{ route('admin.schools.index') }}" class="s-btn ghost sm"><x-hi name="arrow-left-01" style="font-size:10px;" /> Kembali</a>
   </div>
 
   @if (session('success'))
-    <div class="s-alert success"><i class="fa-solid fa-circle-check"></i><span>{{ session('success') }}</span></div>
+    <div class="s-alert success"><x-hi name="checkmark-circle-02" /><span>{{ session('success') }}</span></div>
   @endif
   @if (session('error'))
-    <div class="s-alert error"><i class="fa-solid fa-circle-exclamation"></i><span>{{ session('error') }}</span></div>
+    <div class="s-alert error"><x-hi name="alert-02" /><span>{{ session('error') }}</span></div>
   @endif
 
   @if ($errors->any())
     <div class="s-alert error" style="flex-direction:column;align-items:flex-start;">
-      <span style="display:flex;gap:8px;align-items:center;"><i class="fa-solid fa-triangle-exclamation"></i> <strong>Periksa kembali isian Anda:</strong></span>
+      <span style="display:flex;gap:8px;align-items:center;"><x-hi name="alert-02" /> <strong>Periksa kembali isian Anda:</strong></span>
       <ul>
         @foreach ($errors->all() as $error)
           <li>{{ $error }}</li>
@@ -168,7 +168,7 @@
 
     {{-- ================== INFORMASI DASAR ================== --}}
     <div class="s-sec">
-      <div class="s-sec-title"><i class="fa-solid fa-building-columns"></i> Informasi Dasar</div>
+      <div class="s-sec-title"><x-hi name="bank" /> Informasi Dasar</div>
       <p class="s-sec-desc">Identitas utama sekolah.</p>
       <div class="s-grid">
         <div class="s-field">
@@ -186,8 +186,8 @@
           <label>Status Sekolah</label>
           <button type="button" class="r-pick" data-picker="school_status" aria-haspopup="listbox" aria-expanded="false">
             <span class="pick-label is-placeholder">-- Pilih Status --</span>
-            <span class="pick-clear" data-clear="school_status" role="button" tabindex="0" aria-label="Bersihkan"><i class="fa-solid fa-xmark"></i></span>
-            <i class="fa-solid fa-chevron-down pick-caret"></i>
+            <span class="pick-clear" data-clear="school_status" role="button" tabindex="0" aria-label="Bersihkan"><x-hi name="cancel-01" /></span>
+            <x-hi name="arrow-down-01" />
           </button>
           <input type="hidden" name="school_status" data-picker-input="school_status" value="{{ old('school_status', $school->school_status) }}">
           @error('school_status')<p class="s-err">{{ $message }}</p>@enderror
@@ -196,8 +196,8 @@
           <label>Akreditasi</label>
           <button type="button" class="r-pick" data-picker="accreditation" aria-haspopup="listbox" aria-expanded="false">
             <span class="pick-label is-placeholder">-- Pilih Akreditasi --</span>
-            <span class="pick-clear" data-clear="accreditation" role="button" tabindex="0" aria-label="Bersihkan"><i class="fa-solid fa-xmark"></i></span>
-            <i class="fa-solid fa-chevron-down pick-caret"></i>
+            <span class="pick-clear" data-clear="accreditation" role="button" tabindex="0" aria-label="Bersihkan"><x-hi name="cancel-01" /></span>
+            <x-hi name="arrow-down-01" />
           </button>
           <input type="hidden" name="accreditation" data-picker-input="accreditation" value="{{ old('accreditation', $school->accreditation) }}">
           @error('accreditation')<p class="s-err">{{ $message }}</p>@enderror
@@ -212,7 +212,7 @@
 
     {{-- ================== KONTAK ================== --}}
     <div class="s-sec">
-      <div class="s-sec-title"><i class="fa-solid fa-phone"></i> Kontak</div>
+      <div class="s-sec-title"><x-hi name="call" /> Kontak</div>
       <p class="s-sec-desc">Informasi kontak yang dapat dihubungi.</p>
       <div class="s-grid">
         <div class="s-field">
@@ -241,7 +241,7 @@
 
     {{-- ================== ALAMAT ================== --}}
     <div class="s-sec">
-      <div class="s-sec-title"><i class="fa-solid fa-location-dot"></i> Alamat</div>
+      <div class="s-sec-title"><x-hi name="location-01" /> Alamat</div>
       <p class="s-sec-desc">Alamat lengkap sekolah.</p>
       <div class="s-grid">
         <div class="s-field full">
@@ -275,7 +275,7 @@
 
     {{-- ================== BRANDING ================== --}}
     <div class="s-sec">
-      <div class="s-sec-title"><i class="fa-solid fa-palette"></i> Branding</div>
+      <div class="s-sec-title"><x-hi name="colors" /> Branding</div>
       <p class="s-sec-desc">Logo dan deskripsi singkat sekolah.</p>
       <div class="s-grid">
         <div class="s-field full">
@@ -290,7 +290,7 @@
             </div>
             <div class="s-logo-actions">
               <label class="s-btn ghost sm" style="cursor:pointer;">
-                <i class="fa-solid fa-upload" style="font-size:10px;"></i> Pilih File
+                <x-hi name="upload-01" style="font-size:10px;" /> Pilih File
                 <input type="file" name="logo" id="logoInput" accept="image/jpeg,image/png" style="display:none;">
               </label>
               <p class="s-hint" style="margin:0;">JPG/PNG, maksimal 2MB.</p>
@@ -315,7 +315,7 @@
 
     {{-- ================== JENJANG YANG DILAYANI ================== --}}
     <div class="s-sec">
-      <div class="s-sec-title"><i class="fa-solid fa-graduation-cap"></i> Jenjang yang Dilayani</div>
+      <div class="s-sec-title"><x-hi name="mortarboard-01" /> Jenjang yang Dilayani</div>
       <p class="s-sec-desc">Centang jenjang pendidikan yang menerima pendaftaran di sekolah ini.</p>
       <div style="display:flex;flex-wrap:wrap;gap:10px;">
         @foreach ($levels as $level)
@@ -331,7 +331,7 @@
     <div class="s-submit-row">
       <a href="{{ route('admin.schools.index') }}" class="s-btn ghost">Batal</a>
       <button type="submit" class="s-btn coral" id="saveBtn">
-        <i class="fa-solid fa-floppy-disk" style="font-size:11px;"></i> <span id="saveBtnText">Simpan Data Sekolah</span>
+        <x-hi name="save" style="font-size:11px;" /> <span id="saveBtnText">Simpan Data Sekolah</span>
       </button>
     </div>
   </form>
@@ -341,15 +341,15 @@
   <div class="picker-panel" role="dialog" aria-modal="true" aria-labelledby="pickerTitle">
     <div class="picker-head">
       <div class="picker-title" id="pickerTitle">Pilih item</div>
-      <button type="button" class="picker-close" onclick="closePicker()" aria-label="Tutup"><i class="fa-solid fa-xmark"></i></button>
+      <button type="button" class="picker-close" onclick="closePicker()" aria-label="Tutup"><x-hi name="cancel-01" /></button>
     </div>
     <div class="picker-search">
-      <i class="fa-solid fa-magnifying-glass"></i>
+      <x-hi name="search-01" />
       <input id="pickerSearch" type="search" placeholder="Cari…" autocomplete="off">
     </div>
     <div class="picker-list" id="pickerList" role="listbox"></div>
     <div class="picker-foot">
-      <button type="button" class="picker-clear-all" onclick="clearCurrentPicker()"><i class="fa-solid fa-eraser"></i> Bersihkan</button>
+      <button type="button" class="picker-clear-all" onclick="clearCurrentPicker()"><x-hi name="eraser-01" /> Bersihkan</button>
       <button type="button" class="picker-done" onclick="closePicker()">Selesai</button>
     </div>
   </div>

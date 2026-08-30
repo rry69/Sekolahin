@@ -48,7 +48,7 @@
     <p style="font-size:13px;color:var(--tx2);">Tambahkan profil sekolah baru yang ditampilkan pada form pendaftaran siswa.</p>
   </div>
   <a href="{{ route('admin.schools.index') }}" class="btn btn-outline">
-    <i class="fa-solid fa-arrow-left" style="font-size:10px;"></i> Kembali
+    <x-hi name="arrow-left-01" style="font-size:10px;" /> Kembali
   </a>
 </div>
 
@@ -68,7 +68,7 @@
 
   {{-- ================== INFORMASI DASAR ================== --}}
   <div class="skl-card">
-    <h4 class="skl-card-title"><i class="fa-solid fa-building-columns"></i> Informasi Dasar</h4>
+    <h4 class="skl-card-title"><x-hi name="bank" /> Informasi Dasar</h4>
     <p class="skl-card-desc">Identitas utama sekolah.</p>
 
     <div class="skl-grid">
@@ -116,7 +116,7 @@
 
   {{-- ================== KONTAK ================== --}}
   <div class="skl-card">
-    <h4 class="skl-card-title"><i class="fa-solid fa-phone"></i> Kontak</h4>
+    <h4 class="skl-card-title"><x-hi name="call" /> Kontak</h4>
     <p class="skl-card-desc">Informasi kontak yang dapat dihubungi.</p>
 
     <div class="skl-grid">
@@ -149,7 +149,7 @@
 
   {{-- ================== ALAMAT ================== --}}
   <div class="skl-card">
-    <h4 class="skl-card-title"><i class="fa-solid fa-location-dot"></i> Alamat</h4>
+    <h4 class="skl-card-title"><x-hi name="location-01" /> Alamat</h4>
     <p class="skl-card-desc">Alamat lengkap sekolah.</p>
 
     <div class="skl-grid">
@@ -188,7 +188,7 @@
 
   {{-- ================== BRANDING ================== --}}
   <div class="skl-card">
-    <h4 class="skl-card-title"><i class="fa-solid fa-palette"></i> Branding</h4>
+    <h4 class="skl-card-title"><x-hi name="colors" /> Branding</h4>
     <p class="skl-card-desc">Logo dan deskripsi singkat sekolah.</p>
 
     <div class="skl-grid">
@@ -198,7 +198,7 @@
           <div class="skl-logo-preview" id="logoPreview"><span class="ph">Belum ada logo</span></div>
           <div class="skl-logo-actions">
             <label class="btn btn-outline" style="cursor:pointer;">
-              <i class="fa-solid fa-upload" style="font-size:10px;"></i> Pilih File
+              <x-hi name="upload-01" style="font-size:10px;" /> Pilih File
               <input type="file" name="logo" id="logoInput" accept="image/jpeg,image/png" style="display:none;">
             </label>
             <p class="skl-hint" style="margin:0;">JPG/PNG, maksimal 2MB.</p>
@@ -219,7 +219,7 @@
 
   {{-- ================== JENJANG YANG DILAYANI ================== --}}
   <div class="skl-card">
-    <h4 class="skl-card-title"><i class="fa-solid fa-graduation-cap"></i> Jenjang yang Dilayani <span class="req">*</span></h4>
+    <h4 class="skl-card-title"><x-hi name="mortarboard-01" /> Jenjang yang Dilayani <span class="req">*</span></h4>
     <p class="skl-card-desc">Centang jenjang pendidikan yang menerima pendaftaran di sekolah ini.</p>
 
     <div style="display:flex;flex-wrap:wrap;gap:10px;">
@@ -237,7 +237,7 @@
   <div class="skl-submit-row">
     <a href="{{ route('admin.schools.index') }}" class="btn btn-outline">Batal</a>
     <button type="submit" class="btn btn-primary" id="saveBtn">
-      <i class="fa-solid fa-floppy-disk" style="font-size:11px;"></i> <span id="saveBtnText">Simpan Sekolah</span>
+      <x-hi name="save" style="font-size:11px;" /> <span id="saveBtnText">Simpan Sekolah</span>
     </button>
   </div>
 </form>

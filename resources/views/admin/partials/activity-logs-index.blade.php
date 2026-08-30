@@ -74,11 +74,11 @@
   .alg .alg-row-head { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
   .alg .alg-time { font-size:12px; color:var(--muted); }
   .alg .alg-pill { display:inline-flex; align-items:center; gap:5px; padding:3px 10px; border-radius:20px; font-size:11.5px; font-weight:700; }
-  .alg .alg-pill.green { background:var(--green-soft); color:var(--green); }
-  .alg .alg-pill.red { background:var(--red-soft); color:var(--red); }
-  .alg .alg-pill.amber { background:var(--amber-soft); color:#b45309; }
-  .alg .alg-pill.blue { background:var(--blue-soft); color:var(--blue); }
-  .alg .alg-pill.gray { background:var(--gray-soft); color:var(--gray); }
+  .alg .alg-pill.green { background: transparent; border: 1px solid currentColor; color:var(--green); }
+  .alg .alg-pill.red { background: transparent; border: 1px solid currentColor; color:var(--red); }
+  .alg .alg-pill.amber { background: transparent; border: 1px solid currentColor; color:#b45309; }
+  .alg .alg-pill.blue { background: transparent; border: 1px solid currentColor; color:var(--blue); }
+  .alg .alg-pill.gray { background: transparent; border: 1px solid currentColor; color:var(--gray); }
   .alg .alg-desc { font-size:13px; color:var(--ink); margin-top:4px; }
   .alg .alg-sub { font-size:11.5px; color:var(--muted); margin-top:3px; display:flex; gap:6px; flex-wrap:wrap; }
   .alg .alg-sub .dot { color:#d3d6de; }
@@ -99,23 +99,23 @@
   </div>
   <div class="alg-head">
     <div>
-      <h1 class="alg-title"><i class="fa-solid fa-clock-rotate-left" style="color:var(--coral);margin-right:8px;"></i>Log Aktivitas</h1>
+      <h1 class="alg-title"><x-hi name="work-history" style="color:var(--coral);margin-right:8px;" />Log Aktivitas</h1>
       <p class="alg-meta">Catat semua aksi penting: upload dokumen, pembayaran, dan perubahan status beserta waktu & IP.</p>
     </div>
     <div class="alg-head-actions">
       <span class="alg-count">Menampilkan <strong>{{ $filtered }}</strong> dari <strong>{{ $total }}</strong> entri</span>
-      <a href="{{ route('admin.activity-logs.export.csv', request()->query()) }}" class="alg-btn ghost sm"><i class="fa-solid fa-file-csv"></i> CSV</a>
-      <a href="{{ route('admin.activity-logs.export.xlsx', request()->query()) }}" class="alg-btn ghost sm"><i class="fa-solid fa-file-excel"></i> XLSX</a>
+      <a href="{{ route('admin.activity-logs.export.csv', request()->query()) }}" class="alg-btn ghost sm"><x-hi name="csv-01" /> CSV</a>
+      <a href="{{ route('admin.activity-logs.export.xlsx', request()->query()) }}" class="alg-btn ghost sm"><x-hi name="xls-01" /> XLSX</a>
     </div>
   </div>
 
   <form id="filterForm" method="GET" action="{{ route('admin.activity-logs.index') }}">
     <div class="alg-toolbar">
       <div class="alg-search">
-        <i class="fa-solid fa-magnifying-glass"></i>
+        <x-hi name="search-01" />
         <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari deskripsi / aksi / IP..." autocomplete="off">
       </div>
-      <button type="button" class="alg-fbtn" onclick="toggleFilterPanel()"><i class="fa-solid fa-filter" style="font-size:10px"></i> Filter</button>
+      <button type="button" class="alg-fbtn" onclick="toggleFilterPanel()"><x-hi name="filter" style="font-size:10px" /> Filter</button>
       <button type="submit" class="alg-gobtn">Cari</button>
     </div>
     <div id="filterPanel" class="alg-filters" style="display:{{ request('action') || request('user_id') || request('date_from') || request('date_to') || request('per_page') != 30 && request('per_page') ? 'flex' : 'none' }};">
@@ -123,7 +123,7 @@
         <label>Aksi</label>
         <button type="button" class="r-pick" data-picker="alg_action" aria-haspopup="listbox">
           <span class="pick-label {{ request('action') ? '' : 'is-placeholder' }}">{{ request('action') ? \App\Models\ActivityLog::make(['action' => request('action')])->label() : 'Semua aksi' }}</span>
-          <span class="pick-clear" data-clear="alg_action" role="button" tabindex="0"><i class="fa-solid fa-xmark"></i></span>
+          <span class="pick-clear" data-clear="alg_action" role="button" tabindex="0"><x-hi name="cancel-01" /></span>
         </button>
         <input type="hidden" name="action" data-picker-input="alg_action" value="{{ request('action') }}">
       </div>
@@ -131,7 +131,7 @@
         <label>User</label>
         <button type="button" class="r-pick" data-picker="alg_user" aria-haspopup="listbox">
           <span class="pick-label {{ request('user_id') ? '' : 'is-placeholder' }}">{{ request('user_id') ? ($users->firstWhere('id', (int)request('user_id'))->name ?? 'User') : 'Semua user' }}</span>
-          <span class="pick-clear" data-clear="alg_user" role="button" tabindex="0"><i class="fa-solid fa-xmark"></i></span>
+          <span class="pick-clear" data-clear="alg_user" role="button" tabindex="0"><x-hi name="cancel-01" /></span>
         </button>
         <input type="hidden" name="user_id" data-picker-input="alg_user" value="{{ request('user_id') }}">
       </div>
@@ -147,7 +147,7 @@
         <label>Per Halaman</label>
         <button type="button" class="r-pick" data-picker="alg_perpage" aria-haspopup="listbox">
           <span class="pick-label">{{ request('per_page', 30) }}</span>
-          <span class="pick-clear" data-clear="alg_perpage" role="button" tabindex="0" style="display:none;"><i class="fa-solid fa-xmark"></i></span>
+          <span class="pick-clear" data-clear="alg_perpage" role="button" tabindex="0" style="display:none;"><x-hi name="cancel-01" /></span>
         </button>
         <input type="hidden" name="per_page" data-picker-input="alg_perpage" value="{{ request('per_page', 30) }}">
       </div>
@@ -158,7 +158,7 @@
 
   @if($logs->isEmpty())
     <div class="alg-empty">
-      <i class="fa-solid fa-clipboard-list"></i>
+      <x-hi name="clipboard" />
       <div style="font-weight:600;color:var(--ink);margin-bottom:4px;">{{ request('search') || request('action') || request('user_id') || request('date_from') || request('date_to') ? 'Tidak ada hasil' : 'Belum ada log aktivitas' }}</div>
       <div style="font-size:12px;">{{ request('search') || request('action') || request('user_id') || request('date_from') || request('date_to') ? 'Coba ubah kata kunci atau hapus filter.' : 'Aksi penting akan tercatat otomatis di sini.' }}</div>
       @if(request('search') || request('action') || request('user_id') || request('date_from') || request('date_to'))
@@ -169,10 +169,10 @@
     <div class="alg-list">
       @foreach($logs as $log)
         <div class="alg-row" @if($log->isHighlight()) style="background:rgba(255,255,255,0.45);border-radius:12px;" @endif>
-          <span class="alg-ic {{ $log->badgeClass() === 'status-rejected' ? 'hl-danger' : ($log->badgeClass() === 'status-accepted' ? 'hl-success' : '') }}"><i class="fa-solid {{ $log->icon() }}"></i></span>
+          <span class="alg-ic {{ $log->badgeClass() === 'status-rejected' ? 'hl-danger' : ($log->badgeClass() === 'status-accepted' ? 'hl-success' : '') }}"><x-hi :name="$log->icon()" /></span>
           <div class="alg-body">
             <div class="alg-row-head">
-              <span class="alg-pill {{ $log->badgeClass() === 'status-rejected' ? 'red' : ($log->badgeClass() === 'status-accepted' ? 'green' : ($log->badgeClass() === 'status-pending' ? 'amber' : 'gray')) }}"><i class="fa-solid {{ $log->icon() }}" style="font-size:10px;"></i>{{ $log->label() }}</span>
+              <span class="alg-pill {{ $log->badgeClass() === 'status-rejected' ? 'red' : ($log->badgeClass() === 'status-accepted' ? 'green' : ($log->badgeClass() === 'status-pending' ? 'amber' : 'gray')) }}"><x-hi :name="$log->icon()" style="font-size:10px;" />{{ $log->label() }}</span>
               <span class="alg-time">{{ $log->created_at->format('d/m/Y H:i:s') }} · {{ $log->created_at->diffForHumans() }}</span>
             </div>
             <div class="alg-desc">{{ $log->description ?? '-' }}</div>
@@ -201,15 +201,15 @@
   <div class="picker-panel" role="dialog" aria-modal="true" aria-labelledby="pickerTitle">
     <div class="picker-head">
       <div class="picker-title" id="pickerTitle">Pilih item</div>
-      <button type="button" class="picker-close" onclick="closePicker()" aria-label="Tutup"><i class="fa-solid fa-xmark"></i></button>
+      <button type="button" class="picker-close" onclick="closePicker()" aria-label="Tutup"><x-hi name="cancel-01" /></button>
     </div>
     <div class="picker-search">
-      <i class="fa-solid fa-magnifying-glass"></i>
+      <x-hi name="search-01" />
       <input id="pickerSearch" type="search" placeholder="Cari…" autocomplete="off">
     </div>
     <div class="picker-list" id="pickerList" role="listbox"></div>
     <div class="picker-foot">
-      <button type="button" class="picker-clear-all" onclick="clearCurrentPicker()"><i class="fa-solid fa-eraser"></i> Bersihkan</button>
+      <button type="button" class="picker-clear-all" onclick="clearCurrentPicker()"><x-hi name="eraser-01" /> Bersihkan</button>
       <button type="button" class="picker-done" onclick="closePicker()">Selesai</button>
     </div>
   </div>

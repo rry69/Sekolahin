@@ -68,6 +68,57 @@
   a { text-decoration: none; }
   :focus-visible { outline: 2px solid rgba(34, 211, 238, 0.7); outline-offset: 2px; border-radius: 8px; }
 
+  /* ===================== ICON TREATMENT — HugeIcons (no bg, solid color, 1.4–1.6x) ===================== */
+  svg.hi {
+    display: inline-block;
+    width: 1em; height: 1em;
+    vertical-align: -0.15em;
+    flex: 0 0 auto;
+    stroke: currentColor;
+  }
+  /* Ukuran dasar ikon pada tombol/inline: sedikit lebih besar dari teks */
+  .x-btn svg.hi, .r-fbtn svg.hi, .r-gobtn svg.hi, .ste-btn svg.hi,
+  .d-btn-coral svg.hi, .d-link svg.hi, .x-link svg.hi, .btn svg.hi,
+  button svg.hi, .x-search svg.hi, .r-search svg.hi, .x-cap svg.hi {
+    width: 1.15em; height: 1.15em;
+  }
+  /* Ikon dalam container icon badge (semua class berakhiran -ic):
+     tanpa background, tanpa kotak, ukuran 1.4–1.6x */
+  [class$="-ic"] {
+    background: transparent !important;
+    width: auto !important;
+    height: auto !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  [class$="-ic"] svg.hi {
+    width: 1.5em; height: 1.5em;
+  }
+  /* Ukuran dasar per konteks (1.4–1.6x dari ukuran ikon FA sebelumnya) */
+  .d-ic { font-size: 19px; }
+  .d-row-ic { font-size: 16px; }
+  .k-sum-ic { font-size: 20px; }
+  .d-ic, .d-row-ic, .r-ic, .p-ic, .x-ic, .alg-ic, .m-ic, .det-ic, .pay-ic, .rkp-ic,
+  .trk-ic, .sch-ic, .mjr-ic, .prd-ic, .ste-ic, .acc-ic, .k-ic, .k-sum-ic,
+  .acc-modal-ic, .acd-row-ic, .d-doc-ic, .m-modal-ic, .m-row-ic, .mjr-modal-ic,
+  .prd-modal-ic, .s-modal-ic, .s-row-ic, .s-sec-ic, .ste-biaya-ic, .ste-note-ic,
+  .ste-rereg-ic, .t-modal-ic, .t-row-ic, .t-sec-ic, .x-modal-ic { font-size: 17px; }
+  /* Warna solid per semantik (bukan soft) */
+  .t-coral .d-ic, .d-stat.t-coral svg.hi, .r-ic.coral svg.hi, .p-ic.coral svg.hi { color: var(--coral, #FF6B6B); }
+  .t-blue .d-ic, .d-stat.t-blue svg.hi, .r-ic.blue svg.hi, .p-ic.blue svg.hi { color: var(--blue, #3B82F6); }
+  .t-green .d-ic, .d-stat.t-green svg.hi, .r-ic.green svg.hi, .p-ic.green svg.hi { color: var(--green, #10B981); }
+  .t-amber .d-ic, .d-stat.t-amber svg.hi, .r-ic.amber svg.hi, .p-ic.amber svg.hi { color: var(--amber, #F59E0B); }
+  .t-red .d-ic, .d-stat.t-red svg.hi, .r-ic.red svg.hi, .p-ic.red svg.hi { color: var(--red, #EF4444); }
+  .t-purple .d-ic, .d-stat.t-purple svg.hi { color: var(--purple, #8B5CF6); }
+  .d-row.warning .d-row-ic svg.hi { color: var(--amber, #F59E0B); }
+  .d-row.danger .d-row-ic svg.hi { color: var(--red, #EF4444); }
+  .d-row.upcoming .d-row-ic svg.hi { color: var(--blue, #3B82F6); }
+  .d-sec-title svg.hi { color: var(--coral, #FF6B6B); width: 1.3em; height: 1.3em; }
+
+
   /* ===================== SIDEBAR (Bringova minimal) ===================== */
   .sidebar {
     position: fixed;
@@ -328,7 +379,7 @@
   .tabs { display: flex; gap: 0; border-bottom: 1px solid var(--border); margin-bottom: 20px; flex-wrap: wrap; }
   .tab { padding: 10px 14px; font-size: 13px; color: var(--tx3); cursor: pointer; border-bottom: 2px solid transparent; font-weight: 500; white-space: nowrap; position: relative; text-decoration: none; display: inline-block; }
   .tab.active { color: var(--tx1); border-bottom-color: var(--tx1); font-weight: 600; }
-  .tab .tab-badge { background: var(--tx1); color: var(--page); font-size: 10px; border-radius: 10px; padding: 1px 6px; margin-left: 4px; }
+  .tab .tab-badge { background: transparent; border: 1px solid currentColor; color: var(--page); font-size: 10px; border-radius: 10px; padding: 1px 6px; margin-left: 4px; }
 
   .summary-cards { display: flex; gap: 16px; margin-bottom: 20px; flex-wrap: wrap; }
   .summary-card { flex: 1; min-width: 180px; background: var(--panel-2); border: 1px solid var(--border); border-radius: 10px; padding: 16px; color: inherit; text-decoration: none; transition: border-color .15s, transform .15s; }
@@ -374,10 +425,10 @@
   .alert-success { background: var(--success-bg); border: 1px solid var(--success-border); color: var(--success-fg); }
   .alert-error { background: var(--error-bg); border: 1px solid var(--error-border); color: var(--error-fg); }
   .alert-info { background: var(--info-bg); border: 1px solid var(--info-border); color: var(--info-fg); }
-  .status-pending { background: var(--badge-pending-bg); color: var(--badge-pending-fg); }
-  .status-verified { background: var(--badge-verified-bg); color: var(--badge-verified-fg); }
-  .status-accepted { background: var(--badge-accepted-bg); color: var(--badge-accepted-fg); }
-  .status-rejected { background: var(--badge-rejected-bg); color: var(--badge-rejected-fg); }
+  .status-pending { background: transparent; border: 1px solid currentColor; color: var(--badge-pending-fg); }
+  .status-verified { background: transparent; border: 1px solid currentColor; color: var(--badge-verified-fg); }
+  .status-accepted { background: transparent; border: 1px solid currentColor; color: var(--badge-accepted-fg); }
+  .status-rejected { background: transparent; border: 1px solid currentColor; color: var(--badge-rejected-fg); }
 
   .btn { padding: 6px 14px; border-radius: 6px; border: none; cursor: pointer; font-size: 12px; font-weight: 500; display: inline-flex; align-items: center; gap: 5px; }
   .btn-primary { background: var(--accent); color: var(--accent-fg); }
@@ -398,9 +449,9 @@
   .deadline-item { display: flex; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--hairline); }
   .deadline-item:last-child { border-bottom: none; }
   .deadline-icon { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-right: 12px; flex-shrink: 0; font-size: 14px; }
-  .deadline-item.warning .deadline-icon { background: var(--badge-pending-bg); color: var(--badge-pending-fg); }
-  .deadline-item.danger .deadline-icon { background: var(--badge-rejected-bg); color: var(--badge-rejected-fg); }
-  .deadline-item.upcoming .deadline-icon { background: var(--badge-verified-bg); color: var(--badge-verified-fg); }
+  .deadline-item.warning .deadline-icon { background: transparent; border: 1px solid currentColor; color: var(--badge-pending-fg); }
+  .deadline-item.danger .deadline-icon { background: transparent; border: 1px solid currentColor; color: var(--badge-rejected-fg); }
+  .deadline-item.upcoming .deadline-icon { background: transparent; border: 1px solid currentColor; color: var(--badge-verified-fg); }
   .deadline-info { flex: 1; }
   .deadline-name { font-size: 13px; font-weight: 500; color: var(--tx1); }
   .deadline-num { font-size: 11px; color: var(--tx4); margin-left: 6px; font-weight: 400; }
@@ -447,7 +498,7 @@
   }
   .modal-head { display: flex; gap: 12px; margin-bottom: 16px; }
   .modal-icon { width: 40px; height: 40px; border-radius: 9999px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 18px; }
-  .modal-icon-amber { background: var(--badge-pending-bg); color: var(--badge-pending-fg); }
+  .modal-icon-amber { background: transparent; border: 1px solid currentColor; color: var(--badge-pending-fg); }
   .modal-title { font-size: 15px; font-weight: 600; color: var(--tx1); }
   .modal-text { font-size: 13px; color: var(--tx2); margin-top: 4px; }
   .modal-sub { font-size: 11px; color: var(--tx3); margin-top: 8px; }
@@ -458,9 +509,9 @@
   .modal-btn-action { padding: 8px 16px; font-size: 13px; font-weight: 500; border-radius: 6px; color: var(--accent-fg); background: var(--warning); border: none; cursor: pointer; }
 
   /* Track toggle pill */
-  .track-pill { width: 44px; height: 24px; background: var(--pill-off); border-radius: 9999px; position: relative; transition: background .2s; }
-  .track-pill.on { background: var(--accent); }
-  .track-pill .track-knob { position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; background: #fff; border-radius: 9999px; transition: left .2s; box-shadow: 0 1px 2px rgba(0,0,0,0.2); }
+  .track-pill { width: 44px; height: 24px; background: transparent; border: 1px solid currentColor; border-radius: 9999px; position: relative; transition: background .2s; }
+  .track-pill.on { background: transparent; border: 1px solid currentColor; }
+  .track-pill .track-knob { position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; background: transparent; border: 1px solid currentColor; border-radius: 9999px; transition: left .2s; box-shadow: 0 1px 2px rgba(0,0,0,0.2); }
   .track-pill.on .track-knob { left: 22px; }
   .track-toggle:disabled + .track-pill { opacity: .55; cursor: wait; }
   .track-toggle:disabled { cursor: wait; }
@@ -543,6 +594,32 @@
 @include('components.file-preview-modal')
 
 <script>
+// === Ikon HugeIcons (JS) ===
+// Map kecil untuk ikon yang dirender via innerHTML (bukan komponen Blade).
+// Body SVG diambil dari koleksi HugeIcons (icones.js.org/collection/hugeicons).
+var __HI = {
+  "checkmark": '<path d="M5 12l5 5 9-10"/>',
+  "checkmark-circle-01": '<circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.5 2.5 4.5-5"/>',
+  "folder-open": '<path d="M3 8.5A1.5 1.5 0 0 1 4.5 7h4.1c.4 0 .8.2 1.1.4l1.6 1.2c.3.2.7.4 1.1.4h6.1A1.5 1.5 0 0 1 20 10.5V17a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8.5Z"/><path d="M3 10h18"/>',
+  "loading-01": '<path d="M12 3a9 9 0 1 0 9 9"/>',
+  "key-01": '<circle cx="8" cy="15" r="4"/><path d="M11 12l8-8M15 8l3 3M17 6l2 2"/>',
+  "delete-02": '<path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/>',
+  "layer-group": '<path d="M12 3l9 5-9 5-9-5 9-5Z"/><path d="M3 12l9 5 9-5"/><path d="M3 16.5l9 5 9-5"/>',
+  "calendar-01": '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18"/>',
+  "credit-card": '<rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20M6 15h4"/>',
+  "coins-01": '<circle cx="12" cy="12" r="8"/><path d="M12 8v8M9.5 9.5h3.5a1.5 1.5 0 0 1 0 3H10a1.5 1.5 0 0 0 0 3h4"/>',
+  "clock-01": '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  "calendar-check-in-01": '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18M9 16l2 2 4-4"/>',
+  "layers-01": '<path d="M12 3l9 5-9 5-9-5 9-5Z"/><path d="M3 12l9 5 9-5"/><path d="M3 16.5l9 5 9-5"/>'
+};
+function hiSvg(name, style) {
+  var body = (window.__HI || {})[name] || '';
+  if (!body) return '';
+  var st = style ? ' style="' + style + '"' : '';
+  return '<svg class="hi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"' + st + '>' + body + '</svg>';
+}
+function hiHtml(name, style) { return hiSvg(name, style); }
+
 // === Modal Functions ===
 function openStatusModal(id, status, notes) {
   document.getElementById('statusForm').action = '/admin/registrations/' + id + '/status';
@@ -723,7 +800,7 @@ document.addEventListener('keydown', function (e) {
     if (rows.length === 0) {
       var empty = document.createElement('div');
       empty.className = 'picker-empty';
-      empty.innerHTML = '<i class="fa-regular fa-folder-open"></i> Tidak ada item yang cocok';
+      empty.innerHTML = hiSvg('folder-open') + ' Tidak ada item yang cocok';
       list.appendChild(empty);
       return;
     }
@@ -732,7 +809,7 @@ document.addEventListener('keydown', function (e) {
       div.className = 'picker-item' + (String(it.v) === String(currentValue) ? ' is-selected' : '');
       div.setAttribute('role', 'option');
       div.setAttribute('data-value', it.v);
-      div.innerHTML = '<span class="pi-label">' + escapeHtml(it.l) + '</span><i class="fa-solid fa-check pi-check"></i>';
+      div.innerHTML = '<span class="pi-label">' + escapeHtml(it.l) + '</span>' + hiSvg('checkmark');
       div.addEventListener('click', function () { selectValue(it.v, it.l); });
       list.appendChild(div);
     });
@@ -1307,7 +1384,7 @@ document.addEventListener('DOMContentLoaded', function () {
       if (data && data.html) body.innerHTML = data.html;
       if (data && data.total !== undefined) {
         var totalEl = document.getElementById(isM ? 'mjrTotal' : 'prdTotal');
-        if (totalEl) totalEl.innerHTML = '<i class="' + (isM ? 'fa-solid fa-layer-group' : 'fa-solid fa-calendar-days') + '" style="font-size:11px;"></i> Total <strong>' + data.total + '</strong> ' + (isM ? 'jurusan' : 'periode');
+        if (totalEl) totalEl.innerHTML = hiSvg(isM ? 'layer-group' : 'calendar-01', 'font-size:11px;') + ' Total <strong>' + data.total + '</strong> ' + (isM ? 'jurusan' : 'periode');
       }
     })
     .catch(function (err) { if (err && err.name === 'AbortError') return; });
@@ -1399,7 +1476,7 @@ document.addEventListener('DOMContentLoaded', function () {
   document.addEventListener('submit', function (e) {
     if (e.target && e.target.id === 'prdDeleteForm') {
       var btn = document.getElementById('prdDeleteConfirm');
-      if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin" style="font-size:11px;"></i> Menghapus...'; }
+      if (btn) { btn.disabled = true; btn.innerHTML = hiSvg('loading-01', 'font-size:11px;') + ' Menghapus...'; }
     }
   });
 

@@ -41,7 +41,7 @@
         }
         @media (prefers-reduced-motion: reduce) {
             #auth-switcher > .auth-panel { transition: none !important; }
-            .btn-submit i.fa-arrow-right, .btn-submit svg { transition: none !important; }
+            .btn-submit svg.hi { transition: none !important; }
         }
 
         /* Tab pil Masuk / Daftar */
@@ -73,8 +73,8 @@
         #tab-indicator.pos-register { left: 50%; }
 
         /* Tombol submit: panah bergeser saat hover */
-        .btn-submit .fa-arrow-right { transition: transform .2s ease-out; }
-        .btn-submit:hover .fa-arrow-right { transform: translateX(4px); }
+        .btn-submit svg.hi { transition: transform .2s ease-out; }
+        .btn-submit:hover svg.hi { transform: translateX(4px); }
 
         /* Meter kekuatan sandi */
         .pw-bar { height: 5px; border-radius: 9999px; background: #E5E7EB; transition: background-color .2s ease-out; }
@@ -101,7 +101,7 @@
 
                 @if (session('status'))
                     <div class="mb-4 flex items-center gap-2 rounded-xl px-4 py-3 text-sm font-medium text-green-700" style="background: #E1F5F1; border: 1px solid rgba(45,201,156,.3);">
-                        <i class="fa-solid fa-circle-check text-green-600"></i>
+                        <x-hi icon="fa-circle-check" class="text-green-600" />
                         {{ session('status') }}
                     </div>
                 @endif
@@ -118,12 +118,12 @@
                     <div>
                         <label for="login-email" class="mb-1.5 block text-xs font-semibold text-gray-700">{{ __('Email') }}</label>
                         <div class="relative">
-                            <span class="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400"><i class="fa-regular fa-envelope text-sm"></i></span>
+                            <span class="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400"><x-hi icon="fa-envelope" class="text-sm" /></span>
                             <input id="login-email" type="email" name="email" :value="old('email')" required autocomplete="username" placeholder="nama@email.com"
                                    class="{{ $inputBase }} pl-10 {{ $errors->has('email') ? $inputErr : '' }}">
                         </div>
                         @error('email')
-                            <p class="mt-1.5 flex items-center gap-1.5 text-xs text-red-500"><i class="fa-solid fa-circle-exclamation"></i> {{ $message }}</p>
+                            <p class="mt-1.5 flex items-center gap-1.5 text-xs text-red-500"><x-hi icon="fa-circle-exclamation" /> {{ $message }}</p>
                         @enderror
                     </div>
 
@@ -131,15 +131,15 @@
                     <div>
                         <label for="login-password" class="mb-1.5 block text-xs font-semibold text-gray-700">{{ __('Kata Sandi') }}</label>
                         <div class="relative">
-                            <span class="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400"><i class="fa-solid fa-lock text-sm"></i></span>
+                            <span class="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400"><x-hi icon="fa-lock" class="text-sm" /></span>
                             <input id="login-password" type="password" name="password" required autocomplete="current-password" placeholder="Masukkan kata sandi"
                                    class="{{ $inputBase }} pl-10 pr-11 {{ $errors->has('password') ? $inputErr : '' }}">
                             <button type="button" onclick="togglePassword(this)" class="absolute right-2 top-1/2 flex h-8 w-8 -translate-y-1/2 cursor-pointer items-center justify-center rounded-lg text-gray-400 transition hover:bg-[#FFF0EE] hover:text-[#FF6B6B]" aria-label="Tampilkan kata sandi">
-                                <i class="fa-regular fa-eye text-sm"></i>
+                                <x-hi icon="fa-eye" class="text-sm" />
                             </button>
                         </div>
                         @error('password')
-                            <p class="mt-1.5 flex items-center gap-1.5 text-xs text-red-500"><i class="fa-solid fa-circle-exclamation"></i> {{ $message }}</p>
+                            <p class="mt-1.5 flex items-center gap-1.5 text-xs text-red-500"><x-hi icon="fa-circle-exclamation" /> {{ $message }}</p>
                         @enderror
                     </div>
 
@@ -160,7 +160,7 @@
 
                     <button type="submit" class="btn-submit flex h-12 w-full cursor-pointer items-center justify-center gap-2 rounded-xl text-[15px] font-semibold text-white transition active:scale-[.985] focus:outline-none focus-visible:ring-4 focus-visible:ring-[#FF8E6E]/40"
                             style="background: linear-gradient(135deg, #FF6B6B, #FF8E6E); box-shadow: 0 10px 20px -8px rgba(255,107,107,.6);">
-                        {{ __('Masuk') }} <i class="fa-solid fa-arrow-right"></i>
+                        {{ __('Masuk') }} <x-hi icon="fa-arrow-right" />
                     </button>
                 </form>
             </div>
@@ -180,12 +180,12 @@
                     <div>
                         <label for="reg-name" class="mb-1.5 block text-xs font-semibold text-gray-700">{{ __('Nama Lengkap') }}</label>
                         <div class="relative">
-                            <span class="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400"><i class="fa-regular fa-user text-sm"></i></span>
+                            <span class="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400"><x-hi icon="fa-user" class="text-sm" /></span>
                             <input id="reg-name" type="text" name="name" :value="old('name')" required autocomplete="name" placeholder="Nama sesuai identitas"
                                    class="{{ $inputBase }} pl-10 {{ $errors->has('name') ? $inputErr : '' }}">
                         </div>
                         @error('name')
-                            <p class="mt-1.5 flex items-center gap-1.5 text-xs text-red-500"><i class="fa-solid fa-circle-exclamation"></i> {{ $message }}</p>
+                            <p class="mt-1.5 flex items-center gap-1.5 text-xs text-red-500"><x-hi icon="fa-circle-exclamation" /> {{ $message }}</p>
                         @enderror
                     </div>
 
@@ -193,12 +193,12 @@
                     <div>
                         <label for="reg-email" class="mb-1.5 block text-xs font-semibold text-gray-700">{{ __('Email') }}</label>
                         <div class="relative">
-                            <span class="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400"><i class="fa-regular fa-envelope text-sm"></i></span>
+                            <span class="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400"><x-hi icon="fa-envelope" class="text-sm" /></span>
                             <input id="reg-email" type="email" name="email" :value="old('email')" required autocomplete="username" placeholder="nama@email.com"
                                    class="{{ $inputBase }} pl-10 {{ $errors->has('email') ? $inputErr : '' }}">
                         </div>
                         @error('email')
-                            <p class="mt-1.5 flex items-center gap-1.5 text-xs text-red-500"><i class="fa-solid fa-circle-exclamation"></i> {{ $message }}</p>
+                            <p class="mt-1.5 flex items-center gap-1.5 text-xs text-red-500"><x-hi icon="fa-circle-exclamation" /> {{ $message }}</p>
                         @enderror
                     </div>
 
@@ -206,12 +206,12 @@
                     <div>
                         <label for="reg-password" class="mb-1.5 block text-xs font-semibold text-gray-700">{{ __('Kata Sandi') }}</label>
                         <div class="relative">
-                            <span class="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400"><i class="fa-solid fa-lock text-sm"></i></span>
+                            <span class="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400"><x-hi icon="fa-lock" class="text-sm" /></span>
                             <input id="reg-password" type="password" name="password" required autocomplete="new-password" placeholder="Minimal 8 karakter"
                                    class="{{ $inputBase }} pl-10 pr-11 {{ $errors->has('password') ? $inputErr : '' }}"
                                    oninput="updateStrength(this.value)">
                             <button type="button" onclick="togglePassword(this)" class="absolute right-2 top-1/2 flex h-8 w-8 -translate-y-1/2 cursor-pointer items-center justify-center rounded-lg text-gray-400 transition hover:bg-[#FFF0EE] hover:text-[#FF6B6B]" aria-label="Tampilkan kata sandi">
-                                <i class="fa-regular fa-eye text-sm"></i>
+                                <x-hi icon="fa-eye" class="text-sm" />
                             </button>
                         </div>
                         {{-- Meter kekuatan sandi --}}
@@ -222,7 +222,7 @@
                             <p id="strength-text" class="mt-1 text-[11px] font-medium text-gray-400">Kekuatan sandi</p>
                         </div>
                         @error('password')
-                            <p class="mt-1.5 flex items-center gap-1.5 text-xs text-red-500"><i class="fa-solid fa-circle-exclamation"></i> {{ $message }}</p>
+                            <p class="mt-1.5 flex items-center gap-1.5 text-xs text-red-500"><x-hi icon="fa-circle-exclamation" /> {{ $message }}</p>
                         @enderror
                     </div>
 
@@ -230,15 +230,15 @@
                     <div>
                         <label for="reg-password_confirmation" class="mb-1.5 block text-xs font-semibold text-gray-700">{{ __('Ulangi Kata Sandi') }}</label>
                         <div class="relative">
-                            <span class="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400"><i class="fa-solid fa-lock text-sm"></i></span>
+                            <span class="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400"><x-hi icon="fa-lock" class="text-sm" /></span>
                             <input id="reg-password_confirmation" type="password" name="password_confirmation" required autocomplete="new-password" placeholder="Ketik ulang kata sandi"
                                    class="{{ $inputBase }} pl-10 pr-11 {{ $errors->has('password_confirmation') ? $inputErr : '' }}">
                             <button type="button" onclick="togglePassword(this)" class="absolute right-2 top-1/2 flex h-8 w-8 -translate-y-1/2 cursor-pointer items-center justify-center rounded-lg text-gray-400 transition hover:bg-[#FFF0EE] hover:text-[#FF6B6B]" aria-label="Tampilkan kata sandi">
-                                <i class="fa-regular fa-eye text-sm"></i>
+                                <x-hi icon="fa-eye" class="text-sm" />
                             </button>
                         </div>
                         @error('password_confirmation')
-                            <p class="mt-1.5 flex items-center gap-1.5 text-xs text-red-500"><i class="fa-solid fa-circle-exclamation"></i> {{ $message }}</p>
+                            <p class="mt-1.5 flex items-center gap-1.5 text-xs text-red-500"><x-hi icon="fa-circle-exclamation" /> {{ $message }}</p>
                         @enderror
                     </div>
 
@@ -251,7 +251,7 @@
 
                     <button type="submit" class="btn-submit flex h-12 w-full cursor-pointer items-center justify-center gap-2 rounded-xl text-[15px] font-semibold text-white transition active:scale-[.985] focus:outline-none focus-visible:ring-4 focus-visible:ring-[#FF8E6E]/40"
                             style="background: linear-gradient(135deg, #FF6B6B, #FF8E6E); box-shadow: 0 10px 20px -8px rgba(255,107,107,.6);">
-                        {{ __('Daftar') }} <i class="fa-solid fa-arrow-right"></i>
+                        {{ __('Daftar') }} <x-hi icon="fa-arrow-right" />
                     </button>
                 </form>
             </div>
@@ -262,10 +262,10 @@
     <script>
         function togglePassword(btn) {
             var input = btn.parentElement.querySelector('input');
-            var icon = btn.querySelector('i');
+            var icon = btn.querySelector('svg.hi');
             var show = input.type === 'password';
             input.type = show ? 'text' : 'password';
-            icon.className = show ? 'fa-regular fa-eye-slash text-sm' : 'fa-regular fa-eye text-sm';
+            if (icon) icon.outerHTML = hiSvg(show ? 'fa-eye-slash' : 'fa-eye', 'class="text-sm"');
         }
 
         /* Meter kekuatan sandi (register) — skor sederhana: panjang + keragaman karakter */

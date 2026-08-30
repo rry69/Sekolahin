@@ -101,13 +101,13 @@
 
   /* ---------- pills ---------- */
   .mjr .mjr-pill { display: inline-flex; align-items: center; gap: 6px; padding: 4px 11px; border-radius: 20px; font-size: 11.5px; font-weight: 700; white-space: nowrap; }
-  .mjr .mjr-pill.green { background: var(--green-soft); color: var(--green); }
-  .mjr .mjr-pill.red { background: var(--red-soft); color: var(--red); }
-  .mjr .mjr-pill.blue { background: var(--blue-soft); color: var(--blue); }
-  .mjr .mjr-pill.amber { background: var(--amber-soft); color: #b45309; }
-  .mjr .mjr-pill.purple { background: var(--purple-soft); color: var(--purple); }
-  .mjr .mjr-pill.coral { background: var(--coral-soft); color: var(--coral); }
-  .mjr .mjr-pill.gray { background: var(--gray-soft); color: var(--gray); }
+  .mjr .mjr-pill.green { background: transparent; border: 1px solid currentColor; color: var(--green); }
+  .mjr .mjr-pill.red { background: transparent; border: 1px solid currentColor; color: var(--red); }
+  .mjr .mjr-pill.blue { background: transparent; border: 1px solid currentColor; color: var(--blue); }
+  .mjr .mjr-pill.amber { background: transparent; border: 1px solid currentColor; color: #b45309; }
+  .mjr .mjr-pill.purple { background: transparent; border: 1px solid currentColor; color: var(--purple); }
+  .mjr .mjr-pill.coral { background: transparent; border: 1px solid currentColor; color: var(--coral); }
+  .mjr .mjr-pill.gray { background: transparent; border: 1px solid currentColor; color: var(--gray); }
 
   /* ---------- buttons ---------- */
   .mjr .mjr-btn { display: inline-flex; align-items: center; gap: 6px; border: none; cursor: pointer; border-radius: 11px; padding: 10px 17px; font-size: 13px; font-weight: 700; text-decoration: none; transition: transform .15s ease, filter .15s ease, background-color .15s ease; }
@@ -130,9 +130,9 @@
   .mjr .mjr-list { display: flex; flex-direction: column; }
   .mjr .mjr-row { display: flex; align-items: center; gap: 15px; padding: 16px 4px; border-bottom: 1px solid var(--divider); }
   .mjr .mjr-row:last-child { border-bottom: none; }
-  .mjr .mjr-ic { flex: 0 0 auto; width: 46px; height: 46px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 17px; background: var(--gray-soft); color: var(--gray); }
-  .mjr .mjr-ic.active { background: var(--green-soft); color: var(--green); }
-  .mjr .mjr-ic.inactive { background: var(--red-soft); color: var(--red); }
+  .mjr .mjr-ic { flex: 0 0 auto; width: auto; height: auto; display: inline-flex; align-items: center; justify-content: center; font-size: 22px; line-height: 1; background: none; border-radius: 0; color: var(--gray); }
+  .mjr .mjr-ic.active { color: var(--green); }
+  .mjr .mjr-ic.inactive { color: var(--red); }
   .mjr .mjr-body { flex: 1; min-width: 0; }
   .mjr .mjr-name { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 14px; font-weight: 700; color: var(--ink); }
   .mjr .mjr-name a { color: var(--coral); text-decoration: none; font-weight: 700; }
@@ -158,7 +158,7 @@
   .mjr .mjr-modal { width: 100%; max-width: 400px; background: #fff; border-radius: 18px; padding: 22px; box-shadow: 0 24px 60px -18px rgba(26,26,46,0.4); animation: mjrModalPop .2s cubic-bezier(.22,1.2,.36,1); }
   @keyframes mjrModalPop { from { opacity: 0; transform: scale(0.97) translateY(4px); } to { opacity: 1; transform: scale(1) translateY(0); } }
   .mjr .mjr-modal-body { display: flex; align-items: flex-start; gap: 13px; margin-bottom: 18px; }
-  .mjr .mjr-modal-ic { flex: 0 0 auto; width: 42px; height: 42px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 17px; background: var(--red-soft); color: var(--red); }
+  .mjr .mjr-modal-ic { flex: 0 0 auto; width: auto; height: auto; display: inline-flex; align-items: center; justify-content: center; font-size: 22px; line-height: 1; background: none; border-radius: 0; color: var(--red); }
   .mjr .mjr-modal-title { font-size: 15px; font-weight: 700; color: var(--ink); }
   .mjr .mjr-modal-msg { font-size: 13px; color: var(--muted); margin-top: 3px; line-height: 1.5; }
   .mjr .mjr-modal-actions { display: flex; justify-content: flex-end; gap: 8px; }
@@ -266,30 +266,30 @@
   <p class="mjr-meta">Kelola jurusan per sekolah dan per jenjang, beserta kuota per jalur.</p>
 
   @if (session('success'))
-    <div class="mjr-alert success"><i class="fa-solid fa-circle-check"></i><span>{{ session('success') }}</span></div>
+    <div class="mjr-alert success"><x-hi name="checkmark-circle-02" /><span>{{ session('success') }}</span></div>
   @endif
   @if (session('error'))
-    <div class="mjr-alert error"><i class="fa-solid fa-circle-exclamation"></i><span>{{ session('error') }}</span></div>
+    <div class="mjr-alert error"><x-hi name="alert-02" /><span>{{ session('error') }}</span></div>
   @endif
 
   <div class="mjr-summary">
-    <span id="mjrTotal"><i class="fa-solid fa-layer-group" style="font-size:11px;"></i> Total <strong>{{ $majors->total() }}</strong> jurusan</span>
+    <span id="mjrTotal"><x-hi name="layers-01" style="font-size:11px;" /> Total <strong>{{ $majors->total() }}</strong> jurusan</span>
     @if (request()->has('q') || request()->has('school_id') || request()->has('level'))
-      <a href="{{ route('admin.majors.index') }}" class="mjr-btn ghost sm" style="padding:4px 12px;font-size:11.5px;"><i class="fa-solid fa-xmark" style="font-size:9px;"></i> Reset filter</a>
+      <a href="{{ route('admin.majors.index') }}" class="mjr-btn ghost sm" style="padding:4px 12px;font-size:11.5px;"><x-hi name="cancel-01" style="font-size:9px;" /> Reset filter</a>
     @endif
   </div>
 
   <div class="mjr-toolbar">
     <div class="mjr-search">
-      <i class="fa-solid fa-magnifying-glass"></i>
+      <x-hi name="search-01" />
       <input type="text" id="mjrSearch" placeholder="Cari nama jurusan atau kode..." value="{{ request('q') }}" autocomplete="off">
     </div>
     <div class="mjr-field">
       <label>Jenjang</label>
       <button type="button" class="r-pick" data-picker="level" aria-haspopup="listbox" aria-expanded="false">
         <span class="pick-label is-placeholder">Semua Jenjang</span>
-        <span class="pick-clear" data-clear="level" role="button" tabindex="0" aria-label="Bersihkan"><i class="fa-solid fa-xmark"></i></span>
-        <i class="fa-solid fa-chevron-down pick-caret"></i>
+        <span class="pick-clear" data-clear="level" role="button" tabindex="0" aria-label="Bersihkan"><x-hi name="cancel-01" /></span>
+        <x-hi name="arrow-down-01" />
       </button>
       <input type="hidden" id="mjrLevel" name="level" data-picker-input="level" value="{{ request('level') }}">
     </div>
@@ -297,13 +297,13 @@
       <label>Sekolah</label>
       <button type="button" class="r-pick" data-picker="school" aria-haspopup="listbox" aria-expanded="false">
         <span class="pick-label is-placeholder">Semua Sekolah</span>
-        <span class="pick-clear" data-clear="school" role="button" tabindex="0" aria-label="Bersihkan"><i class="fa-solid fa-xmark"></i></span>
-        <i class="fa-solid fa-chevron-down pick-caret"></i>
+        <span class="pick-clear" data-clear="school" role="button" tabindex="0" aria-label="Bersihkan"><x-hi name="cancel-01" /></span>
+        <x-hi name="arrow-down-01" />
       </button>
       <input type="hidden" id="mjrSchool" name="school_id" data-picker-input="school" value="{{ request('school_id') }}">
     </div>
     <a href="{{ route('admin.majors.create') }}" class="mjr-btn coral" style="white-space:nowrap;">
-      <i class="fa-solid fa-plus" style="font-size:10px;"></i> Tambah Jurusan
+      <x-hi name="plus-sign" style="font-size:10px;" /> Tambah Jurusan
     </a>
   </div>
 
@@ -316,15 +316,15 @@
   <div class="picker-panel" role="dialog" aria-modal="true" aria-labelledby="pickerTitle">
     <div class="picker-head">
       <div class="picker-title" id="pickerTitle">Pilih item</div>
-      <button type="button" class="picker-close" onclick="closePicker()" aria-label="Tutup"><i class="fa-solid fa-xmark"></i></button>
+      <button type="button" class="picker-close" onclick="closePicker()" aria-label="Tutup"><x-hi name="cancel-01" /></button>
     </div>
     <div class="picker-search">
-      <i class="fa-solid fa-magnifying-glass"></i>
+      <x-hi name="search-01" />
       <input id="pickerSearch" type="search" placeholder="Cari…" autocomplete="off">
     </div>
     <div class="picker-list" id="pickerList" role="listbox"></div>
     <div class="picker-foot">
-      <button type="button" class="picker-clear-all" onclick="clearCurrentPicker()"><i class="fa-solid fa-eraser"></i> Bersihkan</button>
+      <button type="button" class="picker-clear-all" onclick="clearCurrentPicker()"><x-hi name="eraser-01" /> Bersihkan</button>
       <button type="button" class="picker-done" onclick="closePicker()">Selesai</button>
     </div>
   </div>
@@ -345,7 +345,7 @@
 <div id="majorDeleteModal" class="mjr-modal-backdrop" aria-hidden="true">
   <div class="mjr-modal" role="dialog" aria-modal="true">
     <div class="mjr-modal-body">
-      <div class="mjr-modal-ic"><i class="fa-solid fa-trash-can"></i></div>
+      <div class="mjr-modal-ic"><x-hi name="delete-02" /></div>
       <div style="flex:1;min-width:0">
         <h3 class="mjr-modal-title">Hapus jurusan?</h3>
         <p class="mjr-modal-msg">Yakin ingin menghapus jurusan <strong id="majorDeleteName"></strong>? Aksi ini tidak dapat dibatalkan.</p>

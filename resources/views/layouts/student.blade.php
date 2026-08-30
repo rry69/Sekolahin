@@ -62,7 +62,7 @@
   .st-brand .st-logo { width: 34px; height: 34px; border-radius: 11px; background: linear-gradient(135deg, var(--coral), var(--coral-2)); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 16px; box-shadow: 0 6px 16px -6px rgba(255,107,107,.6); }
   .st-nav { display: flex; align-items: center; gap: 4px; margin-left: 6px; }
   .st-nav a { display: inline-flex; align-items: center; gap: 7px; padding: 8px 12px; border-radius: 10px; font-size: 13px; font-weight: 600; color: var(--tx3); transition: color .15s, background .15s; }
-  .st-nav a i { font-size: 12px; opacity: .9; }
+  .st-nav a svg.hi { font-size: 14px; opacity: .9; }
   .st-nav a:hover { color: var(--coral); background: var(--coral-soft); }
   .st-nav a.active { color: var(--coral); background: var(--coral-soft); }
   .st-right { margin-left: auto; display: flex; align-items: center; gap: 8px; }
@@ -84,9 +84,9 @@
   .st-dropdown { position: absolute; top: calc(100% + 10px); right: 0; width: 240px; background: #fff; border-radius: 14px; box-shadow: 0 20px 50px -16px rgba(26,26,46,.32), 0 0 0 1px rgba(26,26,46,.06); padding: 6px; z-index: 60; animation: stPop .18s cubic-bezier(.22,1.2,.36,1); }
   @keyframes stPop { from { opacity: 0; transform: translateY(-6px) scale(.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
   .st-dropdown a, .st-dropdown form button { display: flex; align-items: center; gap: 10px; width: 100%; padding: 9px 11px; border-radius: 9px; font-size: 13px; font-weight: 500; color: var(--ink); text-align: left; transition: background .15s; }
-  .st-dropdown a i, .st-dropdown form button i { width: 18px; text-align: center; color: var(--tx3); font-size: 13px; }
+  .st-dropdown a svg.hi, .st-dropdown form button svg.hi { width: 18px; text-align: center; color: var(--tx3); }
   .st-dropdown a:hover, .st-dropdown form button:hover { background: var(--gray-soft); color: var(--ink); }
-  .st-dropdown a:hover i, .st-dropdown form button:hover i { color: var(--coral); }
+  .st-dropdown a:hover svg.hi, .st-dropdown form button:hover svg.hi { color: var(--coral); }
   .st-dropdown .st-dd-sep { height: 1px; background: var(--divider); margin: 5px 4px; }
   .st-dropdown form { margin: 0; }
 
@@ -102,7 +102,7 @@
   .picker-close { width: 30px; height: 30px; border-radius: 8px; border: none; background: transparent; color: var(--muted); cursor: pointer; font-size: 12px; display: inline-flex; align-items: center; justify-content: center; }
   .picker-close:hover { background: var(--gray-soft); color: var(--ink); }
   .picker-search { position: relative; padding: 10px 14px; border-bottom: 1px solid var(--divider); }
-  .picker-search i { position: absolute; left: 24px; top: 50%; transform: translateY(-50%); color: var(--muted); font-size: 12px; pointer-events: none; }
+  .picker-search svg.hi { position: absolute; left: 24px; top: 50%; transform: translateY(-50%); color: var(--muted); pointer-events: none; }
   .picker-search input { width: 100%; padding: 9px 12px 9px 32px; border: 1px solid rgba(26,26,46,.14); border-radius: 10px; font-size: 13px; color: var(--ink); background: rgba(255,255,255,.7); }
   .picker-search input:focus { outline: none; border-color: var(--coral); background: #fff; box-shadow: 0 0 0 3px rgba(255,107,107,.12); }
   .picker-list { flex: 1; overflow-y: auto; padding: 6px 8px; }
@@ -110,8 +110,8 @@
   .picker-item:hover { background: var(--coral-soft); color: var(--coral); }
   .picker-item.is-selected { background: var(--coral); color: #fff; font-weight: 600; }
   .picker-item .pi-label { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .picker-item .pi-check { font-size: 11px; opacity: 0; }
-  .picker-item.is-selected .pi-check { opacity: 1; }
+  .picker-item svg.hi.pi-check { font-size: 11px; opacity: 0; }
+  .picker-item.is-selected svg.hi.pi-check { opacity: 1; }
   .picker-empty { padding: 26px 12px; text-align: center; color: var(--muted); }
   .picker-foot { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 10px 14px; border-top: 1px solid var(--divider); }
   .picker-foot .picker-clear-all { color: var(--muted); font-weight: 600; padding: 6px 8px; border-radius: 8px; }
@@ -151,13 +151,13 @@
 <header class="st-top">
   <div class="st-top-in">
     <a href="{{ route('dashboard') }}" class="st-brand">
-      <span class="st-logo"><i class="fa-solid fa-graduation-cap"></i></span>
+      <span class="st-logo"><x-hi icon="fa-graduation-cap" /></span>
       <span>Sekolahin</span>
     </a>
     <nav class="st-nav" aria-label="Navigasi siswa">
-      <a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') ? 'active' : '' }}"><i class="fa-solid fa-house"></i> Beranda</a>
-      <a href="{{ route('registration.index') }}" class="{{ request()->routeIs('registration.*') ? 'active' : '' }}"><i class="fa-solid fa-folder-open"></i> Pendaftaran</a>
-      <a href="{{ route('applicant.profile') }}" class="{{ request()->routeIs('applicant.profile*') ? 'active' : '' }}"><i class="fa-solid fa-id-card"></i> Biodata</a>
+      <a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') ? 'active' : '' }}"><x-hi icon="fa-house" /> Beranda</a>
+      <a href="{{ route('registration.index') }}" class="{{ request()->routeIs('registration.*') ? 'active' : '' }}"><x-hi icon="fa-folder-open" /> Pendaftaran</a>
+      <a href="{{ route('applicant.profile') }}" class="{{ request()->routeIs('applicant.profile*') ? 'active' : '' }}"><x-hi icon="fa-id-card" /> Biodata</a>
     </nav>
     <div class="st-right">
       <div class="relative flex items-center">
@@ -176,15 +176,15 @@
           <span class="hidden sm:block text-left">
             <span class="block st-uname">{{ Str::limit($studentName, 18) }}</span>
           </span>
-          <i class="fa-solid fa-chevron-down st-caret"></i>
+          <x-hi icon="fa-chevron-down" class="st-caret" />
         </button>
         <div class="st-dropdown" id="stUserDropdown" style="display:none;" role="menu">
-          <a href="{{ route('applicant.profile') }}" role="menuitem"><i class="fa-solid fa-id-card"></i> Biodata Siswa</a>
-          <a href="{{ route('profile.edit') }}" role="menuitem"><i class="fa-solid fa-user-gear"></i> Pengaturan Profil</a>
+          <a href="{{ route('applicant.profile') }}" role="menuitem"><x-hi icon="fa-id-card" /> Biodata Siswa</a>
+          <a href="{{ route('profile.edit') }}" role="menuitem"><x-hi icon="fa-user-gear" /> Pengaturan Profil</a>
           <div class="st-dd-sep"></div>
           <form method="POST" action="{{ route('logout') }}">
             @csrf
-            <button type="submit" role="menuitem"><i class="fa-solid fa-arrow-right-from-bracket"></i> Keluar</button>
+            <button type="submit" role="menuitem"><x-hi icon="fa-arrow-right-from-bracket" /> Keluar</button>
           </form>
         </div>
       </div>
@@ -201,15 +201,15 @@
   <div class="picker-panel" role="dialog" aria-modal="true" aria-labelledby="pickerTitle">
     <div class="picker-head">
       <div class="picker-title" id="pickerTitle">Pilih item</div>
-      <button type="button" class="picker-close" onclick="closePicker()" aria-label="Tutup"><i class="fa-solid fa-xmark"></i></button>
+      <button type="button" class="picker-close" onclick="closePicker()" aria-label="Tutup"><x-hi icon="fa-xmark" /></button>
     </div>
     <div class="picker-search">
-      <i class="fa-solid fa-magnifying-glass"></i>
+      <x-hi icon="fa-magnifying-glass" />
       <input id="pickerSearch" type="search" placeholder="Cari…" autocomplete="off">
     </div>
     <div class="picker-list" id="pickerList" role="listbox"></div>
     <div class="picker-foot">
-      <button type="button" class="picker-clear-all" onclick="clearCurrentPicker()"><i class="fa-solid fa-eraser"></i> Bersihkan</button>
+      <button type="button" class="picker-clear-all" onclick="clearCurrentPicker()"><x-hi icon="fa-eraser" /> Bersihkan</button>
       <button type="button" class="picker-done" onclick="closePicker()">Selesai</button>
     </div>
   </div>
@@ -221,6 +221,21 @@
 @stack('scripts')
 
 <script>
+// === Ikon HugeIcons (JS) — konsisten dengan admin ===
+window.__HI = @json(\App\Support\Hi::all());
+window.__HI_MAP = @json(config('hugeicons'));
+function hiSvg(name, attr) {
+  var key = name || '';
+  if (!(key in (window.__HI || {}))) {
+    key = (window.__HI_MAP || {})[key] || '';
+  }
+  var body = (window.__HI || {})[key] || '';
+  if (!body) return '';
+  var a = attr ? ' ' + attr : '';
+  return '<svg class="hi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"' + a + '>' + body + '</svg>';
+}
+function hiHtml(name, attr) { return hiSvg(name, attr); }
+
 (function () {
   // ================= PICKER (Bringova) =================
   var currentKey = null, currentTrigger = null, currentInput = null, currentValue = null;
@@ -247,12 +262,12 @@
     list.innerHTML='';
     var f=(filter||'').toLowerCase().trim();
     var rows=data.filter(function(it){ if(!f) return true; return String(it.l).toLowerCase().indexOf(f)!==-1; });
-    if(rows.length===0){ var e=document.createElement('div'); e.className='picker-empty'; e.innerHTML='<i class="fa-regular fa-folder-open"></i> Tidak ada item yang cocok'; list.appendChild(e); return; }
+    if(rows.length===0){ var e=document.createElement('div'); e.className='picker-empty'; e.innerHTML=hiSvg('fa-folder-open')+' Tidak ada item yang cocok'; list.appendChild(e); return; }
     rows.forEach(function(it){
       var d=document.createElement('div');
       d.className='picker-item'+(String(it.v)===String(currentValue)?' is-selected':'');
       d.setAttribute('role','option'); d.setAttribute('data-value',it.v);
-      d.innerHTML='<span class="pi-label">'+escapeHtml(it.l)+'</span><i class="fa-solid fa-check pi-check"></i>';
+      d.innerHTML='<span class="pi-label">'+escapeHtml(it.l)+'</span>'+hiSvg('fa-check','class="pi-check"');
       d.addEventListener('click', function(){ selectValue(it.v, it.l); });
       list.appendChild(d);
     });

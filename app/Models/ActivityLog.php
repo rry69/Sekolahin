@@ -98,23 +98,23 @@ class ActivityLog extends Model
     }
 
     /**
-     * Ikon Font Awesome untuk badge.
+     * Ikon HugeIcons untuk badge (dari icones.js.org/collection/hugeicons).
      */
     public function icon(): string
     {
         $iconMap = [
-            'payment' => 'fa-money-bill-transfer',
-            'document' => 'fa-file-circle-check',
-            'registration' => 'fa-user-check',
-            're_registration' => 'fa-user-pen',
-            'auth' => 'fa-right-to-bracket',
-            'account' => 'fa-user-gear',
-            'applicant' => 'fa-user',
-            'track' => 'fa-route',
+            'payment' => 'money-02',
+            'document' => 'file-verified',
+            'registration' => 'user-check-01',
+            're_registration' => 'user-edit-01',
+            'auth' => 'login-01',
+            'account' => 'settings-01',
+            'applicant' => 'user',
+            'track' => 'route-01',
         ];
         $category = explode('.', $this->action)[0] ?? $this->action;
 
-        return $iconMap[$category] ?? 'fa-circle-info';
+        return $iconMap[$category] ?? 'information-circle';
     }
 
     /**

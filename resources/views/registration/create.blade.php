@@ -9,18 +9,18 @@
 
     /* alerts */
     .cre-alert { display:flex; gap:13px; align-items:flex-start; border-radius:14px; padding:14px 16px; margin-top:20px; border:1px solid transparent; }
-    .cre-alert i.cre-alert-ic { width:22px; height:22px; border-radius:7px; display:flex; align-items:center; justify-content:center; font-size:11px; flex:0 0 auto; margin-top:1px; }
+    .cre-alert svg.hi.cre-alert-ic { font-size:16px; flex:0 0 auto; margin-top:2px; }
     .cre-alert .cre-alert-body { flex:1; min-width:0; }
     .cre-alert .cre-alert-t { font-weight:700; font-size:13.5px; }
     .cre-alert .cre-alert-p { font-size:13px; margin-top:2px; opacity:.92; }
     .cre-alert.red { background:var(--red-soft); border-color:rgba(239,68,68,.25); }
-    .cre-alert.red i.cre-alert-ic { background:var(--red); color:#fff; }
+    .cre-alert.red svg.hi.cre-alert-ic { color:var(--red); }
     .cre-alert.red .cre-alert-t, .cre-alert.red .cre-alert-p { color:#B91C1C; }
     .cre-alert.amber { background:var(--amber-soft); border-color:rgba(217,119,6,.3); }
-    .cre-alert.amber i.cre-alert-ic { background:var(--amber); color:#fff; }
+    .cre-alert.amber svg.hi.cre-alert-ic { color:var(--amber); }
     .cre-alert.amber .cre-alert-t, .cre-alert.amber .cre-alert-p { color:#B45309; }
     .cre-alert.info { background:var(--indigo-soft); border-color:rgba(99,102,241,.25); }
-    .cre-alert.info i.cre-alert-ic { background:var(--indigo); color:#fff; }
+    .cre-alert.info svg.hi.cre-alert-ic { color:var(--indigo); }
     .cre-alert.info .cre-alert-t, .cre-alert.info .cre-alert-p { color:#4338CA; }
 
     /* section */
@@ -62,12 +62,12 @@
     .cre-sum-row { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; padding:10px 0; border-top:1px solid var(--divider); }
     .cre-sum-row:first-of-type { border-top:none; padding-top:0; }
     .cre-sum-row .lb { font-size:11.5px; color:var(--muted); display:flex; align-items:center; gap:6px; flex:0 0 auto; }
-    .cre-sum-row .lb i { color:var(--coral); font-size:11px; width:13px; text-align:center; }
+    .cre-sum-row .lb svg.hi { color:var(--coral); font-size:11px; width:13px; text-align:center; }
     .cre-sum-row .val { font-size:12px; font-weight:700; color:var(--ink); text-align:right; }
     .cre-sum-row .val.placeholder { color:var(--muted); font-weight:600; }
     .cre-sum-row .val .q-badge { font-size:9.5px; font-weight:700; padding:1px 7px; border-radius:99px; margin-left:5px; }
-    .cre-sum-row .val .q-badge.green { background:var(--green-soft); color:#047857; }
-    .cre-sum-row .val .q-badge.red { background:var(--red-soft); color:#B91C1C; }
+    .cre-sum-row .val .q-badge.green { background: transparent; border: 1px solid currentColor; color:#047857; }
+    .cre-sum-row .val .q-badge.red { background: transparent; border: 1px solid currentColor; color:#B91C1C; }
     .cre-sum-foot { margin-top:14px; padding-top:16px; border-top:1px solid var(--divider); display:flex; flex-direction:column; gap:10px; }
     .cre-sum .cre-btn.coral { width:100%; padding:13px 16px; font-size:13.5px; }
     .cre-sum .cre-btn.ghost { width:100%; }
@@ -99,12 +99,12 @@
 
     /* pills */
     .cre-pill { display:inline-flex; align-items:center; gap:6px; padding:4px 11px; border-radius:99px; font-size:11px; font-weight:700; }
-    .cre-pill.green { background:var(--green-soft); color:#047857; }
-    .cre-pill.amber { background:var(--amber-soft); color:#B45309; }
-    .cre-pill.red { background:var(--red-soft); color:#B91C1C; }
-    .cre-pill.blue { background:var(--blue-soft); color:#1D4ED8; }
-    .cre-pill.gray { background:#F3F4F6; color:var(--gray, #6b7280); }
-    .cre-pill.indigo { background:var(--indigo-soft); color:#4338CA; }
+    .cre-pill.green { background: transparent; border: 1px solid currentColor; color:#047857; }
+    .cre-pill.amber { background: transparent; border: 1px solid currentColor; color:#B45309; }
+    .cre-pill.red { background: transparent; border: 1px solid currentColor; color:#B91C1C; }
+    .cre-pill.blue { background: transparent; border: 1px solid currentColor; color:#1D4ED8; }
+    .cre-pill.gray { background: transparent; border: 1px solid currentColor; color:var(--gray, #6b7280); }
+    .cre-pill.indigo { background: transparent; border: 1px solid currentColor; color:#4338CA; }
 
     /* buttons */
     .cre-btn { display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:11px 18px; border-radius:11px; font-size:13px; font-weight:700; transition:transform .15s, box-shadow .15s; }
@@ -153,7 +153,7 @@
       {{-- Crumbs + title --}}
       <div class="cre-crumb">
         <a href="{{ route('registration.index') }}">Pendaftaran</a>
-        <i class="fa-solid fa-chevron-right" style="font-size:9px"></i>
+        <x-hi icon="fa-chevron-right" style="font-size:9px" />
         <span>Buat Pendaftaran Baru</span>
       </div>
       <h1 class="cre-title">Buat Pendaftaran Baru</h1>
@@ -161,16 +161,16 @@
 
       @if (session('error'))
         <div class="cre-alert red">
-          <i class="fa-solid fa-circle-exclamation cre-alert-ic"></i>
+          <x-hi icon="fa-circle-exclamation" class="cre-alert-ic" />
           <div class="cre-alert-body"><p class="cre-alert-p">{{ session('error') }}</p></div>
         </div>
       @endif
 
       @if ($periods->isEmpty())
         <div class="cre-empty">
-          <div class="cre-empty-ic"><i class="fa-regular fa-calendar-xmark"></i></div>
+          <div class="cre-empty-ic"><x-hi icon="fa-calendar-xmark" /></div>
           <p>Tidak ada periode pendaftaran yang aktif saat ini.</p>
-          <a href="{{ route('registration.index') }}" class="cre-btn ghost sm"><i class="fa-solid fa-arrow-left"></i> Kembali ke Daftar Pendaftaran</a>
+          <a href="{{ route('registration.index') }}" class="cre-btn ghost sm"><x-hi icon="fa-arrow-left" /> Kembali ke Daftar Pendaftaran</a>
         </div>
       @else
                         @php
@@ -182,7 +182,7 @@
                         @if($openCount === 0)
                             @if($notStartedCount > 0 && $closedCount === 0)
                                 <div class="cre-alert amber">
-                                    <i class="fa-solid fa-hourglass-half cre-alert-ic"></i>
+                                    <x-hi icon="fa-hourglass-half" class="cre-alert-ic" />
                                     <div class="cre-alert-body">
                                         <p class="cre-alert-t">Pendaftaran Belum Dibuka</p>
                                         <p class="cre-alert-p">Periode pendaftaran belum dimulai. Silakan kembali lagi sesuai jadwal yang tertera di bawah. Pendaftaran tidak dapat dilakukan sebelum tanggal mulai.</p>
@@ -190,7 +190,7 @@
                                 </div>
                             @elseif($closedCount > 0 && $notStartedCount === 0)
                                 <div class="cre-alert red">
-                                    <i class="fa-solid fa-circle-xmark cre-alert-ic"></i>
+                                    <x-hi icon="fa-circle-xmark" class="cre-alert-ic" />
                                     <div class="cre-alert-body">
                                         <p class="cre-alert-t">Pendaftaran Sudah Ditutup</p>
                                         <p class="cre-alert-p">Periode pendaftaran telah berakhir. Pendaftaran baru tidak dapat dilakukan lagi.</p>
@@ -198,7 +198,7 @@
                                 </div>
                             @else
                                 <div class="cre-alert amber">
-                                    <i class="fa-solid fa-circle-info cre-alert-ic"></i>
+                                    <x-hi icon="fa-circle-info" class="cre-alert-ic" />
                                     <div class="cre-alert-body">
                                         <p class="cre-alert-t">Pendaftaran Tidak Tersedia Saat Ini</p>
                                         <p class="cre-alert-p">Tidak ada periode pendaftaran yang sedang dibuka. Periksa jadwal di bawah — ada yang belum dibuka atau sudah ditutup.</p>
@@ -231,7 +231,7 @@
                             <div class="cre-main">
                             @if($hasAge)
                                 <div class="cre-alert info">
-                                    <i class="fa-solid fa-cake-candles cre-alert-ic"></i>
+                                    <x-hi icon="fa-cake-candles" class="cre-alert-ic" />
                                     <div class="cre-alert-body">
                                         <p class="cre-alert-t">Usia Anda saat ini: <span style="color:var(--ink)">{{ $applicantAge }} tahun</span></p>
                                         <p class="cre-alert-p">(dari tanggal lahir di profil)</p>
@@ -242,7 +242,7 @@
                             {{-- Pilih Jenjang & Periode --}}
                             <div class="cre-sec" id="step-jenjang">
                                 <div class="cre-sec-head">
-                                    <div class="cre-sec-ic coral"><i class="fa-solid fa-school"></i></div>
+                                    <div class="cre-sec-ic coral"><x-hi icon="fa-school" /></div>
                                     <div>
                                         <p class="cre-sec-ttl">Pilih Jenjang &amp; Periode <span style="color:var(--red)">*</span></p>
                                         <p class="cre-sec-desc">Pilih jenjang dan gelombang pendaftaran yang sedang dibuka.</p>
@@ -285,7 +285,7 @@
                                                     <span class="text-sm font-semibold text-eggplore-neutral-900">{{ $period->schoolLevel->name }}</span>
                                                     <span class="text-sm text-eggplore-neutral-500">- {{ $period->name }}</span>
                                                     <span class="inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-[11px] font-semibold {{ $badgeCls }}">
-                                                        <i class="fa-solid {{ $badgeIcon }} text-[10px]"></i> {{ $statusBadge }}
+                                                        <x-hi icon="{{ $badgeIcon }}" class="text-[10px]" /> {{ $statusBadge }}
                                                     </span>
                                                 </span>
                                                 <span class="mt-1 block font-mono text-xs text-eggplore-neutral-500">
@@ -306,7 +306,7 @@
                                 </div>
                                 @error('registration_period_id')
                                     <p class="mt-2 flex items-start gap-1.5 text-xs text-eggplore-danger">
-                                        <i class="fa-solid fa-circle-exclamation mt-0.5 text-[11px]"></i>
+                                        <x-hi icon="fa-circle-exclamation" class="mt-0.5 text-[11px]" />
                                         <span>{{ $message }}</span>
                                     </p>
                                 @enderror
@@ -317,7 +317,7 @@
                             {{-- Pilih Jalur Pendaftaran --}}
                             <div class="cre-sec">
                                 <div class="cre-sec-head">
-                                    <div class="cre-sec-ic blue"><i class="fa-solid fa-route"></i></div>
+                                    <div class="cre-sec-ic blue"><x-hi icon="fa-route" /></div>
                                     <div>
                                         <p class="cre-sec-ttl">Pilih Jalur Pendaftaran <span style="color:var(--red)">*</span></p>
                                         <p class="cre-sec-desc">Pilih jalur masuk sesuai minat dan prestasimu.</p>
@@ -347,7 +347,7 @@
                                             <input type="radio" name="registration_track_id" value="{{ $track->id }}" required
                                                 class="track-radio sr-only">
                                             <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-input {{ $trackIconCls }}">
-                                                <i class="fa-solid {{ $trackIcon }} text-lg"></i>
+                                                <x-hi icon="{{ $trackIcon }}" class="text-lg" />
                                             </span>
                                             <span class="flex-1 min-w-0">
                                                 <span class="flex flex-wrap items-center gap-2">
@@ -357,14 +357,14 @@
                                                 <span class="mt-0.5 block text-sm text-eggplore-neutral-500">{{ $track->description }}</span>
                                             </span>
                                             <span class="track-check hidden h-5 w-5 shrink-0 items-center justify-center rounded-full bg-eggplore-primary text-white">
-                                                <i class="fa-solid fa-check text-[10px]"></i>
+                                                <x-hi icon="fa-check" class="text-[10px]" />
                                             </span>
                                         </label>
                                     @endforeach
                                 </div>
                                 @error('registration_track_id')
                                     <p class="mt-2 flex items-start gap-1.5 text-xs text-eggplore-danger">
-                                        <i class="fa-solid fa-circle-exclamation mt-0.5 text-[11px]"></i>
+                                        <x-hi icon="fa-circle-exclamation" class="mt-0.5 text-[11px]" />
                                         <span>{{ $message }}</span>
                                     </p>
                                 @enderror
@@ -373,7 +373,7 @@
       {{-- Pilih Sekolah --}}
       <div class="cre-sec" id="school-dd">
         <div class="cre-sec-head">
-          <div class="cre-sec-ic blue"><i class="fa-solid fa-building-columns"></i></div>
+          <div class="cre-sec-ic blue"><x-hi icon="fa-building-columns" /></div>
           <div>
             <p class="cre-sec-ttl">Pilih Sekolah <span style="color:var(--red)">*</span></p>
             <p class="cre-sec-desc">Pilih sekolah tujuan sesuai jenjang pilihan.</p>
@@ -385,7 +385,7 @@
                                     class="school-trigger flex w-full items-stretch gap-3 rounded-card border border-eggplore-neutral-200 bg-white p-3 text-left transition-colors focus-within:border-eggplore-primary-500 focus-within:ring-2 focus-within:ring-eggplore-primary-400/30 disabled:cursor-not-allowed disabled:bg-eggplore-neutral-100 disabled:opacity-70"
                                     aria-haspopup="listbox" aria-expanded="false" aria-controls="school-listbox" disabled>
                                     <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-input bg-eggplore-info-soft text-eggplore-info">
-                                        <i class="fa-solid fa-school text-lg"></i>
+                                        <x-hi icon="fa-school" class="text-lg" />
                                     </span>
                                     <span class="flex flex-1 items-center justify-between gap-2">
                                         <span id="school-label" class="block min-w-0 text-sm text-eggplore-neutral-400">-- Pilih Sekolah --</span>
@@ -407,11 +407,11 @@
                                                         id="school-opt-{{ $sc->id }}"
                                                         class="school-option flex cursor-pointer items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-eggplore-neutral-900 transition-colors hover:bg-white hover:shadow-xs {{ old('school_id') == $sc->id ? 'bg-eggplore-primary-50' : '' }}">
                                                         <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-input bg-eggplore-neutral-100 text-eggplore-neutral-400">
-                                                            <i class="fa-solid fa-building-columns text-xs"></i>
+                                                            <x-hi icon="fa-building-columns" class="text-xs" />
                                                         </span>
                                                         <span class="flex-1 truncate">{{ $sc->name }}</span>
                                                         <span class="school-check {{ old('school_id') == $sc->id ? 'flex' : 'hidden' }} h-5 w-5 shrink-0 items-center justify-center rounded-full bg-eggplore-primary text-white">
-                                                            <i class="fa-solid fa-check text-[10px]"></i>
+                                                            <x-hi icon="fa-check" class="text-[10px]" />
                                                         </span>
                                                     </li>
                                                 @endforeach
@@ -431,12 +431,12 @@
                                 </select>
 
                                 <p id="school-hint" class="mt-1.5 flex items-center gap-1.5 text-xs text-eggplore-neutral-400">
-                                    <i class="fa-solid fa-circle-info text-[11px]"></i>
+                                    <x-hi icon="fa-circle-info" class="text-[11px]" />
                                     <span>Pilih jenjang dulu untuk melihat sekolah yang tersedia.</span>
                                 </p>
                                 @error('school_id')
                                     <p class="mt-2 flex items-start gap-1.5 text-xs text-eggplore-danger">
-                                        <i class="fa-solid fa-circle-exclamation mt-0.5 text-[11px]"></i>
+                                        <x-hi icon="fa-circle-exclamation" class="mt-0.5 text-[11px]" />
                                         <span>{{ $message }}</span>
                                     </p>
                                 @enderror
@@ -445,7 +445,7 @@
                 {{-- Jurusan Pilihan --}}
                 <div id="major-section" class="cre-sec">
                     <div class="cre-sec-head">
-                        <div class="cre-sec-ic amber"><i class="fa-solid fa-book-open"></i></div>
+                        <div class="cre-sec-ic amber"><x-hi icon="fa-book-open" /></div>
                         <div>
                             <p class="cre-sec-ttl">Jurusan Pilihan <span style="color:var(--red)">*</span></p>
                             <p class="cre-sec-desc">Pilih jurusan yang tersedia di sekolah tujuan.</p>
@@ -457,7 +457,7 @@
                                     class="major-trigger flex w-full items-stretch gap-3 rounded-card border border-eggplore-neutral-200 bg-white p-3 text-left transition-colors focus-within:border-eggplore-primary-500 focus-within:ring-2 focus-within:ring-eggplore-primary-400/30 disabled:cursor-not-allowed disabled:bg-eggplore-neutral-100 disabled:opacity-70"
                                     aria-haspopup="listbox" aria-expanded="false" aria-controls="major-listbox" disabled>
                                     <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-input bg-eggplore-warning-soft text-[#B98A2E]">
-                                        <i class="fa-solid fa-book-open text-lg"></i>
+                                        <x-hi icon="fa-book-open" class="text-lg" />
                                     </span>
                                     <span class="flex flex-1 items-center justify-between gap-2">
                                         <span id="major-label" class="block min-w-0 text-sm text-eggplore-neutral-400">-- Pilih Jurusan --</span>
@@ -484,12 +484,12 @@
                                 </select>
 
                                 <p id="major-quota-hint" class="mt-1 flex items-center gap-1.5 text-xs text-eggplore-neutral-400">
-                                    <i class="fa-solid fa-circle-info text-[11px]"></i>
+                                    <x-hi icon="fa-circle-info" class="text-[11px]" />
                                     <span>Pilih sekolah dan jalur untuk melihat sisa kuota.</span>
                                 </p>
                                 @error('major_id')
                                     <p class="mt-2 flex items-start gap-1.5 text-xs text-eggplore-danger">
-                                        <i class="fa-solid fa-circle-exclamation mt-0.5 text-[11px]"></i>
+                                        <x-hi icon="fa-circle-exclamation" class="mt-0.5 text-[11px]" />
                                         <span>{{ $message }}</span>
                                     </p>
                                 @enderror
@@ -506,36 +506,36 @@
                                     <p class="cre-sum-role">Pendaftar</p>
                                   </div>
                                   @if($hasAge)
-                                    <span class="cre-sum-age"><i class="fa-solid fa-cake-candles"></i> {{ $applicantAge }} th</span>
+                                    <span class="cre-sum-age"><x-hi icon="fa-cake-candles" /> {{ $applicantAge }} th</span>
                                   @endif
                                 </div>
                                 <div class="cre-sum-rows">
                                   <div class="cre-sum-row">
-                                    <span class="lb"><i class="fa-solid fa-school"></i> Jenjang</span>
+                                    <span class="lb"><x-hi icon="fa-school" /> Jenjang</span>
                                     <span class="val placeholder" id="sum-period">Belum dipilih</span>
                                   </div>
                                   <div class="cre-sum-row">
-                                    <span class="lb"><i class="fa-solid fa-route"></i> Jalur</span>
+                                    <span class="lb"><x-hi icon="fa-route" /> Jalur</span>
                                     <span class="val placeholder" id="sum-track">Belum dipilih</span>
                                   </div>
                                   <div class="cre-sum-row">
-                                    <span class="lb"><i class="fa-solid fa-building-columns"></i> Sekolah</span>
+                                    <span class="lb"><x-hi icon="fa-building-columns" /> Sekolah</span>
                                     <span class="val placeholder" id="sum-school">Belum dipilih</span>
                                   </div>
                                   <div class="cre-sum-row">
-                                    <span class="lb"><i class="fa-solid fa-book-open"></i> Jurusan</span>
+                                    <span class="lb"><x-hi icon="fa-book-open" /> Jurusan</span>
                                     <span class="val placeholder" id="sum-major">Belum dipilih</span>
                                   </div>
                                 </div>
                                 <div class="cre-sum-foot">
                                   @if($openCount === 0)
-                                    <p class="cre-sum-err"><i class="fa-solid fa-circle-exclamation"></i> Tidak ada periode yang sedang dibuka — pendaftaran tidak dapat dilanjutkan.</p>
+                                    <p class="cre-sum-err"><x-hi icon="fa-circle-exclamation" /> Tidak ada periode yang sedang dibuka — pendaftaran tidak dapat dilanjutkan.</p>
                                   @endif
                                   <a href="{{ route('registration.index') }}" class="cre-btn ghost sm">
-                                    <i class="fa-solid fa-arrow-left"></i> Kembali
+                                    <x-hi icon="fa-arrow-left" /> Kembali
                                   </a>
                                   <button type="submit" id="submit-registration" class="cre-btn coral" @if($openCount === 0) disabled @endif>
-                                    <i class="fa-solid fa-paper-plane"></i> Lanjut ke Review
+                                    <x-hi icon="fa-paper-plane" /> Lanjut ke Review
                                   </button>
                                 </div>
                               </div>
@@ -544,10 +544,10 @@
 
                             <div class="cre-bar">
                               <a href="{{ route('registration.index') }}" class="cre-btn ghost sm">
-                                <i class="fa-solid fa-arrow-left"></i> Kembali
+                                <x-hi icon="fa-arrow-left" /> Kembali
                               </a>
                               <button type="submit" form="reg-form" id="submit-bar" class="cre-btn coral" @if($openCount === 0) disabled @endif>
-                                <i class="fa-solid fa-paper-plane"></i> Lanjut ke Review
+                                <x-hi icon="fa-paper-plane" /> Lanjut ke Review
                               </button>
                             </div>
                         </form>
@@ -586,12 +586,12 @@
         const sel = selectedPeriod();
         if(!sel){ setHint(hint, '', 'gray'); return; }
         const min = mins[sel.value];
-        if(min==null){ setHint(hint, '<i class="fa-solid fa-circle-check text-[11px]"></i> Jenjang ini tidak memiliki batas usia minimal.', 'green'); return; }
-        if(age==null){ setHint(hint, '<i class="fa-solid fa-circle-info text-[11px]"></i> Minimal ' + min + ' tahun untuk jenjang ini.', 'gray'); return; }
+        if(min==null){ setHint(hint, hiSvg('fa-circle-check', 'class="text-[11px]"') + ' Jenjang ini tidak memiliki batas usia minimal.', 'green'); return; }
+        if(age==null){ setHint(hint, hiSvg('fa-circle-info', 'class="text-[11px]"') + ' Minimal ' + min + ' tahun untuk jenjang ini.', 'gray'); return; }
         if(age < min){
-          setHint(hint, '<i class="fa-solid fa-circle-exclamation text-[11px]"></i> Usia ' + age + ' tahun — belum memenuhi minimal ' + min + ' tahun untuk jenjang ini.', 'red');
+          setHint(hint, hiSvg('fa-circle-exclamation', 'class="text-[11px]"') + ' Usia ' + age + ' tahun — belum memenuhi minimal ' + min + ' tahun untuk jenjang ini.', 'red');
         } else {
-          setHint(hint, '<i class="fa-solid fa-circle-check text-[11px]"></i> Memenuhi batas minimal ' + min + ' tahun (usia ' + age + ' tahun).', 'green');
+          setHint(hint, hiSvg('fa-circle-check', 'class="text-[11px]"') + ' Memenuhi batas minimal ' + min + ' tahun (usia ' + age + ' tahun).', 'green');
         }
       }
 
@@ -600,11 +600,11 @@
         if(!sel){ setHint(periodStatusHint, '', 'gray'); syncAgeHint(); return; }
         const st = sel.getAttribute('data-status');
         if(st === 'not_started'){
-          setHint(periodStatusHint, '<i class="fa-solid fa-hourglass-half text-[11px]"></i> Pendaftaran jenjang ini belum dibuka — akan dibuka pada ' + sel.getAttribute('data-start') + '. Tidak bisa melanjutkan.', 'amber');
+          setHint(periodStatusHint, hiSvg('fa-hourglass-half', 'class="text-[11px]"') + ' Pendaftaran jenjang ini belum dibuka — akan dibuka pada ' + sel.getAttribute('data-start') + '. Tidak bisa melanjutkan.', 'amber');
         } else if(st === 'closed'){
-          setHint(periodStatusHint, '<i class="fa-solid fa-circle-xmark text-[11px]"></i> Pendaftaran jenjang ini sudah ditutup pada ' + sel.getAttribute('data-end') + '. Tidak bisa melanjutkan.', 'red');
+          setHint(periodStatusHint, hiSvg('fa-circle-xmark', 'class="text-[11px]"') + ' Pendaftaran jenjang ini sudah ditutup pada ' + sel.getAttribute('data-end') + '. Tidak bisa melanjutkan.', 'red');
         } else if(st === 'open'){
-          setHint(periodStatusHint, '<i class="fa-solid fa-circle-check text-[11px]"></i> Periode sedang dibuka — silakan lanjutkan pendaftaran.', 'green');
+          setHint(periodStatusHint, hiSvg('fa-circle-check', 'class="text-[11px]"') + ' Periode sedang dibuka — silakan lanjutkan pendaftaran.', 'green');
         } else {
           setHint(periodStatusHint, '', 'gray');
         }
@@ -757,9 +757,9 @@
         if(schoolHint){
           schoolHint.innerHTML = hasLevel
             ? (anyVisible
-                ? '<i class="fa-solid fa-circle-info text-[11px]"></i> <span>Pilih sekolah yang tersedia untuk jenjang ini.</span>'
-                : '<i class="fa-solid fa-circle-exclamation text-[11px]"></i> <span>Tidak ada sekolah untuk jenjang ini.</span>')
-            : '<i class="fa-solid fa-circle-info text-[11px]"></i> <span>Pilih jenjang dulu untuk melihat sekolah yang tersedia.</span>';
+                ? hiSvg('fa-circle-info', 'class="text-[11px]"') + ' <span>Pilih sekolah yang tersedia untuk jenjang ini.</span>'
+                : hiSvg('fa-circle-exclamation', 'class="text-[11px]"') + ' <span>Tidak ada sekolah untuk jenjang ini.</span>')
+            : hiSvg('fa-circle-info', 'class="text-[11px]"') + ' <span>Pilih jenjang dulu untuk melihat sekolah yang tersedia.</span>';
         }
 
         syncMajorSection();
@@ -919,12 +919,12 @@
         list.innerHTML = majorCurrentOptions.map(function(m){
           return '<li role="option" data-value="' + m.id + '" aria-selected="false" id="major-opt-' + m.id + '"'
             + ' class="major-option flex cursor-pointer items-center gap-3 rounded-lg px-3 py-3 text-sm text-eggplore-neutral-900 transition-colors hover:bg-white hover:shadow-xs">'
-            + '<span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-input bg-eggplore-warning-soft text-[#B98A2E]"><i class="fa-solid fa-book text-xs"></i></span>'
+            + '<span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-input bg-eggplore-warning-soft text-[#B98A2E]">' + hiSvg('fa-book', 'class="text-xs"') + '</span>'
             + '<span class="flex min-w-0 flex-1 flex-col gap-1">'
             +   '<span class="major-name text-[13px] font-medium leading-snug text-eggplore-neutral-900">' + m.name + '</span>'
             +   '<span class="major-q-badge"></span>'
             + '</span>'
-            + '<span class="major-check hidden h-5 w-5 shrink-0 items-center justify-center rounded-full bg-eggplore-primary text-white"><i class="fa-solid fa-check text-[10px]"></i></span>'
+            + '<span class="major-check hidden h-5 w-5 shrink-0 items-center justify-center rounded-full bg-eggplore-primary text-white">' + hiSvg('fa-check', 'class="text-[10px]"') + '</span>'
             + '</li>';
         }).join('');
         majorSyncBadges();
@@ -1048,14 +1048,14 @@
       function syncQuota(){
         if(!majorSelect || !quotaHint) return;
         if(!levelNeedsMajor()){
-          quotaHint.innerHTML = '<i class="fa-solid fa-circle-info text-[11px]"></i> Jenjang ini tidak memerlukan pemilihan jurusan.';
+          quotaHint.innerHTML = hiSvg('fa-circle-info', 'class="text-[11px]"') + ' Jenjang ini tidak memerlukan pemilihan jurusan.';
           quotaHint.className = 'mt-1 flex items-center gap-1.5 text-xs text-eggplore-neutral-500';
           return;
         }
         const tid = getTrackId();
         const mid = majorSelect.value;
         if(!tid || !mid){
-          quotaHint.innerHTML = '<i class="fa-solid fa-circle-info text-[11px]"></i> Pilih jalur dan jurusan untuk melihat sisa kuota jalur tersebut.';
+          quotaHint.innerHTML = hiSvg('fa-circle-info', 'class="text-[11px]"') + ' Pilih jalur dan jurusan untuk melihat sisa kuota jalur tersebut.';
           quotaHint.className = 'mt-1 flex items-center gap-1.5 text-xs text-eggplore-neutral-500';
           syncOptions(); return;
         }
@@ -1063,13 +1063,13 @@
         const used = acceptedByMajorTrack[mid] && acceptedByMajorTrack[mid][tid] !== undefined ? acceptedByMajorTrack[mid][tid] : 0;
         const tname = tracks[tid] || 'jalur ini';
         if(quota===null || quota===0){
-          quotaHint.innerHTML = '<i class="fa-solid fa-circle-info text-[11px]"></i> ' + tname + ': tanpa batas kuota.';
+          quotaHint.innerHTML = hiSvg('fa-circle-info', 'class="text-[11px]"') + ' ' + tname + ': tanpa batas kuota.';
           quotaHint.className = 'mt-1 flex items-center gap-1.5 text-xs text-eggplore-neutral-500';
         }
         else {
           const open = Math.max(0, quota - used);
           const isFull = open === 0;
-          quotaHint.innerHTML = (isFull ? '<i class="fa-solid fa-circle-exclamation text-[11px]"></i> ' : '<i class="fa-solid fa-circle-check text-[11px]"></i> ')
+          quotaHint.innerHTML = (isFull ? hiSvg('fa-circle-exclamation', 'class="text-[11px]"') + ' ' : hiSvg('fa-circle-check', 'class="text-[11px]"') + ' ')
             + tname + ' — Sisa kuota: <span class="font-mono font-semibold">' + open + ' / ' + quota + '</span>' + (isFull ? ' (PENUH — pilih jalur lain)' : '');
           quotaHint.className = isFull
             ? 'mt-1 flex items-center gap-1.5 text-xs font-medium text-eggplore-danger'

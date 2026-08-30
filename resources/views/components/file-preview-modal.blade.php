@@ -123,6 +123,39 @@ function filePdfNext() {
     filePdfRender();
 }
 
+function fileOpenPdf(url) {
+    filePreviewMode = 'pdf';
+    var body = document.getElementById('filePreviewBody');
+    if (!window.pdfjsLib) {
+        body.innerHTML = '<div class="p-8 text-center text-sm text-gray-600">Gagal memuat penampil PDF.</div>';
+        return;
+    }
+    body.innerHTML = '<div class="p-8 text-center text-sm text-gray-500">Memuat dokumen...</div>';
+    window.pdfjsLib.getDocument(url).promise.then(function (pdf) {
+        filePdfDoc = pdf;
+        document.getElementById('filePdfPages').textContent = pdf.numPages;
+        fileSetToolbar(true, pdf.numPages > 1);
+        fileUpdateZoomLabel();
+        body.innerHTML = '<canvas id="filePdfCanvas" class="shadow rounded bg-white" style="cursor:grab"></canvas>';
+        filePdfRender();
+    }).catch(function () {
+        body.innerHTML = '<div class="p-8 text-center text-sm text-red-600">Dokumen PDF gagal dibuka. <a href="' + url + '" target="_blank" class="underline">Buka di tab baru</a></div>';
+    });
+}
+
+function fileOpenImage(url) {
+    filePreviewMode = 'image';
+    var body = document.getElementById('filePreviewBody');
+    body.innerHTML = '<img id="filePreviewImage" src="' + url + '" alt="Pratinjau" class="max-w-full h-auto rounded" style="transition:transform .15s ease-out;cursor:grab" onerror="this.outerHTML=\'<div class=p-8 text-center text-sm text-red-600>Gagal memuat gambar. <a href=' + url + ' target=_blank class=underline>Buka di tab baru</a></div>\'">';
+    fileSetToolbar(true, false);
+    fileApplyZoom();
+}
+
+function fileShowUnsupported(url) {
+    var body = document.getElementById('filePreviewBody');
+    body.innerHTML = '<div class="p-8 text-center text-sm text-gray-600">Format file tidak dapat ditampilkan. <a href="' + url + '" target="_blank" class="underline">Buka / unduh file</a></div>';
+}
+
 function showFileModal(url, title) {
     var body = document.getElementById('filePreviewBody');
     document.getElementById('filePreviewTitle').textContent = title || 'Pratinjau Dokumen';
@@ -135,31 +168,27 @@ function showFileModal(url, title) {
     filePdfPageNum = 1;
     fileSetToolbar(false, false);
     document.getElementById('filePreviewModal').classList.remove('hidden');
+
     if (isPdf) {
-        filePreviewMode = 'pdf';
-        if (!window.pdfjsLib) {
-            body.innerHTML = '<div class="p-8 text-center text-sm text-gray-600">Gagal memuat penampil PDF.</div>';
-            return;
-        }
-        body.innerHTML = '<div class="p-8 text-center text-sm text-gray-500">Memuat dokumen...</div>';
-        window.pdfjsLib.getDocument(url).promise.then(function (pdf) {
-            filePdfDoc = pdf;
-            document.getElementById('filePdfPages').textContent = pdf.numPages;
-            fileSetToolbar(true, pdf.numPages > 1);
-            fileUpdateZoomLabel();
-            body.innerHTML = '<canvas id="filePdfCanvas" class="shadow rounded bg-white" style="cursor:grab"></canvas>';
-            filePdfRender();
-        }).catch(function () {
-            body.innerHTML = '<div class="p-8 text-center text-sm text-red-600">Dokumen PDF gagal dibuka. <a href="' + url + '" target="_blank" class="underline">Buka di tab baru</a></div>';
-        });
+        fileOpenPdf(url);
     } else if (isImage) {
-        filePreviewMode = 'image';
-        body.innerHTML = '<img id="filePreviewImage" src="' + url + '" alt="Pratinjau" class="max-w-full h-auto rounded" style="transition:transform .15s ease-out;cursor:grab" onerror="this.outerHTML=\'<div class=p-8 text-center text-sm text-red-600>Gagal memuat gambar. <a href=' + url + ' target=_blank class=underline>Buka di tab baru</a></div>\'">';
-        fileSetToolbar(true, false);
-        fileApplyZoom();
+        fileOpenImage(url);
     } else {
-        filePreviewMode = null;
-        body.innerHTML = '<div class="p-8 text-center text-sm text-gray-600">Format file tidak dapat ditampilkan. <a href="' + url + '" target="_blank" class="underline">Buka / unduh file</a></div>';
+        // URL/title tidak memuat ekstensi file (mis. /payments/{id}/proof).
+        // Cek Content-Type dari server untuk menentukan jenis file.
+        body.innerHTML = '<div class="p-8 text-center text-sm text-gray-500">Memuat pratinjau...</div>';
+        fetch(url, { method: 'HEAD' }).then(function (res) {
+            var ct = (res.headers.get('Content-Type') || '').toLowerCase();
+            if (ct.indexOf('pdf') !== -1) {
+                fileOpenPdf(url);
+            } else if (ct.indexOf('image/') === 0) {
+                fileOpenImage(url);
+            } else {
+                fileShowUnsupported(url);
+            }
+        }).catch(function () {
+            fileShowUnsupported(url);
+        });
     }
 }
 

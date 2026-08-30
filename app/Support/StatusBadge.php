@@ -30,15 +30,15 @@ class StatusBadge
     public static function registrationStatusClass(?string $status): string
     {
         return match ($status) {
-            'pending' => 'bg-yellow-100 text-yellow-800',
-            'verified' => 'bg-blue-100 text-blue-800',
-            'rejected' => 'bg-red-100 text-red-800',
-            'accepted' => 'bg-green-100 text-green-800',
-            're_registration_complete' => 'bg-purple-100 text-purple-800',
-            'canceled' => 'bg-gray-300 text-gray-700',
-            'withdrawn' => 'bg-orange-100 text-orange-800',
-            'completed' => 'bg-green-100 text-green-800',
-            default => 'bg-gray-100 text-gray-800',
+            'pending' => 'bg-transparent border border-yellow-300 text-yellow-700',
+            'verified' => 'bg-transparent border border-blue-300 text-blue-700',
+            'rejected' => 'bg-transparent border border-red-300 text-red-700',
+            'accepted' => 'bg-transparent border border-green-300 text-green-700',
+            're_registration_complete' => 'bg-transparent border border-purple-300 text-purple-700',
+            'canceled' => 'bg-transparent border border-gray-300 text-gray-600',
+            'withdrawn' => 'bg-transparent border border-orange-300 text-orange-700',
+            'completed' => 'bg-transparent border border-green-300 text-green-700',
+            default => 'bg-transparent border border-gray-300 text-gray-600',
         };
     }
 
@@ -62,11 +62,11 @@ class StatusBadge
     public static function paymentStatusClass(?string $status): string
     {
         return match ($status) {
-            'unpaid' => 'bg-gray-100 text-gray-800',
-            'pending' => 'bg-yellow-100 text-yellow-800',
-            'paid', 'verified' => 'bg-green-100 text-green-800',
-            'failed', 'rejected' => 'bg-red-100 text-red-800',
-            default => 'bg-gray-100 text-gray-800',
+            'unpaid' => 'bg-transparent border border-gray-300 text-gray-600',
+            'pending' => 'bg-transparent border border-yellow-300 text-yellow-700',
+            'paid', 'verified' => 'bg-transparent border border-green-300 text-green-700',
+            'failed', 'rejected' => 'bg-transparent border border-red-300 text-red-700',
+            default => 'bg-transparent border border-gray-300 text-gray-600',
         };
     }
 
@@ -77,14 +77,14 @@ class StatusBadge
     public static function registrationStatusCard(?string $status): array
     {
         return match ($status) {
-            'pending' => ['label' => 'Menunggu Verifikasi', 'icon' => 'fa-clock', 'cls' => 'bg-blue-50 text-blue-600'],
-            'verified' => ['label' => 'Terverifikasi', 'icon' => 'fa-circle-check', 'cls' => 'bg-indigo-50 text-indigo-600'],
-            'accepted' => ['label' => 'Diterima', 'icon' => 'fa-circle-check', 'cls' => 'bg-emerald-50 text-emerald-600'],
-            're_registration_complete' => ['label' => 'Terdaftar', 'icon' => 'fa-flag-checkered', 'cls' => 'bg-purple-50 text-purple-600'],
-            'rejected' => ['label' => 'Ditolak', 'icon' => 'fa-circle-xmark', 'cls' => 'bg-red-50 text-red-600'],
-            'canceled' => ['label' => 'Dibatalkan', 'icon' => 'fa-ban', 'cls' => 'bg-gray-100 text-gray-500'],
-            'withdrawn' => ['label' => 'Mundur Diri', 'icon' => 'fa-person-walking-arrow-right', 'cls' => 'bg-orange-50 text-orange-600'],
-            default => ['label' => ucfirst(str_replace('_', ' ', (string) $status)), 'icon' => 'fa-circle-question', 'cls' => 'bg-gray-50 text-gray-600'],
+            'pending' => ['label' => 'Menunggu Verifikasi', 'icon' => 'clock-01', 'cls' => 'bg-transparent border border-blue-300 text-blue-600'],
+            'verified' => ['label' => 'Terverifikasi', 'icon' => 'checkmark-circle-02', 'cls' => 'bg-transparent border border-indigo-300 text-indigo-600'],
+            'accepted' => ['label' => 'Diterima', 'icon' => 'checkmark-circle-02', 'cls' => 'bg-transparent border border-emerald-300 text-emerald-600'],
+            're_registration_complete' => ['label' => 'Terdaftar', 'icon' => 'checkmark-badge-01', 'cls' => 'bg-transparent border border-purple-300 text-purple-600'],
+            'rejected' => ['label' => 'Ditolak', 'icon' => 'cancel-circle', 'cls' => 'bg-transparent border border-red-300 text-red-600'],
+            'canceled' => ['label' => 'Dibatalkan', 'icon' => 'cancel-01', 'cls' => 'bg-transparent border border-gray-300 text-gray-500'],
+            'withdrawn' => ['label' => 'Mundur Diri', 'icon' => 'walking', 'cls' => 'bg-transparent border border-orange-300 text-orange-600'],
+            default => ['label' => ucfirst(str_replace('_', ' ', (string) $status)), 'icon' => 'help-circle', 'cls' => 'bg-transparent border border-gray-300 text-gray-600'],
         };
     }
 
@@ -92,11 +92,11 @@ class StatusBadge
     public static function paymentStatusCard(?string $status): array
     {
         return match ($status) {
-            'unpaid' => ['label' => 'Belum Dibayar', 'icon' => 'fa-credit-card', 'cls' => 'bg-gray-50 text-gray-500'],
-            'pending' => ['label' => 'Menunggu Konfirmasi', 'icon' => 'fa-clock', 'cls' => 'bg-yellow-50 text-yellow-600'],
-            'paid' => ['label' => 'Lunas', 'icon' => 'fa-circle-check', 'cls' => 'bg-emerald-50 text-emerald-600'],
-            'failed' => ['label' => 'Gagal', 'icon' => 'fa-circle-xmark', 'cls' => 'bg-red-50 text-red-600'],
-            default => ['label' => ucfirst(str_replace('_', ' ', (string) $status)), 'icon' => 'fa-credit-card', 'cls' => 'bg-gray-50 text-gray-500'],
+            'unpaid' => ['label' => 'Belum Dibayar', 'icon' => 'credit-card', 'cls' => 'bg-transparent border border-gray-300 text-gray-500'],
+            'pending' => ['label' => 'Menunggu Konfirmasi', 'icon' => 'clock-01', 'cls' => 'bg-transparent border border-yellow-300 text-yellow-600'],
+            'paid' => ['label' => 'Lunas', 'icon' => 'checkmark-circle-02', 'cls' => 'bg-transparent border border-emerald-300 text-emerald-600'],
+            'failed' => ['label' => 'Gagal', 'icon' => 'cancel-circle', 'cls' => 'bg-transparent border border-red-300 text-red-600'],
+            default => ['label' => ucfirst(str_replace('_', ' ', (string) $status)), 'icon' => 'credit-card', 'cls' => 'bg-transparent border border-gray-300 text-gray-500'],
         };
     }
 }

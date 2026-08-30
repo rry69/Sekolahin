@@ -25,9 +25,9 @@
         </div>
 
         <div class="prf-actions">
-            <button type="submit" class="prf-btn coral"><i class="fa-solid fa-floppy-disk"></i> Simpan</button>
+            <button type="submit" class="prf-btn coral"><x-hi icon="fa-floppy-disk" /> Simpan</button>
             @if (session('status') === 'password-updated')
-                <span x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 2500)" class="prf-saved"><i class="fa-solid fa-check" style="margin-right:4px"></i> Tersimpan.</span>
+                <span x-data="{ show: true }" x-show="show" x-transition x-init="setTimeout(() => show = false, 2500)" class="prf-saved"><x-hi icon="fa-check" style="margin-right:4px" /> Tersimpan.</span>
             @endif
         </div>
     </form>

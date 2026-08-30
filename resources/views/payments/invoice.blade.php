@@ -68,25 +68,25 @@
 
     /* pills */
     .inv-pill { display:inline-flex; align-items:center; gap:6px; padding:5px 12px; border-radius:99px; font-size:11.5px; font-weight:700; white-space:nowrap; }
-    .inv-pill.green { background:var(--green-soft); color:#047857; }
-    .inv-pill.red { background:var(--red-soft); color:#B91C1C; }
-    .inv-pill.amber { background:var(--amber-soft); color:#B45309; }
-    .inv-pill.blue { background:var(--blue-soft); color:#1D4ED8; }
-    .inv-pill.gray { background:var(--gray-soft); color:var(--gray); }
+    .inv-pill.green { background: transparent; border: 1px solid currentColor; color:#047857; }
+    .inv-pill.red { background: transparent; border: 1px solid currentColor; color:#B91C1C; }
+    .inv-pill.amber { background: transparent; border: 1px solid currentColor; color:#B45309; }
+    .inv-pill.blue { background: transparent; border: 1px solid currentColor; color:#1D4ED8; }
+    .inv-pill.gray { background: transparent; border: 1px solid currentColor; color:var(--gray); }
 
     /* alert deadline */
     .inv-deadline { display:flex; gap:12px; align-items:flex-start; margin-top:14px; padding:14px 16px; border-radius:14px; border:1px solid transparent; }
-    .inv-deadline i.inv-dl-ic { width:34px; height:34px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:13px; flex:0 0 auto; }
+    .inv-deadline svg.hi.inv-dl-ic { font-size:20px; flex:0 0 auto; margin-top:2px; }
     .inv-deadline .inv-dl-t { font-size:13px; font-weight:800; }
     .inv-deadline .inv-dl-p { font-size:12.5px; margin-top:2px; opacity:.95; }
     .inv-deadline.amber { background:var(--amber-soft); border-color:rgba(217,119,6,.3); }
-    .inv-deadline.amber i { background:var(--amber); color:#fff; }
+    .inv-deadline.amber svg.hi { color:var(--amber); }
     .inv-deadline.amber .inv-dl-t, .inv-deadline.amber .inv-dl-p { color:#B45309; }
     .inv-deadline.red { background:var(--red-soft); border-color:rgba(239,68,68,.25); }
-    .inv-deadline.red i { background:var(--red); color:#fff; }
+    .inv-deadline.red svg.hi { color:var(--red); }
     .inv-deadline.red .inv-dl-t, .inv-deadline.red .inv-dl-p { color:#B91C1C; }
     .inv-deadline.green { background:var(--green-soft); border-color:rgba(16,185,129,.3); }
-    .inv-deadline.green i { background:var(--green); color:#fff; }
+    .inv-deadline.green svg.hi { color:var(--green); }
     .inv-deadline.green .inv-dl-t, .inv-deadline.green .inv-dl-p { color:#047857; }
     .inv-deadline b { font-weight:800; }
 
@@ -179,18 +179,18 @@
 
     /* alert info */
     .inv-alert { display:flex; gap:12px; align-items:flex-start; border-radius:14px; padding:14px 16px; margin-top:14px; border:1px solid transparent; }
-    .inv-alert i { width:22px; height:22px; border-radius:7px; display:flex; align-items:center; justify-content:center; font-size:11px; flex:0 0 auto; margin-top:1px; }
+    .inv-alert svg.hi { font-size:16px; flex:0 0 auto; margin-top:2px; }
     .inv-alert.blue { background:var(--blue-soft); border-color:rgba(37,99,235,.25); }
-    .inv-alert.blue i { background:var(--blue); color:#fff; }
+    .inv-alert.blue svg.hi { color:var(--blue); }
     .inv-alert.blue .inv-alert-t, .inv-alert.blue .inv-alert-p { color:#1D4ED8; }
     .inv-alert.red { background:var(--red-soft); border-color:rgba(239,68,68,.25); }
-    .inv-alert.red i { background:var(--red); color:#fff; }
+    .inv-alert.red svg.hi { color:var(--red); }
     .inv-alert.red .inv-alert-t, .inv-alert.red .inv-alert-p { color:#B91C1C; }
     .inv-alert.green { background:var(--green-soft); border-color:rgba(16,185,129,.3); }
-    .inv-alert.green i { background:var(--green); color:#fff; }
+    .inv-alert.green svg.hi { color:var(--green); }
     .inv-alert.green .inv-alert-t, .inv-alert.green .inv-alert-p { color:#047857; }
     .inv-alert.amber { background:var(--amber-soft); border-color:rgba(217,119,6,.3); }
-    .inv-alert.amber i { background:var(--amber); color:#fff; }
+    .inv-alert.amber svg.hi { color:var(--amber); }
     .inv-alert.amber .inv-alert-t, .inv-alert.amber .inv-alert-p { color:#B45309; }
     .inv-alert .inv-alert-t { font-weight:700; font-size:13.5px; }
     .inv-alert .inv-alert-p { font-size:13px; margin-top:2px; opacity:.92; }
@@ -213,9 +213,9 @@
       {{-- Crumbs + title --}}
       <div class="inv-crumb">
         <a href="{{ route('registration.index') }}">Pendaftaran</a>
-        <i class="fa-solid fa-chevron-right" style="font-size:9px"></i>
+        <x-hi icon="fa-chevron-right" style="font-size:9px" />
         <a href="{{ route('registration.show', $registration) }}">Detail Pendaftaran</a>
-        <i class="fa-solid fa-chevron-right" style="font-size:9px"></i>
+        <x-hi icon="fa-chevron-right" style="font-size:9px" />
         <span>Invoice Pembayaran</span>
       </div>
       <h1 class="inv-title">Invoice Pembayaran</h1>
@@ -224,13 +224,13 @@
       {{-- Flash --}}
       @if (session('success'))
         <div class="inv-alert green" style="margin-top:16px">
-          <i class="fa-solid fa-circle-check"></i>
+          <x-hi icon="fa-circle-check" />
           <div><p class="inv-alert-p">{{ session('success') }}</p></div>
         </div>
       @endif
       @if (session('error'))
         <div class="inv-alert red" style="margin-top:16px">
-          <i class="fa-solid fa-circle-exclamation"></i>
+          <x-hi icon="fa-circle-exclamation" />
           <div><p class="inv-alert-p">{{ session('error') }}</p></div>
         </div>
       @endif
@@ -242,20 +242,20 @@
             <img src="{{ $schoolLogoUrl }}" alt="Logo {{ $school->name }}" style="width:100%;height:100%;object-fit:cover;border-radius:14px;">
           </span>
         @else
-          <span class="inv-school-ic"><i class="fa-solid fa-graduation-cap"></i></span>
+          <span class="inv-school-ic"><x-hi icon="fa-graduation-cap" /></span>
         @endif
         <div>
           <p class="inv-school-name">{{ $school->name }}</p>
           <p class="inv-school-addr">{{ $school->address }}</p>
           <p class="inv-school-addr" style="margin-top:4px;font-weight:700;color:var(--ink);letter-spacing:.04em">INVOICE PEMBAYARAN</p>
         </div>
-        <span class="inv-pill {{ $statusTone }} inv-school-badge" id="inv-status-pill"><i class="fa-solid {{ $statusIcon }}" id="inv-status-icon"></i> {{ $statusLabel }}</span>
+        <span class="inv-pill {{ $statusTone }} inv-school-badge" id="inv-status-pill"><x-hi icon="{{ $statusIcon }}" id="inv-status-icon" /> {{ $statusLabel }}</span>
       </div>
 
       {{-- Deadline highlight --}}
       @if ($isPending)
         <div class="inv-deadline {{ $deadlineExpired ? 'red' : ($deadlineHours <= 24 ? 'red' : ($deadlineHours <= 72 ? 'amber' : 'green')) }}" id="inv-deadline-banner">
-          <i class="fa-solid {{ $deadlineExpired ? 'fa-circle-exclamation' : 'fa-hourglass-half' }} inv-dl-ic"></i>
+          <x-hi icon="{{ $deadlineExpired ? 'fa-circle-exclamation' : 'fa-hourglass-half' }}" class="inv-dl-ic" />
           <div>
             @if ($deadlineExpired)
               <p class="inv-dl-t">Batas waktu pembayaran telah berakhir</p>
@@ -276,7 +276,7 @@
       @elseif ($isVerified)
         {{-- Banner sukses pengganti batas waktu saat sudah lunas --}}
         <div class="inv-deadline green" id="inv-success-banner">
-          <i class="fa-solid fa-circle-check inv-dl-ic"></i>
+          <x-hi icon="fa-circle-check" class="inv-dl-ic" />
           <div>
             <p class="inv-dl-t">Pembayaran berhasil diverifikasi</p>
             <p class="inv-dl-p">Tagihan ini sudah lunas. Terima kasih!</p>
@@ -286,19 +286,19 @@
 
       {{-- Amount highlight --}}
       <div class="inv-amount">
-        <span class="inv-amount-ic"><i class="fa-solid fa-wallet"></i></span>
+        <span class="inv-amount-ic"><x-hi icon="fa-wallet" /></span>
         <div>
           <p class="inv-amount-label">Total Tagihan</p>
           <p class="inv-amount-value">{{ $amountLabel }}</p>
           <p class="inv-amount-terbilang">Terbilang: {{ ucfirst($terbilang) }} Rupiah</p>
         </div>
-        <span class="inv-pill {{ $statusTone }} inv-amount-status" id="inv-amount-status"><i class="fa-solid {{ $statusIcon }}" id="inv-amount-status-icon"></i> {{ $statusLabel }}</span>
+        <span class="inv-pill {{ $statusTone }} inv-amount-status" id="inv-amount-status"><x-hi icon="{{ $statusIcon }}" id="inv-amount-status-icon" /> {{ $statusLabel }}</span>
       </div>
 
       {{-- Info grid --}}
       <section class="inv-sec">
         <div class="inv-sec-head">
-          <div class="inv-sec-ic blue"><i class="fa-solid fa-receipt"></i></div>
+          <div class="inv-sec-ic blue"><x-hi icon="fa-receipt" /></div>
           <div>
             <p class="inv-sec-ttl">Informasi Invoice</p>
             <p class="inv-sec-desc">Nomor dan detail tagihan pembayaran.</p>
@@ -310,7 +310,7 @@
             <p class="inv-c-label">No. Invoice</p>
             <p class="inv-c-val">
               <span>{{ $invoiceNumber }}</span>
-              <button type="button" class="inv-copy" onclick="invCopy('{{ $invoiceNumber }}', this)" aria-label="Salin nomor invoice"><i class="fa-regular fa-copy"></i> Salin</button>
+              <button type="button" class="inv-copy" onclick="invCopy('{{ $invoiceNumber }}', this)" aria-label="Salin nomor invoice"><x-hi icon="fa-copy" /> Salin</button>
             </p>
           </div>
           @endif
@@ -318,7 +318,7 @@
             <p class="inv-c-label">No. Registrasi</p>
             <p class="inv-c-val">
               <span>{{ $regNumber }}</span>
-              <button type="button" class="inv-copy" onclick="invCopy('{{ $regNumber }}', this)" aria-label="Salin nomor registrasi"><i class="fa-regular fa-copy"></i> Salin</button>
+              <button type="button" class="inv-copy" onclick="invCopy('{{ $regNumber }}', this)" aria-label="Salin nomor registrasi"><x-hi icon="fa-copy" /> Salin</button>
             </p>
           </div>
           <div class="inv-cell">
@@ -359,7 +359,7 @@
       {{-- Payment section --}}
       <section class="inv-sec">
         <div class="inv-sec-head">
-          <div class="inv-sec-ic coral"><i class="fa-solid fa-credit-card"></i></div>
+          <div class="inv-sec-ic coral"><x-hi icon="fa-credit-card" /></div>
           <div>
             <p class="inv-sec-ttl">Metode Pembayaran</p>
             <p class="inv-sec-desc">
@@ -375,7 +375,7 @@
         <div id="inv-pay-body">
         @if ($isVerified)
           <div class="inv-alert green">
-            <i class="fa-solid fa-circle-check"></i>
+            <x-hi icon="fa-circle-check" />
             <div>
               <p class="inv-alert-t">Pembayaran telah lunas</p>
               <p class="inv-alert-p">Tagihan ini sudah diverifikasi oleh panitia. Terima kasih!</p>
@@ -383,7 +383,7 @@
           </div>
         @elseif ($isRejected)
           <div class="inv-alert red">
-            <i class="fa-solid fa-circle-xmark"></i>
+            <x-hi icon="fa-circle-xmark" />
             <div>
               <p class="inv-alert-t">Pembayaran ditolak</p>
               <p class="inv-alert-p">
@@ -399,7 +399,7 @@
             @if ($isManual)
               {{-- ===== MANUAL (Transfer Bank) ===== --}}
               <div class="inv-method primary">
-                <span class="inv-m-ic"><i class="fa-solid fa-building-columns"></i></span>
+                <span class="inv-m-ic"><x-hi icon="fa-building-columns" /></span>
                 <div>
                   <p class="inv-m-ttl">Transfer Bank (Manual)</p>
                   <p class="inv-m-desc">Lakukan transfer sesuai nominal tagihan, lalu unggah bukti transfer. Pembayaran diverifikasi oleh panitia.</p>
@@ -409,7 +409,7 @@
               {{-- Rekening tujuan --}}
               <div class="inv-bank">
                 <div class="inv-bank-head">
-                  <span class="inv-bank-head-ic"><i class="fa-solid fa-landmark"></i></span>
+                  <span class="inv-bank-head-ic"><x-hi icon="fa-landmark" /></span>
                   <div>
                     <p class="inv-bank-head-t">Rekening Tujuan Pembayaran</p>
                     <p class="inv-bank-head-p">Transfer ke rekening resmi berikut:</p>
@@ -425,7 +425,7 @@
                     <span class="inv-bank-value">
                       @if ($bankNumber)
                         <span class="mono">{{ $bankNumber }}</span>
-                        <button type="button" class="inv-copy" onclick="invCopy('{{ $bankNumber }}', this)" aria-label="Salin nomor rekening"><i class="fa-regular fa-copy"></i> Salin</button>
+                        <button type="button" class="inv-copy" onclick="invCopy('{{ $bankNumber }}', this)" aria-label="Salin nomor rekening"><x-hi icon="fa-copy" /> Salin</button>
                       @else
                         <span style="color:var(--muted);font-weight:600">Belum diatur admin</span>
                       @endif
@@ -479,14 +479,14 @@
               {{-- ===== ONLINE (Xendit) ===== --}}
               @if ($canPayOnline)
                 <div class="inv-method primary">
-                  <span class="inv-m-ic"><i class="fa-solid fa-bolt"></i></span>
+                  <span class="inv-m-ic"><x-hi icon="fa-bolt" /></span>
                   <div>
                     <p class="inv-m-ttl">Lanjut Bayar Online (Xendit)</p>
                     <p class="inv-m-desc">Transfer Bank, E-Wallet, atau Retail Store. Pembayaran diproses otomatis.</p>
                   </div>
                   <div class="inv-m-foot">
                     <a href="{{ $payment->xendit_invoice_url }}" target="_blank" rel="noopener" class="inv-btn coral" style="width:100%">
-                      <i class="fa-solid fa-credit-card"></i> Lanjut Bayar Online
+                      <x-hi icon="fa-credit-card" /> Lanjut Bayar Online
                     </a>
                   </div>
                 </div>
@@ -501,7 +501,7 @@
       @if ($isManual || $hasProof)
       <section class="inv-sec">
         <div class="inv-sec-head">
-          <div class="inv-sec-ic {{ $hasProof ? 'green' : 'amber' }}"><i class="fa-solid {{ $hasProof ? 'fa-file-circle-check' : 'fa-file-circle-question' }}"></i></div>
+          <div class="inv-sec-ic {{ $hasProof ? 'green' : 'amber' }}"><x-hi icon="{{ $hasProof ? 'fa-file-circle-check' : 'fa-file-circle-question' }}" /></div>
           <div>
             <p class="inv-sec-ttl">Bukti Transfer</p>
             <p class="inv-sec-desc">Status bukti pembayaran yang kamu unggah.</p>
@@ -509,7 +509,7 @@
         </div>
 
         <div class="inv-proof">
-          <span class="inv-proof-ic {{ $hasProof ? 'green' : 'gray' }}"><i class="fa-solid {{ $hasProof ? 'fa-circle-check' : 'fa-cloud-arrow-up' }}"></i></span>
+          <span class="inv-proof-ic {{ $hasProof ? 'green' : 'gray' }}"><x-hi icon="{{ $hasProof ? 'fa-circle-check' : 'fa-cloud-arrow-up' }}" /></span>
           <div class="inv-proof-info">
             <p class="inv-proof-t">{{ $hasProof ? 'Bukti transfer sudah diunggah' : 'Belum ada bukti transfer' }}</p>
             <p class="inv-proof-p">
@@ -523,7 +523,7 @@
           @if ($hasProof && $proofUrl)
             <div class="inv-proof-action">
               <a href="{{ $proofUrl }}" target="_blank" rel="noopener" class="inv-btn ghost">
-                <i class="fa-solid fa-image"></i> Lihat Bukti Transfer
+                <x-hi icon="fa-image" /> Lihat Bukti Transfer
               </a>
             </div>
           @endif
@@ -535,11 +535,11 @@
       <div class="inv-actions">
         @if ($canPrintInvoice)
           <a href="{{ route('payments.invoice', $payment) }}" target="_blank" class="inv-btn ghost" id="inv-print-btn">
-            <i class="fa-solid fa-download"></i> Download PDF
+            <x-hi icon="fa-download" /> Download PDF
           </a>
         @endif
         <a href="{{ route('registration.show', $registration) }}" class="inv-btn ghost">
-          <i class="fa-solid fa-arrow-left"></i> Kembali ke Pendaftaran
+          <x-hi icon="fa-arrow-left" /> Kembali ke Pendaftaran
         </a>
       </div>
 
@@ -553,7 +553,7 @@
       function done(){
         if(!btn) return;
         var old = btn.innerHTML;
-        btn.innerHTML = '<i class="fa-solid fa-check"></i> Tersalin';
+        btn.innerHTML = hiSvg('fa-check') + ' Tersalin';
         btn.classList.add('copied');
         if(window.showToast) showToast('Nomor berhasil disalin');
         setTimeout(function(){ btn.innerHTML = old; btn.classList.remove('copied'); }, 1800);
@@ -622,14 +622,14 @@
         var amountIcon = document.getElementById('inv-amount-status-icon');
         if(pill){
           pill.className = 'inv-pill ' + s.tone + ' inv-school-badge';
-          pill.innerHTML = '<i class="fa-solid ' + s.icon + '"></i> ' + s.label;
+          pill.innerHTML = hiSvg(s.icon) + ' ' + s.label;
         }
         if(amountStatus){
           amountStatus.className = 'inv-pill ' + s.tone + ' inv-amount-status';
-          amountStatus.innerHTML = '<i class="fa-solid ' + s.icon + '"></i> ' + s.label;
+          amountStatus.innerHTML = hiSvg(s.icon) + ' ' + s.label;
         }
-        if(icon) icon.className = 'fa-solid ' + s.icon;
-        if(amountIcon) amountIcon.className = 'fa-solid ' + s.icon;
+        if(icon) icon.outerHTML = hiSvg(s.icon, 'id="inv-status-icon"');
+        if(amountIcon) amountIcon.outerHTML = hiSvg(s.icon, 'id="inv-amount-status-icon"');
         // Sesuaikan banner: batas waktu hanya relevan saat masih menunggu pembayaran.
         // Saat LUNAS → ganti banner sukses; saat DITOLAK → sembunyikan banner.
         swapDeadlineBanner(verified, rejected);
@@ -654,7 +654,7 @@
             var wrap = document.createElement('div');
             wrap.className = 'inv-deadline green';
             wrap.id = 'inv-success-banner';
-            wrap.innerHTML = '<i class="fa-solid fa-circle-check inv-dl-ic"></i><div><p class="inv-dl-t">Pembayaran berhasil diverifikasi</p><p class="inv-dl-p">Tagihan ini sudah lunas. Terima kasih!</p></div>';
+            wrap.innerHTML = hiSvg('fa-circle-check', 'class="inv-dl-ic"') + '<div><p class="inv-dl-t">Pembayaran berhasil diverifikasi</p><p class="inv-dl-p">Tagihan ini sudah lunas. Terima kasih!</p></div>';
             if(amount && amount.parentNode){ amount.parentNode.insertBefore(wrap, amount); }
           }
         } else if(rejected){
@@ -679,18 +679,18 @@
         a.target = '_blank';
         a.rel = 'noopener';
         a.className = 'inv-btn ghost';
-        a.innerHTML = '<i class="fa-solid fa-download"></i> Download PDF';
+        a.innerHTML = hiSvg('fa-download') + ' Download PDF';
         // Taruh di posisi pertama (sebelum tombol Kembali)
         actions.insertBefore(a, actions.firstChild);
       }
 
       function payBodyVerified(){
         var sec = document.getElementById('inv-pay-body');
-        if(sec) sec.innerHTML = '<div class="inv-alert green"><i class="fa-solid fa-circle-check"></i><div><p class="inv-alert-t">Pembayaran telah lunas</p><p class="inv-alert-p">Tagihan ini sudah diverifikasi oleh panitia. Terima kasih!</p></div></div>';
+        if(sec) sec.innerHTML = '<div class="inv-alert green">' + hiSvg('fa-circle-check') + '<div><p class="inv-alert-t">Pembayaran telah lunas</p><p class="inv-alert-p">Tagihan ini sudah diverifikasi oleh panitia. Terima kasih!</p></div></div>';
       }
       function payBodyRejected(){
         var sec = document.getElementById('inv-pay-body');
-        if(sec) sec.innerHTML = '<div class="inv-alert red"><i class="fa-solid fa-circle-xmark"></i><div><p class="inv-alert-t">Pembayaran ditolak</p><p class="inv-alert-p">Silakan lakukan pembayaran ulang melalui halaman pendaftaran.</p></div></div>';
+        if(sec) sec.innerHTML = '<div class="inv-alert red">' + hiSvg('fa-circle-xmark') + '<div><p class="inv-alert-t">Pembayaran ditolak</p><p class="inv-alert-p">Silakan lakukan pembayaran ulang melalui halaman pendaftaran.</p></div></div>';
       }
 
       function poll(){

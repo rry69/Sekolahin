@@ -56,7 +56,7 @@
   .prf .prf-title { font-size:26px; font-weight:800; color:var(--ink); letter-spacing:-0.01em; margin-bottom:2px; }
   .prf .prf-meta { font-size:13px; color:var(--muted); margin-bottom:18px; line-height:1.5; }
   .prf .prf-alert { display:flex; align-items:flex-start; gap:10px; padding:12px 16px; border-radius:12px; font-size:13px; margin-bottom:14px; font-weight:500; }
-  .prf .prf-alert i { margin-top:2px; }
+  .prf .prf-alert svg.hi { margin-top:2px; }
   .prf .prf-alert.success { background:var(--green-soft); color:var(--green); }
   .prf .prf-alert.error { background:var(--red-soft); color:var(--red); }
   .prf .prf-alert.info { background:var(--blue-soft); color:var(--blue); }
@@ -99,7 +99,7 @@
   .prf .prf-modal { width:100%; max-width:420px; background:#fff; border-radius:18px; padding:22px; box-shadow:0 24px 60px -18px rgba(26,26,46,.4); animation:prfPop .2s cubic-bezier(.22,1.2,.36,1); }
   @keyframes prfPop { from{opacity:0;transform:scale(.97) translateY(4px);} to{opacity:1;transform:scale(1) translateY(0);} }
   .prf .prf-modal-body { display:flex; align-items:flex-start; gap:13px; margin-bottom:16px; }
-  .prf .prf-modal-ic { flex:0 0 auto; width:42px; height:42px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:17px; background:var(--red-soft); color:var(--red); }
+  .prf .prf-modal-ic { flex:0 0 auto; display:inline-flex; align-items:center; justify-content:center; font-size:22px; line-height:1; background:none; border-radius:0; box-shadow:none; width:auto; height:auto; color:var(--red); }
   .prf .prf-modal-title { font-size:15px; font-weight:700; color:var(--ink); }
   .prf .prf-modal-msg { font-size:13px; color:var(--muted); margin-top:3px; line-height:1.5; }
   .prf .prf-modal-actions { display:flex; justify-content:flex-end; gap:8px; margin-top:6px; }
@@ -120,7 +120,7 @@
     padding: 18px;
   }
   .prfa .prfa-card-head { display:flex; align-items:center; gap:10px; margin-bottom:14px; }
-  .prfa .prfa-card-ic { flex:0 0 auto; width:36px; height:36px; border-radius:11px; display:flex; align-items:center; justify-content:center; font-size:15px; background:var(--coral-soft); color:var(--coral); }
+  .prfa .prfa-card-ic { flex:0 0 auto; display:inline-flex; align-items:center; justify-content:center; font-size:20px; line-height:1; background:none; border-radius:0; box-shadow:none; width:auto; height:auto; color:var(--coral); }
   .prfa .prfa-card-title { font-size:14px; font-weight:700; color:var(--ink); }
   .prfa .prfa-card-sub { font-size:11.5px; color:var(--muted); }
 
@@ -145,7 +145,7 @@
   .prfa-summary-mail { font-size:12.5px; color:var(--muted); margin-bottom:12px; word-break:break-word; }
   .prfa-summary-pills { display:flex; justify-content:center; flex-wrap:wrap; gap:8px; margin-bottom:12px; }
   .prfa-login { font-size:12px; color:var(--muted); display:flex; align-items:center; justify-content:center; gap:7px; margin-bottom:16px; }
-  .prfa-login i { color:var(--blue); }
+  .prfa-login svg.hi { color:var(--blue); }
 
   /* --- Unggah foto --- */
   .prfa-upload { margin-top:4px; }
@@ -156,11 +156,11 @@
   /* --- Security widget --- */
   .prfa .prfa-sec-row { display:flex; align-items:center; gap:11px; padding:11px 0; border-bottom:1px solid var(--divider); }
   .prfa .prfa-sec-row:last-child { border-bottom:none; padding-bottom:2px; }
-  .prfa .prfa-sec-ic { flex:0 0 auto; width:34px; height:34px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:14px; background:var(--gray-soft); color:var(--gray); }
-  .prfa .prfa-sec-ic.green { background:var(--green-soft); color:var(--green); }
-  .prfa .prfa-sec-ic.amber { background:var(--amber-soft); color:#b45309; }
-  .prfa .prfa-sec-ic.blue { background:var(--blue-soft); color:var(--blue); }
-  .prfa .prfa-sec-ic.coral { background:var(--coral-soft); color:var(--coral); }
+  .prfa .prfa-sec-ic { flex:0 0 auto; display:inline-flex; align-items:center; justify-content:center; font-size:18px; line-height:1; background:none; border-radius:0; box-shadow:none; width:auto; height:auto; color:var(--gray); }
+  .prfa .prfa-sec-ic.green { color:var(--green); }
+  .prfa .prfa-sec-ic.amber { color:#b45309; }
+  .prfa .prfa-sec-ic.blue { color:var(--blue); }
+  .prfa .prfa-sec-ic.coral { color:var(--coral); }
   .prfa .prfa-sec-body { flex:1; min-width:0; }
   .prfa .prfa-sec-name { font-size:12.5px; font-weight:600; color:var(--ink); }
   .prfa .prfa-sec-val { font-size:11.5px; color:var(--muted); margin-top:1px; line-height:1.4; }
@@ -174,7 +174,7 @@
   /* --- Quick support widget --- */
   .prfa .prfa-support-item { display:flex; align-items:flex-start; gap:10px; padding:9px 0; border-bottom:1px solid var(--divider); }
   .prfa .prfa-support-item:last-child { border-bottom:none; padding-bottom:2px; }
-  .prfa .prfa-support-ic { flex:0 0 auto; width:30px; height:30px; border-radius:9px; display:flex; align-items:center; justify-content:center; font-size:13px; background:var(--blue-soft); color:var(--blue); }
+  .prfa .prfa-support-ic { flex:0 0 auto; display:inline-flex; align-items:center; justify-content:center; font-size:17px; line-height:1; background:none; border-radius:0; box-shadow:none; width:auto; height:auto; color:var(--blue); }
   .prfa .prfa-support-q { font-size:12.5px; font-weight:600; color:var(--ink); }
   .prfa .prfa-support-a { font-size:11.5px; color:var(--muted); margin-top:2px; line-height:1.45; }
   .prfa .prfa-support-foot { margin-top:12px; padding-top:12px; border-top:1px solid var(--divider); }
@@ -188,7 +188,7 @@
     padding:9px 12px; border-radius:11px; font-size:13px; font-weight:600; color:var(--muted);
     transition: background .16s, color .16s, transform .12s; white-space:nowrap;
   }
-  .prfa .prfa-nav button i { width:17px; text-align:center; font-size:14px; }
+  .prfa .prfa-nav button svg.hi { width:17px; text-align:center; }
   .prfa .prfa-nav button:hover { background:var(--coral-soft); color:var(--coral); }
   .prfa .prfa-nav button.is-active { background:linear-gradient(135deg,var(--coral),var(--coral-2)); color:#fff; box-shadow:0 6px 14px -6px rgba(255,107,107,.6); }
   .prfa .prfa-nav button.danger.is-active { background:var(--red); box-shadow:0 6px 14px -6px rgba(239,68,68,.6); }
@@ -203,7 +203,7 @@
   /* --- Danger zone (admin inline) --- */
   .prfa .prfa-danger { border:1px solid rgba(239,68,68,.25); border-radius:18px; background:rgba(254,226,226,.28); padding:20px 22px; }
   .prfa .prfa-danger-head { display:flex; align-items:flex-start; gap:13px; margin-bottom:16px; }
-  .prfa .prfa-danger-ic { flex:0 0 auto; width:42px; height:42px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:17px; background:var(--red-soft); color:var(--red); }
+  .prfa .prfa-danger-ic { flex:0 0 auto; display:inline-flex; align-items:center; justify-content:center; font-size:22px; line-height:1; background:none; border-radius:0; box-shadow:none; width:auto; height:auto; color:var(--red); }
   .prfa .prfa-danger-title { font-size:15px; font-weight:700; color:var(--red); }
   .prfa .prfa-danger-desc { font-size:12.5px; color:var(--muted); margin-top:3px; line-height:1.5; }
   .prfa .prfa-danger-warn { display:flex; align-items:flex-start; gap:8px; font-size:12px; color:#b45309; background:var(--amber-soft); border-radius:10px; padding:9px 12px; margin-bottom:16px; }
@@ -233,11 +233,11 @@
   <p class="prf-meta">Kelola informasi akun, kata sandi, dan pengaturan keamanan.</p>
 
   @if (session('status') === 'profile-updated')
-    <div class="prf-alert success"><i class="fa-solid fa-circle-check"></i><span>Profil berhasil diperbarui.</span></div>
+    <div class="prf-alert success"><x-hi icon="fa-circle-check" /><span>Profil berhasil diperbarui.</span></div>
   @elseif (session('status') === 'password-updated')
-    <div class="prf-alert success"><i class="fa-solid fa-circle-check"></i><span>Kata sandi berhasil diperbarui.</span></div>
+    <div class="prf-alert success"><x-hi icon="fa-circle-check" /><span>Kata sandi berhasil diperbarui.</span></div>
   @elseif (session('status') === 'verification-link-sent')
-    <div class="prf-alert info"><i class="fa-solid fa-envelope"></i><span>Link verifikasi baru telah dikirim ke email Anda.</span></div>
+    <div class="prf-alert info"><x-hi icon="fa-envelope" /><span>Link verifikasi baru telah dikirim ke email Anda.</span></div>
   @endif
 
   <div class="prfa-grid">
@@ -259,11 +259,11 @@
         <div class="prfa-summary-mail">{{ $user->email }}</div>
         <div class="prfa-summary-pills">
           <span class="prfa-sec-name" style="display:none"></span>
-          <span style="display:inline-flex;align-items:center;gap:6px;padding:4px 11px;border-radius:20px;font-size:11.5px;font-weight:700;background:var(--coral-soft);color:var(--coral);"><i class="fa-solid fa-user-shield"></i> Admin</span>
+          <span style="display:inline-flex;align-items:center;gap:6px;padding:4px 11px;border-radius:20px;font-size:11.5px;font-weight:700;background:var(--coral-soft);color:var(--coral);"><x-hi icon="fa-user-shield" /> Admin</span>
           <span style="display:inline-flex;align-items:center;gap:6px;padding:4px 11px;border-radius:20px;font-size:11.5px;font-weight:700;background:var(--green-soft);color:var(--green);"><span style="width:7px;height:7px;border-radius:50%;background:var(--green);display:inline-block"></span> Online</span>
         </div>
         <div class="prfa-login">
-          <i class="fa-solid fa-clock-rotate-left"></i>
+          <x-hi icon="fa-clock-rotate-left" />
           Terakhir masuk: <b>{{ $adminLastLogin ?: 'Belum tercatat' }}</b>
         </div>
 
@@ -272,7 +272,7 @@
           @csrf
           <label for="prfa-avatar-input" style="cursor:pointer">
             <input id="prfa-avatar-input" name="avatar" type="file" accept="image/jpeg,image/png,image/webp" style="display:none">
-            <span class="prf-btn coral"><i class="fa-solid fa-camera"></i> Unggah Foto Profil Baru</span>
+            <span class="prf-btn coral"><x-hi icon="fa-camera" /> Unggah Foto Profil Baru</span>
           </label>
           <div class="prfa-upload-hint">JPG, PNG, atau WebP · maks 2 MB</div>
         </form>
@@ -281,7 +281,7 @@
       {{-- Widget Informasi Keamanan --}}
       <div class="prfa-card prfa-security">
         <div class="prfa-card-head">
-          <span class="prfa-card-ic"><i class="fa-solid fa-shield-halved"></i></span>
+          <span class="prfa-card-ic"><x-hi icon="fa-shield-halved" /></span>
           <div>
             <div class="prfa-card-title">Keamanan Akun</div>
             <div class="prfa-card-sub">Status keamanan &amp; sesi login</div>
@@ -289,7 +289,7 @@
         </div>
 
         <div class="prfa-sec-row">
-          <span class="prfa-sec-ic {{ $user->two_factor_enabled ? 'green' : 'gray' }}"><i class="fa-solid fa-mobile-screen"></i></span>
+          <span class="prfa-sec-ic {{ $user->two_factor_enabled ? 'green' : 'gray' }}"><x-hi icon="fa-mobile-screen" /></span>
           <div class="prfa-sec-body">
             <div class="prfa-sec-name">Autentikasi Dua Faktor (2FA)</div>
             <div class="prfa-sec-val">{{ $user->two_factor_enabled ? 'Aktif — lapisan keamanan tambahan menyala' : 'Nonaktif — disarankan untuk diaktifkan' }}</div>
@@ -300,18 +300,18 @@
         </div>
 
         <div class="prfa-sec-row">
-          <span class="prfa-sec-ic blue"><i class="fa-solid fa-envelope-circle-check"></i></span>
+          <span class="prfa-sec-ic blue"><x-hi icon="fa-envelope-circle-check" /></span>
           <div class="prfa-sec-body">
             <div class="prfa-sec-name">Email Terverifikasi</div>
             <div class="prfa-sec-val">{{ $user->hasVerifiedEmail() ? 'Email telah diverifikasi' : 'Email belum diverifikasi' }}</div>
           </div>
           @if($user->hasVerifiedEmail())
-            <span class="prfa-sec-name" style="color:var(--green);font-size:11px"><i class="fa-solid fa-circle-check"></i></span>
+            <span class="prfa-sec-name" style="color:var(--green);font-size:11px"><x-hi icon="fa-circle-check" /></span>
           @endif
         </div>
 
         <div class="prfa-sec-row">
-          <span class="prfa-sec-ic amber"><i class="fa-solid fa-laptop"></i></span>
+          <span class="prfa-sec-ic amber"><x-hi icon="fa-laptop" /></span>
           <div class="prfa-sec-body">
             <div class="prfa-sec-name">Sesi Login Terakhir</div>
             <div class="prfa-sec-val">
@@ -324,7 +324,7 @@
         </div>
 
         <div class="prfa-sec-row">
-          <span class="prfa-sec-ic coral"><i class="fa-solid fa-key"></i></span>
+          <span class="prfa-sec-ic coral"><x-hi icon="fa-key" /></span>
           <div class="prfa-sec-body">
             <div class="prfa-sec-name">Kata Sandi</div>
             <div class="prfa-sec-val">Gunakan kombinasi huruf, angka, &amp; simbol yang panjang.</div>
@@ -335,7 +335,7 @@
       {{-- Widget Panduan / Quick Support --}}
       <div class="prfa-card prfa-support">
         <div class="prfa-card-head">
-          <span class="prfa-card-ic"><i class="fa-solid fa-circle-question"></i></span>
+          <span class="prfa-card-ic"><x-hi icon="fa-circle-question" /></span>
           <div>
             <div class="prfa-card-title">Bantuan &amp; FAQ</div>
             <div class="prfa-card-sub">Jawaban singkat untuk hal yang sering ditanyakan</div>
@@ -343,19 +343,19 @@
         </div>
 
         <div class="prfa-support-item">
-          <span class="prfa-support-ic"><i class="fa-solid fa-camera"></i></span>
+          <span class="prfa-support-ic"><x-hi icon="fa-camera" /></span>
           <div><div class="prfa-support-q">Bagaimana cara ganti foto profil?</div><div class="prfa-support-a">Klik tombol "Unggah Foto Profil Baru" di kartu ringkasan, pilih file gambar, lalu tunggu proses selesai.</div></div>
         </div>
         <div class="prfa-support-item">
-          <span class="prfa-support-ic"><i class="fa-solid fa-lock"></i></span>
+          <span class="prfa-support-ic"><x-hi icon="fa-lock" /></span>
           <div><div class="prfa-support-q">Lupa kata sandi?</div><div class="prfa-support-a">Gunakan menu "Keamanan" untuk mengubah kata sandi — Anda perlu memasukkan kata sandi lama terlebih dahulu.</div></div>
         </div>
         <div class="prfa-support-item">
-          <span class="prfa-support-ic"><i class="fa-solid fa-shield-halved"></i></span>
+          <span class="prfa-support-ic"><x-hi icon="fa-shield-halved" /></span>
           <div><div class="prfa-support-q">Apakah 2FA wajib?</div><div class="prfa-support-a">Opsional, tetapi sangat disarankan untuk melindungi akun admin dari akses tidak sah.</div></div>
         </div>
         <div class="prfa-support-foot">
-          <a href="#" data-support-contact><i class="fa-solid fa-headset" style="margin-right:5px"></i> Hubungi Panitia SPMB</a>
+          <a href="#" data-support-contact><x-hi icon="fa-headset" style="margin-right:5px" /> Hubungi Panitia SPMB</a>
         </div>
       </div>
     </aside>
@@ -363,9 +363,9 @@
     {{-- ============ KOLOM KANAN (2/3) ============ --}}
     <div class="prfa-main">
       <nav class="prfa-nav" role="tablist" aria-label="Pengaturan profil">
-        <button type="button" role="tab" class="{{ $activeTab==='info' ? 'is-active' : '' }}" data-prfa-tab="info" aria-selected="{{ $activeTab==='info' ? 'true' : 'false' }}"><i class="fa-regular fa-user"></i> Profil</button>
-        <button type="button" role="tab" class="{{ $activeTab==='password' ? 'is-active' : '' }}" data-prfa-tab="password" aria-selected="{{ $activeTab==='password' ? 'true' : 'false' }}"><i class="fa-solid fa-key"></i> Keamanan</button>
-        <button type="button" role="tab" class="danger {{ $activeTab==='delete' ? 'is-active' : '' }}" data-prfa-tab="delete" aria-selected="{{ $activeTab==='delete' ? 'true' : 'false' }}"><i class="fa-solid fa-trash-can"></i> Danger Zone</button>
+        <button type="button" role="tab" class="{{ $activeTab==='info' ? 'is-active' : '' }}" data-prfa-tab="info" aria-selected="{{ $activeTab==='info' ? 'true' : 'false' }}"><x-hi icon="fa-user" /> Profil</button>
+        <button type="button" role="tab" class="{{ $activeTab==='password' ? 'is-active' : '' }}" data-prfa-tab="password" aria-selected="{{ $activeTab==='password' ? 'true' : 'false' }}"><x-hi icon="fa-key" /> Keamanan</button>
+        <button type="button" role="tab" class="danger {{ $activeTab==='delete' ? 'is-active' : '' }}" data-prfa-tab="delete" aria-selected="{{ $activeTab==='delete' ? 'true' : 'false' }}"><x-hi icon="fa-trash-can" /> Danger Zone</button>
       </nav>
 
       <div class="prfa-panel-wrap">
@@ -423,7 +423,7 @@
     var form = document.getElementById('prfa-avatar-form');
     if(!form || !input.files || !input.files.length) return;
     var btn = form.querySelector('.prf-btn');
-    if(btn){ btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Mengunggah...'; }
+    if(btn){ btn.disabled = true; btn.innerHTML = hiSvg('fa-spinner', 'class="animate-spin"') + ' Mengunggah...'; }
     var fd = new FormData(form);
     fetch(form.getAttribute('action'), {
       method: 'POST',
@@ -432,7 +432,7 @@
     })
     .then(function(r){ return r.json(); })
     .then(function(d){
-      if(btn){ btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-camera"></i> Unggah Foto Profil Baru'; }
+      if(btn){ btn.disabled = false; btn.innerHTML = hiSvg('fa-camera') + ' Unggah Foto Profil Baru'; }
       input.value = '';
       if(d && d.success){
         var img = document.getElementById('prfa-avatar-img');
@@ -449,7 +449,7 @@
       }
     })
     .catch(function(){
-      if(btn){ btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-camera"></i> Unggah Foto Profil Baru'; }
+      if(btn){ btn.disabled = false; btn.innerHTML = hiSvg('fa-camera') + ' Unggah Foto Profil Baru'; }
       input.value = '';
       if(window.showToast) window.showToast('Gagal terhubung ke server');
     });
@@ -506,7 +506,7 @@
             <span class="sep">/</span>
             <span>Pengaturan Profil</span>
         @else
-            <a href="{{ route('registration.index') }}"><i class="fa-solid fa-arrow-left" style="margin-right:4px"></i> Pendaftaran</a>
+            <a href="{{ route('registration.index') }}"><x-hi icon="fa-arrow-left" style="margin-right:4px" /> Pendaftaran</a>
             <span class="sep">/</span>
             <span>Profil</span>
         @endif
@@ -515,17 +515,17 @@
     <p class="prf-meta">Kelola informasi akun, kata sandi, dan pengaturan keamanan.</p>
 
     @if (session('status') === 'profile-updated')
-        <div class="prf-alert success"><i class="fa-solid fa-circle-check"></i><span>Profil berhasil diperbarui.</span></div>
+        <div class="prf-alert success"><x-hi icon="fa-circle-check" /><span>Profil berhasil diperbarui.</span></div>
     @elseif (session('status') === 'password-updated')
-        <div class="prf-alert success"><i class="fa-solid fa-circle-check"></i><span>Kata sandi berhasil diperbarui.</span></div>
+        <div class="prf-alert success"><x-hi icon="fa-circle-check" /><span>Kata sandi berhasil diperbarui.</span></div>
     @elseif (session('status') === 'verification-link-sent')
-        <div class="prf-alert info"><i class="fa-solid fa-envelope"></i><span>Link verifikasi baru telah dikirim ke email Anda.</span></div>
+        <div class="prf-alert info"><x-hi icon="fa-envelope" /><span>Link verifikasi baru telah dikirim ke email Anda.</span></div>
     @endif
 
     <div class="prf-tabs" role="tablist">
-        <button type="button" role="tab" class="prf-tab {{ $activeTab==='info' ? 'is-active' : '' }}" data-prf-tab="info" aria-selected="{{ $activeTab==='info' ? 'true' : 'false' }}"><i class="fa-regular fa-user" style="margin-right:5px"></i> Informasi Profil</button>
-        <button type="button" role="tab" class="prf-tab {{ $activeTab==='password' ? 'is-active' : '' }}" data-prf-tab="password" aria-selected="{{ $activeTab==='password' ? 'true' : 'false' }}"><i class="fa-solid fa-key" style="margin-right:5px"></i> Kata Sandi</button>
-        <button type="button" role="tab" class="prf-tab {{ $activeTab==='delete' ? 'is-active' : '' }}" data-prf-tab="delete" aria-selected="{{ $activeTab==='delete' ? 'true' : 'false' }}"><i class="fa-solid fa-trash-can" style="margin-right:5px"></i> Hapus Akun</button>
+        <button type="button" role="tab" class="prf-tab {{ $activeTab==='info' ? 'is-active' : '' }}" data-prf-tab="info" aria-selected="{{ $activeTab==='info' ? 'true' : 'false' }}"><x-hi icon="fa-user" style="margin-right:5px" /> Informasi Profil</button>
+        <button type="button" role="tab" class="prf-tab {{ $activeTab==='password' ? 'is-active' : '' }}" data-prf-tab="password" aria-selected="{{ $activeTab==='password' ? 'true' : 'false' }}"><x-hi icon="fa-key" style="margin-right:5px" /> Kata Sandi</button>
+        <button type="button" role="tab" class="prf-tab {{ $activeTab==='delete' ? 'is-active' : '' }}" data-prf-tab="delete" aria-selected="{{ $activeTab==='delete' ? 'true' : 'false' }}"><x-hi icon="fa-trash-can" style="margin-right:5px" /> Hapus Akun</button>
     </div>
 
     <div id="prf-panel-info" class="prf-panel {{ $activeTab==='info' ? 'is-active' : '' }}">

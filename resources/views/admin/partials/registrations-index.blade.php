@@ -200,23 +200,24 @@
   }
   .reg .r-tabs a.r-tab:hover, .reg .r-tabs a.doc-tab:hover { color: var(--ink); }
   .reg .r-tabs a.r-tab.active, .reg .r-tabs a.doc-tab.active { color: var(--coral); border-bottom-color: var(--coral); }
-  .reg .r-tabs a .badge { background: var(--coral-soft); color: var(--coral); border-radius: 20px; padding: 1px 8px; font-size: 10.5px; font-weight: 700; }
-  .reg .r-tabs a.active .badge { background: var(--coral); color: #fff; }
+  .reg .r-tabs a .badge { background: transparent; border: 1px solid currentColor; color: var(--coral); border-radius: 20px; padding: 1px 8px; font-size: 10.5px; font-weight: 700; }
+  .reg .r-tabs a.active .badge { background: transparent; border: 1px solid currentColor; color: #fff; }
 
   /* ---------- list rows (no card, divider) ---------- */
   .reg .r-list { display: flex; flex-direction: column; }
   .reg .r-row { display: flex; align-items: center; gap: 15px; padding: 16px 4px; border-bottom: 1px solid var(--divider); }
   .reg .r-row:last-child { border-bottom: none; }
   .reg .r-ic {
-    flex: 0 0 auto; width: 46px; height: 46px; border-radius: 14px;
-    display: flex; align-items: center; justify-content: center; font-size: 17px;
+    flex: 0 0 auto; width: auto; height: auto;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 22px; line-height: 1; background: none; border-radius: 0;
   }
-  .reg .r-ic.coral  { background: var(--coral-soft);  color: var(--coral); }
-  .reg .r-ic.amber  { background: var(--amber-soft);  color: var(--amber); }
-  .reg .r-ic.green  { background: var(--green-soft);  color: var(--green); }
-  .reg .r-ic.blue   { background: var(--blue-soft);   color: var(--blue); }
-  .reg .r-ic.purple { background: var(--purple-soft); color: var(--purple); }
-  .reg .r-ic.red    { background: var(--red-soft);    color: var(--red); }
+  .reg .r-ic.coral  { color: var(--coral); }
+  .reg .r-ic.amber  { color: var(--amber); }
+  .reg .r-ic.green  { color: var(--green); }
+  .reg .r-ic.blue   { color: var(--blue); }
+  .reg .r-ic.purple { color: var(--purple); }
+  .reg .r-ic.red    { color: var(--red); }
   .reg .r-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
   .reg .r-name { font-size: 14px; font-weight: 700; color: var(--ink); line-height: 1.25; }
   .reg .r-num { font-size: 11px; color: var(--muted); font-weight: 600; letter-spacing: .02em; }
@@ -226,11 +227,11 @@
   .reg .r-sub-dot { display: none; }
   .reg .r-badges { display: flex; gap: 7px; flex-wrap: wrap; justify-content: flex-end; }
   .reg .r-pill { font-size: 11px; font-weight: 700; padding: 5px 11px; border-radius: 20px; white-space: nowrap; }
-  .reg .r-pill.p-pending  { background: var(--amber-soft); color: var(--amber); }
-  .reg .r-pill.p-verified { background: var(--blue-soft);   color: var(--blue); }
-  .reg .r-pill.p-accepted { background: var(--green-soft);  color: var(--green); }
-  .reg .r-pill.p-rejected { background: var(--red-soft);    color: var(--red); }
-  .reg .r-pill.p-canceled { background: var(--gray-soft);   color: var(--gray); }
+  .reg .r-pill.p-pending  { background: transparent; border: 1px solid currentColor; color: var(--amber); }
+  .reg .r-pill.p-verified { background: transparent; border: 1px solid currentColor;   color: var(--blue); }
+  .reg .r-pill.p-accepted { background: transparent; border: 1px solid currentColor;  color: var(--green); }
+  .reg .r-pill.p-rejected { background: transparent; border: 1px solid currentColor;    color: var(--red); }
+  .reg .r-pill.p-canceled { background: transparent; border: 1px solid currentColor;   color: var(--gray); }
   .reg .r-actions { display: flex; gap: 7px; align-items: center; }
   .reg .r-act {
     display: inline-flex; align-items: center; gap: 5px; padding: 8px 13px; border-radius: 10px;
@@ -358,20 +359,20 @@
   <p class="r-meta">Kelola & pantau seluruh pendaftaran siswa.</p>
 
   @if (session('success'))
-  <div class="r-alert success"><i class="fa-solid fa-circle-check"></i> {{ session('success') }}</div>
+  <div class="r-alert success"><x-hi name="checkmark-circle-02" /> {{ session('success') }}</div>
   @endif
   @if (session('error'))
-  <div class="r-alert error"><i class="fa-solid fa-circle-exclamation"></i> {{ session('error') }}</div>
+  <div class="r-alert error"><x-hi name="alert-02" /> {{ session('error') }}</div>
   @endif
 
   <form id="filterForm" method="GET" action="{{ route('admin.registrations.index') }}">
     <div class="r-toolbar">
       <div class="r-search">
-        <i class="fa-solid fa-magnifying-glass"></i>
+        <x-hi name="search-01" />
         <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari nama, NIK, NISN, atau no. pendaftaran..." maxlength="100">
       </div>
-      <button type="button" class="r-fbtn" onclick="toggleFilterPanel()"><i class="fa-solid fa-filter" style="font-size:12px"></i> Filter</button>
-      <button type="submit" class="r-gobtn"><i class="fa-solid fa-magnifying-glass" style="font-size:12px"></i> Cari</button>
+      <button type="button" class="r-fbtn" onclick="toggleFilterPanel()"><x-hi name="filter" style="font-size:12px" /> Filter</button>
+      <button type="submit" class="r-gobtn"><x-hi name="search-01" style="font-size:12px" /> Cari</button>
     </div>
 
     <div id="filterPanel" class="r-filters" style="display:none;">
@@ -411,8 +412,8 @@
         <label>Status</label>
         <button type="button" class="r-pick" data-picker="status" aria-haspopup="listbox" aria-expanded="false">
           <span class="pick-label is-placeholder">Pilih status…</span>
-          <span class="pick-clear" data-clear="status" role="button" tabindex="0" aria-label="Bersihkan"><i class="fa-solid fa-xmark"></i></span>
-          <i class="fa-solid fa-chevron-down pick-caret"></i>
+          <span class="pick-clear" data-clear="status" role="button" tabindex="0" aria-label="Bersihkan"><x-hi name="cancel-01" /></span>
+          <x-hi name="arrow-down-01" />
         </button>
         <input type="hidden" name="status" data-picker-input="status" value="{{ request('status') }}">
       </div>
@@ -422,8 +423,8 @@
         <label>Pembayaran</label>
         <button type="button" class="r-pick" data-picker="payment" aria-haspopup="listbox" aria-expanded="false">
           <span class="pick-label is-placeholder">Pilih pembayaran…</span>
-          <span class="pick-clear" data-clear="payment" role="button" tabindex="0" aria-label="Bersihkan"><i class="fa-solid fa-xmark"></i></span>
-          <i class="fa-solid fa-chevron-down pick-caret"></i>
+          <span class="pick-clear" data-clear="payment" role="button" tabindex="0" aria-label="Bersihkan"><x-hi name="cancel-01" /></span>
+          <x-hi name="arrow-down-01" />
         </button>
         <input type="hidden" name="payment_status" data-picker-input="payment" value="{{ request('payment_status') }}">
       </div>
@@ -433,8 +434,8 @@
         <label>Deadline</label>
         <button type="button" class="r-pick" data-picker="deadline" aria-haspopup="listbox" aria-expanded="false">
           <span class="pick-label is-placeholder">Pilih deadline…</span>
-          <span class="pick-clear" data-clear="deadline" role="button" tabindex="0" aria-label="Bersihkan"><i class="fa-solid fa-xmark"></i></span>
-          <i class="fa-solid fa-chevron-down pick-caret"></i>
+          <span class="pick-clear" data-clear="deadline" role="button" tabindex="0" aria-label="Bersihkan"><x-hi name="cancel-01" /></span>
+          <x-hi name="arrow-down-01" />
         </button>
         <input type="hidden" name="deadline" data-picker-input="deadline" value="{{ request('deadline') }}">
       </div>
@@ -444,8 +445,8 @@
         <label>Jalur</label>
         <button type="button" class="r-pick" data-picker="track" aria-haspopup="listbox" aria-expanded="false">
           <span class="pick-label is-placeholder">Pilih jalur…</span>
-          <span class="pick-clear" data-clear="track" role="button" tabindex="0" aria-label="Bersihkan"><i class="fa-solid fa-xmark"></i></span>
-          <i class="fa-solid fa-chevron-down pick-caret"></i>
+          <span class="pick-clear" data-clear="track" role="button" tabindex="0" aria-label="Bersihkan"><x-hi name="cancel-01" /></span>
+          <x-hi name="arrow-down-01" />
         </button>
         <input type="hidden" name="track_id" data-picker-input="track" value="{{ request('track_id') }}">
       </div>
@@ -455,8 +456,8 @@
         <label>Jurusan</label>
         <button type="button" class="r-pick" data-picker="major" aria-haspopup="listbox" aria-expanded="false">
           <span class="pick-label is-placeholder">Pilih jurusan…</span>
-          <span class="pick-clear" data-clear="major" role="button" tabindex="0" aria-label="Bersihkan"><i class="fa-solid fa-xmark"></i></span>
-          <i class="fa-solid fa-chevron-down pick-caret"></i>
+          <span class="pick-clear" data-clear="major" role="button" tabindex="0" aria-label="Bersihkan"><x-hi name="cancel-01" /></span>
+          <x-hi name="arrow-down-01" />
         </button>
         <input type="hidden" name="major_id" data-picker-input="major" value="{{ request('major_id') }}">
       </div>
@@ -470,15 +471,15 @@
     <div class="picker-panel" role="dialog" aria-modal="true" aria-labelledby="pickerTitle">
       <div class="picker-head">
         <div class="picker-title" id="pickerTitle">Pilih item</div>
-        <button type="button" class="picker-close" onclick="closePicker()" aria-label="Tutup"><i class="fa-solid fa-xmark"></i></button>
+        <button type="button" class="picker-close" onclick="closePicker()" aria-label="Tutup"><x-hi name="cancel-01" /></button>
       </div>
       <div class="picker-search">
-        <i class="fa-solid fa-magnifying-glass"></i>
+        <x-hi name="search-01" />
         <input id="pickerSearch" type="search" placeholder="Cari…" autocomplete="off">
       </div>
       <div class="picker-list" id="pickerList" role="listbox"></div>
       <div class="picker-foot">
-        <button type="button" class="picker-clear-all" onclick="clearCurrentPicker()"><i class="fa-solid fa-eraser"></i> Bersihkan</button>
+        <button type="button" class="picker-clear-all" onclick="clearCurrentPicker()"><x-hi name="eraser-01" /> Bersihkan</button>
         <button type="button" class="picker-done" onclick="closePicker()">Selesai</button>
       </div>
     </div>
@@ -519,7 +520,7 @@
 
   @if ($registrations->isEmpty())
     <div class="r-empty">
-      <i class="fa-regular fa-folder-open"></i>
+      <x-hi name="folder-open" />
       Tidak ada pendaftaran yang cocok
     </div>
   @else
@@ -545,15 +546,15 @@
       @endphp
       <div class="r-row">
         <span class="r-ic {{ $s['pill'] == 'p-rejected' ? 'red' : ($s['pill'] == 'p-pending' ? 'amber' : ($s['pill'] == 'p-accepted' ? 'green' : 'blue')) }}">
-          <i class="fa-regular fa-file-lines"></i>
+          <x-hi name="file-01" />
         </span>
         <div class="r-body">
           <div class="r-name">{{ $name }}</div>
           <div class="r-num">{{ $reg->registration_number }}</div>
           <div class="r-sub">
-            <span class="r-sub-item email"><i class="fa-regular fa-envelope"></i> {{ $email }}</span>
-            <span class="r-sub-item major"><i class="fa-solid fa-graduation-cap"></i> {{ $track }} &middot; {{ $major }}</span>
-            <span class="r-sub-item date"><i class="fa-regular fa-clock"></i> {{ $reg->created_at->format('d M Y H:i') }}</span>
+            <span class="r-sub-item email"><x-hi name="mail-01" /> {{ $email }}</span>
+            <span class="r-sub-item major"><x-hi name="mortarboard-01" /> {{ $track }} &middot; {{ $major }}</span>
+            <span class="r-sub-item date"><x-hi name="clock-01" /> {{ $reg->created_at->format('d M Y H:i') }}</span>
           </div>
         </div>
         <div class="r-badges">
@@ -561,8 +562,8 @@
           <span class="r-pill {{ $pay['pill'] }}">{{ $pay['label'] }}</span>
         </div>
         <div class="r-actions">
-          <a href="{{ route('admin.registrations.show', $reg) }}" class="r-act detail"><i class="fa-solid fa-eye" style="font-size:11px"></i> Detail</a>
-          <button type="button" onclick="openResetModal({{ $reg->id }}, '{{ addslashes($reg->registration_number) }}', '{{ addslashes($name) }}')" class="r-act reset"><i class="fa-solid fa-rotate-left" style="font-size:11px"></i> Reset</button>
+          <a href="{{ route('admin.registrations.show', $reg) }}" class="r-act detail"><x-hi name="view" style="font-size:11px" /> Detail</a>
+          <button type="button" onclick="openResetModal({{ $reg->id }}, '{{ addslashes($reg->registration_number) }}', '{{ addslashes($name) }}')" class="r-act reset"><x-hi name="rotate-left-01" style="font-size:11px" /> Reset</button>
         </div>
       </div>
       @endforeach

@@ -76,8 +76,8 @@
   .ste .ste-track-row{ display:flex; align-items:center; justify-content:space-between; gap:10px; padding:8px 0; border-top:1px solid var(--divider); }
   .ste .ste-track-row:first-of-type{ border-top:none; }
   .ste .ste-track-label{ font-size:12px; font-weight:600; color:var(--ink); display:flex; align-items:center; gap:6px; }
-  .ste .ste-track-pill{ font-size:10px; font-weight:700; padding:2px 7px; border-radius:20px; background:var(--gray-soft); color:var(--gray); }
-  .ste .ste-track-pill.coral{ background:var(--coral-soft); color:var(--coral); }
+  .ste .ste-track-pill{ font-size:10px; font-weight:700; padding:2px 7px; border-radius:20px; background: transparent; border: 1px solid currentColor; color:var(--gray); }
+  .ste .ste-track-pill.coral{ background: transparent; border: 1px solid currentColor; color:var(--coral); }
   .ste .ste-track-input{ width:140px; }
   .ste .ste-track-manual{ font-size:11px; color:var(--muted); font-style:italic; text-align:right; line-height:1.3; }
   /* notes per jalur */
@@ -205,31 +205,31 @@
   <p class="ste-meta">Kelola konfigurasi sistem SPMB — pembayaran, biaya, batas waktu, daftar ulang, dan jenjang.</p>
 
   @if (session('success'))
-    <div class="ste-alert success"><i class="fa-solid fa-circle-check"></i><span>{{ session('success') }}</span></div>
+    <div class="ste-alert success"><x-hi name="checkmark-circle-02" /><span>{{ session('success') }}</span></div>
   @endif
   @if (($__errBag ?? $errors ?? new \Illuminate\Support\ViewErrorBag)->any())
-    <div class="ste-alert error"><i class="fa-solid fa-circle-exclamation"></i><span>Ada {{ ($__errBag ?? $errors ?? new \Illuminate\Support\ViewErrorBag)->count() }} kesalahan validasi — tab yang bermasalah sudah dibuka otomatis.</span></div>
+    <div class="ste-alert error"><x-hi name="alert-02" /><span>Ada {{ ($__errBag ?? $errors ?? new \Illuminate\Support\ViewErrorBag)->count() }} kesalahan validasi — tab yang bermasalah sudah dibuka otomatis.</span></div>
   @endif
 
   <div class="ste-tabs" id="settings-tabs">
-    <button type="button" data-tab-btn="pembayaran" class="settings-tab"><i class="fa-solid fa-credit-card"></i> Pembayaran</button>
-    <button type="button" data-tab-btn="biaya" class="settings-tab"><i class="fa-solid fa-coins"></i> Biaya &amp; Jalur</button>
-    <button type="button" data-tab-btn="batas-waktu" class="settings-tab"><i class="fa-regular fa-clock"></i> Batas Waktu</button>
-    <button type="button" data-tab-btn="daftar-ulang" class="settings-tab"><i class="fa-regular fa-calendar-check"></i> Daftar Ulang</button>
-    <button type="button" data-tab-btn="jenjang" class="settings-tab"><i class="fa-solid fa-layer-group"></i> Jenjang</button>
+    <button type="button" data-tab-btn="pembayaran" class="settings-tab"><x-hi name="credit-card" /> Pembayaran</button>
+    <button type="button" data-tab-btn="biaya" class="settings-tab"><x-hi name="coins-01" /> Biaya &amp; Jalur</button>
+    <button type="button" data-tab-btn="batas-waktu" class="settings-tab"><x-hi name="clock-01" /> Batas Waktu</button>
+    <button type="button" data-tab-btn="daftar-ulang" class="settings-tab"><x-hi name="calendar-check-in-01" /> Daftar Ulang</button>
+    <button type="button" data-tab-btn="jenjang" class="settings-tab"><x-hi name="layers-01" /> Jenjang</button>
   </div>
   {{-- Mobile: dropdown picker menggantikan tabs --}}
   <div class="ste-tabs-mobile" id="steTabsMobile">
     <button type="button" class="r-pick" id="steTabPickBtn" aria-haspopup="listbox" aria-expanded="false">
       <span class="pick-label" id="steTabPickLabel">Pilih Halaman</span>
-      <span class="pick-caret"><i class="fa-solid fa-chevron-down"></i></span>
+      <span class="pick-caret"><x-hi name="arrow-down-01" /></span>
     </button>
   </div>
   <div id="stePickerBackdrop" class="ste-picker-backdrop" aria-hidden="true">
     <div class="ste-picker-panel" role="dialog" aria-modal="true" aria-labelledby="stePickerTitle">
       <div class="ste-picker-head">
         <div class="ste-picker-title" id="stePickerTitle">Pilih Halaman Pengaturan</div>
-        <button type="button" class="ste-picker-close" onclick="closeStePicker()" aria-label="Tutup"><i class="fa-solid fa-xmark"></i></button>
+        <button type="button" class="ste-picker-close" onclick="closeStePicker()" aria-label="Tutup"><x-hi name="cancel-01" /></button>
       </div>
       <div class="ste-picker-list" id="stePickerList" role="listbox"></div>
       <div class="ste-picker-foot">
@@ -244,7 +244,7 @@
     <!-- ================= TAB: PEMBAYARAN ================= -->
     <div data-tab-panel="pembayaran" class="{{ $activeTab === 'pembayaran' ? '' : 'hidden' }}">
       <div class="ste-sec-head">
-        <span class="ste-sec-ic coral"><i class="fa-solid fa-building-columns"></i></span>
+        <span class="ste-sec-ic coral"><x-hi name="bank" /></span>
         <div>
           <h4 class="ste-sec-title">Rekening Pembayaran</h4>
           <p class="ste-sec-desc">Rekening manual yang ditampilkan kepada siswa saat instruksi pembayaran.</p>
@@ -274,14 +274,14 @@
         <span class="ste-hint">Tampil di halaman instruksi pembayaran siswa.</span>
       </div>
       <div class="ste-foot">
-        <button type="button" class="ste-btn coral btn-save-tab" data-save-msg="Simpan rekening pembayaran?"><i class="fa-solid fa-floppy-disk"></i> Simpan Pembayaran</button>
+        <button type="button" class="ste-btn coral btn-save-tab" data-save-msg="Simpan rekening pembayaran?"><x-hi name="save" /> Simpan Pembayaran</button>
       </div>
     </div>
 
     <!-- ================= TAB: BIAYA & JALUR ================= -->
     <div data-tab-panel="biaya" class="{{ $activeTab === 'biaya' ? '' : 'hidden' }}">
       <div class="ste-sec-head">
-        <span class="ste-sec-ic purple"><i class="fa-solid fa-coins"></i></span>
+        <span class="ste-sec-ic purple"><x-hi name="coins-01" /></span>
         <div>
           <h4 class="ste-sec-title">Biaya Pendaftaran per Jenjang</h4>
           <p class="ste-sec-desc">Biaya <strong>Reguler</strong> diatur di sini. <strong>Prestasi &amp; Beasiswa</strong> diinput manual panitia setelah verifikasi.</p>
@@ -291,7 +291,7 @@
         @foreach($levels as $level)
           <div class="ste-biaya-card">
             <div class="ste-biaya-card-head">
-              <span class="ste-biaya-ic"><i class="fa-solid fa-graduation-cap"></i></span>
+              <span class="ste-biaya-ic"><x-hi name="mortarboard-01" /></span>
               <div>
                 <div class="ste-biaya-name">{{ $level->name }}</div>
                 <div class="ste-biaya-desc">{{ $level->description }}</div>
@@ -314,7 +314,7 @@
 
       <div class="ste-sec" style="margin-top:6px;">
         <div class="ste-sec-head">
-          <span class="ste-sec-ic blue" style="width:38px;height:38px;font-size:14px;"><i class="fa-regular fa-note-sticky"></i></span>
+          <span class="ste-sec-ic blue" style="width:38px;height:38px;font-size:14px;"><x-hi name="sticky-note-01" /></span>
           <div>
             <h4 class="ste-sec-title">Keterangan Biaya per Jalur</h4>
             <p class="ste-sec-desc">Penjelasan tampil di form pendaftaran siswa — apa saja yang dibayarkan.</p>
@@ -323,7 +323,7 @@
         <div class="ste-notes">
           @foreach($tracks as $track)
             <div class="ste-note-card">
-              <span class="ste-note-ic" style="background:@if(strtolower($track->name)==='reguler') var(--coral-soft); color:var(--coral) @elseif(strtolower($track->name)==='prestasi') var(--amber-soft); color:#b45309 @else var(--green-soft);color:var(--green) @endif"><i class="fa-solid @if(strtolower($track->name)==='reguler') fa-ticket @elseif(strtolower($track->name)==='prestasi') fa-trophy @else fa-hand-holding-heart @endif"></i></span>
+              <span class="ste-note-ic" style="background:transparent; @if(strtolower($track->name)==='reguler') color:var(--coral) @elseif(strtolower($track->name)==='prestasi') color:#b45309 @else color:var(--green) @endif"><x-hi :name="strtolower($track->name)==='reguler' ? 'ticket-01' : (strtolower($track->name)==='prestasi' ? 'award-01' : 'hand-helping')" style="width:26px;height:26px;" /></span>
               <div class="ste-field" style="flex:1;">
                 <label class="ste-label">{{ $track->name }}</label>
                 <textarea name="notes[{{ $track->id }}]" rows="2" placeholder="Apa saja yang dibayarkan pada jalur {{ $track->name }}" class="ste-input-box">{{ App\Models\Setting::get('note_' . $track->id) }}</textarea>
@@ -334,14 +334,14 @@
         </div>
       </div>
       <div class="ste-foot">
-        <button type="button" class="ste-btn coral btn-save-tab" data-save-msg="Simpan biaya pendaftaran?"><i class="fa-solid fa-floppy-disk"></i> Simpan Biaya</button>
+        <button type="button" class="ste-btn coral btn-save-tab" data-save-msg="Simpan biaya pendaftaran?"><x-hi name="save" /> Simpan Biaya</button>
       </div>
     </div>
 
     <!-- ================= TAB: BATAS WAKTU ================= -->
     <div data-tab-panel="batas-waktu" class="{{ $activeTab === 'batas-waktu' ? '' : 'hidden' }}">
       <div class="ste-sec-head">
-        <span class="ste-sec-ic amber"><i class="fa-regular fa-clock"></i></span>
+        <span class="ste-sec-ic amber"><x-hi name="clock-01" /></span>
         <div>
           <h4 class="ste-sec-title">Batas Waktu Pendaftaran &amp; Pembayaran</h4>
           <p class="ste-sec-desc">Jika melebihi batas, status otomatis “Dibatalkan” dan kuota dibuka kembali.</p>
@@ -350,7 +350,7 @@
       <div class="ste-deadline-grid">
         <div class="ste-dl-card">
           <div class="ste-dl-head">
-            <span class="ste-dl-ic amber"><i class="fa-regular fa-file-lines"></i></span>
+            <span class="ste-dl-ic amber"><x-hi name="file-01" /></span>
             <div>
               <div style="font-size:13px;font-weight:800;color:var(--ink);">Upload Berkas</div>
               <div style="font-size:11.5px;color:var(--muted);">Batas upload dokumen</div>
@@ -365,7 +365,7 @@
         </div>
         <div class="ste-dl-card">
           <div class="ste-dl-head">
-            <span class="ste-dl-ic blue"><i class="fa-solid fa-money-bill-wave"></i></span>
+            <span class="ste-dl-ic blue"><x-hi name="money-02" /></span>
             <div>
               <div style="font-size:13px;font-weight:800;color:var(--ink);">Pembayaran</div>
               <div style="font-size:11.5px;color:var(--muted);">Batas konfirmasi bayar</div>
@@ -381,14 +381,14 @@
       </div>
       <input type="hidden" name="re_registration_type" value="offline">
       <div class="ste-foot">
-        <button type="button" class="ste-btn coral btn-save-tab" data-save-msg="Simpan batas waktu?"><i class="fa-solid fa-floppy-disk"></i> Simpan Batas Waktu</button>
+        <button type="button" class="ste-btn coral btn-save-tab" data-save-msg="Simpan batas waktu?"><x-hi name="save" /> Simpan Batas Waktu</button>
       </div>
     </div>
 
     <!-- ================= TAB: DAFTAR ULANG ================= -->
     <div data-tab-panel="daftar-ulang" class="{{ $activeTab === 'daftar-ulang' ? '' : 'hidden' }}">
       <div class="ste-sec-head">
-        <span class="ste-sec-ic green"><i class="fa-regular fa-calendar-check"></i></span>
+        <span class="ste-sec-ic green"><x-hi name="calendar-check-in-01" /></span>
         <div>
           <h4 class="ste-sec-title">Jadwal Daftar Ulang per Jenjang</h4>
           <p class="ste-sec-desc">Offline di sekolah — wajib setelah periode pendaftaran jenjang berakhir.</p>
@@ -404,10 +404,10 @@
             $periodEndLabel = $periodEndByLevel[$level->id] ?? null;
           @endphp
           <div class="ste-rereg-card">
-            <span class="ste-rereg-ic"><i class="fa-solid fa-school"></i></span>
+            <span class="ste-rereg-ic"><x-hi name="school" /></span>
             <div class="ste-rereg-body">
               <div class="ste-rereg-name">{{ $level->name }} <span style="font-weight:500;color:var(--muted);font-size:11.5px;">— {{ $level->description }}</span></div>
-              @if($periodEndLabel)<div class="ste-rereg-sub"><i class="fa-regular fa-clock" style="font-size:10px;"></i> Periode berakhir {{ $periodEndLabel }} @if($reRegMin)· paling awal {{ $reRegMin }}@endif</div>@elseif($reRegMin)<div class="ste-rereg-sub">Paling awal {{ $reRegMin }}</div>@endif
+              @if($periodEndLabel)<div class="ste-rereg-sub"><x-hi name="clock-01" style="font-size:10px;" /> Periode berakhir {{ $periodEndLabel }} @if($reRegMin)· paling awal {{ $reRegMin }}@endif</div>@elseif($reRegMin)<div class="ste-rereg-sub">Paling awal {{ $reRegMin }}</div>@endif
               <div class="ste-rereg-dates">
                 <div class="ste-field">
                   <label class="ste-label">Mulai</label>
@@ -428,7 +428,7 @@
 
       <div class="ste-sec" style="margin-top:10px;">
         <div class="ste-sec-head">
-          <span class="ste-sec-ic blue" style="width:38px;height:38px;"><i class="fa-regular fa-bell"></i></span>
+          <span class="ste-sec-ic blue" style="width:38px;height:38px;"><x-hi name="notification-01" /></span>
           <div>
             <h4 class="ste-sec-title">Notifikasi Daftar Ulang</h4>
             <p class="ste-sec-desc">Pengingat di dashboard siswa diterima. Dukung <code style="background:rgba(255,255,255,0.6);padding:1px 4px;border-radius:4px;">{tanggal}</code> & <code style="background:rgba(255,255,255,0.6);padding:1px 4px;border-radius:4px;">{tanggal_selesai}</code>.</p>
@@ -463,14 +463,14 @@
         </div>
       </div>
       <div class="ste-foot">
-        <button type="button" class="ste-btn coral btn-save-tab" data-save-msg="Simpan jadwal daftar ulang?"><i class="fa-solid fa-floppy-disk"></i> Simpan Daftar Ulang</button>
+        <button type="button" class="ste-btn coral btn-save-tab" data-save-msg="Simpan jadwal daftar ulang?"><x-hi name="save" /> Simpan Daftar Ulang</button>
       </div>
     </div>
 
     <!-- ================= TAB: JENJANG ================= -->
     <div data-tab-panel="jenjang" class="{{ $activeTab === 'jenjang' ? '' : 'hidden' }}">
       <div class="ste-sec-head">
-        <span class="ste-sec-ic purple"><i class="fa-solid fa-layer-group"></i></span>
+        <span class="ste-sec-ic purple"><x-hi name="layers-01" /></span>
         <div>
           <h4 class="ste-sec-title">Batas Usia Minimal per Jenjang</h4>
           <p class="ste-sec-desc">Kosongkan untuk menonaktifkan batas. Rekomendasi: TK 4, SD 6, SMP 12, SMA/SMK 15</p>
@@ -491,7 +491,7 @@
 
       <div class="ste-sec" style="margin-top:10px;">
         <div class="ste-sec-head">
-          <span class="ste-sec-ic green"><i class="fa-solid fa-toggle-on"></i></span>
+          <span class="ste-sec-ic green"><x-hi name="toggle-on" /></span>
           <div>
             <h4 class="ste-sec-title">Status Pendaftaran per Jenjang</h4>
             <p class="ste-sec-desc">Nonaktif = tidak muncul di form siswa.</p>
@@ -501,7 +501,7 @@
           @foreach($levels as $level)
             <div class="ste-level-row">
               <div style="display:flex; gap:12px; align-items:center;">
-                <span style="width:38px;height:38px;border-radius:11px; display:flex;align-items:center;justify-content:center; font-size:14px; background:@if($level->is_active) var(--green-soft); color:var(--green) @else var(--red-soft); color:var(--red) @endif"><i class="fa-solid @if($level->is_active) fa-circle-check @else fa-circle-xmark @endif"></i></span>
+                <span style="width:38px;height:38px;border-radius:11px; display:flex;align-items:center;justify-content:center; font-size:14px; background:transparent; @if($level->is_active) color:var(--green) @else color:var(--red) @endif"><x-hi :name="$level->is_active ? 'checkmark-circle-02' : 'cancel-circle'" style="width:26px;height:26px;" /></span>
                 <div>
                   <p style="font-weight:700;color:var(--ink);font-size:13px; margin:0;">{{ $level->name }}</p>
                   <p style="font-size:12px;color:var(--muted); margin:0;">{{ $level->description }}</p>
@@ -517,8 +517,8 @@
         <p class="ste-hint" style="margin-top:8px;">Matikan jenjang yang tidak menerima pendaftaran.</p>
       </div>
       <div class="ste-foot" style="flex-wrap:wrap;">
-        <button type="button" id="btn-save-levels" class="ste-btn ghost" style="border:1px solid var(--divider);"><i class="fa-solid fa-toggle-on"></i> Simpan Status Jenjang Saja</button>
-        <button type="button" class="ste-btn coral btn-save-tab" data-save-msg="Simpan pengaturan jenjang &amp; batas usia?"><i class="fa-solid fa-floppy-disk"></i> Simpan Jenjang</button>
+        <button type="button" id="btn-save-levels" class="ste-btn ghost" style="border:1px solid var(--divider);"><x-hi name="toggle-on" /> Simpan Status Jenjang Saja</button>
+        <button type="button" class="ste-btn coral btn-save-tab" data-save-msg="Simpan pengaturan jenjang &amp; batas usia?"><x-hi name="save" /> Simpan Jenjang</button>
       </div>
     </div>
 
@@ -542,11 +542,11 @@
     var tabButtons = tabsRoot.querySelectorAll('[data-tab-btn]');
     var tabPanels = document.querySelectorAll('[data-tab-panel]');
     var steTabItems = [
-        {v:'pembayaran', l:'Pembayaran', i:'fa-credit-card'},
-        {v:'biaya', l:'Biaya & Jalur', i:'fa-coins'},
-        {v:'batas-waktu', l:'Batas Waktu', i:'fa-clock'},
-        {v:'daftar-ulang', l:'Daftar Ulang', i:'fa-calendar-check'},
-        {v:'jenjang', l:'Jenjang', i:'fa-layer-group'}
+        {v:'pembayaran', l:'Pembayaran', i:'credit-card'},
+        {v:'biaya', l:'Biaya & Jalur', i:'coins-01'},
+        {v:'batas-waktu', l:'Batas Waktu', i:'clock-01'},
+        {v:'daftar-ulang', l:'Daftar Ulang', i:'calendar-check-in-01'},
+        {v:'jenjang', l:'Jenjang', i:'layers-01'}
     ];
     var steActiveTab = '{{ $activeTab }}';
     function syncStePickerLabel(key){
@@ -582,7 +582,7 @@
             var div = document.createElement('div');
             div.className = 'ste-picker-item' + (it.v===steActiveTab ? ' is-active' : '');
             div.setAttribute('role','option');
-            div.innerHTML = '<i class="fa-solid '+it.i+'"></i><span style="flex:1">'+it.l+'</span>' + (it.v===steActiveTab ? '<i class="fa-solid fa-check" style="font-size:11px"></i>' : '');
+            div.innerHTML = hiSvg(it.i, 'font-size:15px;') + '<span style="flex:1">'+it.l+'</span>' + (it.v===steActiveTab ? hiSvg('checkmark', 'font-size:12px;') : '');
             div.addEventListener('click', function(){ activateTab(it.v,true); closeStePicker(); });
             list.appendChild(div);
         });

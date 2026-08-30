@@ -24,12 +24,12 @@
         .apl .apl-inner { max-width:1080px; margin:0 auto; }
         .apl-crumb { font-size:12.5px; color:var(--muted); margin-bottom:6px; }
         .apl-crumb a { color:var(--coral); font-weight:600; }
-        .apl-crumb i { font-size:10px; margin:0 6px; color:var(--muted); }
+        .apl-crumb svg.hi { font-size:10px; margin:0 6px; color:var(--muted); }
         .apl-title { font-size:26px; font-weight:800; letter-spacing:-0.01em; color:var(--ink); line-height:1.15; }
         .apl-meta { font-size:13px; color:var(--muted); margin-top:4px; }
         .apl-alert { border-radius:14px; padding:12px 16px; font-size:13px; line-height:1.5; margin-bottom:20px; display:flex; align-items:flex-start; gap:10px; }
         .apl-alert.error { background:rgba(239,68,68,.10); color:#c0392b; border:1px solid rgba(239,68,68,.22); }
-        .apl-alert i { margin-top:2px; }
+        .apl-alert svg.hi { margin-top:2px; }
 
         .apl-grid { display:grid; grid-template-columns:300px minmax(0,1fr); gap:28px; align-items:start; }
         @media (max-width:1024px){ .apl-grid { grid-template-columns:1fr; } }
@@ -50,7 +50,7 @@
 
         .apl-sec-link { display:flex; align-items:center; gap:10px; padding:9px 10px; border-radius:12px; font-size:13px; color:var(--muted); text-decoration:none; transition:background .15s,color .15s; }
         .apl-sec-link:hover { background:rgba(255,107,107,.08); color:var(--coral); }
-        .apl-sec-link i { font-size:11px; color:var(--muted); margin-left:auto; }
+        .apl-sec-link svg.hi { font-size:11px; color:var(--muted); margin-left:auto; }
 
         .apl-main { min-width:0; }
         .apl-sec { border-top:1px solid var(--divider); padding:26px 0 6px; }
@@ -75,8 +75,8 @@
         .apl-foot { display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-top:26px; padding-top:22px; border-top:1px solid var(--divider); }
         .apl-muted { color:var(--muted); }
         .apl-pill { display:inline-flex; align-items:center; gap:6px; border-radius:20px; padding:4px 12px; font-size:11px; font-weight:700; }
-        .apl-pill.is-green { background:rgba(16,185,129,.14); color:#0e9f6e; }
-        .apl-pill.is-amber { background:rgba(245,158,11,.16); color:#b45309; }
+        .apl-pill.is-green { background: transparent; border: 1px solid currentColor; color:#0e9f6e; }
+        .apl-pill.is-amber { background: transparent; border: 1px solid currentColor; color:#b45309; }
         .apl-age-hint { font-size:12px; margin-left:6px; }
         .apl-age-hint.ok  { color:#0e9f6e; }
         .apl-age-hint.bad { color:#c0392b; }
@@ -84,12 +84,12 @@
 
     <div class="apl">
         <div class="apl-inner">
-            <div class="apl-crumb"><a href="{{ route('dashboard') }}">Beranda</a><i class="fa-solid fa-chevron-right"></i>Review Data Diri</div>
+            <div class="apl-crumb"><a href="{{ route('dashboard') }}">Beranda</a><x-hi icon="fa-chevron-right" />Review Data Diri</div>
             <h1 class="apl-title">Review Data Diri</h1>
             <p class="apl-meta">Pastikan seluruh data sudah benar sebelum disimpan. Anda masih bisa kembali untuk mengubah.</p>
 
             @if (session('error'))
-                <div class="apl-alert error"><i class="fa-solid fa-circle-exclamation"></i><span>{{ session('error') }}</span></div>
+                <div class="apl-alert error"><x-hi icon="fa-circle-exclamation" /><span>{{ session('error') }}</span></div>
             @endif
 
             <div class="apl-grid">
@@ -98,15 +98,15 @@
                         <h4>Langkah Pendaftaran</h4>
                         <nav aria-label="Progress pendaftaran" style="display:flex;flex-direction:column;gap:2px;">
                             <a href="{{ route('applicant.profile') }}" class="apl-step done">
-                                <span class="st-ic"><i class="fa-solid fa-check"></i></span>
+                                <span class="st-ic"><x-hi icon="fa-check" /></span>
                                 <span class="st-tx">Isi Biodata</span>
                             </a>
                             <span class="apl-step current">
-                                <span class="st-ic"><i class="fa-solid fa-file-pen"></i></span>
+                                <span class="st-ic"><x-hi icon="fa-file-pen" /></span>
                                 <span class="st-tx">Review Data</span>
                             </span>
                             <span class="apl-step todo">
-                                <span class="st-ic"><i class="fa-solid fa-check"></i></span>
+                                <span class="st-ic"><x-hi icon="fa-check" /></span>
                                 <span class="st-tx">Selesai</span>
                             </span>
                         </nav>
@@ -117,7 +117,7 @@
                         <nav aria-label="Bagian data" style="display:flex;flex-direction:column;gap:2px;">
                             @foreach ($sections as $sec)
                                 <a href="#{{ $sec['id'] }}" class="apl-sec-link">
-                                    <i class="fa-solid {{ $sec['icon'] }}"></i>{{ $sec['label'] }}<i class="fa-solid fa-arrow-right"></i>
+                                    <x-hi icon="{{ $sec['icon'] }}" />{{ $sec['label'] }}<x-hi icon="fa-arrow-right" />
                                 </a>
                             @endforeach
                         </nav>
@@ -127,7 +127,7 @@
                 <main class="apl-main">
                     <div class="apl-sec" id="review-diri" style="scroll-margin-top:84px;">
                         <header class="apl-sec-head">
-                            <span class="apl-sec-ic coral"><i class="fa-solid fa-id-card"></i></span>
+                            <span class="apl-sec-ic coral"><x-hi icon="fa-id-card" /></span>
                             <div>
                                 <div class="apl-sec-ttl">Data Diri</div>
                                 <div class="apl-sec-desc">Identitas utama calon murid</div>
@@ -138,7 +138,7 @@
                             <x-review-item label="NISN" value="{{ $data['nisn'] ?? null }}" mono />
                             <x-review-item label="Verifikasi NISN">
                                 @if ($verifBadge)
-                                    <span class="apl-pill {{ $verifBadge['cls'] }}"><i class="fa-solid {{ $verifBadge['icon'] }}"></i>{{ $verifBadge['label'] }}</span>
+                                    <span class="apl-pill {{ $verifBadge['cls'] }}"><x-hi icon="{{ $verifBadge['icon'] }}" />{{ $verifBadge['label'] }}</span>
                                 @else
                                     <span class="apl-muted">—</span>
                                 @endif
@@ -154,7 +154,7 @@
 
                     <div class="apl-sec" id="review-alamat" style="scroll-margin-top:84px;">
                         <header class="apl-sec-head">
-                            <span class="apl-sec-ic blue"><i class="fa-solid fa-location-dot"></i></span>
+                            <span class="apl-sec-ic blue"><x-hi icon="fa-location-dot" /></span>
                             <div>
                                 <div class="apl-sec-ttl">Alamat</div>
                                 <div class="apl-sec-desc">Alamat domisili saat ini</div>
@@ -173,7 +173,7 @@
 
                     <div class="apl-sec" id="review-ortu" style="scroll-margin-top:84px;">
                         <header class="apl-sec-head">
-                            <span class="apl-sec-ic amber"><i class="fa-solid fa-people-roof"></i></span>
+                            <span class="apl-sec-ic amber"><x-hi icon="fa-people-roof" /></span>
                             <div>
                                 <div class="apl-sec-ttl">Orang Tua / Wali</div>
                                 <div class="apl-sec-desc">Data orang tua atau wali calon murid</div>
@@ -191,7 +191,7 @@
 
                     <div class="apl-sec" id="review-sekolah" style="scroll-margin-top:84px;">
                         <header class="apl-sec-head">
-                            <span class="apl-sec-ic green"><i class="fa-solid fa-school"></i></span>
+                            <span class="apl-sec-ic green"><x-hi icon="fa-school" /></span>
                             <div>
                                 <div class="apl-sec-ttl">Sekolah Asal</div>
                                 <div class="apl-sec-desc">Asal pendidikan calon murid</div>
@@ -208,10 +208,10 @@
                     </div>
 
                     <div class="apl-foot">
-                        <a href="{{ route('applicant.profile') }}" class="apl-btn ghost"><i class="fa-solid fa-arrow-left"></i> Kembali</a>
+                        <a href="{{ route('applicant.profile') }}" class="apl-btn ghost"><x-hi icon="fa-arrow-left" /> Kembali</a>
                         <form method="POST" action="{{ route('applicant.profile.confirm') }}">
                             @csrf
-                            <button type="submit" class="apl-btn coral"><i class="fa-solid fa-check"></i> Konfirmasi &amp; Simpan</button>
+                            <button type="submit" class="apl-btn coral"><x-hi icon="fa-check" /> Konfirmasi &amp; Simpan</button>
                         </form>
                     </div>
                 </main>

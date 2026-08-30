@@ -67,11 +67,11 @@
 
   /* ---------- pills ---------- */
   .sch .s-pill { display: inline-flex; align-items: center; gap: 6px; padding: 4px 11px; border-radius: 20px; font-size: 11.5px; font-weight: 700; white-space: nowrap; }
-  .sch .s-pill.green  { background: var(--green-soft);  color: var(--green); }
-  .sch .s-pill.amber  { background: var(--amber-soft);  color: #b45309; }
-  .sch .s-pill.blue   { background: var(--blue-soft);   color: var(--blue); }
-  .sch .s-pill.red    { background: var(--red-soft);    color: var(--red); }
-  .sch .s-pill.gray   { background: var(--gray-soft);   color: var(--gray); }
+  .sch .s-pill.green  { background: transparent; border: 1px solid currentColor;  color: var(--green); }
+  .sch .s-pill.amber  { background: transparent; border: 1px solid currentColor;  color: #b45309; }
+  .sch .s-pill.blue   { background: transparent; border: 1px solid currentColor;   color: var(--blue); }
+  .sch .s-pill.red    { background: transparent; border: 1px solid currentColor;    color: var(--red); }
+  .sch .s-pill.gray   { background: transparent; border: 1px solid currentColor;   color: var(--gray); }
 
   /* ---------- list rows (no card, divider) ---------- */
   .sch .s-list { display: flex; flex-direction: column; }
@@ -219,21 +219,21 @@
       <h1 class="s-title">Data Sekolah</h1>
       <p class="s-meta">Kelola daftar sekolah berdasarkan jenjang pendidikan</p>
     </div>
-    <a href="{{ route('admin.schools.create') }}" class="s-btn coral"><i class="fa-solid fa-plus"></i> Tambah Sekolah</a>
+    <a href="{{ route('admin.schools.create') }}" class="s-btn coral"><x-hi name="plus-sign" /> Tambah Sekolah</a>
   </div>
 
   @if (session('success'))
-    <div class="s-alert success"><i class="fa-solid fa-circle-check"></i><span>{{ session('success') }}</span></div>
+    <div class="s-alert success"><x-hi name="checkmark-circle-02" /><span>{{ session('success') }}</span></div>
   @endif
   @if (session('error'))
-    <div class="s-alert error"><i class="fa-solid fa-circle-exclamation"></i><span>{{ session('error') }}</span></div>
+    <div class="s-alert error"><x-hi name="alert-02" /><span>{{ session('error') }}</span></div>
   @endif
 
   @forelse ($levels as $level)
     @php $levelSchools = $grouped->get($level->id, collect()); @endphp
     <div class="s-sec">
       <div class="s-sec-head">
-        <span class="s-sec-ic"><i class="fa-solid fa-school"></i></span>
+        <span class="s-sec-ic"><x-hi name="school" /></span>
         <div>
           <div class="s-sec-name">{{ $level->name }}</div>
           @if($level->description)
@@ -247,21 +247,21 @@
           @foreach ($levelSchools as $entry)
             @php $school = $entry['school']; @endphp
             <div class="s-row">
-              <span class="s-row-ic"><i class="fa-solid fa-building-columns"></i></span>
+              <span class="s-row-ic"><x-hi name="bank" /></span>
               <div class="s-body">
                 <div class="s-name">{{ $school->name }}</div>
                 <div class="s-sub">
                   @if($school->address)
-                    <i class="fa-solid fa-location-dot" style="margin-right:3px"></i>{{ $school->address }}
+                    <x-hi name="location-01" style="margin-right:3px" />{{ $school->address }}
                   @else
                     Alamat belum diisi
                   @endif
                   @if($school->principal_name)
-                    &nbsp;·&nbsp; <i class="fa-solid fa-user-tie" style="margin-right:3px"></i>{{ $school->principal_name }}
+                    &nbsp;·&nbsp; <x-hi name="user" style="margin-right:3px" />{{ $school->principal_name }}
                   @endif
                 </div>
                 <div class="s-tags">
-                  <span class="s-pill blue"><i class="fa-solid fa-book"></i> {{ $school->majors_count }} jurusan</span>
+                  <span class="s-pill blue"><x-hi name="book-01" /> {{ $school->majors_count }} jurusan</span>
                   @if($school->school_status)
                     <span class="s-pill gray">{{ ucfirst($school->school_status) }}</span>
                   @endif
@@ -269,12 +269,12 @@
               </div>
               <div class="s-actions">
                 <span class="s-pill {{ $level->is_active ? 'green' : 'gray' }}">
-                  <i class="fa-solid {{ $level->is_active ? 'fa-circle-check' : 'fa-circle-xmark' }}"></i>
+                  <x-hi :name="$level->is_active ? 'checkmark-circle-02' : 'cancel-circle'" />
                   {{ $level->is_active ? 'Jenjang Aktif' : 'Jenjang Nonaktif' }}
                 </span>
                 <div class="s-actions-row">
-                  <a href="{{ route('admin.schools.edit', $school) }}" class="s-btn sm" style="background:var(--amber-soft);color:#b45309"><i class="fa-solid fa-pen"></i> Edit</a>
-                  <button type="button" class="s-btn sm" style="background:var(--red-soft);color:var(--red)" onclick="openSchoolDelete({{ $school->id }}, '{{ addslashes($school->name) }}')"><i class="fa-solid fa-trash-can"></i> Hapus</button>
+                  <a href="{{ route('admin.schools.edit', $school) }}" class="s-btn sm" style="background:var(--amber-soft);color:#b45309"><x-hi name="edit-02" /> Edit</a>
+                  <button type="button" class="s-btn sm" style="background:var(--red-soft);color:var(--red)" onclick="openSchoolDelete({{ $school->id }}, '{{ addslashes($school->name) }}')"><x-hi name="delete-02" /> Hapus</button>
                   <form id="schoolDeleteForm-{{ $school->id }}" method="POST" action="{{ route('admin.schools.destroy', $school) }}" style="display:none">
                     @csrf
                     @method('DELETE')
@@ -285,21 +285,21 @@
           @endforeach
         </div>
       @else
-        <div class="s-empty"><i class="fa-regular fa-school" style="display:block;font-size:20px;margin-bottom:6px;color:#d3d6de"></i>Belum ada sekolah untuk jenjang ini.</div>
+        <div class="s-empty"><x-hi name="school" style="display:block;font-size:20px;margin-bottom:6px;color:#d3d6de" />Belum ada sekolah untuk jenjang ini.</div>
       @endif
     </div>
   @empty
-    <div class="s-empty"><i class="fa-regular fa-school" style="display:block;font-size:20px;margin-bottom:6px;color:#d3d6de"></i>Tidak ada data jenjang</div>
+    <div class="s-empty"><x-hi name="school" style="display:block;font-size:20px;margin-bottom:6px;color:#d3d6de" />Tidak ada data jenjang</div>
   @endforelse
 
   @php $levelCount = \App\Models\SchoolLevel::count(); @endphp
   @if ($levelCount > 0)
     <div class="s-info">
       <div class="s-info-text">
-        <i class="fa-solid fa-circle-info"></i>
+        <x-hi name="information-circle" />
         <span>Status aktif/nonaktif tiap jenjang kini dikelola di <a href="{{ route('admin.settings.edit', ['tab' => 'jenjang']) }}">Pengaturan › tab Jenjang</a>.</span>
       </div>
-      <a href="{{ route('admin.settings.edit', ['tab' => 'jenjang']) }}" class="s-btn ghost sm"><i class="fa-solid fa-gear"></i> Buka Pengaturan Jenjang</a>
+      <a href="{{ route('admin.settings.edit', ['tab' => 'jenjang']) }}" class="s-btn ghost sm"><x-hi name="settings-01" /> Buka Pengaturan Jenjang</a>
     </div>
   @endif
   </div>
@@ -308,7 +308,7 @@
 <div id="schoolDeleteModal" class="s-modal-backdrop" aria-hidden="true">
   <div class="s-modal" role="dialog" aria-modal="true">
     <div class="s-modal-body">
-      <div id="schoolDeleteIcon" class="s-modal-ic"><i class="fa-solid fa-trash-can"></i></div>
+      <div id="schoolDeleteIcon" class="s-modal-ic"><x-hi name="delete-02" /></div>
       <div style="flex:1;min-width:0">
         <h3 id="schoolDeleteTitle" class="s-modal-title">Hapus sekolah ini?</h3>
         <p id="schoolDeleteMessage" class="s-modal-msg"></p>

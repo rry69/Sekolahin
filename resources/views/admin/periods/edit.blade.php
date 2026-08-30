@@ -92,7 +92,7 @@
       <h1 class="ped-title">Edit Periode Pendaftaran</h1>
       <p class="ped-meta">Perbarui periode. Jenjang dikunci agar data historis tidak berubah.</p>
     </div>
-    <a href="{{ route('admin.periods.index') }}" class="ped-btn ghost"><i class="fa-solid fa-arrow-left" style="font-size:10px;"></i> Kembali</a>
+    <a href="{{ route('admin.periods.index') }}" class="ped-btn ghost"><x-hi name="arrow-left-01" style="font-size:10px;" /> Kembali</a>
   </div>
 
 @php
@@ -103,7 +103,7 @@
 
 @if ($isRunning)
 <div class="ped-warn">
-  <i class="fa-solid fa-triangle-exclamation" style="margin-top:2px;"></i>
+  <x-hi name="alert-02" style="margin-top:2px;" />
   <div>
     <strong>Periode sedang berlangsung ({{ $statusLabel }})</strong> — perubahan tanggal akan langsung memengaruhi pendaftaran yang berjalan. Pastikan rentang baru tidak bertabrakan dengan periode aktif lain di jenjang yang sama.
   </div>
@@ -112,7 +112,7 @@
 
 @if ($errors->any())
 <div class="ped-alert error" style="flex-direction:column;align-items:stretch;">
-  <div style="display:flex;gap:10px;"><i class="fa-solid fa-circle-exclamation"></i><strong>Periksa kembali isian Anda:</strong></div>
+  <div style="display:flex;gap:10px;"><x-hi name="alert-02" /><strong>Periksa kembali isian Anda:</strong></div>
   <ul style="margin:6px 0 0 18px;list-style:disc;">
     @foreach ($errors->all() as $error)
       <li>{{ $error }}</li>
@@ -126,11 +126,11 @@
   @method('PATCH')
 
   <div class="ped-sec">
-    <div class="ped-sec-title"><i class="fa-solid fa-calendar-days"></i> Informasi Periode</div>
+    <div class="ped-sec-title"><x-hi name="calendar-01" /> Informasi Periode</div>
     <div class="ped-grid">
       <div class="ped-field">
         <label>Jenjang <span class="req">*</span></label>
-        <div class="ped-locked"><i class="fa-solid fa-lock"></i> {{ $schoolLevels->firstWhere('id', old('school_level_id', $registrationPeriod->school_level_id))?->name ?? '-' }}</div>
+        <div class="ped-locked"><x-hi name="lock" /> {{ $schoolLevels->firstWhere('id', old('school_level_id', $registrationPeriod->school_level_id))?->name ?? '-' }}</div>
         <input type="hidden" name="school_level_id" value="{{ old('school_level_id', $registrationPeriod->school_level_id) }}">
         <p class="ped-hint">Jenjang dikunci saat edit untuk menjaga konsistensi data pendaftaran.</p>
         @error('school_level_id')<p class="ped-err">{{ $message }}</p>@enderror
@@ -166,7 +166,7 @@
   </div>
 
   <div class="ped-sec">
-    <div class="ped-sec-title"><i class="fa-solid fa-clock"></i> Jadwal</div>
+    <div class="ped-sec-title"><x-hi name="clock-01" /> Jadwal</div>
     <div class="ped-grid">
       <div class="ped-field">
         <label>Tanggal Mulai <span class="req">*</span></label>
@@ -181,14 +181,14 @@
       </div>
 
       <div class="ped-field full" style="margin-top:2px;">
-        <span class="ped-duration" id="durationBadge"><i class="fa-regular fa-clock" style="font-size:11px;"></i> <span id="durationText">{{ $registrationPeriod->durationLabel() }}</span></span>
+        <span class="ped-duration" id="durationBadge"><x-hi name="clock-01" style="font-size:11px;" /> <span id="durationText">{{ $registrationPeriod->durationLabel() }}</span></span>
         <p class="ped-hint" id="dateOrderHint" style="display:none;color:var(--red);"></p>
       </div>
     </div>
   </div>
 
   <div class="ped-sec">
-    <div class="ped-sec-title"><i class="fa-solid fa-note-sticky"></i> Catatan & Status</div>
+    <div class="ped-sec-title"><x-hi name="sticky-note-01" /> Catatan & Status</div>
     <div class="ped-grid">
       <div class="ped-field full">
         <label>Catatan / Deskripsi</label>
@@ -209,7 +209,7 @@
   <div class="ped-submit">
     <a href="{{ route('admin.periods.index') }}" class="ped-btn ghost">Batal</a>
     <button type="submit" class="ped-btn coral" id="saveBtn">
-      <i class="fa-solid fa-floppy-disk" style="font-size:11px;"></i> <span id="saveBtnText">Simpan Perubahan</span>
+      <x-hi name="save" style="font-size:11px;" /> <span id="saveBtnText">Simpan Perubahan</span>
     </button>
   </div>
 </form>

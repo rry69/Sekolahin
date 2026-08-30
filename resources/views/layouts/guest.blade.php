@@ -15,6 +15,22 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+        <script>
+            // === Ikon HugeIcons (JS) — konsisten dengan dashboard admin ===
+            window.__HI = @json(\App\Support\Hi::all());
+            window.__HI_MAP = @json(config('hugeicons'));
+            function hiSvg(name, attr) {
+                var key = name || '';
+                if (!(key in (window.__HI || {}))) {
+                    key = (window.__HI_MAP || {})[key] || '';
+                }
+                var body = (window.__HI || {})[key] || '';
+                if (!body) return '';
+                var a = attr ? ' ' + attr : '';
+                return '<svg class="hi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"' + a + '>' + body + '</svg>';
+            }
+            function hiHtml(name, attr) { return hiSvg(name, attr); }
+        </script>
     </head>
     <body class="font-sans antialiased" style="font-family: 'Inter', system-ui, sans-serif; background: #F4F5FB;">
         <div class="relative flex min-h-screen items-center justify-center overflow-hidden px-4 py-10 sm:px-6">
@@ -36,7 +52,7 @@
                 <div class="mb-7 flex flex-col items-center text-center">
                     <div class="flex h-12 w-12 items-center justify-center rounded-2xl text-white shadow-lg"
                          style="background: linear-gradient(135deg, #FF6B6B, #FF8E6E); box-shadow: 0 10px 24px -8px rgba(255,107,107,.55);">
-                        <i class="fa-solid fa-graduation-cap text-xl"></i>
+                        <x-hi icon="fa-graduation-cap" class="text-xl" />
                     </div>
                     <h1 class="mt-3 text-2xl font-extrabold tracking-tight text-gray-900">Sekolahin</h1>
                     <p class="text-xs font-semibold uppercase tracking-[0.05em] text-gray-400">Penerimaan Murid Baru</p>

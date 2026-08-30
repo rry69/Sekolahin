@@ -100,15 +100,15 @@
   .prd .prd-sub .dot { color: #d3d6de; }
   .prd .prd-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; align-items: center; }
   .prd .prd-pill { display: inline-flex; align-items: center; gap: 6px; padding: 4px 11px; border-radius: 20px; font-size: 11.5px; font-weight: 700; white-space: nowrap; }
-  .prd .prd-pill.green { background: var(--green-soft); color: var(--green); }
-  .prd .prd-pill.blue { background: var(--blue-soft); color: var(--blue); }
-  .prd .prd-pill.amber { background: var(--amber-soft); color: #b45309; }
-  .prd .prd-pill.red { background: var(--red-soft); color: var(--red); }
-  .prd .prd-pill.gray { background: var(--gray-soft); color: var(--gray); }
-  .prd .badge-nonaktif { background: var(--gray-soft); color: var(--gray); border: none; }
-  .prd .badge-belum { background: var(--blue-soft); color: var(--blue); border: none; }
-  .prd .badge-berlangsung { background: var(--green-soft); color: var(--green); border: none; }
-  .prd .badge-selesai { background: var(--amber-soft); color: #b45309; border: none; }
+  .prd .prd-pill.green { background: transparent; border: 1px solid currentColor; color: var(--green); }
+  .prd .prd-pill.blue { background: transparent; border: 1px solid currentColor; color: var(--blue); }
+  .prd .prd-pill.amber { background: transparent; border: 1px solid currentColor; color: #b45309; }
+  .prd .prd-pill.red { background: transparent; border: 1px solid currentColor; color: var(--red); }
+  .prd .prd-pill.gray { background: transparent; border: 1px solid currentColor; color: var(--gray); }
+  .prd .badge-nonaktif { background: transparent; border: 1px solid currentColor; color: var(--gray);  }
+  .prd .badge-belum { background: transparent; border: 1px solid currentColor; color: var(--blue);  }
+  .prd .badge-berlangsung { background: transparent; border: 1px solid currentColor; color: var(--green);  }
+  .prd .badge-selesai { background: transparent; border: 1px solid currentColor; color: #b45309;  }
   .prd .kuota-ok { color: var(--green); font-weight: 700; }
   .prd .kuota-warn { color: #b45309; font-weight: 700; }
   .prd .kuota-full { color: var(--red); font-weight: 700; }
@@ -173,28 +173,28 @@
       <p class="prd-meta">Kelola jendela pendaftaran per jenjang, tahun ajaran, dan gelombang.</p>
     </div>
     <a href="{{ route('admin.periods.create') }}" class="prd-btn coral" style="white-space:nowrap;">
-      <i class="fa-solid fa-plus" style="font-size:10px;"></i> Tambah Periode
+      <x-hi name="plus-sign" style="font-size:10px;" /> Tambah Periode
     </a>
   </div>
 
   @if (session('success'))
-    <div class="prd-alert success"><i class="fa-solid fa-circle-check"></i><span>{{ session('success') }}</span></div>
+    <div class="prd-alert success"><x-hi name="checkmark-circle-02" /><span>{{ session('success') }}</span></div>
   @endif
   @if (session('error'))
-    <div class="prd-alert error"><i class="fa-solid fa-circle-exclamation"></i><span>{{ session('error') }}</span></div>
+    <div class="prd-alert error"><x-hi name="alert-02" /><span>{{ session('error') }}</span></div>
   @endif
 
   <div class="prd-toolbar">
     <div class="prd-search">
-      <i class="fa-solid fa-magnifying-glass"></i>
+      <x-hi name="search-01" />
       <input type="text" id="prdSearch" placeholder="Cari nama periode, tahun ajaran, atau catatan..." value="{{ $filters['q'] ?? '' }}" autocomplete="off">
     </div>
     <div class="prd-field">
       <label>Jenjang</label>
       <button type="button" class="r-pick" data-picker="level" aria-haspopup="listbox" aria-expanded="false">
         <span class="pick-label is-placeholder">Semua Jenjang</span>
-        <span class="pick-clear" data-clear="level" role="button" tabindex="0" aria-label="Bersihkan"><i class="fa-solid fa-xmark"></i></span>
-        <i class="fa-solid fa-chevron-down pick-caret"></i>
+        <span class="pick-clear" data-clear="level" role="button" tabindex="0" aria-label="Bersihkan"><x-hi name="cancel-01" /></span>
+        <x-hi name="arrow-down-01" />
       </button>
       <input type="hidden" id="prdLevel" data-picker-input="level" value="{{ $filters['level'] ?? '' }}">
     </div>
@@ -202,8 +202,8 @@
       <label>Status</label>
       <button type="button" class="r-pick" data-picker="status" aria-haspopup="listbox" aria-expanded="false">
         <span class="pick-label is-placeholder">Semua Status</span>
-        <span class="pick-clear" data-clear="status" role="button" tabindex="0" aria-label="Bersihkan"><i class="fa-solid fa-xmark"></i></span>
-        <i class="fa-solid fa-chevron-down pick-caret"></i>
+        <span class="pick-clear" data-clear="status" role="button" tabindex="0" aria-label="Bersihkan"><x-hi name="cancel-01" /></span>
+        <x-hi name="arrow-down-01" />
       </button>
       <input type="hidden" id="prdStatus" data-picker-input="status" value="{{ $filters['status'] ?? '' }}">
     </div>
@@ -211,17 +211,17 @@
       <label>Tahun Ajaran</label>
       <button type="button" class="r-pick" data-picker="year" aria-haspopup="listbox" aria-expanded="false">
         <span class="pick-label is-placeholder">Semua Tahun</span>
-        <span class="pick-clear" data-clear="year" role="button" tabindex="0" aria-label="Bersihkan"><i class="fa-solid fa-xmark"></i></span>
-        <i class="fa-solid fa-chevron-down pick-caret"></i>
+        <span class="pick-clear" data-clear="year" role="button" tabindex="0" aria-label="Bersihkan"><x-hi name="cancel-01" /></span>
+        <x-hi name="arrow-down-01" />
       </button>
       <input type="hidden" id="prdYear" data-picker-input="year" value="{{ $filters['academic_year'] ?? '' }}">
     </div>
   </div>
 
   <div class="prd-summary">
-    <span id="prdTotal"><i class="fa-solid fa-calendar-days" style="font-size:11px;"></i> Total <strong>{{ $periods->count() }}</strong> periode</span>
+    <span id="prdTotal"><x-hi name="calendar-01" style="font-size:11px;" /> Total <strong>{{ $periods->count() }}</strong> periode</span>
     @if (!empty($filters['q']) || !empty($filters['level']) || !empty($filters['status']) || !empty($filters['academic_year']))
-      <a href="{{ route('admin.periods.index') }}" class="prd-btn ghost sm" style="padding:4px 12px;font-size:11.5px;"><i class="fa-solid fa-xmark" style="font-size:9px;"></i> Reset filter</a>
+      <a href="{{ route('admin.periods.index') }}" class="prd-btn ghost sm" style="padding:4px 12px;font-size:11.5px;"><x-hi name="cancel-01" style="font-size:9px;" /> Reset filter</a>
     @endif
   </div>
 
@@ -234,15 +234,15 @@
   <div class="picker-panel" role="dialog" aria-modal="true" aria-labelledby="pickerTitle">
     <div class="picker-head">
       <div class="picker-title" id="pickerTitle">Pilih item</div>
-      <button type="button" class="picker-close" onclick="closePicker()" aria-label="Tutup"><i class="fa-solid fa-xmark"></i></button>
+      <button type="button" class="picker-close" onclick="closePicker()" aria-label="Tutup"><x-hi name="cancel-01" /></button>
     </div>
     <div class="picker-search">
-      <i class="fa-solid fa-magnifying-glass"></i>
+      <x-hi name="search-01" />
       <input id="pickerSearch" type="search" placeholder="Cari…" autocomplete="off">
     </div>
     <div class="picker-list" id="pickerList" role="listbox"></div>
     <div class="picker-foot">
-      <button type="button" class="picker-clear-all" onclick="clearCurrentPicker()"><i class="fa-solid fa-eraser"></i> Bersihkan</button>
+      <button type="button" class="picker-clear-all" onclick="clearCurrentPicker()"><x-hi name="eraser-01" /> Bersihkan</button>
       <button type="button" class="picker-done" onclick="closePicker()">Selesai</button>
     </div>
   </div>
@@ -263,7 +263,7 @@
 <div id="periodDeleteModal" class="prd-modal-backdrop" aria-hidden="true">
   <div class="prd-modal" role="dialog" aria-modal="true">
     <div class="prd-modal-head">
-      <div class="prd-modal-ic" id="prdModalIcon"><i class="fa-solid fa-trash-can"></i></div>
+      <div class="prd-modal-ic" id="prdModalIcon"><x-hi name="delete-02" /></div>
       <div style="flex:1;min-width:0">
         <h3 class="prd-modal-title" id="prdModalTitle">Hapus periode?</h3>
         <p class="prd-modal-text">Yakin ingin menghapus periode <strong id="prdDeleteName"></strong>? Aksi ini tidak dapat dibatalkan.</p>

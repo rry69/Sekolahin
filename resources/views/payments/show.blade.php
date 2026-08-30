@@ -1,18 +1,4 @@
-<x-app-layout>
-    <x-slot name="header">
-        <div class="flex items-center gap-3">
-            <a href="{{ route('registration.index') }}" class="inline-flex items-center p-2 rounded-md text-gray-500 hover:text-gray-700 hover:bg-gray-100" aria-label="Kembali ke Pendaftaran">
-                <i class="fa-solid fa-arrow-left text-lg"></i>
-            </a>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Detail Pembayaran
-            </h2>
-            <div class="ms-auto">
-                <x-notification-panel />
-            </div>
-        </div>
-    </x-slot>
-
+<x-student-layout title="Detail Pembayaran">
     @php
         $registration = $payment->registration;
         $applicant = $registration->applicant;
@@ -73,24 +59,31 @@
             --amber: #F59E0B; --amber-soft: #FEF3C7;
             --blue: #3B82F6; --blue-soft: #DBEAFE;
             --gray: #6b7280; --gray-soft: #F3F4F6;
-        }
-        .pay-show .ps-inner { max-width: 820px; margin: 0 auto; }
-
-        /* card utama */
-        .pay-show .ps-card {
             position: relative;
             border-radius: 24px;
+            padding: 28px 28px 44px;
             background: #f6f7fb;
-            padding: 28px 28px 40px;
+        }
+        .pay-show .pay-show-inner { width: 100%; max-width: 820px; margin: 0 auto; }
+
+        /* crumbs + title (Bringova) */
+        .pay-show .ps-crumb { font-size: 12.5px; color: var(--muted); margin-bottom: 6px; display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
+        .pay-show .ps-crumb a { color: var(--coral); font-weight: 600; } .pay-show .ps-crumb a:hover { text-decoration: underline; }
+        .pay-show .ps-crumb svg.hi { font-size: 9px; color: #d3d6de; }
+        .pay-show .ps-title-page { font-size: 26px; font-weight: 800; color: var(--ink); letter-spacing: -0.01em; line-height: 1.2; }
+        .pay-show .ps-meta { font-size: 13px; color: var(--muted); margin-top: 6px; }
+
+        /* card utama — menyatu dengan wrapper (Bringova: tanpa kartu putih bertumpuk) */
+        .pay-show .ps-card {
+            position: relative;
         }
 
         /* header */
         .pay-show .ps-head { display: flex; align-items: flex-start; gap: 14px; flex-wrap: wrap; }
         .pay-show .ps-head-ic {
-            width: 52px; height: 52px; border-radius: 15px;
-            background: linear-gradient(135deg, var(--coral), var(--coral-2));
-            color: #fff; display: flex; align-items: center; justify-content: center;
-            font-size: 21px; box-shadow: 0 10px 22px -10px rgba(255,107,107,.6); flex: 0 0 auto;
+            display: inline-flex; align-items: center; justify-content: center;
+            font-size: 26px; line-height: 1; color: var(--coral);
+            background: none; border-radius: 0; box-shadow: none; width: auto; height: auto; flex: 0 0 auto;
         }
         .pay-show .ps-title { font-size: 22px; font-weight: 800; color: var(--ink); letter-spacing: -0.01em; }
         .pay-show .ps-sub { font-size: 13px; color: var(--muted); margin-top: 4px; }
@@ -102,25 +95,25 @@
             padding: 5px 13px; border-radius: 99px; font-size: 11.5px; font-weight: 800;
             white-space: nowrap;
         }
-        .pay-show .ps-pill.green { background: var(--green-soft); color: #047857; }
-        .pay-show .ps-pill.red { background: var(--red-soft); color: #B91C1C; }
-        .pay-show .ps-pill.amber { background: var(--amber-soft); color: #B45309; }
-        .pay-show .ps-pill.gray { background: var(--gray-soft); color: var(--gray); }
+        .pay-show .ps-pill.green { background: transparent; border: 1px solid currentColor; color: #047857; }
+        .pay-show .ps-pill.red { background: transparent; border: 1px solid currentColor; color: #B91C1C; }
+        .pay-show .ps-pill.amber { background: transparent; border: 1px solid currentColor; color: #B45309; }
+        .pay-show .ps-pill.gray { background: transparent; border: 1px solid currentColor; color: var(--gray); }
 
         /* section */
         .pay-show .ps-sec { border-top: 1px solid var(--divider); padding: 24px 0 6px; }
         .pay-show .ps-sec:first-of-type { border-top: none; padding-top: 22px; }
         .pay-show .ps-sec-head { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; flex-wrap: wrap; }
         .pay-show .ps-sec-ic {
-            width: 40px; height: 40px; border-radius: 12px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 16px; flex: 0 0 auto;
+            display: inline-flex; align-items: center; justify-content: center;
+            font-size: 22px; line-height: 1; background: none; border-radius: 0;
+            box-shadow: none; width: auto; height: auto; flex: 0 0 auto;
         }
-        .pay-show .ps-sec-ic.coral { background: var(--coral-soft); color: var(--coral); }
-        .pay-show .ps-sec-ic.blue { background: var(--blue-soft); color: var(--blue); }
-        .pay-show .ps-sec-ic.green { background: var(--green-soft); color: var(--green); }
-        .pay-show .ps-sec-ic.amber { background: var(--amber-soft); color: var(--amber); }
-        .pay-show .ps-sec-ic.red { background: var(--red-soft); color: var(--red); }
+        .pay-show .ps-sec-ic.coral { color: var(--coral); }
+        .pay-show .ps-sec-ic.blue { color: var(--blue); }
+        .pay-show .ps-sec-ic.green { color: var(--green); }
+        .pay-show .ps-sec-ic.amber { color: var(--amber); }
+        .pay-show .ps-sec-ic.red { color: var(--red); }
         .pay-show .ps-sec-ttl { font-size: 14px; font-weight: 800; color: var(--ink); }
         .pay-show .ps-sec-desc { font-size: 12px; color: var(--muted); margin-top: 1px; }
 
@@ -144,9 +137,9 @@
             background: linear-gradient(180deg, rgba(255,107,107,.06), rgba(255,107,107,.02));
         }
         .pay-show .ps-amount-ic {
-            width: 48px; height: 48px; border-radius: 14px; background: var(--coral-soft);
-            color: var(--coral); display: flex; align-items: center; justify-content: center;
-            font-size: 19px; flex: 0 0 auto;
+            display: inline-flex; align-items: center; justify-content: center;
+            font-size: 26px; line-height: 1; color: var(--coral);
+            background: none; border-radius: 0; box-shadow: none; width: auto; height: auto; flex: 0 0 auto;
         }
         .pay-show .ps-amount-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
         .pay-show .ps-amount-value { font-size: 26px; font-weight: 800; color: var(--ink); letter-spacing: -0.01em; line-height: 1.1; margin-top: 2px; }
@@ -157,19 +150,17 @@
             border-radius: 14px; padding: 14px 16px; margin-top: 16px;
             border: 1px solid transparent;
         }
-        .pay-show .ps-alert i.ps-alert-ic {
-            width: 22px; height: 22px; border-radius: 7px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 11px; flex: 0 0 auto; margin-top: 1px;
+        .pay-show .ps-alert svg.hi.ps-alert-ic {
+            font-size: 16px; flex: 0 0 auto; margin-top: 2px;
         }
         .pay-show .ps-alert.green { background: var(--green-soft); border-color: rgba(16,185,129,.3); }
-        .pay-show .ps-alert.green i.ps-alert-ic { background: var(--green); color: #fff; }
+        .pay-show .ps-alert.green svg.hi.ps-alert-ic { color: var(--green); }
         .pay-show .ps-alert.green .ps-alert-t, .pay-show .ps-alert.green .ps-alert-p { color: #047857; }
         .pay-show .ps-alert.red { background: var(--red-soft); border-color: rgba(239,68,68,.25); }
-        .pay-show .ps-alert.red i.ps-alert-ic { background: var(--red); color: #fff; }
+        .pay-show .ps-alert.red svg.hi.ps-alert-ic { color: var(--red); }
         .pay-show .ps-alert.red .ps-alert-t, .pay-show .ps-alert.red .ps-alert-p { color: #B91C1C; }
         .pay-show .ps-alert.amber { background: var(--amber-soft); border-color: rgba(245,158,11,.3); }
-        .pay-show .ps-alert.amber i.ps-alert-ic { background: var(--amber); color: #fff; }
+        .pay-show .ps-alert.amber svg.hi.ps-alert-ic { color: var(--amber); }
         .pay-show .ps-alert.amber .ps-alert-t, .pay-show .ps-alert.amber .ps-alert-p { color: #B45309; }
         .pay-show .ps-alert .ps-alert-t { font-weight: 800; font-size: 13.5px; }
         .pay-show .ps-alert .ps-alert-p { font-size: 13px; margin-top: 2px; opacity: .94; line-height: 1.5; }
@@ -180,9 +171,9 @@
             display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
         }
         .pay-show .ps-proof-ic {
-            width: 46px; height: 46px; border-radius: 13px;
-            background: var(--gray-soft); color: var(--gray);
-            display: flex; align-items: center; justify-content: center; font-size: 18px; flex: 0 0 auto;
+            display: inline-flex; align-items: center; justify-content: center;
+            font-size: 22px; line-height: 1; color: var(--gray);
+            background: none; border-radius: 0; box-shadow: none; width: auto; height: auto; flex: 0 0 auto;
         }
         .pay-show .ps-proof-info { flex: 1 1 200px; min-width: 0; }
         .pay-show .ps-proof-t { font-size: 13.5px; font-weight: 800; color: var(--ink); }
@@ -228,19 +219,49 @@
         }
     </style>
 
-    <div class="py-10 pay-show">
-        <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
+    <div class="pay-show">
+        <div class="pay-show-inner">
+
+            {{-- Crumbs + title (Bringova) --}}
+            <div class="ps-crumb">
+                <a href="{{ route('registration.index') }}">Pendaftaran</a>
+                <x-hi icon="fa-chevron-right" />
+                <a href="{{ route('registration.show', $registration) }}">{{ $registration->registration_number }}</a>
+                <x-hi icon="fa-chevron-right" />
+                <span>Detail Pembayaran</span>
+            </div>
+            <h1 class="ps-title-page">Detail Pembayaran</h1>
+            <p class="ps-meta">Informasi tagihan, status, dan bukti transfer pembayaran kamu.</p>
+
+            {{-- Session banners --}}
+            @if (session('success'))
+                <div class="ps-alert green" style="margin-top:18px">
+                    <x-hi icon="fa-circle-check" class="ps-alert-ic" />
+                    <div>
+                        <p class="ps-alert-p">{{ session('success') }}</p>
+                    </div>
+                </div>
+            @endif
+            @if (session('error'))
+                <div class="ps-alert red" style="margin-top:18px">
+                    <x-hi icon="fa-circle-exclamation" class="ps-alert-ic" />
+                    <div>
+                        <p class="ps-alert-p">{{ session('error') }}</p>
+                    </div>
+                </div>
+            @endif
+
             <div class="ps-card">
                 {{-- Header --}}
                 <div class="ps-head">
-                    <span class="ps-head-ic"><i class="fa-solid fa-wallet"></i></span>
+                    <span class="ps-head-ic"><x-hi icon="fa-wallet" /></span>
                     <div>
                         <h3 class="ps-title">Pembayaran #{{ $payment->id }}</h3>
                         <p class="ps-sub">No. Registrasi: <span class="mono" style="font-family:ui-monospace,monospace">{{ $registration->registration_number }}</span></p>
                     </div>
                     <span class="ps-badge">
                         <span class="ps-pill {{ $isVerified ? 'green' : ($isRejected ? 'red' : 'amber') }}">
-                            <i class="fa-solid {{ $isVerified ? 'fa-circle-check' : ($isRejected ? 'fa-circle-xmark' : 'fa-clock') }}"></i>
+                            <x-hi icon="{{ $isVerified ? 'fa-circle-check' : ($isRejected ? 'fa-circle-xmark' : 'fa-clock') }}" />
                             {{ $isVerified ? 'LUNAS' : ($isRejected ? 'DITOLAK' : 'MENUNGGU') }}
                         </span>
                     </span>
@@ -249,7 +270,7 @@
                 {{-- Status alert --}}
                 @if ($isVerified)
                     <div class="ps-alert green">
-                        <i class="fa-solid fa-circle-check ps-alert-ic"></i>
+                        <x-hi icon="fa-circle-check" class="ps-alert-ic" />
                         <div>
                             <p class="ps-alert-t">Pembayaran Terverifikasi</p>
                             <p class="ps-alert-p">Diverifikasi oleh: <b>{{ $verifiedByLabel }}</b> &middot; {{ $paidDate ? $paidDate->format('d M Y H:i') : '-' }}</p>
@@ -257,7 +278,7 @@
                     </div>
                 @elseif ($isRejected)
                     <div class="ps-alert red">
-                        <i class="fa-solid fa-circle-xmark ps-alert-ic"></i>
+                        <x-hi icon="fa-circle-xmark" class="ps-alert-ic" />
                         <div>
                             <p class="ps-alert-t">Pembayaran Ditolak</p>
                             <p class="ps-alert-p">Ditolak oleh: <b>{{ $verifiedByLabel }}</b> &middot; {{ $paidDate ? $paidDate->format('d M Y H:i') : '-' }}</p>
@@ -272,7 +293,7 @@
                     </div>
                 @else
                     <div class="ps-alert amber">
-                        <i class="fa-solid fa-clock ps-alert-ic"></i>
+                        <x-hi icon="fa-clock" class="ps-alert-ic" />
                         <div>
                             <p class="ps-alert-t">Menunggu Pembayaran</p>
                             <p class="ps-alert-p">Pembayaran Anda sedang diproses. Mohon tunggu konfirmasi.</p>
@@ -283,7 +304,7 @@
                 {{-- Informasi Pembayaran --}}
                 <section class="ps-sec">
                     <div class="ps-sec-head">
-                        <div class="ps-sec-ic blue"><i class="fa-solid fa-receipt"></i></div>
+                        <div class="ps-sec-ic blue"><x-hi icon="fa-receipt" /></div>
                         <div>
                             <p class="ps-sec-ttl">Informasi Pembayaran</p>
                             <p class="ps-sec-desc">Nomor, metode, dan detail tagihan.</p>
@@ -327,7 +348,7 @@
 
                     {{-- Amount highlight --}}
                     <div class="ps-amount">
-                        <span class="ps-amount-ic"><i class="fa-solid fa-coins"></i></span>
+                        <span class="ps-amount-ic"><x-hi icon="fa-coins" /></span>
                         <div>
                             <p class="ps-amount-label">Jumlah Dibayar</p>
                             <p class="ps-amount-value">Rp {{ number_format($payment->amount, 0, ',', '.') }}</p>
@@ -338,7 +359,7 @@
                     @if($payment->invoice_pdf)
                         <div style="margin-top:16px">
                             <a href="{{ route('payments.invoice', $payment) }}" target="_blank" class="ps-btn coral">
-                                <i class="fa-solid fa-file-pdf"></i> Unduh Invoice (PDF)
+                                <x-hi icon="fa-file-pdf" /> Unduh Invoice (PDF)
                             </a>
                         </div>
                     @endif
@@ -348,21 +369,21 @@
                 @if ($payment->proof_file)
                     <section class="ps-sec">
                         <div class="ps-sec-head">
-                            <div class="ps-sec-ic coral"><i class="fa-solid fa-paperclip"></i></div>
+                            <div class="ps-sec-ic coral"><x-hi icon="fa-paperclip" /></div>
                             <div>
                                 <p class="ps-sec-ttl">Bukti Pembayaran</p>
                                 <p class="ps-sec-desc">Dokumen bukti transfer yang diunggah.</p>
                             </div>
                         </div>
                         <div class="ps-proof">
-                            <span class="ps-proof-ic"><i class="fa-solid fa-file-lines"></i></span>
+                            <span class="ps-proof-ic"><x-hi icon="fa-file-lines" /></span>
                             <div class="ps-proof-info">
                                 <p class="ps-proof-t">Bukti Transfer</p>
                                 <p class="ps-proof-p">{{ basename($payment->proof_file) }}</p>
                             </div>
                             <div class="ps-proof-action">
                                 <button type="button" onclick="showFileModal('{{ route('payments.proof', $payment) }}', 'Bukti Pembayaran')" class="ps-btn blue">
-                                    <i class="fa-solid fa-eye"></i> Lihat Bukti
+                                    <x-hi icon="fa-eye" /> Lihat Bukti
                                 </button>
                             </div>
                         </div>
@@ -373,7 +394,7 @@
                 @if ($cleanNotes)
                     <section class="ps-sec">
                         <div class="ps-sec-head">
-                            <div class="ps-sec-ic amber"><i class="fa-solid fa-note-sticky"></i></div>
+                            <div class="ps-sec-ic amber"><x-hi icon="fa-note-sticky" /></div>
                             <div>
                                 <p class="ps-sec-ttl">Catatan</p>
                                 <p class="ps-sec-desc">Informasi tambahan dari sistem / admin.</p>
@@ -386,12 +407,12 @@
                 {{-- Actions --}}
                 <div class="ps-actions">
                     <a href="{{ route('registration.show', $registration) }}" class="ps-btn ghost">
-                        <i class="fa-solid fa-arrow-left"></i> Kembali ke Pendaftaran
+                        <x-hi icon="fa-arrow-left" /> Kembali ke Pendaftaran
                     </a>
                 </div>
-            </div>
-        </div>
-    </div>
+            </div>{{-- /ps-card --}}
+        </div>{{-- /pay-show-inner --}}
+    </div>{{-- /pay-show --}}
 
     @include('components.file-preview-modal')
-</x-app-layout>
+</x-student-layout>

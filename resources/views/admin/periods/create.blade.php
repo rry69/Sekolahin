@@ -126,12 +126,12 @@
       <h1 class="ped-title">Tambah Periode Pendaftaran</h1>
       <p class="ped-meta">Buat jendela pendaftaran baru. Status dihitung otomatis dari tanggal dan flag aktif.</p>
     </div>
-    <a href="{{ route('admin.periods.index') }}" class="ped-btn ghost"><i class="fa-solid fa-arrow-left" style="font-size:10px;"></i> Kembali</a>
+    <a href="{{ route('admin.periods.index') }}" class="ped-btn ghost"><x-hi name="arrow-left-01" style="font-size:10px;" /> Kembali</a>
   </div>
 
 @if ($errors->any())
 <div class="ped-alert error" style="flex-direction:column;align-items:stretch;">
-  <div style="display:flex;gap:10px;"><i class="fa-solid fa-circle-exclamation"></i><strong>Periksa kembali isian Anda:</strong></div>
+  <div style="display:flex;gap:10px;"><x-hi name="alert-02" /><strong>Periksa kembali isian Anda:</strong></div>
   <ul style="margin:6px 0 0 18px;list-style:disc;">
     @foreach ($errors->all() as $error)
       <li>{{ $error }}</li>
@@ -143,14 +143,14 @@
 <form action="{{ route('admin.periods.store') }}" method="POST" id="periodForm">
   @csrf
   <div class="ped-sec">
-    <div class="ped-sec-title"><i class="fa-solid fa-calendar-days"></i> Informasi Periode</div>
+    <div class="ped-sec-title"><x-hi name="calendar-01" /> Informasi Periode</div>
     <div class="ped-grid">
       <div class="ped-field">
         <label>Jenjang <span class="req">*</span></label>
         <button type="button" class="r-pick" data-picker="jenjang" aria-haspopup="listbox" aria-expanded="false">
           <span class="pick-label is-placeholder">-- Pilih Jenjang --</span>
-          <span class="pick-clear" data-clear="jenjang" role="button" tabindex="0" aria-label="Bersihkan"><i class="fa-solid fa-xmark"></i></span>
-          <i class="fa-solid fa-chevron-down pick-caret"></i>
+          <span class="pick-clear" data-clear="jenjang" role="button" tabindex="0" aria-label="Bersihkan"><x-hi name="cancel-01" /></span>
+          <x-hi name="arrow-down-01" />
         </button>
         <input type="hidden" name="school_level_id" data-picker-input="jenjang" value="{{ old('school_level_id') }}" required>
         @error('school_level_id')<p class="ped-err">{{ $message }}</p>@enderror
@@ -186,7 +186,7 @@
   </div>
 
   <div class="ped-sec">
-    <div class="ped-sec-title"><i class="fa-solid fa-clock"></i> Jadwal</div>
+    <div class="ped-sec-title"><x-hi name="clock-01" /> Jadwal</div>
     <div class="ped-grid">
       <div class="ped-field">
         <label>Tanggal Mulai <span class="req">*</span></label>
@@ -201,14 +201,14 @@
       </div>
 
       <div class="ped-field full" style="margin-top:2px;">
-        <span class="ped-duration" id="durationBadge"><i class="fa-regular fa-clock" style="font-size:11px;"></i> <span id="durationText">Pilih tanggal mulai dan selesai</span></span>
+        <span class="ped-duration" id="durationBadge"><x-hi name="clock-01" style="font-size:11px;" /> <span id="durationText">Pilih tanggal mulai dan selesai</span></span>
         <p class="ped-hint" id="dateOrderHint" style="display:none;color:var(--red);"></p>
       </div>
     </div>
   </div>
 
   <div class="ped-sec">
-    <div class="ped-sec-title"><i class="fa-solid fa-note-sticky"></i> Catatan & Status</div>
+    <div class="ped-sec-title"><x-hi name="sticky-note-01" /> Catatan & Status</div>
     <div class="ped-grid">
       <div class="ped-field full">
         <label>Catatan / Deskripsi</label>
@@ -229,7 +229,7 @@
   <div class="ped-submit">
     <a href="{{ route('admin.periods.index') }}" class="ped-btn ghost">Batal</a>
     <button type="submit" class="ped-btn coral" id="saveBtn">
-      <i class="fa-solid fa-floppy-disk" style="font-size:11px;"></i> <span id="saveBtnText">Simpan Periode</span>
+      <x-hi name="save" style="font-size:11px;" /> <span id="saveBtnText">Simpan Periode</span>
     </button>
   </div>
 </form>
@@ -239,15 +239,15 @@
   <div class="picker-panel" role="dialog" aria-modal="true" aria-labelledby="pickerTitle">
     <div class="picker-head">
       <div class="picker-title" id="pickerTitle">Pilih item</div>
-      <button type="button" class="picker-close" onclick="closePicker()" aria-label="Tutup"><i class="fa-solid fa-xmark"></i></button>
+      <button type="button" class="picker-close" onclick="closePicker()" aria-label="Tutup"><x-hi name="cancel-01" /></button>
     </div>
     <div class="picker-search">
-      <i class="fa-solid fa-magnifying-glass"></i>
+      <x-hi name="search-01" />
       <input id="pickerSearch" type="search" placeholder="Cari…" autocomplete="off">
     </div>
     <div class="picker-list" id="pickerList" role="listbox"></div>
     <div class="picker-foot">
-      <button type="button" class="picker-clear-all" onclick="clearCurrentPicker()"><i class="fa-solid fa-eraser"></i> Bersihkan</button>
+      <button type="button" class="picker-clear-all" onclick="clearCurrentPicker()"><x-hi name="eraser-01" /> Bersihkan</button>
       <button type="button" class="picker-done" onclick="closePicker()">Selesai</button>
     </div>
   </div>

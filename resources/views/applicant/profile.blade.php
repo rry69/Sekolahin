@@ -38,7 +38,7 @@
   .apl .apl-meta { font-size:13px; color:var(--muted); margin-bottom:18px; }
 
   .apl .apl-alert { display:flex; align-items:flex-start; gap:10px; padding:12px 16px; border-radius:12px; font-size:13px; margin-bottom:18px; font-weight:500; }
-  .apl .apl-alert i { margin-top:2px; }
+  .apl .apl-alert svg.hi { margin-top:2px; }
   .apl .apl-alert.success { background:var(--green-soft); color:var(--green); }
   .apl .apl-alert.error { background:var(--red-soft); color:var(--red); }
   .apl .apl-alert.info { background:var(--blue-soft); color:var(--blue); }
@@ -65,25 +65,25 @@
   .apl .apl-sec-list { margin-top:14px; display:flex; flex-direction:column; gap:2px; }
   .apl .apl-sec-link { display:flex; align-items:center; gap:9px; padding:7px 9px; border-radius:10px; font-size:12.5px; font-weight:600; color:var(--ink); transition:background .15s; }
   .apl .apl-sec-link:hover { background:var(--gray-soft); }
-  .apl .apl-sec-link .apl-sec-ic { width:26px; height:26px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:11px; flex:0 0 auto; }
-  .apl .apl-sec-link .apl-sec-ic.coral{ background:var(--coral-soft); color:var(--coral); }
-  .apl .apl-sec-link .apl-sec-ic.blue{ background:var(--blue-soft); color:var(--blue); }
-  .apl .apl-sec-link .apl-sec-ic.amber{ background:var(--amber-soft); color:#b45309; }
-  .apl .apl-sec-link .apl-sec-ic.green{ background:var(--green-soft); color:var(--green); }
+  .apl .apl-sec-link .apl-sec-ic { display:inline-flex; align-items:center; justify-content:center; font-size:15px; line-height:1; flex:0 0 auto; background:none; border-radius:0; width:auto; height:auto; }
+  .apl .apl-sec-link .apl-sec-ic.coral{ color:var(--coral); }
+  .apl .apl-sec-link .apl-sec-ic.blue{ color:var(--blue); }
+  .apl .apl-sec-link .apl-sec-ic.amber{ color:#b45309; }
+  .apl .apl-sec-link .apl-sec-ic.green{ color:var(--green); }
   .apl .apl-sec-link .apl-sec-name { flex:1; min-width:0; }
-  .apl .apl-sec-pill { font-size:10px; font-weight:700; padding:2px 7px; border-radius:20px; background:var(--gray-soft); color:var(--gray); }
-  .apl .apl-sec-pill.ok { background:var(--green-soft); color:var(--green); }
+  .apl .apl-sec-pill { font-size:10px; font-weight:700; padding:2px 7px; border-radius:20px; background: transparent; border: 1px solid currentColor; color:var(--gray); }
+  .apl .apl-sec-pill.ok { background: transparent; border: 1px solid currentColor; color:var(--green); }
 
   /* right column */
   .apl .apl-main { min-width:0; }
   .apl .apl-sec { padding:22px 0 4px; border-top:1px solid var(--divider); }
   .apl .apl-sec:first-of-type { border-top:none; padding-top:0; }
   .apl .apl-sec-head { display:flex; align-items:center; gap:12px; margin-bottom:18px; }
-  .apl .apl-sec-ic { flex:0 0 auto; width:42px; height:42px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:16px; }
-  .apl .apl-sec-ic.coral{ background:var(--coral-soft); color:var(--coral); }
-  .apl .apl-sec-ic.blue{ background:var(--blue-soft); color:var(--blue); }
-  .apl .apl-sec-ic.amber{ background:var(--amber-soft); color:#b45309; }
-  .apl .apl-sec-ic.green{ background:var(--green-soft); color:var(--green); }
+  .apl .apl-sec-ic { flex:0 0 auto; display:inline-flex; align-items:center; justify-content:center; font-size:22px; line-height:1; background:none; border-radius:0; box-shadow:none; width:auto; height:auto; }
+  .apl .apl-sec-ic.coral{ color:var(--coral); }
+  .apl .apl-sec-ic.blue{ color:var(--blue); }
+  .apl .apl-sec-ic.amber{ color:#b45309; }
+  .apl .apl-sec-ic.green{ color:var(--green); }
   .apl .apl-sec-ttl { font-size:15px; font-weight:800; color:var(--ink); letter-spacing:-0.01em; margin:0; }
   .apl .apl-sec-desc { font-size:12.5px; color:var(--muted); margin:2px 0 0; line-height:1.5; }
 
@@ -94,7 +94,7 @@
   .apl .apl-label .req { color:var(--red); }
   .apl .apl-hint { font-size:11px; color:var(--muted); margin-top:2px; }
   .apl .apl-err { font-size:12px; color:var(--red); margin-top:4px; display:flex; align-items:flex-start; gap:6px; }
-  .apl .apl-err i { margin-top:1px; font-size:11px; }
+  .apl .apl-err svg.hi { margin-top:1px; font-size:11px; }
 
   .apl .apl-input { width:100%; padding:9px 4px; border:none; border-bottom:1px solid rgba(26,26,46,0.18); border-radius:0; font-size:13px; color:var(--ink); background:transparent; box-sizing:border-box; outline:none; -webkit-tap-highlight-color:transparent; transition:border-color .18s; }
   .apl .apl-input:focus { outline:none; box-shadow:none; border-bottom-color:var(--coral); }
@@ -158,10 +158,10 @@
   <p class="apl-meta">Lengkapi data diri Anda sebelum mendaftar. Data ini menjadi profil resmi pendaftaran Anda.</p>
 
   @if (session('success'))
-    <div class="apl-alert success"><i class="fa-solid fa-circle-check"></i><span>{{ session('success') }}</span></div>
+    <div class="apl-alert success"><x-hi icon="fa-circle-check" /><span>{{ session('success') }}</span></div>
   @endif
   @if (session('error'))
-    <div class="apl-alert error"><i class="fa-solid fa-circle-exclamation"></i><span>{{ session('error') }}</span></div>
+    <div class="apl-alert error"><x-hi icon="fa-circle-exclamation" /><span>{{ session('error') }}</span></div>
   @endif
 
   <div class="apl-grid">
@@ -173,7 +173,7 @@
           <div class="min-w-0">
             <div class="apl-id-name">{{ $applicant?->full_name ?? auth()->user()?->name ?? 'Calon Siswa' }}</div>
             <div class="apl-id-nisn">NISN {{ $applicant?->nisn ?: '—' }}</div>
-            <span class="apl-id-tag green"><i class="fa-solid fa-circle-check"></i> Profil</span>
+            <span class="apl-id-tag green"><x-hi icon="fa-circle-check" /> Profil</span>
           </div>
         </div>
       </div>
@@ -189,7 +189,7 @@
         <div class="apl-sec-list">
           @foreach ($sections as $key => $sec)
             <a href="#section-{{ $key }}" class="apl-sec-link scroll-mt-28">
-              <span class="apl-sec-ic {{ $sec['cls'] }}"><i class="fa-solid {{ $sec['icon'] }}"></i></span>
+              <span class="apl-sec-ic {{ $sec['cls'] }}"><x-hi icon="{{ $sec['icon'] }}" /></span>
               <span class="apl-sec-name">{{ $sec['label'] }}</span>
               <span data-section-progress="{{ $key }}" class="apl-sec-pill {{ $sectionProgress[$key] == 100 ? 'ok' : '' }}">{{ $sectionProgress[$key] == 100 ? 'Lengkap' : $sectionProgress[$key] . '%' }}</span>
             </a>
@@ -202,7 +202,7 @@
     <main class="apl-main">
       @if ($hasErrors)
         <div id="error-summary" class="apl-summary" role="alert" tabindex="-1" aria-labelledby="error-summary-title">
-          <h3 id="error-summary-title"><i class="fa-solid fa-circle-exclamation"></i> Ada {{ $errors->count() }} masalah pada biodata</h3>
+          <h3 id="error-summary-title"><x-hi icon="fa-circle-exclamation" /> Ada {{ $errors->count() }} masalah pada biodata</h3>
           <ul>
             @foreach ($errors->keys() as $errKey)
               @if ($first = $errors->first($errKey))
@@ -220,7 +220,7 @@
         {{-- ===== DATA DIRI ===== --}}
         <section id="section-diri" class="apl-sec scroll-mt-28">
           <div class="apl-sec-head">
-            <span class="apl-sec-ic coral"><i class="fa-solid fa-id-card"></i></span>
+            <span class="apl-sec-ic coral"><x-hi icon="fa-id-card" /></span>
             <div>
               <h3 class="apl-sec-ttl">Data Diri</h3>
               <p class="apl-sec-desc">Identitas utama calon siswa.</p>
@@ -231,21 +231,21 @@
             <div class="apl-field full">
               <label class="apl-label" for="full_name">Nama Lengkap <span class="req">*</span></label>
               <input type="text" id="full_name" name="full_name" class="apl-input" value="{{ old('full_name', $applicant?->full_name) }}" required data-progress-field="full_name" data-validate="required|min:3" placeholder="Contoh: Budi Santoso">
-              @error('full_name')<p class="apl-err"><i class="fa-solid fa-circle-exclamation"></i>{{ $message }}</p>@enderror
+              @error('full_name')<p class="apl-err"><x-hi icon="fa-circle-exclamation" />{{ $message }}</p>@enderror
             </div>
 
             <div class="apl-field">
               <label class="apl-label" for="nisn">NISN <span class="req">*</span></label>
               <input type="text" id="nisn" name="nisn" class="apl-input" inputmode="numeric" maxlength="10" value="{{ old('nisn', $applicant?->nisn) }}" required data-progress-field="nisn" data-validate="required|digits:10" placeholder="Contoh: 0081234567" style="font-family:'JetBrains Mono',monospace;">
               <p class="apl-hint">10 digit Nomor Induk Siswa Nasional (lihat rapor/ijazah).</p>
-              @error('nisn')<p class="apl-err"><i class="fa-solid fa-circle-exclamation"></i>{{ $message }}</p>@enderror
+              @error('nisn')<p class="apl-err"><x-hi icon="fa-circle-exclamation" />{{ $message }}</p>@enderror
             </div>
 
             <div class="apl-field">
               <label class="apl-label" for="nik">NIK <span class="req">*</span></label>
               <input type="text" id="nik" name="nik" class="apl-input" inputmode="numeric" maxlength="16" value="{{ old('nik', $applicant?->nik) }}" required data-progress-field="nik" data-validate="required|digits:16" placeholder="Contoh: 3171010101010001" style="font-family:'JetBrains Mono',monospace;">
               <p class="apl-hint">16 digit Nomor Induk Kependudukan (KTP/KK).</p>
-              @error('nik')<p class="apl-err"><i class="fa-solid fa-circle-exclamation"></i>{{ $message }}</p>@enderror
+              @error('nik')<p class="apl-err"><x-hi icon="fa-circle-exclamation" />{{ $message }}</p>@enderror
             </div>
 
             <div class="apl-field full">
@@ -253,7 +253,7 @@
               <div style="display:flex; flex-direction:column; gap:10px;">
                 <input type="text" id="nisn_link" name="nisn_link" class="apl-input" value="{{ old('nisn_link', $applicant?->nisn_link) }}" required data-progress-field="nisn_link" data-validate="required" placeholder="https://nisn.data.kemendikdasmen.go.id/search-result?id=0x...">
                 <div>
-                  <button type="button" id="cek-nisn-btn" class="apl-btn coral sm" style="padding:7px 14px;font-size:12.5px;border-radius:9px;"><i class="fa-solid fa-magnifying-glass"></i> Cek NISN &amp; NIK</button>
+                  <button type="button" id="cek-nisn-btn" class="apl-btn coral sm" style="padding:7px 14px;font-size:12.5px;border-radius:9px;"><x-hi icon="fa-magnifying-glass" /> Cek NISN &amp; NIK</button>
                 </div>
               </div>
               <div id="nisn-check-result" class="apl-nisn-result"></div>
@@ -268,48 +268,48 @@
                 <p>3. Setelah hasil muncul, salin (copy) alamat/link di address bar browser</p>
                 <p>4. Tempel (paste) link tersebut di kolom ini</p>
               </div>
-              @error('nisn_link')<p class="apl-err"><i class="fa-solid fa-circle-exclamation"></i>{{ $message }}</p>@enderror
+              @error('nisn_link')<p class="apl-err"><x-hi icon="fa-circle-exclamation" />{{ $message }}</p>@enderror
             </div>
 
             <div class="apl-field">
               <label class="apl-label" for="birth_place">Tempat Lahir <span class="req">*</span></label>
               <input type="text" id="birth_place" name="birth_place" class="apl-input" value="{{ old('birth_place', $applicant?->birth_place) }}" required data-progress-field="birth_place" data-validate="required|min:3" placeholder="Contoh: Jakarta">
-              @error('birth_place')<p class="apl-err"><i class="fa-solid fa-circle-exclamation"></i>{{ $message }}</p>@enderror
+              @error('birth_place')<p class="apl-err"><x-hi icon="fa-circle-exclamation" />{{ $message }}</p>@enderror
             </div>
 
             <div class="apl-field">
               <label class="apl-label" for="birth_date">Tanggal Lahir <span class="req">*</span></label>
               <x-date-picker name="birth_date" id="birth_date" :value="$applicant?->birth_date?->format('Y-m-d')" :required="true" :max="date('Y-m-d')" placeholder="Pilih tanggal" data-progress-field="birth_date" />
               <p id="age-hint" class="apl-hint"></p>
-              @error('birth_date')<p class="apl-err"><i class="fa-solid fa-circle-exclamation"></i>{{ $message }}</p>@enderror
+              @error('birth_date')<p class="apl-err"><x-hi icon="fa-circle-exclamation" />{{ $message }}</p>@enderror
             </div>
 
             <div class="apl-field">
               <label class="apl-label">Jenis Kelamin <span class="req">*</span></label>
               <button type="button" class="r-pick" data-picker="gender" aria-haspopup="listbox" aria-expanded="false">
                 <span class="pick-label is-placeholder">-- Pilih --</span>
-                <span class="pick-clear" data-clear="gender" role="button" tabindex="0" aria-label="Bersihkan"><i class="fa-solid fa-xmark"></i></span>
-                <i class="fa-solid fa-chevron-down pick-caret"></i>
+                <span class="pick-clear" data-clear="gender" role="button" tabindex="0" aria-label="Bersihkan"><x-hi icon="fa-xmark" /></span>
+                <x-hi icon="fa-chevron-down" class="pick-caret" />
               </button>
               <input type="hidden" name="gender" data-picker-input="gender" data-progress-field="gender" data-validate="required" value="{{ old('gender', $applicant?->gender) }}">
-              @error('gender')<p class="apl-err"><i class="fa-solid fa-circle-exclamation"></i>{{ $message }}</p>@enderror
+              @error('gender')<p class="apl-err"><x-hi icon="fa-circle-exclamation" />{{ $message }}</p>@enderror
             </div>
 
             <div class="apl-field">
               <label class="apl-label">Agama <span class="req">*</span></label>
               <button type="button" class="r-pick" data-picker="religion" aria-haspopup="listbox" aria-expanded="false">
                 <span class="pick-label is-placeholder">-- Pilih --</span>
-                <span class="pick-clear" data-clear="religion" role="button" tabindex="0" aria-label="Bersihkan"><i class="fa-solid fa-xmark"></i></span>
-                <i class="fa-solid fa-chevron-down pick-caret"></i>
+                <span class="pick-clear" data-clear="religion" role="button" tabindex="0" aria-label="Bersihkan"><x-hi icon="fa-xmark" /></span>
+                <x-hi icon="fa-chevron-down" class="pick-caret" />
               </button>
               <input type="hidden" name="religion" data-picker-input="religion" data-progress-field="religion" data-validate="required" value="{{ old('religion', $applicant?->religion) }}">
-              @error('religion')<p class="apl-err"><i class="fa-solid fa-circle-exclamation"></i>{{ $message }}</p>@enderror
+              @error('religion')<p class="apl-err"><x-hi icon="fa-circle-exclamation" />{{ $message }}</p>@enderror
             </div>
 
             <div class="apl-field">
               <label class="apl-label" for="phone">Nomor Telepon <span class="req">*</span></label>
               <input type="text" id="phone" name="phone" class="apl-input" value="{{ old('phone', $applicant?->phone) }}" required data-progress-field="phone" data-validate="required|phone" placeholder="Contoh: 081234567890" style="font-family:'JetBrains Mono',monospace;">
-              @error('phone')<p class="apl-err"><i class="fa-solid fa-circle-exclamation"></i>{{ $message }}</p>@enderror
+              @error('phone')<p class="apl-err"><x-hi icon="fa-circle-exclamation" />{{ $message }}</p>@enderror
             </div>
           </div>
         </section>
@@ -317,7 +317,7 @@
         {{-- ===== ALAMAT ===== --}}
         <section id="section-alamat" class="apl-sec scroll-mt-28">
           <div class="apl-sec-head">
-            <span class="apl-sec-ic blue"><i class="fa-solid fa-location-dot"></i></span>
+            <span class="apl-sec-ic blue"><x-hi icon="fa-location-dot" /></span>
             <div>
               <h3 class="apl-sec-ttl">Alamat</h3>
               <p class="apl-sec-desc">Alamat tempat tinggal calon siswa saat ini.</p>
@@ -328,69 +328,69 @@
             <div class="apl-field full">
               <label class="apl-label" for="address">Alamat Lengkap <span class="req">*</span></label>
               <textarea id="address" name="address" rows="3" class="apl-input-box" required data-progress-field="address" data-validate="required|min:5" placeholder="Contoh: Jl. Melati No. 10, RT 02/RW 05">{{ old('address', $applicant?->address) }}</textarea>
-              @error('address')<p class="apl-err"><i class="fa-solid fa-circle-exclamation"></i>{{ $message }}</p>@enderror
+              @error('address')<p class="apl-err"><x-hi icon="fa-circle-exclamation" />{{ $message }}</p>@enderror
             </div>
 
             <div class="apl-field">
               <label class="apl-label">Provinsi</label>
               <button type="button" class="r-pick" data-picker="province" aria-haspopup="listbox" aria-expanded="false">
                 <span class="pick-label is-placeholder">-- Pilih Provinsi --</span>
-                <span class="pick-clear" data-clear="province" role="button" tabindex="0" aria-label="Bersihkan"><i class="fa-solid fa-xmark"></i></span>
-                <i class="fa-solid fa-chevron-down pick-caret"></i>
+                <span class="pick-clear" data-clear="province" role="button" tabindex="0" aria-label="Bersihkan"><x-hi icon="fa-xmark" /></span>
+                <x-hi icon="fa-chevron-down" class="pick-caret" />
               </button>
               <input type="hidden" name="province" data-picker-input="province" id="province" data-progress-field="province" data-validate="required" value="{{ old('province', $applicant?->province) }}">
-              @error('province')<p class="apl-err"><i class="fa-solid fa-circle-exclamation"></i>{{ $message }}</p>@enderror
+              @error('province')<p class="apl-err"><x-hi icon="fa-circle-exclamation" />{{ $message }}</p>@enderror
             </div>
 
             <div class="apl-field">
               <label class="apl-label">Kabupaten/Kota</label>
               <button type="button" class="r-pick" data-picker="city" aria-haspopup="listbox" aria-expanded="false">
                 <span class="pick-label is-placeholder">-- Pilih Kabupaten/Kota --</span>
-                <span class="pick-clear" data-clear="city" role="button" tabindex="0" aria-label="Bersihkan"><i class="fa-solid fa-xmark"></i></span>
-                <i class="fa-solid fa-chevron-down pick-caret"></i>
+                <span class="pick-clear" data-clear="city" role="button" tabindex="0" aria-label="Bersihkan"><x-hi icon="fa-xmark" /></span>
+                <x-hi icon="fa-chevron-down" class="pick-caret" />
               </button>
               <input type="hidden" name="city" data-picker-input="city" id="city" data-progress-field="city" data-validate="required" value="{{ old('city', $applicant?->city) }}">
-              @error('city')<p class="apl-err"><i class="fa-solid fa-circle-exclamation"></i>{{ $message }}</p>@enderror
+              @error('city')<p class="apl-err"><x-hi icon="fa-circle-exclamation" />{{ $message }}</p>@enderror
             </div>
 
             <div class="apl-field">
               <label class="apl-label">Kecamatan</label>
               <button type="button" class="r-pick" data-picker="district" aria-haspopup="listbox" aria-expanded="false">
                 <span class="pick-label is-placeholder">-- Pilih Kecamatan --</span>
-                <span class="pick-clear" data-clear="district" role="button" tabindex="0" aria-label="Bersihkan"><i class="fa-solid fa-xmark"></i></span>
-                <i class="fa-solid fa-chevron-down pick-caret"></i>
+                <span class="pick-clear" data-clear="district" role="button" tabindex="0" aria-label="Bersihkan"><x-hi icon="fa-xmark" /></span>
+                <x-hi icon="fa-chevron-down" class="pick-caret" />
               </button>
               <input type="hidden" name="district" data-picker-input="district" id="district" data-progress-field="district" data-validate="required" value="{{ old('district', $applicant?->district) }}">
-              @error('district')<p class="apl-err"><i class="fa-solid fa-circle-exclamation"></i>{{ $message }}</p>@enderror
+              @error('district')<p class="apl-err"><x-hi icon="fa-circle-exclamation" />{{ $message }}</p>@enderror
             </div>
 
             <div class="apl-field">
               <label class="apl-label">Kelurahan/Desa</label>
               <button type="button" class="r-pick" data-picker="village" aria-haspopup="listbox" aria-expanded="false">
                 <span class="pick-label is-placeholder">-- Pilih Kelurahan/Desa --</span>
-                <span class="pick-clear" data-clear="village" role="button" tabindex="0" aria-label="Bersihkan"><i class="fa-solid fa-xmark"></i></span>
-                <i class="fa-solid fa-chevron-down pick-caret"></i>
+                <span class="pick-clear" data-clear="village" role="button" tabindex="0" aria-label="Bersihkan"><x-hi icon="fa-xmark" /></span>
+                <x-hi icon="fa-chevron-down" class="pick-caret" />
               </button>
               <input type="hidden" name="village" data-picker-input="village" id="village" data-progress-field="village" data-validate="required" value="{{ old('village', $applicant?->village) }}">
-              @error('village')<p class="apl-err"><i class="fa-solid fa-circle-exclamation"></i>{{ $message }}</p>@enderror
+              @error('village')<p class="apl-err"><x-hi icon="fa-circle-exclamation" />{{ $message }}</p>@enderror
             </div>
 
             <div class="apl-field">
               <label class="apl-label" for="rt">RT</label>
               <input type="text" id="rt" name="rt" class="apl-input" value="{{ old('rt', $applicant?->rt) }}" data-progress-field="rt" placeholder="Contoh: 02" style="font-family:'JetBrains Mono',monospace;">
-              @error('rt')<p class="apl-err"><i class="fa-solid fa-circle-exclamation"></i>{{ $message }}</p>@enderror
+              @error('rt')<p class="apl-err"><x-hi icon="fa-circle-exclamation" />{{ $message }}</p>@enderror
             </div>
 
             <div class="apl-field">
               <label class="apl-label" for="rw">RW</label>
               <input type="text" id="rw" name="rw" class="apl-input" value="{{ old('rw', $applicant?->rw) }}" data-progress-field="rw" placeholder="Contoh: 05" style="font-family:'JetBrains Mono',monospace;">
-              @error('rw')<p class="apl-err"><i class="fa-solid fa-circle-exclamation"></i>{{ $message }}</p>@enderror
+              @error('rw')<p class="apl-err"><x-hi icon="fa-circle-exclamation" />{{ $message }}</p>@enderror
             </div>
 
             <div class="apl-field">
               <label class="apl-label" for="postal_code">Kode Pos</label>
               <input type="text" id="postal_code" name="postal_code" class="apl-input" value="{{ old('postal_code', $applicant?->postal_code) }}" data-progress-field="postal_code" placeholder="Contoh: 12345" style="font-family:'JetBrains Mono',monospace;">
-              @error('postal_code')<p class="apl-err"><i class="fa-solid fa-circle-exclamation"></i>{{ $message }}</p>@enderror
+              @error('postal_code')<p class="apl-err"><x-hi icon="fa-circle-exclamation" />{{ $message }}</p>@enderror
             </div>
           </div>
         </section>
@@ -398,7 +398,7 @@
         {{-- ===== ORANG TUA / WALI ===== --}}
         <section id="section-ortu" class="apl-sec scroll-mt-28">
           <div class="apl-sec-head">
-            <span class="apl-sec-ic amber"><i class="fa-solid fa-people-roof"></i></span>
+            <span class="apl-sec-ic amber"><x-hi icon="fa-people-roof" /></span>
             <div>
               <h3 class="apl-sec-ttl">Orang Tua / Wali</h3>
               <p class="apl-sec-desc">Data ayah, ibu, dan wali (jika ada).</p>
@@ -409,32 +409,32 @@
             <div class="apl-field">
               <label class="apl-label" for="father_name">Nama Ayah <span class="req">*</span></label>
               <input type="text" id="father_name" name="father_name" class="apl-input" value="{{ old('father_name', $applicant?->father_name) }}" required data-progress-field="father_name" data-validate="required|min:3" placeholder="Contoh: Ahmad Subarjo">
-              @error('father_name')<p class="apl-err"><i class="fa-solid fa-circle-exclamation"></i>{{ $message }}</p>@enderror
+              @error('father_name')<p class="apl-err"><x-hi icon="fa-circle-exclamation" />{{ $message }}</p>@enderror
             </div>
             <div class="apl-field">
               <label class="apl-label" for="father_occupation">Pekerjaan Ayah</label>
               <input type="text" id="father_occupation" name="father_occupation" class="apl-input" value="{{ old('father_occupation', $applicant?->father_occupation) }}" data-progress-field="father_occupation" placeholder="Contoh: Wiraswasta">
-              @error('father_occupation')<p class="apl-err"><i class="fa-solid fa-circle-exclamation"></i>{{ $message }}</p>@enderror
+              @error('father_occupation')<p class="apl-err"><x-hi icon="fa-circle-exclamation" />{{ $message }}</p>@enderror
             </div>
             <div class="apl-field">
               <label class="apl-label" for="mother_name">Nama Ibu <span class="req">*</span></label>
               <input type="text" id="mother_name" name="mother_name" class="apl-input" value="{{ old('mother_name', $applicant?->mother_name) }}" required data-progress-field="mother_name" data-validate="required|min:3" placeholder="Contoh: Siti Aminah">
-              @error('mother_name')<p class="apl-err"><i class="fa-solid fa-circle-exclamation"></i>{{ $message }}</p>@enderror
+              @error('mother_name')<p class="apl-err"><x-hi icon="fa-circle-exclamation" />{{ $message }}</p>@enderror
             </div>
             <div class="apl-field">
               <label class="apl-label" for="mother_occupation">Pekerjaan Ibu</label>
               <input type="text" id="mother_occupation" name="mother_occupation" class="apl-input" value="{{ old('mother_occupation', $applicant?->mother_occupation) }}" data-progress-field="mother_occupation" placeholder="Contoh: Ibu Rumah Tangga">
-              @error('mother_occupation')<p class="apl-err"><i class="fa-solid fa-circle-exclamation"></i>{{ $message }}</p>@enderror
+              @error('mother_occupation')<p class="apl-err"><x-hi icon="fa-circle-exclamation" />{{ $message }}</p>@enderror
             </div>
             <div class="apl-field">
               <label class="apl-label" for="parent_name">Nama Wali</label>
               <input type="text" id="parent_name" name="parent_name" class="apl-input" value="{{ old('parent_name', $applicant?->parent_name) }}" data-progress-field="parent_name" placeholder="Contoh: Bambang">
-              @error('parent_name')<p class="apl-err"><i class="fa-solid fa-circle-exclamation"></i>{{ $message }}</p>@enderror
+              @error('parent_name')<p class="apl-err"><x-hi icon="fa-circle-exclamation" />{{ $message }}</p>@enderror
             </div>
             <div class="apl-field">
               <label class="apl-label" for="parent_phone">Nomor HP Orang Tua/Wali</label>
               <input type="text" id="parent_phone" name="parent_phone" class="apl-input" value="{{ old('parent_phone', $applicant?->parent_phone) }}" data-progress-field="parent_phone" data-validate="phone" placeholder="Contoh: 081298765432" style="font-family:'JetBrains Mono',monospace;">
-              @error('parent_phone')<p class="apl-err"><i class="fa-solid fa-circle-exclamation"></i>{{ $message }}</p>@enderror
+              @error('parent_phone')<p class="apl-err"><x-hi icon="fa-circle-exclamation" />{{ $message }}</p>@enderror
             </div>
           </div>
         </section>
@@ -442,7 +442,7 @@
         {{-- ===== SEKOLAH ASAL ===== --}}
         <section id="section-sekolah" class="apl-sec scroll-mt-28">
           <div class="apl-sec-head">
-            <span class="apl-sec-ic green"><i class="fa-solid fa-school"></i></span>
+            <span class="apl-sec-ic green"><x-hi icon="fa-school" /></span>
             <div>
               <h3 class="apl-sec-ttl">Sekolah Asal</h3>
               <p class="apl-sec-desc">Sekolah terakhir yang ditempuh calon siswa.</p>
@@ -453,22 +453,22 @@
             <div class="apl-field">
               <label class="apl-label" for="previous_school">Sekolah Asal <span class="req">*</span></label>
               <input type="text" id="previous_school" name="previous_school" class="apl-input" value="{{ old('previous_school', $applicant?->previous_school) }}" required data-progress-field="previous_school" data-validate="required|min:3" placeholder="Contoh: SMPN 1 Jakarta">
-              @error('previous_school')<p class="apl-err"><i class="fa-solid fa-circle-exclamation"></i>{{ $message }}</p>@enderror
+              @error('previous_school')<p class="apl-err"><x-hi icon="fa-circle-exclamation" />{{ $message }}</p>@enderror
             </div>
             <div class="apl-field">
               <label class="apl-label" for="graduation_year">Tahun Lulus</label>
               <input type="text" id="graduation_year" name="graduation_year" class="apl-input" inputmode="numeric" maxlength="4" placeholder="Contoh: 2024" value="{{ old('graduation_year', $applicant?->graduation_year) }}" data-progress-field="graduation_year" data-validate="digits:4" style="font-family:'JetBrains Mono',monospace;">
               <p id="grad-hint" class="apl-hint"></p>
               <p class="apl-hint">Diisi 4 digit (1990–{{ date('Y') }}). Divalidasi silang dengan tanggal lahir.</p>
-              @error('graduation_year')<p class="apl-err"><i class="fa-solid fa-circle-exclamation"></i>{{ $message }}</p>@enderror
+              @error('graduation_year')<p class="apl-err"><x-hi icon="fa-circle-exclamation" />{{ $message }}</p>@enderror
             </div>
           </div>
         </section>
 
         {{-- Aksi --}}
         <div class="apl-foot">
-          <a href="{{ route('registration.index') }}" class="apl-btn ghost"><i class="fa-solid fa-xmark"></i> Batal</a>
-          <button type="submit" id="biodata-submit" class="apl-btn coral">Simpan &amp; Lanjut ke Review <i class="fa-solid fa-arrow-right"></i></button>
+          <a href="{{ route('registration.index') }}" class="apl-btn ghost"><x-hi icon="fa-xmark" /> Batal</a>
+          <button type="submit" id="biodata-submit" class="apl-btn coral">Simpan &amp; Lanjut ke Review <x-hi icon="fa-arrow-right" /></button>
         </div>
       </form>
     </main>
@@ -645,7 +645,7 @@
         const nik = nikInput ? nikInput.value.trim() : '';
         if (!nisn || !link) { show('Isi NISN dan link hasil pencarian terlebih dahulu.', 'warn'); return; }
         btn.disabled = true;
-        btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Memeriksa...';
+        btn.innerHTML = hiSvg('fa-circle-notch', 'class="animate-spin"') + ' Memeriksa...';
         try {
             const res = await fetch('{{ route('applicant.profile.check-nisn') }}', {
                 method: 'POST',
@@ -675,7 +675,7 @@
             show('! Gagal terhubung ke server. Coba lagi.', 'warn');
         } finally {
             btn.disabled = false;
-            btn.innerHTML = '<i class="fa-solid fa-magnifying-glass"></i> Cek NISN & NIK';
+            btn.innerHTML = hiSvg('fa-magnifying-glass') + ' Cek NISN & NIK';
         }
     });
 })();
@@ -768,7 +768,7 @@
                 err = document.createElement('p');
                 err.setAttribute('data-inline-error', '');
                 err.className = 'apl-err';
-                err.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i><span></span>';
+                err.innerHTML = hiSvg('fa-circle-exclamation') + '<span></span>';
                 field.appendChild(err);
             }
             err.querySelector('span').textContent = msg;

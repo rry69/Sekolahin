@@ -3,7 +3,7 @@
         <div class="flex justify-between items-center">
             <div class="flex items-center gap-3">
                 <a href="{{ route('registration.index') }}" class="inline-flex items-center p-2 rounded-md text-gray-500 hover:text-gray-700 hover:bg-gray-100" aria-label="Kembali ke Pendaftaran">
-                    <i class="fa-solid fa-arrow-left text-lg"></i>
+                    <x-hi icon="fa-arrow-left" class="text-lg" />
                 </a>
                 <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                     Notifikasi
@@ -13,7 +13,7 @@
                 <form method="POST" action="{{ route('notifications.read-all') }}">
                     @csrf
                     <x-app-button variant="primary" size="sm" type="submit">
-                        <i class="fa-solid fa-check-double"></i> Tandai Semua Dibaca
+                        <x-hi icon="fa-check-double" /> Tandai Semua Dibaca
                     </x-app-button>
                 </form>
             @endif
@@ -33,7 +33,7 @@
                     @if ($notifications->isEmpty())
                         <div class="text-center py-12">
                             <div class="mx-auto w-14 h-14 rounded-full bg-gray-100 flex items-center justify-center text-gray-400">
-                                <i class="fa-regular fa-bell text-2xl"></i>
+                                <x-hi icon="fa-bell" class="text-2xl" />
                             </div>
                             <p class="mt-4 text-gray-500">Belum ada notifikasi.</p>
                             <p class="text-sm text-gray-400 mt-1">Pemberitahuan perubahan status pendaftaran akan muncul di sini.</p>

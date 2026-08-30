@@ -56,9 +56,9 @@
 
   /* ---------- pills ---------- */
   .rres .r-pill { display: inline-flex; align-items: center; gap: 6px; padding: 4px 11px; border-radius: 20px; font-size: 11.5px; font-weight: 700; white-space: nowrap; }
-  .rres .r-pill.green  { background: var(--green-soft);  color: var(--green); }
-  .rres .r-pill.amber  { background: var(--amber-soft);  color: #b45309; }
-  .rres .r-pill.red    { background: var(--red-soft);    color: var(--red); }
+  .rres .r-pill.green  { background: transparent; border: 1px solid currentColor;  color: var(--green); }
+  .rres .r-pill.amber  { background: transparent; border: 1px solid currentColor;  color: #b45309; }
+  .rres .r-pill.red    { background: transparent; border: 1px solid currentColor;    color: var(--red); }
 
   /* ---------- code ---------- */
   .rres .r-code { font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; letter-spacing: 2px; font-size: 22px; font-weight: 800; color: var(--coral); }
@@ -126,14 +126,14 @@
   </div>
 
   @if (session('success'))
-    <div class="r-alert success"><i class="fa-solid fa-circle-check"></i><span>{{ session('success') }}</span></div>
+    <div class="r-alert success"><x-hi name="checkmark-circle-02" /><span>{{ session('success') }}</span></div>
   @endif
   @if (session('error'))
-    <div class="r-alert error"><i class="fa-solid fa-circle-exclamation"></i><span>{{ session('error') }}</span></div>
+    <div class="r-alert error"><x-hi name="alert-02" /><span>{{ session('error') }}</span></div>
   @endif
 
   <div class="r-sec">
-    <div class="r-sec-title"><i class="fa-solid fa-user"></i> Informasi Pendaftar</div>
+    <div class="r-sec-title"><x-hi name="user" /> Informasi Pendaftar</div>
     <div class="r-grid">
       <div class="r-item">
         <div class="r-lbl">Nama Lengkap</div>
@@ -156,14 +156,14 @@
 
   @if($reRegistration->verification_code)
   <div class="r-sec">
-    <div class="r-sec-title"><i class="fa-solid fa-qrcode"></i> Kode Verifikasi</div>
+    <div class="r-sec-title"><x-hi name="qr-code" /> Kode Verifikasi</div>
     <div class="r-code">{{ $reRegistration->verification_code }}</div>
     <div class="r-code-sub">Kode pada kartu daftar ulang</div>
   </div>
   @endif
 
   <div class="r-sec">
-    <div class="r-sec-title"><i class="fa-solid fa-clipboard-check"></i> Status Verifikasi</div>
+    <div class="r-sec-title"><x-hi name="task-done-01" /> Status Verifikasi</div>
     <div class="r-grid">
       <div class="r-item">
         <div class="r-lbl">Tanggal Submit</div>
@@ -189,11 +189,11 @@
   </div>
 
   <div class="r-back">
-    <a href="{{ route('admin.re-registrations.index') }}" class="r-act ghost"><i class="fa-solid fa-arrow-left"></i> Kembali</a>
+    <a href="{{ route('admin.re-registrations.index') }}" class="r-act ghost"><x-hi name="arrow-left-01" /> Kembali</a>
     @if ($reRegistration->status === 'pending')
       <div class="r-back-actions">
-        <button type="button" onclick="showReRegRejectModal({{ $reRegistration->id }})" class="r-act reject"><i class="fa-solid fa-xmark"></i> Tolak Daftar Ulang</button>
-        <button type="button" onclick="openReRegVerify({{ $reRegistration->id }}, '{{ $reRegistration->registration->registration_number }}')" class="r-act verify"><i class="fa-solid fa-check"></i> Verifikasi Daftar Ulang</button>
+        <button type="button" onclick="showReRegRejectModal({{ $reRegistration->id }})" class="r-act reject"><x-hi name="cancel-01" /> Tolak Daftar Ulang</button>
+        <button type="button" onclick="openReRegVerify({{ $reRegistration->id }}, '{{ $reRegistration->registration->registration_number }}')" class="r-act verify"><x-hi name="checkmark" /> Verifikasi Daftar Ulang</button>
       </div>
     @endif
   </div>
@@ -201,14 +201,14 @@
   {{-- Modal Tolak Daftar Ulang (Bringova) --}}
   <div id="reRegRejectModal" class="r-modal-backdrop" style="display:none">
     <div class="r-modal" role="dialog" aria-modal="true">
-      <div class="r-modal-title red"><i class="fa-solid fa-circle-exclamation"></i> Tolak Daftar Ulang</div>
+      <div class="r-modal-title red"><x-hi name="alert-02" /> Tolak Daftar Ulang</div>
       <form id="reRegRejectForm" method="POST">
         @csrf
         <label>Catatan / Alasan Penolakan</label>
         <textarea name="notes" rows="4" placeholder="Alasan penolakan (wajib)" required></textarea>
         <div class="r-modal-foot">
           <button type="button" onclick="hideReRegRejectModal()" class="r-act ghost">Batal</button>
-          <button type="submit" class="r-act reject"><i class="fa-solid fa-xmark"></i> Tolak</button>
+          <button type="submit" class="r-act reject"><x-hi name="cancel-01" /> Tolak</button>
         </div>
       </form>
     </div>
@@ -217,14 +217,14 @@
   {{-- Modal Konfirmasi Verifikasi (Bringova) --}}
   <div id="reRegVerifyModal" class="r-modal-backdrop" style="display:none">
     <div class="r-modal" role="dialog" aria-modal="true">
-      <div class="r-modal-title green"><i class="fa-solid fa-circle-check"></i> Verifikasi Daftar Ulang</div>
+      <div class="r-modal-title green"><x-hi name="checkmark-circle-02" /> Verifikasi Daftar Ulang</div>
       <p class="r-modal-msg">Verifikasi daftar ulang <b id="reRegVerifyNumber"></b>? Pendaftaran akan ditandai <b>Daftar Ulang Selesai</b>.</p>
       <form id="reRegVerifyForm" method="POST" style="margin-top:0">
         @csrf
       </form>
       <div class="r-modal-foot">
         <button type="button" onclick="closeReRegVerify()" class="r-act ghost">Batal</button>
-        <button type="button" onclick="submitReRegVerify()" class="r-act verify"><i class="fa-solid fa-check"></i> Ya, Verifikasi</button>
+        <button type="button" onclick="submitReRegVerify()" class="r-act verify"><x-hi name="checkmark" /> Ya, Verifikasi</button>
       </div>
     </div>
   </div>

@@ -77,11 +77,11 @@
   .acd .acd-value { font-weight: 600; color: var(--ink); font-size: 13px; overflow-wrap: anywhere; }
   .acd .acd-note { font-size: 11px; color: var(--muted); margin-top: 2px; }
   .acd .acd-pill { display: inline-flex; align-items: center; gap: 6px; padding: 4px 11px; border-radius: 20px; font-size: 11.5px; font-weight: 700; white-space: nowrap; }
-  .acd .acd-pill.green { background: var(--green-soft); color: var(--green); }
-  .acd .acd-pill.red { background: var(--red-soft); color: var(--red); }
-  .acd .acd-pill.amber { background: var(--amber-soft); color: #b45309; }
-  .acd .acd-pill.blue { background: var(--blue-soft); color: var(--blue); }
-  .acd .acd-pill.gray { background: var(--gray-soft); color: var(--gray); }
+  .acd .acd-pill.green { background: transparent; border: 1px solid currentColor; color: var(--green); }
+  .acd .acd-pill.red { background: transparent; border: 1px solid currentColor; color: var(--red); }
+  .acd .acd-pill.amber { background: transparent; border: 1px solid currentColor; color: #b45309; }
+  .acd .acd-pill.blue { background: transparent; border: 1px solid currentColor; color: var(--blue); }
+  .acd .acd-pill.gray { background: transparent; border: 1px solid currentColor; color: var(--gray); }
   .acd .acd-btn { display: inline-flex; align-items: center; gap: 6px; border: none; cursor: pointer; border-radius: 11px; padding: 9px 15px; font-size: 12.5px; font-weight: 700; text-decoration: none; transition: transform .15s, filter .15s, background-color .15s; }
   .acd .acd-btn:hover { transform: translateY(-1px); }
   .acd .acd-btn.ghost { background: rgba(255,255,255,0.65); color: var(--ink); box-shadow: 0 2px 10px -8px rgba(26,26,46,0.3); }
@@ -162,27 +162,27 @@
       <p class="acd-sub">{{ $user->email }}</p>
     </div>
     <div class="acd-head-actions">
-      <button type="button" class="acd-btn ghost sm" onclick="openAcctModal('reset')"><i class="fa-solid fa-key" style="font-size:10px;"></i> Reset Password</button>
-      <button type="button" class="acd-btn red sm" onclick="openAcctModal('delete')"><i class="fa-regular fa-trash-can" style="font-size:10px;"></i> Hapus Akun</button>
+      <button type="button" class="acd-btn ghost sm" onclick="openAcctModal('reset')"><x-hi name="key-01" style="font-size:10px;" /> Reset Password</button>
+      <button type="button" class="acd-btn red sm" onclick="openAcctModal('delete')"><x-hi name="delete-02" style="font-size:10px;" /> Hapus Akun</button>
     </div>
   </div>
 
   @if (session('success'))
-    <div class="acd-alert success"><i class="fa-solid fa-circle-check"></i><span>{{ session('success') }}</span></div>
+    <div class="acd-alert success"><x-hi name="checkmark-circle-02" /><span>{{ session('success') }}</span></div>
   @endif
   @if (session('error'))
-    <div class="acd-alert error"><i class="fa-solid fa-circle-exclamation"></i><span>{{ session('error') }}</span></div>
+    <div class="acd-alert error"><x-hi name="alert-02" /><span>{{ session('error') }}</span></div>
   @endif
 
   @if ($resetPasswordShown)
-    <div class="acd-alert info"><i class="fa-solid fa-key"></i><span>Password baru: <code>{{ $resetPasswordShown }}</code></span></div>
+    <div class="acd-alert info"><x-hi name="key-01" /><span>Password baru: <code>{{ $resetPasswordShown }}</code></span></div>
   @endif
 
   {{-- ========== INFORMASI PROFIL ========== --}}
   <div class="acd-sec">
-    <h4 class="acd-sec-title"><i class="fa-regular fa-user"></i> Informasi Profil</h4>
+    <h4 class="acd-sec-title"><x-hi name="user" /> Informasi Profil</h4>
     @if (! $applicant)
-      <div class="acd-empty"><i class="fa-regular fa-folder-open"></i>Data profil belum diisi siswa</div>
+      <div class="acd-empty"><x-hi name="folder-open" />Data profil belum diisi siswa</div>
     @else
       <div class="acd-grid">
         <div><p class="acd-field">Nama Lengkap</p><p class="acd-value">{{ $applicant->full_name }}</p></div>
@@ -221,7 +221,7 @@
 
   {{-- ========== RINGKASAN ========== --}}
   <div class="acd-sec">
-    <h4 class="acd-sec-title"><i class="fa-solid fa-chart-simple"></i> Ringkasan</h4>
+    <h4 class="acd-sec-title"><x-hi name="chart-up" /> Ringkasan</h4>
     <div class="acd-grid">
       <div><p class="acd-field">Tanggal Terdaftar</p><p class="acd-value">{{ $user->created_at->format('d M Y H:i') }}</p></div>
       <div><p class="acd-field">Jumlah Pendaftaran</p><p class="acd-value">{{ $registrations->count() }}</p></div>
@@ -247,14 +247,14 @@
 
   {{-- ========== DAFTAR PENDAFTARAN ========== --}}
   <div class="acd-sec">
-    <h4 class="acd-sec-title"><i class="fa-regular fa-file-lines"></i> Daftar Pendaftaran</h4>
+    <h4 class="acd-sec-title"><x-hi name="file-01" /> Daftar Pendaftaran</h4>
     @if ($registrations->isEmpty())
-      <div class="acd-empty"><i class="fa-regular fa-folder-open"></i>Belum ada pendaftaran</div>
+      <div class="acd-empty"><x-hi name="folder-open" />Belum ada pendaftaran</div>
     @else
       <div class="acd-list">
         @foreach ($registrations as $registration)
           <div class="acd-row">
-            <span class="acd-row-ic"><i class="fa-solid fa-file-lines"></i></span>
+            <span class="acd-row-ic"><x-hi name="file-01" /></span>
             <div class="acd-row-body">
               <div class="acd-row-name">{{ $registration->registration_number }}</div>
               <div class="acd-row-sub">
@@ -270,7 +270,7 @@
               </div>
             </div>
             <div style="display:flex;gap:6px;flex-shrink:0;">
-              <a href="{{ route('admin.registrations.show', $registration) }}" class="acd-btn ghost sm"><i class="fa-regular fa-eye" style="font-size:10px;"></i> Lihat</a>
+              <a href="{{ route('admin.registrations.show', $registration) }}" class="acd-btn ghost sm"><x-hi name="view" style="font-size:10px;" /> Lihat</a>
             </div>
           </div>
         @endforeach
@@ -280,15 +280,15 @@
 
   {{-- ========== DOKUMEN ========== --}}
   <div class="acd-sec">
-    <h4 class="acd-sec-title"><i class="fa-regular fa-folder-open"></i> Dokumen</h4>
+    <h4 class="acd-sec-title"><x-hi name="folder-open" /> Dokumen</h4>
     @if ($allDocs->isEmpty())
-      <div class="acd-empty"><i class="fa-regular fa-folder-open"></i>Belum ada dokumen yang diunggah</div>
+      <div class="acd-empty"><x-hi name="folder-open" />Belum ada dokumen yang diunggah</div>
     @else
       <div class="doc-list">
         @foreach ($allDocs as $item)
         @php $d = $item['doc']; $r = $item['reg']; $docTypeName = ucfirst(str_replace('_', ' ', $d->document_type)); @endphp
         <div class="doc-row" id="acct-doc-{{ $d->id }}">
-          <div class="doc-icon"><i class="fa-regular fa-file-lines"></i></div>
+          <div class="doc-icon"><x-hi name="file-01" /></div>
           <div class="doc-info">
             <div class="doc-name">{{ $docTypeName }}</div>
             <div class="doc-meta">{{ $d->file_name }}<span>·</span>{{ number_format($d->file_size / 1024, 0) }} KB<span>·</span>Pendaftaran {{ $r->registration_number }}</div>
@@ -341,38 +341,38 @@
   {{-- ========== RIWAYAT AKTIVITAS ========== --}}
   @php
       $actionIconMap = [
-          'auth.register' => ['fa-user-plus', ''],
-          'auth.login' => ['fa-right-to-bracket', ''],
-          'auth.logout' => ['fa-right-from-bracket', ''],
-          'applicant.profile_update' => ['fa-pen', 'warn'],
-          'registration.create' => ['fa-file-circle-plus', ''],
-          'registration.verify' => ['fa-check-double', ''],
-          'registration.accepted' => ['fa-graduation-cap', ''],
-          'registration.reset' => ['fa-rotate-left', 'warn'],
-          'registration.withdraw' => ['fa-person-walking-arrow-right', 'warn'],
-          'document.upload' => ['fa-file-arrow-up', ''],
-          'document.verify' => ['fa-file-circle-check', ''],
-          'document.unverify' => ['fa-file-circle-exclamation', 'warn'],
-          'document.reject' => ['fa-file-circle-xmark', 'danger'],
-          'document.delete' => ['fa-trash', 'danger'],
-          'payment.create_online' => ['fa-money-check-dollar', ''],
-          'payment.upload_proof' => ['fa-image', ''],
-          'payment.verify' => ['fa-circle-check', ''],
-          'payment.reject' => ['fa-circle-xmark', 'danger'],
-          'payment.reset' => ['fa-rotate-left', 'warn'],
-          're_registration.verify' => ['fa-clipboard-check', ''],
-          'account.reset_password' => ['fa-key', 'warn'],
-          'account.delete' => ['fa-user-slash', 'danger'],
+          'auth.register' => ['user-add-01', ''],
+          'auth.login' => ['login-01', ''],
+          'auth.logout' => ['logout-01', ''],
+          'applicant.profile_update' => ['edit-02', 'warn'],
+          'registration.create' => ['file-add', ''],
+          'registration.verify' => ['checkmark-circle-01', ''],
+          'registration.accepted' => ['mortarboard-01', ''],
+          'registration.reset' => ['rotate-left-01', 'warn'],
+          'registration.withdraw' => ['walking', 'warn'],
+          'document.upload' => ['file-upload', ''],
+          'document.verify' => ['file-verified', ''],
+          'document.unverify' => ['file-remove', 'warn'],
+          'document.reject' => ['file-remove', 'danger'],
+          'document.delete' => ['delete-02', 'danger'],
+          'payment.create_online' => ['money-02', ''],
+          'payment.upload_proof' => ['image-01', ''],
+          'payment.verify' => ['checkmark-circle-02', ''],
+          'payment.reject' => ['cancel-circle', 'danger'],
+          'payment.reset' => ['rotate-left-01', 'warn'],
+          're_registration.verify' => ['task-done-01', ''],
+          'account.reset_password' => ['key-01', 'warn'],
+          'account.delete' => ['user-block-01', 'danger'],
       ];
   @endphp
   <div class="acd-sec">
-    <h4 class="acd-sec-title"><i class="fa-solid fa-clock-rotate-left"></i> Riwayat Aktivitas</h4>
+    <h4 class="acd-sec-title"><x-hi name="work-history" /> Riwayat Aktivitas</h4>
     @if ($activities->isEmpty())
-      <div class="acd-empty"><i class="fa-regular fa-folder-open"></i>Belum ada aktivitas tercatat</div>
+      <div class="acd-empty"><x-hi name="folder-open" />Belum ada aktivitas tercatat</div>
     @else
       <div class="acd-timeline">
         @foreach ($activities as $log)
-        @php [$tlIcon, $tone] = $actionIconMap[$log->action] ?? ['fa-circle-dot', '']; @endphp
+        @php [$tlIcon, $tone] = $actionIconMap[$log->action] ?? ['more-horizontal-circle-01', '']; @endphp
         <div class="acd-tl-item {{ $tone }}">
           <span class="acd-tl-dot"></span>
           <p class="acd-tl-desc">{{ $log->description ?? $log->action }}</p>

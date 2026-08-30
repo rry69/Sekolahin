@@ -32,7 +32,7 @@
     <button type="button" @click="toggle()" aria-haspopup="true" :aria-expanded="open"
         class="relative inline-flex items-center p-2 rounded-md text-gray-500 hover:text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition ease-in-out duration-150"
         aria-label="Notifikasi">
-        <i class="fa-solid fa-bell text-lg"></i>
+        <x-hi name="notification-01" />
         <span x-show="unread > 0" x-cloak
             class="absolute -top-1 -right-1 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-red-500 rounded-full min-w-[1.25rem] text-center">
             <span x-text="unread > 9 ? '9+' : unread"></span>
@@ -66,7 +66,7 @@
                 </button>
                 <button type="button" @click="close()" aria-label="Tutup"
                     class="inline-flex items-center justify-center w-7 h-7 rounded-md text-gray-400 hover:text-gray-600 hover:bg-gray-200 transition">
-                    <i class="fa-solid fa-xmark"></i>
+                    <x-hi name="cancel-01" />
                 </button>
             </div>
         </div>
@@ -76,7 +76,7 @@
             <template x-if="notifications.length === 0">
                 <div class="px-4 py-10 text-center">
                     <div class="mx-auto w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center text-gray-400">
-                        <i class="fa-regular fa-bell text-xl"></i>
+                        <x-hi name="notification-01" />
                     </div>
                     <p class="mt-3 text-sm text-gray-500">Belum ada notifikasi.</p>
                 </div>
@@ -103,7 +103,7 @@
                         x-cloak
                         class="absolute right-2 top-1/2 -translate-y-1/2 inline-flex items-center gap-1 text-[11px] text-indigo-600 hover:text-indigo-800 bg-white border border-gray-200 rounded-md px-1.5 py-0.5 shadow-sm opacity-0 group-hover:opacity-100 focus:opacity-100 transition"
                         title="Tandai dibaca">
-                        <i class="fa-solid fa-check"></i> Dibaca
+                        <x-hi name="checkmark" /> Dibaca
                     </button>
                 </div>
             </template>
@@ -114,7 +114,7 @@
             <a href="{{ route('notifications.index') }}"
                 class="flex items-center justify-center gap-2 px-4 py-2.5 text-sm text-indigo-600 hover:bg-indigo-50 transition">
                 Lihat Semua Notifikasi
-                <i class="fa-solid fa-arrow-right text-xs"></i>
+                <x-hi name="arrow-right-01" />
             </a>
         </div>
     </div>

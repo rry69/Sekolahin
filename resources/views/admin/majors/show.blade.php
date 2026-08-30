@@ -52,12 +52,12 @@
   .mjd .m-btn.amber:hover { background: #d97706; }
   .mjd .m-btn.sm { padding: 7px 12px; font-size: 12px; border-radius: 9px; }
   .mjd .m-pill { display: inline-flex; align-items: center; gap: 6px; padding: 4px 11px; border-radius: 20px; font-size: 11.5px; font-weight: 700; white-space: nowrap; }
-  .mjd .m-pill.green { background: var(--green-soft); color: var(--green); }
-  .mjd .m-pill.red { background: var(--red-soft); color: var(--red); }
-  .mjd .m-pill.blue { background: var(--blue-soft); color: var(--blue); }
-  .mjd .m-pill.amber { background: var(--amber-soft); color: #b45309; }
-  .mjd .m-pill.gray { background: var(--gray-soft); color: var(--gray); }
-  .mjd .m-pill.coral { background: var(--coral-soft); color: var(--coral); }
+  .mjd .m-pill.green { background: transparent; border: 1px solid currentColor; color: var(--green); }
+  .mjd .m-pill.red { background: transparent; border: 1px solid currentColor; color: var(--red); }
+  .mjd .m-pill.blue { background: transparent; border: 1px solid currentColor; color: var(--blue); }
+  .mjd .m-pill.amber { background: transparent; border: 1px solid currentColor; color: #b45309; }
+  .mjd .m-pill.gray { background: transparent; border: 1px solid currentColor; color: var(--gray); }
+  .mjd .m-pill.coral { background: transparent; border: 1px solid currentColor; color: var(--coral); }
   .mjd .m-sec { border-top: 1px solid var(--divider); padding: 24px 0 6px; }
   .mjd .m-sec:first-of-type { border-top: none; padding-top: 4px; }
   .mjd .m-sec-title { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; color: var(--ink); text-transform: uppercase; letter-spacing: .4px; margin-bottom: 16px; }
@@ -125,7 +125,7 @@
     <div>
       <h1 class="m-title">{{ $major->name }}</h1>
       <p class="m-meta">
-        <span class="m-pill {{ $major->is_active ? 'green' : 'red' }}"><i class="fa-solid {{ $major->is_active ? 'fa-circle-check' : 'fa-circle-xmark' }}"></i> {{ $major->statusLabel() }}</span>
+        <span class="m-pill {{ $major->is_active ? 'green' : 'red' }}"><x-hi :name="$major->is_active ? 'checkmark-circle-02' : 'cancel-circle'" /> {{ $major->statusLabel() }}</span>
         <span class="dot">·</span>{{ $major->school->name ?? '-' }}
         <span class="dot">·</span>{{ $major->schoolLevel->name ?? '-' }}
         <span class="dot">·</span><span style="color:var(--muted)">Kode {{ $major->code }}</span>
@@ -133,44 +133,44 @@
       </p>
     </div>
     <div class="m-head-actions">
-      <a href="{{ route('admin.majors.index') }}" class="m-btn ghost sm"><i class="fa-solid fa-arrow-left"></i> Kembali</a>
-      <a href="{{ route('admin.majors.edit', $major) }}" class="m-btn ghost sm"><i class="fa-solid fa-pen"></i> Edit</a>
+      <a href="{{ route('admin.majors.index') }}" class="m-btn ghost sm"><x-hi name="arrow-left-01" /> Kembali</a>
+      <a href="{{ route('admin.majors.edit', $major) }}" class="m-btn ghost sm"><x-hi name="edit-02" /> Edit</a>
       <form action="{{ route('admin.majors.toggle-status', $major) }}" method="POST" style="display:inline;">
         @csrf
         <button type="submit" class="m-btn {{ $major->is_active ? 'ghost' : 'coral' }} sm">
-          <i class="fa-solid fa-{{ $major->is_active ? 'toggle-on' : 'toggle-off' }}"></i>
+          <x-hi :name="$major->is_active ? 'toggle-on' : 'toggle-off'" />
           {{ $major->is_active ? 'Nonaktifkan' : 'Aktifkan' }}
         </button>
       </form>
       <button type="button" class="m-btn red sm" onclick="openMajorDelete({{ $major->id }}, {{ json_encode($major->name) }})">
-        <i class="fa-solid fa-trash-can"></i> Hapus
+        <x-hi name="delete-02" /> Hapus
       </button>
     </div>
   </div>
 
   @if (session('success'))
-    <div class="m-alert success"><i class="fa-solid fa-circle-check"></i><span>{{ session('success') }}</span></div>
+    <div class="m-alert success"><x-hi name="checkmark-circle-02" /><span>{{ session('success') }}</span></div>
   @endif
   @if (session('error'))
-    <div class="m-alert error"><i class="fa-solid fa-circle-exclamation"></i><span>{{ session('error') }}</span></div>
+    <div class="m-alert error"><x-hi name="alert-02" /><span>{{ session('error') }}</span></div>
   @endif
 
   <div class="m-sec">
-    <div class="m-sec-title"><i class="fa-solid fa-chart-simple"></i> Ringkasan Pendaftar</div>
+    <div class="m-sec-title"><x-hi name="chart-up" /> Ringkasan Pendaftar</div>
     <div class="m-summary">
-      <div class="m-sum"><span class="m-sum-ic coral"><i class="fa-solid fa-layer-group"></i></span><div><div class="m-sum-lbl">Total Kuota</div><div class="m-sum-val">{{ $statistics['total_quota'] }}</div></div></div>
-      <div class="m-sum"><span class="m-sum-ic green"><i class="fa-solid fa-check"></i></span><div><div class="m-sum-lbl">Sisa Kuota</div><div class="m-sum-val">{{ $statistics['available_quota'] }}</div></div></div>
-      <div class="m-sum"><span class="m-sum-ic gray"><i class="fa-solid fa-users"></i></span><div><div class="m-sum-lbl">Total Pendaftar</div><div class="m-sum-val">{{ $statistics['total_applicants'] }}</div></div></div>
-      <div class="m-sum"><span class="m-sum-ic amber"><i class="fa-solid fa-clock"></i></span><div><div class="m-sum-lbl">Pending</div><div class="m-sum-val">{{ $statistics['pending'] }}</div></div></div>
-      <div class="m-sum"><span class="m-sum-ic blue"><i class="fa-solid fa-file-circle-check"></i></span><div><div class="m-sum-lbl">Terverifikasi</div><div class="m-sum-val">{{ $statistics['verified'] }}</div></div></div>
-      <div class="m-sum"><span class="m-sum-ic green"><i class="fa-solid fa-user-check"></i></span><div><div class="m-sum-lbl">Diterima</div><div class="m-sum-val">{{ $statistics['accepted'] }}</div></div></div>
-      <div class="m-sum"><span class="m-sum-ic red"><i class="fa-solid fa-user-xmark"></i></span><div><div class="m-sum-lbl">Ditolak</div><div class="m-sum-val">{{ $statistics['rejected'] }}</div></div></div>
+      <div class="m-sum"><span class="m-sum-ic coral"><x-hi name="layers-01" /></span><div><div class="m-sum-lbl">Total Kuota</div><div class="m-sum-val">{{ $statistics['total_quota'] }}</div></div></div>
+      <div class="m-sum"><span class="m-sum-ic green"><x-hi name="checkmark" /></span><div><div class="m-sum-lbl">Sisa Kuota</div><div class="m-sum-val">{{ $statistics['available_quota'] }}</div></div></div>
+      <div class="m-sum"><span class="m-sum-ic gray"><x-hi name="user-multiple-02" /></span><div><div class="m-sum-lbl">Total Pendaftar</div><div class="m-sum-val">{{ $statistics['total_applicants'] }}</div></div></div>
+      <div class="m-sum"><span class="m-sum-ic amber"><x-hi name="clock-01" /></span><div><div class="m-sum-lbl">Pending</div><div class="m-sum-val">{{ $statistics['pending'] }}</div></div></div>
+      <div class="m-sum"><span class="m-sum-ic blue"><x-hi name="file-verified" /></span><div><div class="m-sum-lbl">Terverifikasi</div><div class="m-sum-val">{{ $statistics['verified'] }}</div></div></div>
+      <div class="m-sum"><span class="m-sum-ic green"><x-hi name="user-check-01" /></span><div><div class="m-sum-lbl">Diterima</div><div class="m-sum-val">{{ $statistics['accepted'] }}</div></div></div>
+      <div class="m-sum"><span class="m-sum-ic red"><x-hi name="user-remove-01" /></span><div><div class="m-sum-lbl">Ditolak</div><div class="m-sum-val">{{ $statistics['rejected'] }}</div></div></div>
     </div>
   </div>
 
   @if (isset($statistics['by_track']))
   <div class="m-sec">
-    <div class="m-sec-title"><i class="fa-solid fa-route"></i> Kuota per Jalur</div>
+    <div class="m-sec-title"><x-hi name="route-01" /> Kuota per Jalur</div>
     <div class="m-quotas-min">
       @foreach($statistics['by_track'] as $trackName => $row)
         <span>{{ $trackName }} {{ $row['quota'] }} <span style="color:var(--muted)">terisi {{ $row['accepted'] }}, sisa {{ $row['sisa'] }}</span></span>
@@ -181,7 +181,7 @@
   @endif
 
   <div class="m-sec">
-    <div class="m-sec-title"><i class="fa-solid fa-circle-info"></i> Informasi Jurusan</div>
+    <div class="m-sec-title"><x-hi name="information-circle" /> Informasi Jurusan</div>
     <div class="m-grid">
       <div class="m-item"><span class="k">Nama Jurusan</span><span class="v">{{ $major->name }}</span></div>
       <div class="m-item"><span class="k">Kode</span><span class="v"><span style="color:var(--muted)">· {{ $major->code }}</span></span></div>
@@ -196,14 +196,14 @@
   </div>
 
   <div class="m-sec">
-    <div class="m-sec-title"><i class="fa-solid fa-users"></i> Daftar Pendaftar</div>
+    <div class="m-sec-title"><x-hi name="user-multiple-02" /> Daftar Pendaftar</div>
     @if ($registrations->isEmpty())
-      <div class="m-empty"><i class="fa-regular fa-folder-open"></i>Belum ada pendaftar</div>
+      <div class="m-empty"><x-hi name="folder-open" />Belum ada pendaftar</div>
     @else
       <div class="m-list">
         @foreach ($registrations as $registration)
           <div class="m-row">
-            <span class="m-row-ic"><i class="fa-solid fa-user"></i></span>
+            <span class="m-row-ic"><x-hi name="user" /></span>
             <div class="m-row-body">
               <div class="m-row-name">{{ $registration->applicant->full_name ?? '-' }}</div>
               <div class="m-row-sub">
@@ -213,7 +213,7 @@
               </div>
             </div>
             <div class="m-row-actions">
-              <a href="{{ route('admin.registrations.show', $registration) }}" class="m-btn ghost sm"><i class="fa-solid fa-eye"></i> Detail</a>
+              <a href="{{ route('admin.registrations.show', $registration) }}" class="m-btn ghost sm"><x-hi name="view" /> Detail</a>
             </div>
           </div>
         @endforeach
@@ -226,7 +226,7 @@
 <div id="majorDeleteModal" class="m-modal-backdrop" aria-hidden="true">
   <div class="m-modal" role="dialog" aria-modal="true">
     <div class="m-modal-body">
-      <div class="m-modal-ic"><i class="fa-solid fa-trash-can"></i></div>
+      <div class="m-modal-ic"><x-hi name="delete-02" /></div>
       <div style="flex:1;min-width:0">
         <h3 class="m-modal-title">Hapus jurusan?</h3>
         <p class="m-modal-text" style="font-size:13px;color:var(--muted);margin-top:3px">Yakin ingin menghapus jurusan <strong id="majorDeleteName" style="color:var(--ink)"></strong>? Aksi ini tidak dapat dibatalkan.</p>

@@ -1,7 +1,7 @@
 <section>
     <div class="prfa-danger">
         <div class="prfa-danger-head">
-            <span class="prfa-danger-ic"><i class="fa-solid fa-triangle-exclamation"></i></span>
+            <span class="prfa-danger-ic"><x-hi icon="fa-triangle-exclamation" /></span>
             <div>
                 <div class="prfa-danger-title">Zona Bahaya · Hapus Akun</div>
                 <p class="prfa-danger-desc">Setelah akun dihapus, semua data dan sumber daya akan dihapus permanen dan tidak dapat dikembalikan. Harap unduh atau simpan data yang ingin Anda pertahankan sebelum melanjutkan.</p>
@@ -9,7 +9,7 @@
         </div>
 
         <div class="prfa-danger-warn">
-            <i class="fa-solid fa-circle-info" style="margin-top:2px"></i>
+            <x-hi icon="fa-circle-info" style="margin-top:2px" />
             <span>Tindakan ini <b>tidak dapat dibatalkan</b>. Anda akan kehilangan akses ke dashboard admin dan seluruh data terkait akun ini.</span>
         </div>
 
@@ -30,7 +30,7 @@
             </div>
 
             <div class="prf-actions">
-                <button type="submit" id="prfa-delete-btn" class="prf-btn red" disabled><i class="fa-solid fa-trash-can"></i> Hapus Akun Permanen</button>
+                <button type="submit" id="prfa-delete-btn" class="prf-btn red" disabled><x-hi icon="fa-trash-can" /> Hapus Akun Permanen</button>
             </div>
         </form>
     </div>

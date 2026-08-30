@@ -210,10 +210,10 @@
   <p class="acc-meta">Kelola akun siswa dan pendaftaran terkait</p>
 
   @if (session('success'))
-    <div class="acc-alert success"><i class="fa-solid fa-circle-check"></i><span>{{ session('success') }}</span></div>
+    <div class="acc-alert success"><x-hi name="checkmark-circle-02" /><span>{{ session('success') }}</span></div>
   @endif
   @if (session('error'))
-    <div class="acc-alert error"><i class="fa-solid fa-circle-exclamation"></i><span>{{ session('error') }}</span></div>
+    <div class="acc-alert error"><x-hi name="alert-02" /><span>{{ session('error') }}</span></div>
   @endif
 
   <div class="acc-tabs">
@@ -227,10 +227,10 @@
   <form id="filterForm" method="GET" action="{{ route('admin.accounts.index') }}">
     <div class="acc-toolbar">
       <div class="acc-search">
-        <i class="fa-solid fa-magnifying-glass"></i>
+        <x-hi name="search-01" />
         <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari nama / email / NIK / NISN..." autocomplete="off">
       </div>
-      <button type="button" class="acc-fbtn" onclick="toggleFilterPanel()"><i class="fa-solid fa-filter" style="font-size:10px"></i> Filter</button>
+      <button type="button" class="acc-fbtn" onclick="toggleFilterPanel()"><x-hi name="filter" style="font-size:10px" /> Filter</button>
       <button type="submit" class="acc-gobtn">Cari</button>
     </div>
     <div id="filterPanel" class="acc-filters" style="display:{{ request('registration_status') || request('major_id') ? 'flex' : 'none' }};">
@@ -238,7 +238,7 @@
         <label>Status Pendaftaran</label>
         <button type="button" class="r-pick" data-picker="reg_status" aria-haspopup="listbox" aria-expanded="false">
           <span class="pick-label {{ request('registration_status') ? '' : 'is-placeholder' }}">{{ request('registration_status') ? ucfirst(request('registration_status')) : 'Semua Status' }}</span>
-          <span class="pick-clear" data-clear="reg_status" role="button" tabindex="0" aria-label="Bersihkan"><i class="fa-solid fa-xmark"></i></span>
+          <span class="pick-clear" data-clear="reg_status" role="button" tabindex="0" aria-label="Bersihkan"><x-hi name="cancel-01" /></span>
         </button>
         <input type="hidden" name="registration_status" data-picker-input="reg_status" value="{{ request('registration_status') }}">
       </div>
@@ -246,7 +246,7 @@
         <label>Jurusan</label>
         <button type="button" class="r-pick" data-picker="major" aria-haspopup="listbox" aria-expanded="false">
           <span class="pick-label {{ request('major_id') ? '' : 'is-placeholder' }}">{{ request('major_id') ? ($majors->firstWhere('id', (int)request('major_id'))->name ?? 'Jurusan') : 'Semua Jurusan' }}</span>
-          <span class="pick-clear" data-clear="major" role="button" tabindex="0" aria-label="Bersihkan"><i class="fa-solid fa-xmark"></i></span>
+          <span class="pick-clear" data-clear="major" role="button" tabindex="0" aria-label="Bersihkan"><x-hi name="cancel-01" /></span>
         </button>
         <input type="hidden" name="major_id" data-picker-input="major" value="{{ request('major_id') }}">
       </div>
@@ -256,7 +256,7 @@
   </form>
 
   @if ($accounts->isEmpty())
-    <div class="acc-empty"><i class="fa-regular fa-folder-open"></i>Tidak ada akun siswa</div>
+    <div class="acc-empty"><x-hi name="folder-open" />Tidak ada akun siswa</div>
   @else
     <div class="acc-list">
       @foreach ($accounts as $account)
@@ -265,24 +265,24 @@
           $hasAccepted = $account->applicant?->registrations?->contains(fn($r) => $r->isAccepted()) ?? false;
         @endphp
         <div class="acc-row">
-          <span class="acc-ic"><i class="fa-solid fa-user"></i></span>
+          <span class="acc-ic"><x-hi name="user" /></span>
           <div class="acc-body">
             <div class="acc-head">
               <div class="acc-name">{{ $fullName }}</div>
               <span class="acc-count-badge"><b>{{ $account->applicant->registrations_count ?? 0 }}</b> pendaftaran</span>
             </div>
             <div class="acc-meta-grid">
-              <span class="acc-meta-item"><i class="fa-regular fa-envelope"></i>{{ $account->email }}</span>
+              <span class="acc-meta-item"><x-hi name="mail-01" />{{ $account->email }}</span>
               <span class="acc-meta-item"><b>NIK</b> {{ $account->applicant->nik ?? '-' }}</span>
               <span class="acc-meta-item"><b>NISN</b> {{ $account->applicant->nisn ?? '-' }}</span>
-              <span class="acc-meta-item"><i class="fa-regular fa-calendar"></i>Terdaftar {{ $account->created_at->format('d M Y') }}</span>
+              <span class="acc-meta-item"><x-hi name="calendar-01" />Terdaftar {{ $account->created_at->format('d M Y') }}</span>
             </div>
           </div>
           <div class="acc-count"><span><b>{{ $account->applicant->registrations_count ?? 0 }}</b> pendaftaran</span></div>
           <div class="acc-actions">
-            <a href="{{ route('admin.accounts.show', $account) }}" class="acc-btn ghost sm"><i class="fa-regular fa-eye" style="font-size:10px;"></i> Detail</a>
+            <a href="{{ route('admin.accounts.show', $account) }}" class="acc-btn ghost sm"><x-hi name="view" style="font-size:10px;" /> Detail</a>
             @if (! $hasAccepted)
-              <button type="button" class="acc-btn red sm" onclick="openAccDelete({{ $account->id }}, '{{ addslashes($fullName) }}')"><i class="fa-solid fa-trash-can" style="font-size:10px;"></i> Hapus Akun</button>
+              <button type="button" class="acc-btn red sm" onclick="openAccDelete({{ $account->id }}, '{{ addslashes($fullName) }}')"><x-hi name="delete-02" style="font-size:10px;" /> Hapus Akun</button>
               <form id="accDeleteForm-{{ $account->id }}" method="POST" action="{{ route('admin.accounts.destroy', $account) }}" style="display:none;">@csrf @method('DELETE')</form>
             @endif
           </div>
@@ -297,15 +297,15 @@
   <div class="picker-panel" role="dialog" aria-modal="true" aria-labelledby="pickerTitle">
     <div class="picker-head">
       <div class="picker-title" id="pickerTitle">Pilih item</div>
-      <button type="button" class="picker-close" onclick="closePicker()" aria-label="Tutup"><i class="fa-solid fa-xmark"></i></button>
+      <button type="button" class="picker-close" onclick="closePicker()" aria-label="Tutup"><x-hi name="cancel-01" /></button>
     </div>
     <div class="picker-search">
-      <i class="fa-solid fa-magnifying-glass"></i>
+      <x-hi name="search-01" />
       <input id="pickerSearch" type="search" placeholder="Cari…" autocomplete="off">
     </div>
     <div class="picker-list" id="pickerList" role="listbox"></div>
     <div class="picker-foot">
-      <button type="button" class="picker-clear-all" onclick="clearCurrentPicker()"><i class="fa-solid fa-eraser"></i> Bersihkan</button>
+      <button type="button" class="picker-clear-all" onclick="clearCurrentPicker()"><x-hi name="eraser-01" /> Bersihkan</button>
       <button type="button" class="picker-done" onclick="closePicker()">Selesai</button>
     </div>
   </div>
@@ -324,7 +324,7 @@
 <div id="accDeleteModal" class="acc-modal-backdrop" aria-hidden="true">
   <div class="acc-modal" role="dialog" aria-modal="true">
     <div class="acc-modal-body">
-      <div class="acc-modal-ic"><i class="fa-solid fa-trash-can"></i></div>
+      <div class="acc-modal-ic"><x-hi name="delete-02" /></div>
       <div style="flex:1;min-width:0">
         <h3 class="acc-modal-title">Hapus akun siswa?</h3>
         <p id="accDeleteMessage" class="acc-modal-msg"></p>

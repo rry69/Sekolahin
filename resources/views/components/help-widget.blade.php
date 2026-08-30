@@ -7,7 +7,7 @@
         // ===== SISWA =====
         'dashboard' => [
             'title' => 'Alur Pendaftaran SPMB',
-            'icon' => 'fa-route',
+            'icon' => 'route-01',
             'intro' => 'Ikuti 6 langkah ini dari awal sampai diterima:',
             'steps' => [
                 'Lengkapi <strong>Profil/Biodata</strong> di menu Biodata Saya (NISN, NIK, alamat, sekolah asal).',
@@ -20,7 +20,7 @@
         ],
         'applicant.profile' => [
             'title' => 'Melengkapi Profil',
-            'icon' => 'fa-user-pen',
+            'icon' => 'user-edit-01',
             'intro' => 'Profil wajib lengkap sebelum bisa mendaftar. Perhatikan NISN & tanggal lahir:',
             'steps' => [
                 'Isi <strong>Nama, NISN (10 digit), NIK (16 digit)</strong> sesuai rapor/KK.',
@@ -33,7 +33,7 @@
         ],
         'applicant.profile.review' => [
             'title' => 'Review Profil',
-            'icon' => 'fa-clipboard-check',
+            'icon' => 'task-done-01',
             'intro' => 'Pastikan semua data sudah benar sebelum disimpan:',
             'steps' => [
                 'Periksa Nama, NISN, NIK, tempat/tanggal lahir, dan kontak.',
@@ -44,7 +44,7 @@
         ],
         'registration.index' => [
             'title' => 'Dashboard',
-            'icon' => 'fa-list-check',
+            'icon' => 'check-list',
             'intro' => 'Halaman ini menampilkan semua pendaftaran Anda:',
             'steps' => [
                 'Jika belum ada profil, klik <strong>Lengkapi Profil</strong> terlebih dahulu.',
@@ -55,7 +55,7 @@
         ],
         'registration.create' => [
             'title' => 'Membuat Pendaftaran Baru',
-            'icon' => 'fa-file-circle-plus',
+            'icon' => 'file-add',
             'intro' => 'Pilih jenjang, jalur, dan jurusan dengan teliti:',
             'steps' => [
                 'Pilih <strong>Jenjang & Periode</strong> — sistem menampilkan usia Anda dan batas minimal per jenjang (TK 4, SD 6, SMP 12, SMA/SMK 15). Jenjang yang belum cukup umur akan terkunci.',
@@ -66,7 +66,7 @@
         ],
         'registration.review' => [
             'title' => 'Review Pendaftaran',
-            'icon' => 'fa-eye',
+            'icon' => 'view',
             'intro' => 'Cek kembali pilihan sebelum pendaftaran dibuat:',
             'steps' => [
                 'Pastikan jenjang, periode, jalur, dan jurusan sudah sesuai.',
@@ -76,7 +76,7 @@
         ],
         'registration.show' => [
             'title' => 'Menyelesaikan Pendaftaran',
-            'icon' => 'fa-file-circle-check',
+            'icon' => 'file-verified',
             'intro' => 'Tiga hal yang harus selesai sebelum batas waktu:',
             'steps' => [
                 '<strong>Upload Dokumen:</strong> foto, KK, akta, rapor (wajib). Ijazah/SKL untuk SMK, sertifikat untuk Prestasi. Pilih file → Upload Semua Dokumen. Dokumen yang ditolak akan ada alasan — upload ulang.',
@@ -87,7 +87,7 @@
         ],
         'payments.show' => [
             'title' => 'Detail Pembayaran',
-            'icon' => 'fa-money-check-dollar',
+            'icon' => 'money-02',
             'intro' => 'Status pembayaran Anda:',
             'steps' => [
                 '<strong>pending</strong> = menunggu verifikasi admin/Xendit.',
@@ -98,7 +98,7 @@
         ],
         'profile.edit' => [
             'title' => 'Pengaturan Akun',
-            'icon' => 'fa-gear',
+            'icon' => 'settings-01',
             'intro' => 'Kelola akun login Anda:',
             'steps' => [
                 'Ubah nama/email pada tab Informasi Profil.',
@@ -109,7 +109,7 @@
         // ===== ADMIN =====
         'admin.dashboard' => [
             'title' => 'Dashboard Admin',
-            'icon' => 'fa-grip',
+            'icon' => 'grid',
             'intro' => 'Ringkasan dan tugas yang butuh perhatian:',
             'steps' => [
                 'Pantau <strong>Pending Tasks</strong>, jumlah pendaftar, dan pembayaran pending.',
@@ -119,7 +119,7 @@
         ],
         'admin.registrations.index' => [
             'title' => 'Kelola Pendaftaran',
-            'icon' => 'fa-users',
+            'icon' => 'user-multiple-02',
             'intro' => 'Verifikasi pendaftaran masuk:',
             'steps' => [
                 'Gunakan filter (status, jenjang, jalur) dan pencarian.',
@@ -130,7 +130,7 @@
         ],
         'admin.accounts.index' => [
             'title' => 'Akun Siswa',
-            'icon' => 'fa-user-slash',
+            'icon' => 'user-block-01',
             'intro' => 'Manajemen akun pengguna:',
             'steps' => [
                 'Cari akun via kolom pencarian (nama/email).',
@@ -140,7 +140,7 @@
         ],
         'admin.majors.index' => [
             'title' => 'Kelola Jurusan',
-            'icon' => 'fa-graduation-cap',
+            'icon' => 'mortarboard-01',
             'intro' => 'Atur jurusan & kuota:',
             'steps' => [
                 'Klik <strong>Tambah Jurusan</strong> untuk jurusan baru.',
@@ -150,7 +150,7 @@
         ],
         'admin.payments.index' => [
             'title' => 'Verifikasi Pembayaran',
-            'icon' => 'fa-money-check-dollar',
+            'icon' => 'money-02',
             'intro' => 'Konfirmasi pembayaran masuk:',
             'steps' => [
                 'Filter pembayaran pending.',
@@ -161,7 +161,7 @@
         ],
         'admin.re-registrations.index' => [
             'title' => 'Daftar Ulang',
-            'icon' => 'fa-clipboard-check',
+            'icon' => 'task-done-01',
             'intro' => 'Menangani daftar ulang siswa diterima:',
             'steps' => [
                 'Lihat daftar siswa yang sudah melakukan daftar ulang.',
@@ -171,7 +171,7 @@
         ],
         'admin.rekap.index' => [
             'title' => 'Rekap Diterima',
-            'icon' => 'fa-chart-simple',
+            'icon' => 'chart-up',
             'intro' => 'Rekapitulasi siswa yang diterima per jurusan/jenjang.',
             'steps' => [
                 'Lihat tabel rekap dan filter per periode/jurusan.',
@@ -180,7 +180,7 @@
         ],
         'admin.schools.index' => [
             'title' => 'Data Sekolah',
-            'icon' => 'fa-school',
+            'icon' => 'school',
             'intro' => 'Kelola identitas sekolah & jenjang aktif:',
             'steps' => [
                 'Kelola beberapa sekolah sekaligus, dikelompokkan per jenjang pendidikan.',
@@ -190,7 +190,7 @@
         ],
         'admin.settings.edit' => [
             'title' => 'Pengaturan Sistem',
-            'icon' => 'fa-gear',
+            'icon' => 'settings-01',
             'intro' => 'Parameter penting SPMB:',
             'steps' => [
                 'Atur <strong>batas usia minimal</strong> per jenjang (age_min) dan <strong>batas waktu</strong> pendaftaran/pembayaran (jam).',
@@ -201,7 +201,7 @@
         ],
         'fallback' => [
             'title' => 'Bantuan SPMB',
-            'icon' => 'fa-circle-question',
+            'icon' => 'help-circle',
             'intro' => 'Alur umum SPMB — 6 langkah sampai diterima:',
             'steps' => [
                 'Lengkapi Profil → Buat Pendaftaran → Pilih Jenjang/Jalur/Jurusan → Upload Dokumen → Bayar → Tunggu Verifikasi → Daftar Ulang (jika diterima).',
@@ -233,7 +233,7 @@
 <div id="help-widget-root" class="help-widget">
     <button type="button" id="help-fab" aria-haspopup="dialog" aria-controls="help-modal" aria-expanded="false"
         class="fixed bottom-6 right-6 z-40 inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-3 rounded-full shadow-lg hover:shadow-xl transition-all text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-offset-2">
-        <i class="fa-solid fa-circle-question text-base"></i>
+        <x-hi name="help-circle" />
         <span>Bantuan</span>
     </button>
 
@@ -245,7 +245,7 @@
             <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[85vh] flex flex-col overflow-hidden">
                 <div class="px-6 pt-6 pb-4 border-b border-gray-100 flex items-start justify-between gap-4">
                     <div class="flex items-center gap-3">
-                        <span class="w-9 h-9 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0"><i class="fa-solid {{ $current['icon'] }}"></i></span>
+                        <span class="w-9 h-9 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0"><x-hi :name="$current['icon']" /></span>
                         <div>
                             <h2 id="help-modal-title" class="text-base font-bold text-gray-900">{{ $current['title'] }}</h2>
                             <p class="text-xs text-gray-500 mt-0.5">{{ $route ? $route : 'Halaman' }} · panduan konteks</p>
@@ -253,7 +253,7 @@
                     </div>
                     <button type="button" id="help-close" aria-label="Tutup"
                         class="w-8 h-8 rounded-full hover:bg-gray-100 text-gray-500 flex items-center justify-center shrink-0">
-                        <i class="fa-solid fa-xmark"></i>
+                        <x-hi name="cancel-01" />
                     </button>
                 </div>
                 <div class="px-6 py-5 overflow-y-auto">
@@ -267,7 +267,7 @@
                         @endforeach
                     </ol>
                     <div class="mt-5 bg-amber-50 border border-amber-200 rounded-xl p-3 flex gap-2.5">
-                        <i class="fa-solid fa-lightbulb text-amber-500 mt-0.5"></i>
+                        <x-hi name="idea-01" />
                         <p class="text-xs text-amber-900 leading-relaxed"><strong>Tips:</strong> Tombol ini ada di setiap halaman penting. Isinya menyesuaikan halaman yang sedang Anda buka. Jika masih bingung, hubungi panitia melalui kontak di halaman utama.</p>
                     </div>
                 </div>

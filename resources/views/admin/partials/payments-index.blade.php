@@ -117,22 +117,22 @@
   .pay .p-list { display: flex; flex-direction: column; }
   .pay .p-row { display: flex; align-items: center; gap: 15px; padding: 16px 4px; border-bottom: 1px solid var(--divider); }
   .pay .p-row:last-child { border-bottom: none; }
-  .pay .p-ic { flex: 0 0 auto; width: 46px; height: 46px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 17px; }
-  .pay .p-ic.amber { background: var(--amber-soft); color: #b45309; }
-  .pay .p-ic.green { background: var(--green-soft); color: var(--green); }
-  .pay .p-ic.red   { background: var(--red-soft);   color: var(--red); }
-  .pay .p-ic.blue  { background: var(--blue-soft);  color: var(--blue); }
+  .pay .p-ic { flex: 0 0 auto; width: auto; height: auto; display: inline-flex; align-items: center; justify-content: center; font-size: 22px; line-height: 1; background: none; border-radius: 0; }
+  .pay .p-ic.amber { color: #b45309; }
+  .pay .p-ic.green { color: var(--green); }
+  .pay .p-ic.red   { color: var(--red); }
+  .pay .p-ic.blue  { color: var(--blue); }
   .pay .p-body { flex: 1; min-width: 0; }
   .pay .p-name { font-size: 14px; font-weight: 700; color: var(--ink); }
   .pay .p-sub { font-size: 12px; color: var(--muted); }
   .pay .p-tags { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-top: 4px; }
   .pay .p-pill { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; white-space: nowrap; }
-  .pay .p-pill.amber { background: var(--amber-soft); color: #b45309; }
-  .pay .p-pill.green { background: var(--green-soft); color: var(--green); }
-  .pay .p-pill.red   { background: var(--red-soft);   color: var(--red); }
-  .pay .p-pill.gray  { background: var(--gray-soft);  color: var(--gray); }
-  .pay .p-pill.coral { background: var(--coral-soft); color: var(--coral); }
-  .pay .p-pill.blue  { background: var(--blue-soft);  color: var(--blue); }
+  .pay .p-pill.amber { background: transparent; border: 1px solid currentColor; color: #b45309; }
+  .pay .p-pill.green { background: transparent; border: 1px solid currentColor; color: var(--green); }
+  .pay .p-pill.red   { background: transparent; border: 1px solid currentColor;   color: var(--red); }
+  .pay .p-pill.gray  { background: transparent; border: 1px solid currentColor;  color: var(--gray); }
+  .pay .p-pill.coral { background: transparent; border: 1px solid currentColor; color: var(--coral); }
+  .pay .p-pill.blue  { background: transparent; border: 1px solid currentColor;  color: var(--blue); }
   .pay .p-amount { font-size: 16px; font-weight: 800; color: var(--ink); flex-shrink: 0; }
   .pay .p-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: flex-end; flex-shrink: 0; }
   .pay .p-btn { display: inline-flex; align-items: center; gap: 6px; border: none; cursor: pointer; border-radius: 10px; padding: 8px 13px; font-size: 12px; font-weight: 700; transition: transform .15s ease, filter .15s ease, background-color .15s ease, color .15s ease; }
@@ -161,10 +161,10 @@
   .pay .p-modal { width: 100%; max-width: 400px; background: #fff; border-radius: 18px; padding: 22px; box-shadow: 0 24px 60px -18px rgba(26,26,46,0.4); animation: pModalPop .2s cubic-bezier(.22,1.2,.36,1); }
   @keyframes pModalPop { from { opacity: 0; transform: scale(0.97) translateY(4px); } to { opacity: 1; transform: scale(1) translateY(0); } }
   .pay .p-modal-body { display: flex; align-items: flex-start; gap: 13px; margin-bottom: 18px; }
-  .pay .p-modal-ic { flex: 0 0 auto; width: 42px; height: 42px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
-  .pay .p-modal-ic.green { background: var(--green-soft); color: var(--green); }
-  .pay .p-modal-ic.amber { background: var(--amber-soft); color: #b45309; }
-  .pay .p-modal-ic.red   { background: var(--red-soft);   color: var(--red); }
+  .pay .p-modal-ic { flex: 0 0 auto; width: auto; height: auto; display: inline-flex; align-items: center; justify-content: center; font-size: 22px; line-height: 1; background: none; border-radius: 0; }
+  .pay .p-modal-ic.green { color: var(--green); }
+  .pay .p-modal-ic.amber { color: #b45309; }
+  .pay .p-modal-ic.red   { color: var(--red); }
   .pay .p-modal-title { font-size: 15px; font-weight: 700; color: var(--ink); }
   .pay .p-modal-msg { font-size: 13px; color: var(--muted); margin-top: 3px; line-height: 1.5; }
   .pay .p-modal-actions { display: flex; justify-content: flex-end; gap: 8px; }
@@ -195,10 +195,10 @@
   <h1 class="p-title">Daftar Pembayaran</h1>
 
   @if (session('success'))
-    <div class="p-alert success"><i class="fa-solid fa-circle-check"></i><span>{{ session('success') }}</span></div>
+    <div class="p-alert success"><x-hi name="checkmark-circle-02" /><span>{{ session('success') }}</span></div>
   @endif
   @if (session('error'))
-    <div class="p-alert error"><i class="fa-solid fa-circle-exclamation"></i><span>{{ session('error') }}</span></div>
+    <div class="p-alert error"><x-hi name="alert-02" /><span>{{ session('error') }}</span></div>
   @endif
 
   <div class="p-tabs">
@@ -211,11 +211,11 @@
   <form id="filterForm" method="GET" action="{{ route('admin.payments.index') }}">
     <div class="p-toolbar">
       <div class="p-search">
-        <i class="fa-solid fa-magnifying-glass"></i>
+        <x-hi name="search-01" />
         <input type="search" name="search" placeholder="Cari no. registrasi, nama, atau email…" value="{{ request('search') }}" autocomplete="off">
       </div>
-      <button type="button" class="p-fbtn" onclick="toggleFilterPanel()"><i class="fa-solid fa-sliders"></i> Filter</button>
-      <button type="submit" class="p-gobtn"><i class="fa-solid fa-magnifying-glass"></i> Cari</button>
+      <button type="button" class="p-fbtn" onclick="toggleFilterPanel()"><x-hi name="sliders-horizontal" /> Filter</button>
+      <button type="submit" class="p-gobtn"><x-hi name="search-01" /> Cari</button>
     </div>
 
     <div id="filterPanel" class="p-filters" style="display:{{ request('payment_type') || request('payment_method') ? 'flex' : 'none' }}">
@@ -223,8 +223,8 @@
         <label>Tipe Pembayaran</label>
         <button type="button" class="r-pick" data-picker="payment_type" aria-haspopup="listbox" aria-expanded="false">
           <span class="pick-label is-placeholder">Pilih tipe…</span>
-          <span class="pick-clear" data-clear="payment_type" role="button" tabindex="0" aria-label="Bersihkan"><i class="fa-solid fa-xmark"></i></span>
-          <i class="fa-solid fa-chevron-down pick-caret"></i>
+          <span class="pick-clear" data-clear="payment_type" role="button" tabindex="0" aria-label="Bersihkan"><x-hi name="cancel-01" /></span>
+          <x-hi name="arrow-down-01" />
         </button>
         <input type="hidden" name="payment_type" data-picker-input="payment_type" value="{{ request('payment_type') }}">
       </div>
@@ -232,20 +232,20 @@
         <label>Metode Pembayaran</label>
         <button type="button" class="r-pick" data-picker="payment_method" aria-haspopup="listbox" aria-expanded="false">
           <span class="pick-label is-placeholder">Pilih metode…</span>
-          <span class="pick-clear" data-clear="payment_method" role="button" tabindex="0" aria-label="Bersihkan"><i class="fa-solid fa-xmark"></i></span>
-          <i class="fa-solid fa-chevron-down pick-caret"></i>
+          <span class="pick-clear" data-clear="payment_method" role="button" tabindex="0" aria-label="Bersihkan"><x-hi name="cancel-01" /></span>
+          <x-hi name="arrow-down-01" />
         </button>
         <input type="hidden" name="payment_method" data-picker-input="payment_method" value="{{ request('payment_method') }}">
       </div>
-      <button type="submit" class="p-gobtn"><i class="fa-solid fa-filter"></i> Terapkan</button>
+      <button type="submit" class="p-gobtn"><x-hi name="filter" /> Terapkan</button>
     </div>
   </form>
 
   @php
     $payIcon = [
-      'pending' => ['ic' => 'amber', 'icon' => 'fa-solid fa-hourglass-half'],
-      'verified' => ['ic' => 'green', 'icon' => 'fa-solid fa-circle-check'],
-      'rejected' => ['ic' => 'red', 'icon' => 'fa-solid fa-circle-xmark'],
+      'pending' => ['ic' => 'amber', 'icon' => 'hourglass'],
+      'verified' => ['ic' => 'green', 'icon' => 'checkmark-circle-02'],
+      'rejected' => ['ic' => 'red', 'icon' => 'cancel-circle'],
     ];
     $pillMap = ['pending' => 'amber', 'verified' => 'green', 'rejected' => 'red'];
     $statusLabels = ['pending' => 'Pending', 'verified' => 'Lunas', 'rejected' => 'Ditolak'];
@@ -254,7 +254,7 @@
   @endphp
 
   @if ($payments->isEmpty())
-    <div class="p-empty"><i class="fa-regular fa-credit-card"></i>Tidak ada data pembayaran</div>
+    <div class="p-empty"><x-hi name="credit-card" />Tidak ada data pembayaran</div>
   @else
     <div class="p-list">
       @foreach ($payments as $payment)
@@ -264,7 +264,7 @@
         $method = $payment->payment_method;
       @endphp
       <div class="p-row">
-        <span class="p-ic {{ $payIcon[$st]['ic'] ?? 'blue' }}"><i class="{{ $payIcon[$st]['icon'] ?? 'fa-solid fa-money-bill-wave' }}"></i></span>
+        <span class="p-ic {{ $payIcon[$st]['ic'] ?? 'blue' }}"><x-hi :name="$payIcon[$st]['icon'] ?? 'money-02'" /></span>
         <div class="p-body">
           <div class="p-name">{{ $payment->registration->applicant->full_name ?? '-' }}</div>
           <div class="p-sub">{{ $payment->registration->registration_number }} · {{ $payment->registration->applicant->user->email ?? '-' }}</div>
@@ -277,13 +277,13 @@
         <div class="p-amount">Rp {{ number_format($payment->amount, 0, ',', '.') }}</div>
         <div class="p-actions">
           @if ($payment->proof_file)
-            <button type="button" onclick="showFileModal('{{ route('payments.proof', $payment) }}', 'Bukti Pembayaran · {{ $payment->registration->applicant->full_name }}')" class="p-btn ghost sm"><i class="fa-solid fa-receipt"></i> Bukti</button>
+            <button type="button" onclick="showFileModal('{{ route('payments.proof', $payment) }}', 'Bukti Pembayaran · {{ $payment->registration->applicant->full_name }}')" class="p-btn ghost sm"><x-hi name="receipt-text" /> Bukti</button>
           @endif
           @if ($payment->status === 'pending')
-            <button type="button" onclick="openPayVerify({{ $payment->id }}, '{{ addslashes($payment->registration->registration_number) }}')" class="p-btn green sm"><i class="fa-solid fa-check"></i> Verifikasi</button>
-            <button type="button" onclick="showRejectModal({{ $payment->id }})" class="p-btn red sm"><i class="fa-solid fa-xmark"></i> Tolak</button>
+            <button type="button" onclick="openPayVerify({{ $payment->id }}, '{{ addslashes($payment->registration->registration_number) }}')" class="p-btn green sm"><x-hi name="checkmark" /> Verifikasi</button>
+            <button type="button" onclick="showRejectModal({{ $payment->id }})" class="p-btn red sm"><x-hi name="cancel-01" /> Tolak</button>
           @else
-            <button type="button" onclick="openPayReset({{ $payment->id }}, '{{ addslashes($payment->registration->registration_number) }}')" class="p-btn ghost sm"><i class="fa-solid fa-rotate-left"></i> Reset</button>
+            <button type="button" onclick="openPayReset({{ $payment->id }}, '{{ addslashes($payment->registration->registration_number) }}')" class="p-btn ghost sm"><x-hi name="rotate-left-01" /> Reset</button>
           @endif
         </div>
       </div>
@@ -302,15 +302,15 @@
   <div class="picker-panel" role="dialog" aria-modal="true" aria-labelledby="pickerTitle">
     <div class="picker-head">
       <div class="picker-title" id="pickerTitle">Pilih item</div>
-      <button type="button" class="picker-close" onclick="closePicker()" aria-label="Tutup"><i class="fa-solid fa-xmark"></i></button>
+      <button type="button" class="picker-close" onclick="closePicker()" aria-label="Tutup"><x-hi name="cancel-01" /></button>
     </div>
     <div class="picker-search">
-      <i class="fa-solid fa-magnifying-glass"></i>
+      <x-hi name="search-01" />
       <input id="pickerSearch" type="search" placeholder="Cari…" autocomplete="off">
     </div>
     <div class="picker-list" id="pickerList" role="listbox"></div>
     <div class="picker-foot">
-      <button type="button" class="picker-clear-all" onclick="clearCurrentPicker()"><i class="fa-solid fa-eraser"></i> Bersihkan</button>
+      <button type="button" class="picker-clear-all" onclick="clearCurrentPicker()"><x-hi name="eraser-01" /> Bersihkan</button>
       <button type="button" class="picker-done" onclick="closePicker()">Selesai</button>
     </div>
   </div>
@@ -333,7 +333,7 @@
 <div id="payVerifyModal" class="p-modal-backdrop" aria-hidden="true">
   <div class="p-modal" role="dialog" aria-modal="true">
     <div class="p-modal-body">
-      <div class="p-modal-ic green"><i class="fa-solid fa-circle-check"></i></div>
+      <div class="p-modal-ic green"><x-hi name="checkmark-circle-02" /></div>
       <div style="flex:1;min-width:0">
         <h3 class="p-modal-title">Verifikasi pembayaran?</h3>
         <p class="p-modal-msg" id="payVerifyMsg">Yakin ingin memverifikasi pembayaran ini sebagai lunas?</p>
@@ -341,7 +341,7 @@
     </div>
     <div class="p-modal-actions">
       <button type="button" onclick="closePayVerify()" class="p-btn ghost p-btn-ghost">Batal</button>
-      <button type="button" onclick="submitPayVerify()" id="payVerifyAction" class="p-btn green"><i class="fa-solid fa-check"></i> Ya, Verifikasi</button>
+      <button type="button" onclick="submitPayVerify()" id="payVerifyAction" class="p-btn green"><x-hi name="checkmark" /> Ya, Verifikasi</button>
     </div>
   </div>
 </div>
@@ -350,7 +350,7 @@
 <div id="payResetModal" class="p-modal-backdrop" aria-hidden="true">
   <div class="p-modal" role="dialog" aria-modal="true">
     <div class="p-modal-body">
-      <div class="p-modal-ic amber"><i class="fa-solid fa-rotate-left"></i></div>
+      <div class="p-modal-ic amber"><x-hi name="rotate-left-01" /></div>
       <div style="flex:1;min-width:0">
         <h3 class="p-modal-title">Kembalikan ke pending?</h3>
         <p class="p-modal-msg" id="payResetMsg">Pembayaran ini akan dikembalikan ke status pending. Yakin lanjut?</p>
@@ -358,7 +358,7 @@
     </div>
     <div class="p-modal-actions">
       <button type="button" onclick="closePayReset()" class="p-btn ghost p-btn-ghost">Batal</button>
-      <button type="button" onclick="submitPayReset()" id="payResetAction" class="p-btn amber"><i class="fa-solid fa-rotate-left"></i> Ya, Reset</button>
+      <button type="button" onclick="submitPayReset()" id="payResetAction" class="p-btn amber"><x-hi name="rotate-left-01" /> Ya, Reset</button>
     </div>
   </div>
 </div>
@@ -367,7 +367,7 @@
 <div id="rejectModal" class="p-modal-backdrop" aria-hidden="true">
   <div class="p-modal" role="dialog" aria-modal="true">
     <div class="p-modal-body">
-      <div class="p-modal-ic red"><i class="fa-solid fa-circle-xmark"></i></div>
+      <div class="p-modal-ic red"><x-hi name="cancel-circle" /></div>
       <div style="flex:1;min-width:0">
         <h3 class="p-modal-title">Tolak Pembayaran</h3>
         <p class="p-modal-msg">Pembayaran akan ditolak. Beri alasan penolakan (wajib).</p>
@@ -381,7 +381,7 @@
       </div>
       <div class="p-modal-actions">
         <button type="button" onclick="hideRejectModal()" class="p-btn ghost p-btn-ghost">Batal</button>
-        <button type="submit" class="p-btn red"><i class="fa-solid fa-xmark"></i> Tolak</button>
+        <button type="submit" class="p-btn red"><x-hi name="cancel-01" /> Tolak</button>
       </div>
     </form>
   </div>

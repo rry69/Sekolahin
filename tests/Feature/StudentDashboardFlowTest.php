@@ -125,9 +125,9 @@ class StudentDashboardFlowTest extends TestCase
         // Nomor pendaftaran
         $res->assertSee('REG-2026-SMK-00001');
 
-        // Timeline: pastikan tepat SATU tahap aktif (ring-indigo-100)
+        // Timeline: pastikan tepat SATU tahap aktif (reg-step.current — desain v2)
         $html = $res->getContent();
-        $activeCount = substr_count($html, 'ring-indigo-100');
+        $activeCount = substr_count($html, 'class="reg-step current"');
         $this->assertSame(1, $activeCount, "Harusnya tepat 1 tahap aktif di timeline, ternyata $activeCount");
         // Tahap aktif harus Dokumen (belum semua dokumen terupload)
         $this->assertStringContainsString('Dokumen', $html);

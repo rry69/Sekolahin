@@ -1,6 +1,6 @@
 @if ($majors->isEmpty())
   <div class="mjr-empty">
-    <i class="fa-solid fa-folder-open"></i>
+    <x-hi name="folder-open" />
     Tidak ada jurusan yang cocok dengan filter.
   </div>
 @else
@@ -11,7 +11,7 @@
         $isActive = $major->is_active;
       @endphp
       <div class="mjr-row">
-        <span class="mjr-ic {{ $isActive ? 'active' : 'inactive' }}"><i class="fa-solid fa-graduation-cap"></i></span>
+        <span class="mjr-ic {{ $isActive ? 'active' : 'inactive' }}"><x-hi name="mortarboard-01" /></span>
         <div class="mjr-body">
           <div class="mjr-name">
             <a href="{{ route('admin.majors.show', $major) }}">{{ $major->name }}</a>
@@ -19,7 +19,7 @@
             <span class="mjr-pill {{ $isActive ? 'green' : 'red' }}" style="padding:2px 9px;font-size:10.5px">{{ $major->statusLabel() }}</span>
           </div>
           <div class="mjr-sub">
-            <i class="fa-solid fa-school" style="margin-right:3px;font-size:10px;"></i>{{ $major->school->name ?? '-' }}
+            <x-hi name="school" style="margin-right:3px;font-size:10px;" />{{ $major->school->name ?? '-' }}
           </div>
           <div class="mjr-stats">
             <span>Pendaftar <b>{{ $major->total_applicants }}</b></span>
@@ -46,16 +46,16 @@
           </div>
         </div>
         <div class="mjr-actions">
-          <a href="{{ route('admin.majors.show', $major) }}" class="mjr-btn ghost sm" title="Detail"><i class="fa-solid fa-eye" style="font-size:10px;"></i> Detail</a>
-          <a href="{{ route('admin.majors.edit', $major) }}" class="mjr-btn amber sm" title="Edit"><i class="fa-solid fa-pen" style="font-size:10px;"></i> Edit</a>
+          <a href="{{ route('admin.majors.show', $major) }}" class="mjr-btn ghost sm" title="Detail"><x-hi name="view" style="font-size:10px;" /> Detail</a>
+          <a href="{{ route('admin.majors.edit', $major) }}" class="mjr-btn amber sm" title="Edit"><x-hi name="edit-02" style="font-size:10px;" /> Edit</a>
           <form action="{{ route('admin.majors.toggle-status', $major) }}" method="POST" style="display:inline;">
             @csrf
             <button type="submit" class="mjr-btn {{ $isActive ? 'ghost' : 'green' }} sm" title="{{ $isActive ? 'Nonaktifkan' : 'Aktifkan' }}">
-              <i class="fa-solid fa-{{ $isActive ? 'toggle-on' : 'toggle-off' }}" style="font-size:11px;"></i> {{ $isActive ? 'Nonaktif' : 'Aktif' }}
+              <x-hi :name="$isActive ? 'toggle-on' : 'toggle-off'" style="font-size:11px;" /> {{ $isActive ? 'Nonaktif' : 'Aktif' }}
             </button>
           </form>
           <button type="button" class="mjr-btn red sm" title="Hapus" onclick="openMajorDelete({{ $major->id }}, {{ json_encode($major->name) }})">
-            <i class="fa-solid fa-trash-can" style="font-size:10px;"></i> Hapus
+            <x-hi name="delete-02" style="font-size:10px;" /> Hapus
           </button>
         </div>
       </div>

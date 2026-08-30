@@ -51,11 +51,11 @@
 
   /* ---------- pills ---------- */
   .trk .t-pill { display: inline-flex; align-items: center; gap: 6px; padding: 4px 11px; border-radius: 20px; font-size: 11.5px; font-weight: 700; white-space: nowrap; }
-  .trk .t-pill.green { background: var(--green-soft); color: var(--green); }
-  .trk .t-pill.amber { background: var(--amber-soft); color: #b45309; }
-  .trk .t-pill.red   { background: var(--red-soft);   color: var(--red); }
-  .trk .t-pill.coral { background: var(--coral-soft); color: var(--coral); }
-  .trk .t-pill.blue  { background: var(--blue-soft);  color: var(--blue); }
+  .trk .t-pill.green { background: transparent; border: 1px solid currentColor; color: var(--green); }
+  .trk .t-pill.amber { background: transparent; border: 1px solid currentColor; color: #b45309; }
+  .trk .t-pill.red   { background: transparent; border: 1px solid currentColor;   color: var(--red); }
+  .trk .t-pill.coral { background: transparent; border: 1px solid currentColor; color: var(--coral); }
+  .trk .t-pill.blue  { background: transparent; border: 1px solid currentColor;  color: var(--blue); }
 
   /* ---------- track row ---------- */
   .trk .t-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 16px 6px; border-bottom: 1px solid var(--divider); }
@@ -112,20 +112,20 @@
   <p class="t-meta">Kelola status aktif/nonaktif jalur (Beasiswa, Prestasi, Reguler) per jenjang. Jalur yang dinonaktifkan tidak muncul di form pendaftaran siswa dan ditolak di backend. Data historis pendaftar lama tetap tersimpan.</p>
 
   @if (session('success'))
-    <div class="t-alert success"><i class="fa-solid fa-circle-check"></i><span>{{ session('success') }}</span></div>
+    <div class="t-alert success"><x-hi name="checkmark-circle-02" /><span>{{ session('success') }}</span></div>
   @endif
   @if (session('error'))
-    <div class="t-alert error"><i class="fa-solid fa-circle-exclamation"></i><span>{{ session('error') }}</span></div>
+    <div class="t-alert error"><x-hi name="alert-02" /><span>{{ session('error') }}</span></div>
   @endif
 
   @if ($levels->isEmpty() || $tracks->isEmpty())
-    <div class="t-empty"><i class="fa-regular fa-folder-open"></i>Belum ada jenjang atau jalur terdaftar.</div>
+    <div class="t-empty"><x-hi name="folder-open" />Belum ada jenjang atau jalur terdaftar.</div>
   @else
     @foreach ($levels as $level)
       <div class="t-sec">
         <div class="t-sec-head">
           <div class="t-sec-head-l">
-            <span class="t-sec-ic"><i class="fa-solid fa-school"></i></span>
+            <span class="t-sec-ic"><x-hi name="school" /></span>
             <div>
               <div class="t-sec-name">{{ $level->name }}</div>
               @if($level->description)
@@ -143,11 +143,11 @@
           @endphp
           <div class="t-row {{ $isActive ? 'active' : '' }} track-row" data-track-id="{{ $track->id }}" data-level-id="{{ $level->id }}">
             <div class="t-row-info">
-              <span class="t-row-ic"><i class="fa-solid fa-route"></i></span>
+              <span class="t-row-ic"><x-hi name="route-01" /></span>
               <div style="min-width:0">
                 <div class="t-row-name">
                   <b>{{ $track->name }}</b>
-                  <span class="status-badge track-badge {{ $isActive ? 'status-accepted' : 'status-rejected' }}" style="{{ $isActive ? '' : 'background:var(--badge-rejected-bg);color:var(--badge-rejected-fg);' }}">{{ $isActive ? 'Aktif' : 'Nonaktif' }}</span>
+                  <span class="status-badge track-badge {{ $isActive ? 'status-accepted' : 'status-rejected' }}" style="{{ $isActive ? '' : 'background: transparent; border: 1px solid currentColor;color:var(--badge-rejected-fg);' }}">{{ $isActive ? 'Aktif' : 'Nonaktif' }}</span>
                 </div>
                 @if($track->description)
                   <div class="t-row-desc">{{ $track->description }}</div>
@@ -172,7 +172,7 @@
   <div id="trackConfirmModal" class="t-modal-backdrop" aria-hidden="true">
     <div class="t-modal" role="dialog" aria-modal="true">
       <div class="t-modal-body">
-        <div class="t-modal-ic"><i class="fa-solid fa-toggle-off"></i></div>
+        <div class="t-modal-ic"><x-hi name="toggle-off" /></div>
         <div style="flex:1;min-width:0">
           <h3 class="t-modal-title">Nonaktifkan jalur ini?</h3>
           <p id="trackConfirmMsg" class="t-modal-msg"></p>

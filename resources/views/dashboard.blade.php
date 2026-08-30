@@ -11,7 +11,7 @@
                 <div class="p-6">
                     <div class="text-center py-8">
                         <div class="mx-auto w-16 h-16 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600">
-                            <i class="fa-solid fa-graduation-cap text-2xl"></i>
+                            <x-hi icon="fa-graduation-cap" class="text-2xl" />
                         </div>
                         <h3 class="mt-4 text-lg font-semibold text-gray-900">Selamat datang, {{ Auth::user()->name }}!</h3>
                         <p class="mt-2 text-sm text-gray-500 max-w-xl mx-auto">
@@ -20,10 +20,10 @@
                         </p>
                         <div class="mt-6 flex flex-wrap justify-center gap-3">
                             <x-app-button variant="primary" :href="route('registration.index')">
-                                <i class="fa-solid fa-folder-open"></i> Lihat Pendaftaran
+                                <x-hi icon="fa-folder-open" /> Lihat Pendaftaran
                             </x-app-button>
                             <x-app-button variant="secondary" :href="route('applicant.profile')">
-                                <i class="fa-solid fa-id-card"></i> Biodata Saya
+                                <x-hi icon="fa-id-card" /> Biodata Saya
                             </x-app-button>
                         </div>
                     </div>

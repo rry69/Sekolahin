@@ -1,15 +1,15 @@
 <section>
     <div class="prf-danger">
-        <div class="prf-danger-title"><i class="fa-solid fa-triangle-exclamation"></i> Zona Bahaya</div>
+        <div class="prf-danger-title"><x-hi icon="fa-triangle-exclamation" /> Zona Bahaya</div>
         <div class="prf-sec-label" style="font-size:14px;margin-bottom:2px">Hapus Akun</div>
         <p class="prf-danger-desc">Setelah akun dihapus, semua data dan sumber daya akan dihapus permanen. Harap unduh data yang ingin Anda simpan sebelum melanjutkan.</p>
-        <button type="button" class="prf-btn red" onclick="openPrfDelete()"><i class="fa-solid fa-trash-can"></i> Hapus Akun</button>
+        <button type="button" class="prf-btn red" onclick="openPrfDelete()"><x-hi icon="fa-trash-can" /> Hapus Akun</button>
     </div>
 
     <div id="prfDeleteModal" class="prf-modal-backdrop" aria-hidden="true">
         <div class="prf-modal" role="dialog" aria-modal="true">
             <div class="prf-modal-body">
-                <div class="prf-modal-ic"><i class="fa-solid fa-trash-can"></i></div>
+                <div class="prf-modal-ic"><x-hi icon="fa-trash-can" /></div>
                 <div style="flex:1;min-width:0">
                     <div class="prf-modal-title">Hapus akun Anda?</div>
                     <p class="prf-modal-msg">Akun dan semua data akan dihapus permanen. Masukkan kata sandi untuk konfirmasi.</p>

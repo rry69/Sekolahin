@@ -4,11 +4,11 @@
             {{-- Previous --}}
             @if ($paginator->onFirstPage())
                 <span aria-disabled="true" style="display:inline-flex;align-items:center;justify-content:center;min-width:36px;height:36px;padding:0 12px;border-radius:10px;font-size:13px;font-weight:600;color:#8a8f9d;background:rgba(255,255,255,0.45);border:1px solid rgba(26,26,46,0.08);opacity:.55;cursor:not-allowed;">
-                    <i class="fa-solid fa-chevron-left" style="font-size:11px"></i>
+                    <x-hi name="arrow-left-01" style="font-size:11px;" />
                 </span>
             @else
                 <a href="{{ $paginator->previousPageUrl() }}" rel="prev" style="display:inline-flex;align-items:center;justify-content:center;min-width:36px;height:36px;padding:0 12px;border-radius:10px;font-size:13px;font-weight:600;color:#1a1a2e;background:rgba(255,255,255,0.6);border:1px solid rgba(26,26,46,0.08);text-decoration:none;transition:background-color .15s ease,color .15s ease;" onmouseover="this.style.background='#fff';this.style.color='#FF6B6B';" onmouseout="this.style.background='rgba(255,255,255,0.6)';this.style.color='#1a1a2e';">
-                    <i class="fa-solid fa-chevron-left" style="font-size:11px"></i>
+                    <x-hi name="arrow-left-01" style="font-size:11px;" />
                 </a>
             @endif
 
@@ -32,11 +32,11 @@
             {{-- Next --}}
             @if ($paginator->hasMorePages())
                 <a href="{{ $paginator->nextPageUrl() }}" rel="next" style="display:inline-flex;align-items:center;justify-content:center;min-width:36px;height:36px;padding:0 12px;border-radius:10px;font-size:13px;font-weight:600;color:#1a1a2e;background:rgba(255,255,255,0.6);border:1px solid rgba(26,26,46,0.08);text-decoration:none;transition:background-color .15s ease,color .15s ease;" onmouseover="this.style.background='#fff';this.style.color='#FF6B6B';" onmouseout="this.style.background='rgba(255,255,255,0.6)';this.style.color='#1a1a2e';">
-                    <i class="fa-solid fa-chevron-right" style="font-size:11px"></i>
+                    <x-hi name="arrow-right-01" style="font-size:11px;" />
                 </a>
             @else
                 <span aria-disabled="true" style="display:inline-flex;align-items:center;justify-content:center;min-width:36px;height:36px;padding:0 12px;border-radius:10px;font-size:13px;font-weight:600;color:#8a8f9d;background:rgba(255,255,255,0.45);border:1px solid rgba(26,26,46,0.08);opacity:.55;cursor:not-allowed;">
-                    <i class="fa-solid fa-chevron-right" style="font-size:11px"></i>
+                    <x-hi name="arrow-right-01" style="font-size:11px;" />
                 </span>
             @endif
         </div>

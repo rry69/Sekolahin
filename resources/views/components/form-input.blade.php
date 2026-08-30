@@ -15,7 +15,7 @@
 
 <div @if($leftIcon) class="relative" @endif>
     @if($leftIcon)
-        <i class="{{ $leftIcon }} absolute left-3.5 top-1/2 -translate-y-1/2 text-sm text-eggplore-neutral-400 peer-focus:text-eggplore-primary-500"></i>
+        <x-hi :name="$leftIcon" class="absolute left-3.5 top-1/2 -translate-y-1/2 text-sm text-eggplore-neutral-400 peer-focus:text-eggplore-primary-500" />
     @endif
     <input {{ $attributes->merge([
         'class' => 'block h-11 w-full rounded-input border bg-white ' . $paddingLeft . ' pr-3.5 text-sm text-eggplore-neutral-900 placeholder-eggplore-neutral-400 shadow-xs transition-colors focus:outline-none focus:ring-2 disabled:cursor-not-allowed disabled:bg-eggplore-neutral-100 disabled:text-eggplore-neutral-400 ' . $stateClasses,

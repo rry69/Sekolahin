@@ -50,7 +50,7 @@
             color: #B23A3A;
             letter-spacing: .01em;
         }
-        .terms-meta .chip i { color: #FF6B6B; }
+        .terms-meta .chip svg.hi { color: #FF6B6B; }
 
         .terms-content {
             font-size: 14.5px;
@@ -114,7 +114,7 @@
             color: #0f5132;
             display: flex; gap: .65rem; align-items: flex-start;
         }
-        .terms-acknowledge i { color: #2DC99C; margin-top: 2px; }
+        .terms-acknowledge svg.hi { color: #2DC99C; margin-top: 2px; }
 
         .terms-footer {
             margin-top: 1.6rem;
@@ -144,7 +144,7 @@
         {{-- ===== Hero / judul halaman ===== --}}
         <div class="terms-hero">
             <div class="terms-hero-icon" aria-hidden="true">
-                <i class="fa-solid fa-file-contract text-lg"></i>
+                <x-hi icon="fa-file-contract" class="text-lg" />
             </div>
             <div>
                 <h1>Syarat &amp; Ketentuan</h1>
@@ -154,9 +154,9 @@
 
         {{-- ===== Meta info (versi + tanggal) ===== --}}
         <div class="terms-meta">
-            <span class="chip"><i class="fa-solid fa-circle-check"></i> Versi 1.0</span>
-            <span class="chip"><i class="fa-regular fa-calendar"></i> Berlaku sejak {{ $effectiveDate }}</span>
-            <span class="chip"><i class="fa-solid fa-shield-halved"></i> Wajib disetujui saat pendaftaran akun</span>
+            <span class="chip"><x-hi icon="fa-circle-check" /> Versi 1.0</span>
+            <span class="chip"><x-hi icon="fa-calendar" /> Berlaku sejak {{ $effectiveDate }}</span>
+            <span class="chip"><x-hi icon="fa-shield-halved" /> Wajib disetujui saat pendaftaran akun</span>
         </div>
 
         {{-- ===== Pembuka ===== --}}
@@ -324,7 +324,7 @@
 
         {{-- ===== Acknowledgement box ===== --}}
         <div class="terms-acknowledge" role="note">
-            <i class="fa-solid fa-circle-check mt-0.5"></i>
+            <x-hi icon="fa-circle-check" class="mt-0.5" />
             <div>
                 Dengan mencentang kotak <strong>"Saya menyetujui syarat &amp; ketentuan"</strong> di halaman
                 pendaftaran, Anda menyatakan telah membaca, memahami, dan menyetujui seluruh isi dokumen ini.
@@ -337,7 +337,7 @@
                 © {{ date('Y') }} Sekolahin · Versi 1.0 · {{ $effectiveDate }}
             </span>
             <a href="{{ route('register') }}" class="terms-back" rel="noopener">
-                <i class="fa-solid fa-arrow-left text-xs"></i>
+                <x-hi icon="fa-arrow-left" class="text-xs" />
                 Kembali ke pendaftaran
             </a>
         </div>

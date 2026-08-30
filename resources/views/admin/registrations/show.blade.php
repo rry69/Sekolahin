@@ -62,12 +62,12 @@
 
   /* ---------- pills ---------- */
   .det .d-pill { display: inline-flex; align-items: center; gap: 6px; padding: 4px 11px; border-radius: 20px; font-size: 11.5px; font-weight: 700; white-space: nowrap; }
-  .det .d-pill.green  { background: var(--green-soft);  color: var(--green); }
-  .det .d-pill.amber  { background: var(--amber-soft);  color: #b45309; }
-  .det .d-pill.blue   { background: var(--blue-soft);   color: var(--blue); }
-  .det .d-pill.red    { background: var(--red-soft);    color: var(--red); }
-  .det .d-pill.gray   { background: var(--gray-soft);   color: var(--gray); }
-  .det .d-pill.coral  { background: var(--coral-soft);  color: var(--coral); }
+  .det .d-pill.green  { background: transparent; border: 1px solid currentColor;  color: var(--green); }
+  .det .d-pill.amber  { background: transparent; border: 1px solid currentColor;  color: #b45309; }
+  .det .d-pill.blue   { background: transparent; border: 1px solid currentColor;   color: var(--blue); }
+  .det .d-pill.red    { background: transparent; border: 1px solid currentColor;    color: var(--red); }
+  .det .d-pill.gray   { background: transparent; border: 1px solid currentColor;   color: var(--gray); }
+  .det .d-pill.coral  { background: transparent; border: 1px solid currentColor;  color: var(--coral); }
 
   /* ---------- buttons ---------- */
   .det .d-btn { display: inline-flex; align-items: center; gap: 6px; border: none; cursor: pointer; border-radius: 11px; padding: 9px 15px; font-size: 12.5px; font-weight: 700; transition: transform .15s ease, filter .15s ease, background-color .15s ease, color .15s ease; }
@@ -261,7 +261,7 @@
       <x-status-badge :status="$registration->status" type="registration" class="d-pill" />
       @if ($registration->deadline_at && $registration->status === 'pending')
         @php $hoursRemaining = $registration->getDeadlineHoursRemaining(); @endphp
-        <span class="d-pill amber"><i class="fa-regular fa-clock"></i> Batas waktu: {{ $registration->deadline_at->format('d M Y H:i') }}@if ($hoursRemaining !== null) ({{ $hoursRemaining }} jam tersisa)@endif</span>
+        <span class="d-pill amber"><x-hi name="clock-01" /> Batas waktu: {{ $registration->deadline_at->format('d M Y H:i') }}@if ($hoursRemaining !== null) ({{ $hoursRemaining }} jam tersisa)@endif</span>
       @endif
       @if ($registration->canceled_at)
         <span class="d-pill gray">Dibatalkan: {{ $registration->canceled_at->format('d M Y H:i') }}</span>
@@ -271,27 +271,27 @@
       @endif
       <form action="{{ route('admin.registrations.reset-password', $registration) }}" method="POST" id="resetPasswordForm" class="inline-block">
         @csrf
-        <button type="button" onclick="openActionConfirm('reset-password', '{{ addslashes($registration->applicant?->user?->email ?? '') }}')" class="d-btn amber"><i class="fa-solid fa-key"></i> Reset Password</button>
+        <button type="button" onclick="openActionConfirm('reset-password', '{{ addslashes($registration->applicant?->user?->email ?? '') }}')" class="d-btn amber"><x-hi name="key-01" /> Reset Password</button>
       </form>
       @if (! $registration->isAccepted())
       <form action="{{ route('admin.registrations.delete-account', $registration) }}" method="POST" id="deleteAccountForm" class="inline-block">
         @csrf
-        <button type="button" onclick="openActionConfirm('delete-account', '{{ addslashes($registration->applicant?->full_name ?? '') }}')" class="d-btn red"><i class="fa-solid fa-trash-can"></i> Hapus Akun</button>
+        <button type="button" onclick="openActionConfirm('delete-account', '{{ addslashes($registration->applicant?->full_name ?? '') }}')" class="d-btn red"><x-hi name="delete-02" /> Hapus Akun</button>
       </form>
       @endif
     </div>
   </div>
 
   @if (session('success'))
-    <div class="d-alert success"><i class="fa-solid fa-circle-check"></i><span>{{ session('success') }}</span></div>
+    <div class="d-alert success"><x-hi name="checkmark-circle-02" /><span>{{ session('success') }}</span></div>
   @endif
   @if (session('error'))
-    <div class="d-alert error"><i class="fa-solid fa-circle-exclamation"></i><span>{{ session('error') }}</span></div>
+    <div class="d-alert error"><x-hi name="alert-02" /><span>{{ session('error') }}</span></div>
   @endif
 
   {{-- ================== INFORMASI PENDAFTAR ================== --}}
   <div class="d-sec">
-    <div class="d-sec-title"><i class="fa-solid fa-user"></i> Informasi Pendaftar</div>
+    <div class="d-sec-title"><x-hi name="user" /> Informasi Pendaftar</div>
     <div class="d-grid">
       <div class="d-item">
         <div class="d-lbl">Nama Lengkap</div>
@@ -306,7 +306,7 @@
         <div class="d-val">
           @php $vstatus = $registration->applicant->nisn_verification_status ?? null; @endphp
           @if ($vstatus === 'verified')
-            <span class="d-pill green"><i class="fa-solid fa-check"></i> Terverifikasi</span>
+            <span class="d-pill green"><x-hi name="checkmark" /> Terverifikasi</span>
             @if ($registration->applicant->nisn_verified_at)
               <div class="d-sub">{{ $registration->applicant->nisn_verified_at->format('d M Y H:i') }}</div>
             @endif
@@ -355,7 +355,7 @@
 
   {{-- ================== PILIHAN SEKOLAH & JURUSAN ================== --}}
   <div class="d-sec">
-    <div class="d-sec-title"><i class="fa-solid fa-school"></i> Pilihan Sekolah &amp; Jurusan</div>
+    <div class="d-sec-title"><x-hi name="school" /> Pilihan Sekolah &amp; Jurusan</div>
     <div class="d-grid cols-2">
       <div class="d-item">
         <div class="d-lbl">Sekolah</div>
@@ -378,23 +378,23 @@
 
   {{-- ================== VERIFIKASI DOKUMEN ================== --}}
   <div class="d-sec">
-    <div class="d-sec-title"><i class="fa-solid fa-folder-open"></i> Verifikasi Dokumen</div>
+    <div class="d-sec-title"><x-hi name="folder-open" /> Verifikasi Dokumen</div>
     @forelse ($registration->documents as $doc)
       <div class="d-doc" id="doc-row-{{ $doc->id }}">
         <div class="d-doc-info">
-          <span class="d-doc-ic"><i class="fa-solid fa-file-lines"></i></span>
+          <span class="d-doc-ic"><x-hi name="file-01" /></span>
           <div style="min-width:0">
             <div class="d-doc-name">{{ $doc->document_type }}</div>
             <div class="d-doc-file">{{ $doc->file_name }}</div>
             @if($doc->verification_notes)
-              <div class="d-doc-note"><i class="fa-solid fa-circle-exclamation"></i> Alasan: {{ $doc->verification_notes }}</div>
+              <div class="d-doc-note"><x-hi name="alert-02" /> Alasan: {{ $doc->verification_notes }}</div>
             @endif
           </div>
         </div>
         <div class="d-doc-actions" id="doc-actions-{{ $doc->id }}">
-          <button type="button" onclick="showFileModal('{{ route('registration.documents.download', [$registration, $doc]) }}', '{{ addslashes($doc->file_name) }}')" class="d-btn ghost sm"><i class="fa-solid fa-eye"></i> Lihat</button>
+          <button type="button" onclick="showFileModal('{{ route('registration.documents.download', [$registration, $doc]) }}', '{{ addslashes($doc->file_name) }}')" class="d-btn ghost sm"><x-hi name="view" /> Lihat</button>
           @if($doc->verified_at)
-            <span id="doc-badge-{{ $doc->id }}" class="d-pill green"><i class="fa-solid fa-check"></i> Terverifikasi</span>
+            <span id="doc-badge-{{ $doc->id }}" class="d-pill green"><x-hi name="checkmark" /> Terverifikasi</span>
             <span id="doc-verify-btns-{{ $doc->id }}" class="hidden items-center gap-2">
               <button type="button" onclick="openDocVerifyModal({{ $doc->id }}, '{{ addslashes($doc->document_type) }}')" class="d-btn green sm">✓ Verifikasi</button>
               <button type="button" onclick="toggleDocReject({{ $doc->id }})" class="d-btn red sm">✕ Tolak</button>
@@ -420,7 +420,7 @@
       </div>
       @if(!$doc->verified_at && !$doc->verification_notes)
         <div id="doc-reject-{{ $doc->id }}" class="d-reject hidden">
-          <p><i class="fa-solid fa-circle-exclamation"></i> Tolak dokumen — beri alasan (file akan dihapus):</p>
+          <p><x-hi name="alert-02" /> Tolak dokumen — beri alasan (file akan dihapus):</p>
           <form action="{{ route('admin.documents.reject', $doc) }}" method="POST">
             @csrf
             @method('PATCH')
@@ -431,20 +431,20 @@
         </div>
       @endif
     @empty
-      <div class="d-empty"><i class="fa-regular fa-folder-open" style="display:block;font-size:20px;margin-bottom:6px;color:#d3d6de"></i>Belum ada dokumen</div>
+      <div class="d-empty"><x-hi name="folder-open" style="display:block;font-size:20px;margin-bottom:6px;color:#d3d6de" />Belum ada dokumen</div>
     @endforelse
   </div>
 
   {{-- ================== VERIFIKASI PENDAFTARAN ================== --}}
   <div class="d-sec">
-    <div class="d-sec-title"><i class="fa-solid fa-file-shield"></i> Verifikasi Pendaftaran</div>
+    <div class="d-sec-title"><x-hi name="file-security" /> Verifikasi Pendaftaran</div>
     @if ($registration->status === 'pending' || $registration->status === 'rejected')
       @php
         $docsVerified = $registration->hasAllDocumentsVerified();
         $requiredDocs = $registration->requiredDocumentTypes();
       @endphp
       <div id="docVerifyLock" class="d-lock {{ $docsVerified ? 'hidden' : '' }}">
-        <i class="fa-solid fa-triangle-exclamation"></i>
+        <x-hi name="alert-02" />
         <span>Verifikasi pendaftaran terkunci sampai <b>semua dokumen wajib</b> diverifikasi. Dokumen diverifikasi satu per satu di bagian Verifikasi Dokumen di atas.</span>
       </div>
       @php
@@ -462,8 +462,8 @@
             <label>Status Verifikasi</label>
             <button type="button" class="r-pick" data-picker="verify_status" aria-haspopup="listbox" aria-expanded="false">
               <span class="pick-label is-placeholder">Pilih status…</span>
-              <span class="pick-clear" data-clear="verify_status" role="button" tabindex="0" aria-label="Bersihkan"><i class="fa-solid fa-xmark"></i></span>
-              <i class="fa-solid fa-chevron-down pick-caret"></i>
+              <span class="pick-clear" data-clear="verify_status" role="button" tabindex="0" aria-label="Bersihkan"><x-hi name="cancel-01" /></span>
+              <x-hi name="arrow-down-01" />
             </button>
             <input type="hidden" name="status" data-picker-input="verify_status" value="verified">
           </div>
@@ -492,7 +492,7 @@
           @else
             <p class="d-hint" style="margin:0">Biaya Reguler otomatis dari menu Setting. Tidak perlu input manual.</p>
           @endif
-          <button type="submit" class="d-btn coral"><i class="fa-solid fa-floppy-disk"></i> Simpan</button>
+          <button type="submit" class="d-btn coral"><x-hi name="save" /> Simpan</button>
         </div>
       </form>
     @else
@@ -504,9 +504,9 @@
 
   @if ($registration->status === 'verified')
   <div class="d-sec">
-    <div class="d-sec-title"><i class="fa-solid fa-check-double"></i> Status Diterima (Otomatis)</div>
+    <div class="d-sec-title"><x-hi name="checkmark-circle-01" /> Status Diterima (Otomatis)</div>
     <div class="d-lock" style="background:var(--blue-soft);color:var(--blue)">
-      <i class="fa-solid fa-circle-info"></i>
+      <x-hi name="information-circle" />
       <span>Siswa otomatis terdaftar sebagai siswa setelah <b>berkas diverifikasi</b> dan <b>pembayaran lunas</b>. NIS diterbitkan otomatis saat itu.</span>
     </div>
   </div>
@@ -514,7 +514,7 @@
 
   {{-- ================== STATUS PEMBAYARAN ================== --}}
   <div class="d-sec">
-    <div class="d-sec-title"><i class="fa-solid fa-money-bill-wave"></i> Status Pembayaran</div>
+    <div class="d-sec-title"><x-hi name="money-02" /> Status Pembayaran</div>
     @php
       $payPill = [
         'unpaid' => 'gray', 'pending' => 'amber', 'paid' => 'green', 'failed' => 'red',
@@ -536,15 +536,15 @@
       </div>
       <div class="d-pay-actions">
         @if($invoicePayment)
-          <a href="{{ route('payments.invoice.view', $invoicePayment) }}" target="_blank" class="d-btn green sm"><i class="fa-solid fa-file-invoice"></i> Lihat Invoice</a>
+          <a href="{{ route('payments.invoice.view', $invoicePayment) }}" target="_blank" class="d-btn green sm"><x-hi name="invoice-01" /> Lihat Invoice</a>
         @endif
         @if($proofPayment)
-          <button type="button" onclick="showFileModal('{{ route('payments.proof', $proofPayment) }}', '{{ addslashes($proofPayment->proof_file ? basename($proofPayment->proof_file) : 'Bukti Pembayaran') }}')" class="d-btn blue sm"><i class="fa-solid fa-receipt"></i> Lihat Bukti</button>
+          <button type="button" onclick="showFileModal('{{ route('payments.proof', $proofPayment) }}', '{{ addslashes($proofPayment->proof_file ? basename($proofPayment->proof_file) : 'Bukti Pembayaran') }}')" class="d-btn blue sm"><x-hi name="receipt-text" /> Lihat Bukti</button>
         @endif
         @if($pendingPayment)
           <form action="{{ route('admin.payments.verify', $pendingPayment) }}" method="POST" class="inline">
             @csrf
-            <button type="submit" class="d-btn green sm"><i class="fa-solid fa-badge-check"></i> Verifikasi Pembayaran</button>
+            <button type="submit" class="d-btn green sm"><x-hi name="checkmark-badge-01" /> Verifikasi Pembayaran</button>
           </form>
         @endif
         @if(!$pendingPayment && !$invoicePayment && !$proofPayment)
@@ -560,9 +560,9 @@
     $hiddenInvoicesAdmin = $registration->payments->filter(fn ($p) => \App\Models\Payment::isAbandonedOnline($p))->count();
   @endphp
   <div class="d-sec">
-    <div class="d-sec-title"><i class="fa-solid fa-clock-rotate-left"></i> Riwayat Pembayaran</div>
+    <div class="d-sec-title"><x-hi name="work-history" /> Riwayat Pembayaran</div>
     @if($successPayments->isEmpty())
-      <div class="d-empty"><i class="fa-regular fa-credit-card" style="display:block;font-size:20px;margin-bottom:6px;color:#d3d6de"></i>Belum ada riwayat pembayaran</div>
+      <div class="d-empty"><x-hi name="credit-card" style="display:block;font-size:20px;margin-bottom:6px;color:#d3d6de" />Belum ada riwayat pembayaran</div>
     @else
       @foreach ($successPayments as $payment)
         <div class="d-pay-row">
@@ -599,7 +599,7 @@
   </div>
 
   <div class="d-back">
-    <a href="{{ route('admin.registrations.index') }}" class="d-btn ghost"><i class="fa-solid fa-arrow-left"></i> Kembali</a>
+    <a href="{{ route('admin.registrations.index') }}" class="d-btn ghost"><x-hi name="arrow-left-01" /> Kembali</a>
   </div>
 
 {{-- ============================================================
@@ -609,15 +609,15 @@
   <div class="picker-panel" role="dialog" aria-modal="true" aria-labelledby="pickerTitle">
     <div class="picker-head">
       <div class="picker-title" id="pickerTitle">Pilih item</div>
-      <button type="button" class="picker-close" onclick="closePicker()" aria-label="Tutup"><i class="fa-solid fa-xmark"></i></button>
+      <button type="button" class="picker-close" onclick="closePicker()" aria-label="Tutup"><x-hi name="cancel-01" /></button>
     </div>
     <div class="picker-search">
-      <i class="fa-solid fa-magnifying-glass"></i>
+      <x-hi name="search-01" />
       <input id="pickerSearch" type="search" placeholder="Cari…" autocomplete="off">
     </div>
     <div class="picker-list" id="pickerList" role="listbox"></div>
     <div class="picker-foot">
-      <button type="button" class="picker-clear-all" onclick="clearCurrentPicker()"><i class="fa-solid fa-eraser"></i> Bersihkan</button>
+      <button type="button" class="picker-clear-all" onclick="clearCurrentPicker()"><x-hi name="eraser-01" /> Bersihkan</button>
       <button type="button" class="picker-done" onclick="closePicker()">Selesai</button>
     </div>
   </div>
@@ -655,7 +655,7 @@
 <div id="actionConfirmModal" class="d-modal-backdrop" aria-hidden="true">
   <div class="d-modal" role="dialog" aria-modal="true">
     <div class="d-modal-body">
-      <div id="actionConfirmIcon" class="d-modal-ic amber"><i class="fa-solid fa-key"></i></div>
+      <div id="actionConfirmIcon" class="d-modal-ic amber"><x-hi name="key-01" /></div>
       <div style="flex:1;min-width:0">
         <h3 id="actionConfirmTitle" class="d-modal-title"></h3>
         <p id="actionConfirmMessage" class="d-modal-msg"></p>
@@ -822,14 +822,14 @@ function toggleDocReject(id) {
 
     if (action === 'reset-password') {
       icon.className = 'd-modal-ic amber';
-      icon.innerHTML = '<i class="fa-solid fa-key"></i>';
+      icon.innerHTML = hiSvg('key-01');
       title.textContent = 'Reset password?';
       msg.textContent = 'Yakin ingin mereset password akun ' + (targetName || 'siswa') + '? Password baru akan dikirim ke email siswa.';
       btn.textContent = 'Ya, Reset';
       btn.className = 'd-btn amber';
     } else {
       icon.className = 'd-modal-ic red';
-      icon.innerHTML = '<i class="fa-solid fa-trash-can"></i>';
+      icon.innerHTML = hiSvg('delete-02');
       title.textContent = 'Hapus akun?';
       msg.textContent = 'Hapus akun siswa ' + (targetName || 'ini') + '? Seluruh data pendaftaran dan pembayarannya akan ikut terhapus permanen.';
       btn.textContent = 'Ya, Hapus';

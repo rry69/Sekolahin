@@ -21,6 +21,138 @@ input[type='date'].native-date-hidden {
 .dp-mono { font-family: 'JetBrains Mono', monospace; }
 .dp-picker { font-family: 'Inter', sans-serif; }
 
+/* ===================== ICON TREATMENT — HugeIcons (no bg, solid color, 1.4–1.6x) =====================
+   Berlaku global (semua layout: student, app, guest). Konsisten dengan dashboard admin.
+   Aturan:
+   - Hapus semua background soft circle/kotak pada container icon berakhiran -ic
+   - Ikon saja, solid, ukuran 1.4–1.6x lebih besar dari teks
+   - Warna solid per semantik (coral/blue/amber/emerald/red/gray)
+*/
+svg.hi {
+  display: inline-block;
+  width: 1em; height: 1em;
+  vertical-align: -0.15em;
+  flex: 0 0 auto;
+  stroke: currentColor;
+}
+/* Ukuran dasar pada tombol/inline: sedikit lebih besar dari teks */
+.x-btn svg.hi, .r-fbtn svg.hi, .r-gobtn svg.hi, .ste-btn svg.hi,
+.d-btn-coral svg.hi, .d-link svg.hi, .x-link svg.hi, .btn svg.hi,
+button svg.hi, .x-search svg.hi, .r-search svg.hi, .x-cap svg.hi,
+.reg-btn svg.hi, .apl-btn svg.hi, .ps-btn svg.hi, .inv-btn svg.hi,
+.st-nav a svg.hi, .st-dropdown a svg.hi, .st-dropdown form button svg.hi,
+.det-btn svg.hi, .rvw-btn svg.hi, .cre-btn svg.hi, .prf-btn svg.hi,
+.st-btn svg.hi, .prfa-btn svg.hi {
+  width: 1.15em; height: 1.15em;
+}
+/* Ikon dalam container icon badge (semua class berakhiran -ic):
+   tanpa background, tanpa kotak, ukuran 1.4–1.6x.
+   NOTE: .reg-step-ic di-exclude — itu timeline numbered circle dari registration/index.blade.php
+   yang WAJIB punya shape lingkaran, bg hijau, shadow & pulse. */
+div[class$="-ic"]:not(.reg-step-ic), span[class$="-ic"], a[class$="-ic"], button[class$="-ic"], i[class$="-ic"] {
+  background: transparent !important;
+  width: auto !important;
+  height: auto !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+div[class$="-ic"] svg.hi, span[class$="-ic"] svg.hi, a[class$="-ic"] svg.hi,
+button[class$="-ic"] svg.hi, i[class$="-ic"] svg.hi {
+  width: 1.5em; height: 1.5em;
+}
+/* SVG yang MEMBAWA class -ic langsung (icon itu sendiri, mis. <x-hi class="reg-alert-ic">) */
+svg.hi[class$="-ic"] {
+  background: transparent !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  width: 1.5em !important;
+  height: 1.5em !important;
+}
+/* Ukuran dasar per konteks (1.4–1.6x dari ukuran FA sebelumnya) */
+.reg-stat-ic { font-size: 22px; }
+.reg-row-ic { font-size: 24px; }
+.reg-hero-ic { font-size: 40px; }
+.reg-widget-ic, .reg-prereq-ic { font-size: 22px; }
+.apl-sec-ic, .cre-sec-ic, .det-sec-ic, .rvw-sec-ic, .ps-sec-ic, .inv-sec-ic { font-size: 22px; }
+.det-status-ic { font-size: 20px; }
+.det-file-ic, .det-picked-ic { font-size: 20px; }
+.det-drop-ic { font-size: 24px; }
+.inv-amount-ic, .ps-amount-ic, .ps-head-ic { font-size: 26px; }
+.inv-school-ic, .reg-row-ic { font-size: 24px; }
+.inv-m-ic, .inv-bank-head-ic, .inv-proof-ic, .ps-proof-ic { font-size: 22px; }
+.prfa-sec-ic { font-size: 18px; }
+.prfa-card-ic { font-size: 20px; }
+.prfa-support-ic { font-size: 17px; }
+.prf-modal-ic, .prfa-danger-ic { font-size: 22px; }
+.rvw-tile-ic { font-size: 22px; }
+/* ===== PENGECUALIAN: elemen dekoratif yang BUKAN icon container (berisi angka/urutan) — pertahankan shape ===== */
+/* NOTE: .reg-step-ic kini sepenuhnya dikelola di registration/index.blade.php (desain v2 numbered timeline).
+   Hapus dari global agar tidak override shadow/pulse/transform dari blade. */
+.st-ic {
+  background: #fff !important;
+  width: 38px !important;
+  height: 38px !important;
+  border-radius: 50% !important;
+  border: 2px solid #D1D5DB !important;
+  box-shadow: none !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex: 0 0 auto !important;
+}
+.st-ic { width: 26px !important; height: 26px !important; border-radius: 50% !important; border: 1.5px solid rgba(26,26,46,.22) !important; color: var(--muted) !important; font-size: 10px !important; }
+.apl-step.done .st-ic { background: var(--coral) !important; border-color: var(--coral) !important; color: #fff !important; }
+.apl-step.current .st-ic { background: linear-gradient(135deg, var(--coral), var(--coral-2)) !important; border-color: transparent !important; color: #fff !important; }
+/* ===== Warna solid per semantik (bukan soft) — kontainer berakhiran -ic ===== */
+.apl-sec-ic.coral, .cre-sec-ic.coral, .det-sec-ic.coral, .rvw-sec-ic.coral,
+.ps-sec-ic.coral, .inv-sec-ic.coral { color: var(--coral, #FF6B6B); }
+.apl-sec-ic.blue, .cre-sec-ic.blue, .det-sec-ic.blue, .rvw-sec-ic.blue,
+.ps-sec-ic.blue, .inv-sec-ic.blue { color: var(--blue, #3B82F6); }
+.apl-sec-ic.amber, .cre-sec-ic.amber, .det-sec-ic.amber, .rvw-sec-ic.amber,
+.ps-sec-ic.amber, .inv-sec-ic.amber { color: var(--amber, #F59E0B); }
+.apl-sec-ic.green, .cre-sec-ic.green, .det-sec-ic.green, .rvw-sec-ic.green,
+.ps-sec-ic.green, .inv-sec-ic.green { color: var(--green, #10B981); }
+.det-sec-ic.red, .ps-sec-ic.red, .inv-sec-ic.red { color: var(--red, #EF4444); }
+.reg-ic-blue { color: var(--blue, #3B82F6); }
+.reg-ic-green { color: var(--green, #10B981); }
+.reg-ic-red { color: var(--red, #EF4444); }
+.reg-ic-amber { color: var(--amber, #F59E0B); }
+.reg-ic-gray { color: var(--gray, #6b7280); }
+.reg-ic-indigo { color: var(--indigo, #6366F1); }
+.reg-widget-ic.cal { color: var(--blue, #3B82F6); }
+.reg-widget-ic.help { color: var(--indigo, #6366F1); }
+.rvw-tile-ic.school { color: var(--blue, #3B82F6); }
+.rvw-tile-ic.track, .rvw-tile-ic.major { color: var(--amber, #F59E0B); }
+.rvw-tile-ic.period { color: var(--muted, #8a8f9d); }
+.prfa-sec-ic.green { color: var(--green, #10B981); }
+.prfa-sec-ic.amber { color: var(--amber, #F59E0B); }
+.prfa-sec-ic.blue { color: var(--blue, #3B82F6); }
+.prfa-sec-ic.coral { color: var(--coral, #FF6B6B); }
+.inv-proof-ic.green { color: var(--green, #10B981); }
+.inv-proof-ic.gray { color: var(--gray, #6b7280); }
+/* Elemen dengan background gradient/solid lama — setelah bg dihapus, ikon solid sesuai semantik */
+.reg-hero-ic, .reg-row-ic, .det-regnum-ic, .inv-school-ic,
+.inv-method.primary .inv-m-ic, .inv-bank-head-ic, .cre-empty-ic { color: var(--coral, #FF6B6B) !important; }
+.reg-prereq.ready .reg-prereq-ic { color: var(--green, #10B981) !important; }
+.reg-prereq.warn .reg-prereq-ic { color: var(--amber, #F59E0B) !important; }
+.reg-alert.red .reg-alert-ic, .cre-alert.red .cre-alert-ic, .det-alert.red .det-alert-ic,
+.rvw-alert.red .rvw-alert-ic, .ps-alert.red .ps-alert-ic { color: var(--red, #EF4444) !important; }
+.reg-alert.amber .reg-alert-ic, .cre-alert.amber .cre-alert-ic, .det-alert.amber .det-alert-ic,
+.rvw-alert.amber .rvw-alert-ic, .ps-alert.amber .ps-alert-ic { color: var(--amber, #F59E0B) !important; }
+.reg-alert.blue .reg-alert-ic, .det-alert.info .det-alert-ic, .cre-alert.info .cre-alert-ic { color: var(--blue, #3B82F6) !important; }
+.reg-alert.info .reg-alert-ic { color: var(--indigo, #6366F1) !important; }
+.reg-alert.success .reg-alert-ic, .det-alert.green .det-alert-ic, .ps-alert.green .ps-alert-ic { color: var(--green, #10B981) !important; }
+.inv-deadline.over .inv-dl-ic, .inv-deadline.soon .inv-dl-ic { color: var(--red, #EF4444) !important; }
+.inv-deadline.normal .inv-dl-ic { color: var(--muted, #8a8f9d) !important; }
+.inv-alert.green .inv-dl-ic { color: var(--green, #10B981) !important; }
+.inv-alert.red .inv-dl-ic { color: var(--red, #EF4444) !important; }
+.det-file-ic { color: var(--gray, #6b7280) !important; }
+.ps-head-ic, .ps-amount-ic { color: var(--coral, #FF6B6B) !important; }
+.ps-proof-ic { color: var(--gray, #6b7280) !important; }
+
 @keyframes dp-pickerIn { from { opacity: 0; transform: translateY(-10px) scale(0.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
 @keyframes dp-pickerOut { from { opacity: 1; transform: translateY(0) scale(1); } to { opacity: 0; transform: translateY(-8px) scale(0.97); } }
 .dp-animate-in { animation: dp-pickerIn 180ms cubic-bezier(0.16, 1, 0.3, 1) forwards; }

@@ -37,7 +37,7 @@
 
   /* ---------- alerts (flash) ---------- */
   .rkp .k-alert { display: flex; align-items: flex-start; gap: 10px; padding: 12px 16px; border-radius: 12px; font-size: 13px; margin-bottom: 16px; font-weight: 500; }
-  .rkp .k-alert i { margin-top: 2px; }
+  .rkp .k-alert svg.hi { margin-top: 2px; }
   .rkp .k-alert.success { background: var(--green-soft); color: var(--green); }
   .rkp .k-alert.error   { background: var(--red-soft);   color: var(--red); }
   .rkp .k-alert.info    { background: var(--blue-soft);  color: var(--blue); }
@@ -61,8 +61,8 @@
   }
   .rkp .k-tabs a.k-tab:hover, .rkp .k-tabs a.doc-tab:hover { color: var(--ink); }
   .rkp .k-tabs a.k-tab.active, .rkp .k-tabs a.doc-tab.active { color: var(--coral); border-bottom-color: var(--coral); }
-  .rkp .k-tabs a .badge { background: var(--coral-soft); color: var(--coral); border-radius: 20px; padding: 1px 8px; font-size: 10.5px; font-weight: 700; }
-  .rkp .k-tabs a.active .badge { background: var(--coral); color: #fff; }
+  .rkp .k-tabs a .badge { background: transparent; border: 1px solid currentColor; color: var(--coral); border-radius: 20px; padding: 1px 8px; font-size: 10.5px; font-weight: 700; }
+  .rkp .k-tabs a.active .badge { background: transparent; border: 1px solid currentColor; color: #fff; }
   .rkp .k-tools { display: flex; align-items: center; gap: 8px; flex-shrink: 0; padding-bottom: 10px; }
 
   /* ---------- buttons ---------- */
@@ -172,17 +172,17 @@
   .rkp .k-mid .k-mid-val { font-size: 13px; color: var(--ink); font-weight: 600; }
   .rkp .k-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 5px; }
   .rkp .k-pill { display: inline-flex; align-items: center; gap: 5px; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; white-space: nowrap; }
-  .rkp .k-pill.green { background: var(--green-soft); color: var(--green); }
-  .rkp .k-pill.blue  { background: var(--blue-soft);  color: var(--blue); }
-  .rkp .k-pill.coral { background: var(--coral-soft); color: var(--coral); }
-  .rkp .k-pill.amber { background: var(--amber-soft); color: #b45309; }
+  .rkp .k-pill.green { background: transparent; border: 1px solid currentColor; color: var(--green); }
+  .rkp .k-pill.blue  { background: transparent; border: 1px solid currentColor;  color: var(--blue); }
+  .rkp .k-pill.coral { background: transparent; border: 1px solid currentColor; color: var(--coral); }
+  .rkp .k-pill.amber { background: transparent; border: 1px solid currentColor; color: #b45309; }
   .rkp .k-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; min-width: 200px; justify-content: flex-end; }
   /* mobile tabs -> dropdown */
   .rkp .k-tabs-mobile { display: none; }
 
   /* ---------- empty ---------- */
   .rkp .k-empty { text-align: center; color: var(--muted); font-size: 13.5px; padding: 40px 0; }
-  .rkp .k-empty i { display: block; font-size: 28px; margin-bottom: 8px; color: #d3d6de; }
+  .rkp .k-empty svg.hi { display: block; font-size: 28px; margin: 0 auto 8px; color: #d3d6de; }
 
   /* ---------- pagination ---------- */
   .rkp .k-pager { margin-top: 22px; display: flex; justify-content: center; }
@@ -279,15 +279,15 @@
   <p class="k-meta">Daftar siswa yang telah <b>diterima</b> dan <b>melengkapi daftar ulang</b>.</p>
 
   @if (session('success'))
-    <div class="k-alert success"><i class="fa-solid fa-circle-check"></i><span>{{ session('success') }}</span></div>
+    <div class="k-alert success"><x-hi name="checkmark-circle-02" /><span>{{ session('success') }}</span></div>
   @endif
   @if (session('error'))
-    <div class="k-alert error"><i class="fa-solid fa-circle-exclamation"></i><span>{{ session('error') }}</span></div>
+    <div class="k-alert error"><x-hi name="alert-02" /><span>{{ session('error') }}</span></div>
   @endif
 
   {{-- Summary badge (no card) --}}
   <div class="k-summary">
-    <span class="k-sum-ic"><i class="fa-solid fa-user-check"></i></span>
+    <span class="k-sum-ic"><x-hi name="user-check-01" /></span>
     <div>
       <div class="k-sum-lbl">Total Siswa Diterima</div>
       <div class="k-sum-val">{{ $registrations->total() }}</div>
@@ -309,16 +309,16 @@
     {{-- Mobile: dropdown picker pengganti tabs --}}
     <div class="k-tabs-mobile">
       <button type="button" class="r-pick" data-picker="majorTab" aria-haspopup="listbox" aria-expanded="false">
-        <i class="fa-solid fa-layer-group" style="color:var(--muted);font-size:12px"></i>
+        <x-hi name="layers-01" style="color:var(--muted);font-size:12px" />
         <span class="pick-label is-placeholder">Semua Jurusan</span>
-        <span class="pick-clear" data-clear="majorTab" role="button" tabindex="0" aria-label="Bersihkan"><i class="fa-solid fa-xmark"></i></span>
+        <span class="pick-clear" data-clear="majorTab" role="button" tabindex="0" aria-label="Bersihkan"><x-hi name="cancel-01" /></span>
       </button>
       <input type="hidden" data-picker-input="majorTab" value="{{ request('major_id') }}">
     </div>
     <div class="k-tools">
-      <button class="k-btn ghost sm" onclick="toggleFilterForm()"><i class="fa-solid fa-filter" style="font-size:10px"></i> Filter</button>
-      <a href="{{ route('admin.rekap.export.xlsx', request()->only(['major_id','period_id','search'])) }}" class="k-btn green sm" title="Export Excel"><i class="fa-solid fa-file-excel" style="font-size:10px"></i> Export Excel</a>
-      <a href="{{ route('admin.rekap.export.pdf', request()->only(['major_id','period_id','search'])) }}" class="k-btn red sm" title="Export PDF"><i class="fa-solid fa-file-pdf" style="font-size:10px"></i> Export PDF</a>
+      <button class="k-btn ghost sm" onclick="toggleFilterForm()"><x-hi name="filter" style="font-size:10px" /> Filter</button>
+      <a href="{{ route('admin.rekap.export.xlsx', request()->only(['major_id','period_id','search'])) }}" class="k-btn green sm" title="Export Excel"><x-hi name="xls-01" style="font-size:10px" /> Export Excel</a>
+      <a href="{{ route('admin.rekap.export.pdf', request()->only(['major_id','period_id','search'])) }}" class="k-btn red sm" title="Export PDF"><x-hi name="pdf-01" style="font-size:10px" /> Export PDF</a>
     </div>
   </div>
 
@@ -326,11 +326,11 @@
   <form id="filterForm" method="GET" action="{{ route('admin.rekap.index') }}" style="display:none;margin-bottom:16px;">
     <div class="k-toolbar">
       <div class="k-search">
-        <i class="fa-solid fa-magnifying-glass"></i>
+        <x-hi name="search-01" />
         <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari nama / NIS / NISN / No. Reg…">
       </div>
-      <button type="button" class="k-fbtn" onclick="toggleFilterPanel()"><i class="fa-solid fa-sliders"></i> Periode</button>
-      <button type="submit" class="k-gobtn"><i class="fa-solid fa-magnifying-glass"></i> Cari</button>
+      <button type="button" class="k-fbtn" onclick="toggleFilterPanel()"><x-hi name="sliders-horizontal" /> Periode</button>
+      <button type="submit" class="k-gobtn"><x-hi name="search-01" /> Cari</button>
     </div>
 
     <div id="filterPanel" class="k-filters" style="display:{{ request('period_id') ? 'flex' : 'none' }}">
@@ -338,22 +338,22 @@
         <label>Periode</label>
         <button type="button" class="r-pick" data-picker="period" aria-haspopup="listbox" aria-expanded="false">
           <span class="pick-label is-placeholder">Pilih periode…</span>
-          <span class="pick-clear" data-clear="period" role="button" tabindex="0" aria-label="Bersihkan"><i class="fa-solid fa-xmark"></i></span>
-          <i class="fa-solid fa-chevron-down pick-caret"></i>
+          <span class="pick-clear" data-clear="period" role="button" tabindex="0" aria-label="Bersihkan"><x-hi name="cancel-01" /></span>
+          <x-hi name="arrow-down-01" />
         </button>
         <input type="hidden" name="period_id" data-picker-input="period" value="{{ request('period_id') }}">
       </div>
-      <button type="submit" class="k-gobtn"><i class="fa-solid fa-check"></i> Terapkan</button>
+      <button type="submit" class="k-gobtn"><x-hi name="checkmark" /> Terapkan</button>
     </div>
   </form>
 
   @if ($registrations->isEmpty())
-    <div class="k-empty"><i class="fa-regular fa-folder-open"></i>Belum ada siswa yang diterima</div>
+    <div class="k-empty"><x-hi name="folder-open" />Belum ada siswa yang diterima</div>
   @else
     <div class="k-list">
       @foreach ($registrations as $reg)
       <div class="k-row">
-        <span class="k-ic"><i class="fa-solid fa-graduation-cap"></i></span>
+        <span class="k-ic"><x-hi name="mortarboard-01" /></span>
         <div class="k-body">
           <div class="k-name">{{ $reg->applicant->full_name ?? '-' }}</div>
           <div class="k-sub">
@@ -361,7 +361,7 @@
             @if ($reg->applicant->user?->email)<span class="k-dot">·</span><span class="k-email">{{ $reg->applicant->user->email }}</span>@endif
           </div>
           <div class="k-tags">
-            <span class="k-pill coral"><i class="fa-solid fa-layer-group"></i> {{ $reg->finalMajor->name ?? '-' }}</span>
+            <span class="k-pill coral"><x-hi name="layers-01" /> {{ $reg->finalMajor->name ?? '-' }}</span>
             <span class="k-pill blue">{{ $reg->registrationPeriod->name ?? '-' }}</span>
           </div>
         </div>
@@ -371,7 +371,7 @@
         </div>
         <div class="k-actions">
           <span class="k-pill green">{{ \App\Models\Registration::statusLabel($reg->status) }}</span>
-          <a href="{{ route('admin.registrations.show', $reg) }}" class="k-btn coral-soft sm"><i class="fa-solid fa-eye"></i> Detail</a>
+          <a href="{{ route('admin.registrations.show', $reg) }}" class="k-btn coral-soft sm"><x-hi name="view" /> Detail</a>
         </div>
       </div>
       @endforeach
@@ -387,15 +387,15 @@
   <div class="picker-panel" role="dialog" aria-modal="true" aria-labelledby="pickerTitle">
     <div class="picker-head">
       <div class="picker-title" id="pickerTitle">Pilih item</div>
-      <button type="button" class="picker-close" onclick="closePicker()" aria-label="Tutup"><i class="fa-solid fa-xmark"></i></button>
+      <button type="button" class="picker-close" onclick="closePicker()" aria-label="Tutup"><x-hi name="cancel-01" /></button>
     </div>
     <div class="picker-search">
-      <i class="fa-solid fa-magnifying-glass"></i>
+      <x-hi name="search-01" />
       <input id="pickerSearch" type="search" placeholder="Cari…" autocomplete="off">
     </div>
     <div class="picker-list" id="pickerList" role="listbox"></div>
     <div class="picker-foot">
-      <button type="button" class="picker-clear-all" onclick="clearCurrentPicker()"><i class="fa-solid fa-eraser"></i> Bersihkan</button>
+      <button type="button" class="picker-clear-all" onclick="clearCurrentPicker()"><x-hi name="eraser-01" /> Bersihkan</button>
       <button type="button" class="picker-done" onclick="closePicker()">Selesai</button>
     </div>
   </div>

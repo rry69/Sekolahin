@@ -37,7 +37,7 @@
     <h1 class="page-title" style="margin-bottom:2px;">Edit Jurusan</h1>
     <p style="font-size:13px;color:var(--tx2);">Perbarui data jurusan dan kuota per jalur.</p>
   </div>
-  <a href="{{ route('admin.majors.index') }}" class="btn btn-outline"><i class="fa-solid fa-arrow-left" style="font-size:10px;"></i> Kembali</a>
+  <a href="{{ route('admin.majors.index') }}" class="btn btn-outline"><x-hi name="arrow-left-01" style="font-size:10px;" /> Kembali</a>
 </div>
 
 @if ($errors->any())
@@ -56,7 +56,7 @@
   @method('PATCH')
   <div class="mjr-card">
     <div class="mjr-card-head">
-      <h4 style="margin:0;font-size:15px;font-weight:600;color:var(--tx1);"><i class="fa-solid fa-graduation-cap" style="margin-right:6px;color:var(--accent);"></i> Data Jurusan</h4>
+      <h4 style="margin:0;font-size:15px;font-weight:600;color:var(--tx1);"><x-hi name="mortarboard-01" style="margin-right:6px;color:var(--accent);" /> Data Jurusan</h4>
     </div>
     <div class="mjr-card-body">
       <div class="mjr-grid">
@@ -141,7 +141,7 @@
       <div class="mjr-submit">
         <a href="{{ route('admin.majors.index') }}" class="btn btn-outline">Batal</a>
         <button type="submit" class="btn btn-primary" id="saveBtn">
-          <i class="fa-solid fa-floppy-disk" style="font-size:11px;"></i> <span id="saveBtnText">Simpan Perubahan</span>
+          <x-hi name="save" style="font-size:11px;" /> <span id="saveBtnText">Simpan Perubahan</span>
         </button>
       </div>
     </div>

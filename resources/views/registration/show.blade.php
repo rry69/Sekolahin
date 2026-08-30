@@ -12,40 +12,40 @@
     .det-meta { font-size:13px; color:var(--muted); margin-top:6px; }
 
     .det-regnum { display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin-top:18px; padding:16px 18px; border-top:1px solid var(--divider); border-bottom:1px solid var(--divider); }
-    .det-regnum-ic { width:44px; height:44px; border-radius:13px; background:linear-gradient(135deg,var(--coral),var(--coral-2)); color:#fff; display:flex; align-items:center; justify-content:center; font-size:18px; box-shadow:0 10px 20px -10px rgba(255,107,107,.6); flex:0 0 auto; }
+    .det-regnum-ic { display:inline-flex; align-items:center; justify-content:center; font-size:24px; line-height:1; color:var(--coral); background:none; border-radius:0; box-shadow:none; width:auto; height:auto; flex:0 0 auto; }
     .det-regnum-num { font-size:18px; font-weight:800; color:var(--ink); letter-spacing:.01em; }
     .det-regnum-sub { font-size:12px; color:var(--muted); margin-top:1px; }
     .det-regnum-badge { margin-left:auto; }
 
     /* alert */
     .det-alert { display:flex; gap:13px; align-items:flex-start; border-radius:14px; padding:14px 16px; margin-top:20px; border:1px solid transparent; }
-    .det-alert i.det-alert-ic { width:22px; height:22px; border-radius:7px; display:flex; align-items:center; justify-content:center; font-size:11px; flex:0 0 auto; margin-top:1px; }
+    .det-alert svg.hi.det-alert-ic { font-size:16px; flex:0 0 auto; margin-top:2px; }
     .det-alert .det-alert-body { flex:1; min-width:0; }
     .det-alert .det-alert-t { font-weight:700; font-size:13.5px; }
     .det-alert .det-alert-p { font-size:13px; margin-top:2px; opacity:.92; }
     .det-alert.red { background:var(--red-soft); border-color:rgba(239,68,68,.25); }
-    .det-alert.red i.det-alert-ic { background:var(--red); color:#fff; }
+    .det-alert.red svg.hi.det-alert-ic { color:var(--red); }
     .det-alert.red .det-alert-t, .det-alert.red .det-alert-p { color:#B91C1C; }
     .det-alert.amber { background:var(--amber-soft); border-color:rgba(217,119,6,.3); }
-    .det-alert.amber i.det-alert-ic { background:var(--amber); color:#fff; }
+    .det-alert.amber svg.hi.det-alert-ic { color:var(--amber); }
     .det-alert.amber .det-alert-t, .det-alert.amber .det-alert-p { color:#B45309; }
     .det-alert.info { background:var(--blue-soft); border-color:rgba(37,99,235,.25); }
-    .det-alert.info i.det-alert-ic { background:var(--blue); color:#fff; }
+    .det-alert.info svg.hi.det-alert-ic { color:var(--blue); }
     .det-alert.info .det-alert-t, .det-alert.info .det-alert-p { color:#1D4ED8; }
     .det-alert.green { background:var(--green-soft); border-color:rgba(16,185,129,.3); }
-    .det-alert.green i.det-alert-ic { background:var(--green); color:#fff; }
+    .det-alert.green svg.hi.det-alert-ic { color:var(--green); }
     .det-alert.green .det-alert-t, .det-alert.green .det-alert-p { color:#047857; }
 
     /* section */
     .det-sec { border-top:1px solid var(--divider); padding:26px 0 6px; }
     .det-sec:first-of-type { border-top:none; padding-top:24px; }
     .det-sec-head { display:flex; align-items:center; gap:12px; margin-bottom:14px; flex-wrap:wrap; }
-    .det-sec-ic { width:42px; height:42px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:17px; flex:0 0 auto; }
-    .det-sec-ic.coral { background:var(--coral-soft); color:var(--coral); }
-    .det-sec-ic.blue { background:var(--blue-soft); color:var(--blue); }
-    .det-sec-ic.amber { background:var(--amber-soft); color:var(--amber); }
-    .det-sec-ic.green { background:var(--green-soft); color:var(--green); }
-    .det-sec-ic.red { background:var(--red-soft); color:var(--red); }
+    .det-sec-ic { display:inline-flex; align-items:center; justify-content:center; font-size:22px; line-height:1; flex:0 0 auto; background:none; border-radius:0; box-shadow:none; width:auto; height:auto; }
+    .det-sec-ic.coral { color:var(--coral); }
+    .det-sec-ic.blue { color:var(--blue); }
+    .det-sec-ic.amber { color:var(--amber); }
+    .det-sec-ic.green { color:var(--green); }
+    .det-sec-ic.red { color:var(--red); }
     .det-sec-ttl { font-size:14px; font-weight:800; color:var(--ink); }
     .det-sec-desc { font-size:12px; color:var(--muted); margin-top:1px; }
 
@@ -60,23 +60,23 @@
     .det-status { border:1px solid var(--divider); border-left:3px solid var(--coral); border-radius:16px; padding:18px 20px; background:transparent; }
     .det-status.pay { border-left-color:var(--blue); }
     .det-status-hd { display:flex; align-items:center; gap:10px; margin-bottom:14px; padding-bottom:12px; border-bottom:1px solid var(--divider); }
-    .det-status-ic { width:38px; height:38px; border-radius:11px; display:flex; align-items:center; justify-content:center; font-size:15px; flex:0 0 auto; background:var(--coral-soft); color:var(--coral); }
-    .det-status.pay .det-status-ic { background:var(--blue-soft); color:var(--blue); }
+    .det-status-ic { display:inline-flex; align-items:center; justify-content:center; font-size:20px; line-height:1; flex:0 0 auto; background:none; border-radius:0; box-shadow:none; width:auto; height:auto; color:var(--coral); }
+    .det-status.pay .det-status-ic { color:var(--blue); }
     .det-status-ttl { font-size:13px; font-weight:800; color:var(--ink); }
     .det-status-line { display:flex; align-items:flex-start; gap:9px; margin-top:8px; font-size:13px; color:var(--ink); }
-    .det-status-line i { color:var(--coral); font-size:12px; margin-top:2px; flex:0 0 auto; width:14px; text-align:center; }
-    .det-status.pay .det-status-line i { color:var(--blue); }
+    .det-status-line svg.hi { color:var(--coral); font-size:12px; margin-top:2px; flex:0 0 auto; width:14px; text-align:center; }
+    .det-status.pay .det-status-line svg.hi { color:var(--blue); }
     .det-status-line b { font-weight:700; }
     .det-status .det-btn { margin-top:14px; }
 
     /* pills */
     .det-pill { display:inline-flex; align-items:center; gap:6px; padding:4px 11px; border-radius:99px; font-size:11px; font-weight:700; white-space:nowrap; }
-    .det-pill.green { background:var(--green-soft); color:#047857; }
-    .det-pill.amber { background:var(--amber-soft); color:#B45309; }
-    .det-pill.red { background:var(--red-soft); color:#B91C1C; }
-    .det-pill.blue { background:var(--blue-soft); color:#1D4ED8; }
-    .det-pill.gray { background:#F3F4F6; color:var(--gray, #6b7280); }
-    .det-pill.coral { background:var(--coral-soft); color:var(--coral); }
+    .det-pill.green { background: transparent; border: 1px solid currentColor; color:#047857; }
+    .det-pill.amber { background: transparent; border: 1px solid currentColor; color:#B45309; }
+    .det-pill.red { background: transparent; border: 1px solid currentColor; color:#B91C1C; }
+    .det-pill.blue { background: transparent; border: 1px solid currentColor; color:#1D4ED8; }
+    .det-pill.gray { background: transparent; border: 1px solid currentColor; color:var(--gray, #6b7280); }
+    .det-pill.coral { background: transparent; border: 1px solid currentColor; color:var(--coral); }
 
     /* buttons */
     .det-btn { display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:13px 20px; border-radius:12px; font-size:14px; font-weight:700; transition:transform .15s, box-shadow .15s, background .15s; min-height:44px; cursor:pointer; border:none; text-decoration:none; }
@@ -112,7 +112,7 @@
 
     .det-file-row { display:flex; align-items:flex-start; gap:11px; padding:12px 4px; border-bottom:1px solid var(--divider); }
     .det-file-row:last-of-type { border-bottom:none; }
-    .det-file-ic { width:38px; height:38px; border-radius:11px; background:#F3F4F6; color:var(--gray); display:flex; align-items:center; justify-content:center; font-size:15px; flex:0 0 auto; }
+    .det-file-ic { display:inline-flex; align-items:center; justify-content:center; font-size:20px; line-height:1; color:var(--gray); background:none; border-radius:0; box-shadow:none; width:auto; height:auto; flex:0 0 auto; }
     .det-file-info { flex:1; min-width:0; }
     .det-file-name { font-size:13px; font-weight:600; color:var(--blue); background:none; border:none; padding:0; cursor:pointer; text-align:left; word-break:break-word; }
     .det-file-name:hover { text-decoration:underline; }
@@ -129,14 +129,14 @@
     .det-drop { position:relative; margin-top:12px; border:1.5px dashed rgba(26,26,46,.22); border-radius:14px; padding:20px 16px; display:flex; align-items:center; justify-content:center; text-align:center; cursor:pointer; transition:border-color .15s, background .15s; background:rgba(255,255,255,.4); }
     .det-drop-inner { display:flex; flex-direction:column; align-items:center; }
     .det-drop:hover, .det-drop.over { border-color:var(--coral); background:var(--coral-soft); }
-    .det-drop-ic { width:42px; height:42px; border-radius:12px; background:var(--coral-soft); color:var(--coral); display:flex; align-items:center; justify-content:center; font-size:16px; margin:0 auto 8px; }
+    .det-drop-ic { display:inline-flex; align-items:center; justify-content:center; font-size:24px; line-height:1; color:var(--coral); background:none; border-radius:0; box-shadow:none; width:auto; height:auto; margin:0 auto 8px; }
     .det-drop-t { font-size:13px; font-weight:700; color:var(--ink); }
     .det-drop-p { font-size:11.5px; color:var(--muted); margin-top:3px; }
     .det .det-file { position:absolute; inset:0; width:100%; height:100%; opacity:0; cursor:pointer; z-index:2; }
 
     /* picked file summary */
     .det-picked { display:flex; align-items:center; gap:12px; margin-top:12px; padding:12px 14px; border:1px solid rgba(16,185,129,.4); border-left:3px solid var(--green); border-radius:12px; background:var(--green-soft); }
-    .det-picked-ic { width:36px; height:36px; border-radius:10px; background:#fff; color:var(--green); display:flex; align-items:center; justify-content:center; font-size:14px; flex:0 0 auto; }
+    .det-picked-ic { display:inline-flex; align-items:center; justify-content:center; font-size:20px; line-height:1; color:var(--green); background:none; border-radius:0; box-shadow:none; width:auto; height:auto; flex:0 0 auto; }
     .det-picked-info { flex:1; min-width:0; }
     .det-picked-name { font-size:12.5px; font-weight:700; color:#065F46; word-break:break-word; }
     .det-picked-size { font-size:11px; color:#047857; margin-top:1px; }
@@ -157,7 +157,7 @@
 
     /* accepted / notice */
     .det-notice { display:flex; gap:14px; align-items:flex-start; border-radius:16px; padding:20px; border:1px solid rgba(16,185,129,.35); border-left:3px solid var(--green); background:var(--green-soft); margin-top:26px; }
-    .det-notice i.det-notice-ic { color:var(--green); font-size:20px; margin-top:1px; }
+    .det-notice svg.hi.det-notice-ic { color:var(--green); font-size:20px; margin-top:1px; }
     .det-notice-t { font-size:14px; font-weight:800; color:#065F46; }
     .det-notice-p { margin-top:4px; font-size:13px; line-height:1.6; color:#047857; }
     .det-notice .det-btn { margin-top:14px; }
@@ -168,16 +168,16 @@
     .det .det-modal { width:100%; max-width:420px; background:#fff; border-radius:18px; padding:22px; box-shadow:0 24px 60px -18px rgba(26,26,46,.4); animation:detModalPop .2s cubic-bezier(.22,1.2,.36,1); }
     @keyframes detModalPop { from { opacity:0; transform:translateY(8px) scale(.98); } to { opacity:1; transform:translateY(0) scale(1); } }
     .det .det-modal-body { display:flex; gap:13px; margin-bottom:16px; }
-    .det .det-modal-ic { flex:0 0 auto; width:42px; height:42px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:17px; }
-    .det .det-modal-ic.red { background:var(--red-soft); color:var(--red); }
-    .det .det-modal-ic.amber { background:var(--amber-soft); color:#b45309; }
+    .det .det-modal-ic { flex:0 0 auto; display:inline-flex; align-items:center; justify-content:center; font-size:22px; line-height:1; background:none; border-radius:0; box-shadow:none; width:auto; height:auto; }
+    .det .det-modal-ic.red { color:var(--red); }
+    .det .det-modal-ic.amber { color:#b45309; }
     .det .det-modal-t { font-size:15px; font-weight:800; color:var(--ink); }
     .det .det-modal-p { font-size:12.5px; color:var(--muted); margin-top:3px; line-height:1.5; }
     .det .det-modal-list { margin-top:10px; padding:12px 14px; background:var(--amber-soft); border-radius:11px; }
     .det .det-modal-list p { font-size:11.5px; font-weight:700; color:#B45309; margin-bottom:6px; }
     .det .det-modal-list ul { list-style:none; padding:0; margin:0; }
     .det .det-modal-list li { display:flex; align-items:flex-start; gap:7px; font-size:11.5px; color:#B45309; margin-top:5px; }
-    .det .det-modal-list li i { margin-top:1px; }
+    .det .det-modal-list li svg.hi { margin-top:1px; }
     .det .det-modal-ack { display:flex; align-items:flex-start; gap:10px; margin-top:16px; font-size:12px; color:var(--ink); cursor:pointer; }
     .det .det-modal-ack input { width:17px; height:17px; margin-top:1px; accent-color:var(--red); flex:0 0 auto; }
     .det .det-modal-foot { display:flex; justify-content:flex-end; gap:10px; margin-top:18px; padding-top:16px; border-top:1px solid var(--divider); }
@@ -199,7 +199,7 @@
       {{-- Crumbs + title --}}
       <div class="det-crumb">
         <a href="{{ route('registration.index') }}">Pendaftaran</a>
-        <i class="fa-solid fa-chevron-right" style="font-size:9px"></i>
+        <x-hi icon="fa-chevron-right" style="font-size:9px" />
         <span>Detail Pendaftaran</span>
       </div>
       <h1 class="det-title">Detail Pendaftaran</h1>
@@ -208,20 +208,20 @@
       {{-- Session banners --}}
       @if (session('success'))
         <div class="det-alert green">
-          <i class="fa-solid fa-circle-check det-alert-ic"></i>
+          <x-hi icon="fa-circle-check" class="det-alert-ic" />
           <div class="det-alert-body"><p class="det-alert-p">{{ session('success') }}</p></div>
         </div>
       @endif
 
       @if (session('error'))
         <div class="det-alert red">
-          <i class="fa-solid fa-circle-exclamation det-alert-ic"></i>
+          <x-hi icon="fa-circle-exclamation" class="det-alert-ic" />
           <div class="det-alert-body"><p class="det-alert-p">{{ session('error') }}</p></div>
         </div>
       @endif
       @if (($errors ?? null) && $errors->any())
         <div class="det-alert red">
-          <i class="fa-solid fa-circle-exclamation det-alert-ic"></i>
+          <x-hi icon="fa-circle-exclamation" class="det-alert-ic" />
           <div class="det-alert-body">
             <p class="det-alert-t">Upload gagal</p>
             @foreach ($errors->all() as $err)
@@ -234,7 +234,7 @@
       @if (!isset($isAdmin) || !$isAdmin)
         @if ($registration->status === 'withdrawn')
           <div class="det-alert amber">
-            <i class="fa-solid fa-person-walking-arrow-right det-alert-ic"></i>
+            <x-hi icon="fa-person-walking-arrow-right" class="det-alert-ic" />
             <div class="det-alert-body">
               <p class="det-alert-t">Anda telah Mundur diri dari pendaftaran ini</p>
               <p class="det-alert-p">Anda dapat membuat pendaftaran baru jika periode pendaftaran masih dibuka.</p>
@@ -249,7 +249,7 @@
         @endphp
         @if ($registration->status === 'rejected' || $rejectedDocs->count() > 0)
           <div class="det-alert red">
-            <i class="fa-solid fa-triangle-exclamation det-alert-ic"></i>
+            <x-hi icon="fa-triangle-exclamation" class="det-alert-ic" />
             <div class="det-alert-body">
               <p class="det-alert-t">{{ $registration->status === 'rejected' ? 'Pendaftaran Anda ditolak' : 'Dokumen Anda ada yang ditolak' }}</p>
               <p class="det-alert-p">
@@ -267,7 +267,7 @@
         @endif
         @if (!empty($registration->verified_notes) && $registration->status !== 'rejected' && $rejectedDocs->count() === 0)
           <div class="det-alert info">
-            <i class="fa-solid fa-comment-dots det-alert-ic"></i>
+            <x-hi icon="fa-comment-dots" class="det-alert-ic" />
             <div class="det-alert-body">
               <p class="det-alert-t">Catatan dari Panitia</p>
               <p class="det-alert-p">{{ $registration->verified_notes }}</p>
@@ -288,7 +288,7 @@
           @endphp
           @if ($isDeadlineExpired)
             <div class="det-alert red">
-              <i class="fa-solid fa-circle-exclamation det-alert-ic"></i>
+              <x-hi icon="fa-circle-exclamation" class="det-alert-ic" />
               <div class="det-alert-body">
                 <p class="det-alert-t">Batas waktu telah terlewati!</p>
                 <p class="det-alert-p">Pendaftaran ini akan segera dibatalkan otomatis karena melebihi batas waktu penyelesaian ({{ $registration->deadline_at->format('d M Y H:i') }}).</p>
@@ -296,7 +296,7 @@
             </div>
           @elseif ($hoursRemaining !== null && $hoursRemaining <= 24)
             <div class="det-alert amber">
-              <i class="fa-solid fa-clock det-alert-ic"></i>
+              <x-hi icon="fa-clock" class="det-alert-ic" />
               <div class="det-alert-body">
                 <p class="det-alert-t">Segera selesaikan pendaftaran Anda!</p>
                 <p class="det-alert-p">Sisa waktu: <strong>{{ $registration->getDeadlineLabel() }}</strong> (sampai {{ $registration->deadline_at->format('d M Y H:i') }}). Segera lengkapi dokumen dan lakukan pembayaran sebelum pendaftaran dibatalkan otomatis.</p>
@@ -304,7 +304,7 @@
             </div>
           @else
             <div class="det-alert info">
-              <i class="fa-solid fa-hourglass-half det-alert-ic"></i>
+              <x-hi icon="fa-hourglass-half" class="det-alert-ic" />
               <div class="det-alert-body">
                 <p class="det-alert-p"><strong>Batas waktu penyelesaian:</strong> {{ $registration->deadline_at->format('d M Y H:i') }} (sisa {{ $registration->getDeadlineLabel() }})</p>
               </div>
@@ -315,7 +315,7 @@
 
       {{-- Registration number --}}
       <div class="det-regnum">
-        <span class="det-regnum-ic"><i class="fa-solid fa-file-signature"></i></span>
+        <span class="det-regnum-ic"><x-hi icon="fa-file-signature" /></span>
         <div>
           <p class="det-regnum-num">{{ $registration->registration_number }}</p>
           <p class="det-regnum-sub">Dibuat: {{ $registration->created_at->format('d M Y H:i') }}</p>
@@ -335,7 +335,7 @@
       {{-- ===== INFORMASI PENDAFTAR ===== --}}
       <section class="det-sec">
         <div class="det-sec-head">
-          <div class="det-sec-ic coral"><i class="fa-solid fa-user-graduate"></i></div>
+          <div class="det-sec-ic coral"><x-hi icon="fa-user-graduate" /></div>
           <div>
             <p class="det-sec-ttl">Informasi Pendaftaran</p>
             <p class="det-sec-desc">Data pendaftar dan detail pilihan pendaftaran.</p>
@@ -390,7 +390,7 @@
       {{-- ===== STATUS ===== --}}
       <section class="det-sec">
         <div class="det-sec-head">
-          <div class="det-sec-ic blue"><i class="fa-solid fa-gauge-high"></i></div>
+          <div class="det-sec-ic blue"><x-hi icon="fa-gauge-high" /></div>
           <div>
             <p class="det-sec-ttl">Status Pendaftaran &amp; Pembayaran</p>
             <p class="det-sec-desc">Pantau progres pendaftaran dan kewajiban pembayaran kamu.</p>
@@ -401,7 +401,7 @@
           {{-- Status Pendaftaran --}}
           <div class="det-status">
             <div class="det-status-hd">
-              <span class="det-status-ic"><i class="fa-solid fa-file-circle-check"></i></span>
+              <span class="det-status-ic"><x-hi icon="fa-file-circle-check" /></span>
               <p class="det-status-ttl">Status Pendaftaran</p>
             </div>
             @php
@@ -442,13 +442,13 @@
                 default => 'gray',
               };
             @endphp
-            <span class="det-pill {{ $statusTone }}"><i class="fa-solid fa-circle"></i> {{ $statusLabel }}</span>
+            <span class="det-pill {{ $statusTone }}"><x-hi icon="fa-circle" /> {{ $statusLabel }}</span>
 
             @if ($registration->status === 'pending' && !$docsComplete)
-              <div class="det-status-line"><i class="fa-solid fa-circle-info"></i><span>Lengkapi dokumen yang masih belum diupload.</span></div>
+              <div class="det-status-line"><x-hi icon="fa-circle-info" /><span>Lengkapi dokumen yang masih belum diupload.</span></div>
             @endif
             @if ($registration->documents_verified_at)
-              <div class="det-status-line"><i class="fa-solid fa-circle-check"></i><span>Diverifikasi: <b>{{ $registration->documents_verified_at->format('d M Y H:i') }}</b></span></div>
+              <div class="det-status-line"><x-hi icon="fa-circle-check" /><span>Diverifikasi: <b>{{ $registration->documents_verified_at->format('d M Y H:i') }}</b></span></div>
             @endif
             @if ($registration->deadline_at && $registration->status === 'pending')
               @php
@@ -456,7 +456,7 @@
                 $isExpired = $registration->isDeadlineExpired();
               @endphp
               @if ($isExpired)
-                <div class="det-status-line"><i class="fa-solid fa-triangle-exclamation"></i><span style="color:var(--red)">Batas waktu telah terlewati. Pendaftaran akan dibatalkan otomatis.</span></div>
+                <div class="det-status-line"><x-hi icon="fa-triangle-exclamation" /><span style="color:var(--red)">Batas waktu telah terlewati. Pendaftaran akan dibatalkan otomatis.</span></div>
               @elseif ($hoursRemaining !== null)
                 @php
                   $timeTone = $hoursRemaining <= 24 ? 'var(--red)' : 'var(--ink)';
@@ -464,25 +464,25 @@
                     ? floor($hoursRemaining / 24) . ' hari ' . ($hoursRemaining % 24) . ' jam'
                     : $hoursRemaining . ' jam';
                 @endphp
-                <div class="det-status-line"><i class="fa-solid fa-hourglass-end"></i><span>Sisa waktu: <b style="color:{{ $timeTone }}">{{ $timeLabel }}</b></span></div>
+                <div class="det-status-line"><x-hi icon="fa-hourglass-end" /><span>Sisa waktu: <b style="color:{{ $timeTone }}">{{ $timeLabel }}</b></span></div>
               @endif
             @endif
             @if ($registration->canceled_at)
-              <div class="det-status-line"><i class="fa-solid fa-ban"></i><span style="color:var(--red)">Dibatalkan pada: {{ $registration->canceled_at->format('d M Y H:i') }}</span></div>
+              <div class="det-status-line"><x-hi icon="fa-ban" /><span style="color:var(--red)">Dibatalkan pada: {{ $registration->canceled_at->format('d M Y H:i') }}</span></div>
             @endif
             @if ($registration->withdrawn_at)
-              <div class="det-status-line"><i class="fa-solid fa-person-walking-arrow-right"></i><span style="color:var(--amber)">Mengundurkan diri pada: {{ $registration->withdrawn_at->format('d M Y H:i') }}</span></div>
+              <div class="det-status-line"><x-hi icon="fa-person-walking-arrow-right" /><span style="color:var(--amber)">Mengundurkan diri pada: {{ $registration->withdrawn_at->format('d M Y H:i') }}</span></div>
             @endif
 
             @if ($isStudentView && $registration->status === 'pending' && !$docsComplete)
-              <button type="button" id="det-scroll-docs" class="det-btn coral sm"><i class="fa-solid fa-arrow-up-from-bracket"></i> Lengkapi Dokumen</button>
+              <button type="button" id="det-scroll-docs" class="det-btn coral sm"><x-hi icon="fa-arrow-up-from-bracket" /> Lengkapi Dokumen</button>
             @endif
           </div>
 
           {{-- Status Pembayaran --}}
           <div class="det-status pay">
             <div class="det-status-hd">
-              <span class="det-status-ic"><i class="fa-solid fa-credit-card"></i></span>
+              <span class="det-status-ic"><x-hi icon="fa-credit-card" /></span>
               <p class="det-status-ttl">Status Pembayaran</p>
             </div>
             @php
@@ -495,9 +495,9 @@
                 default => 'gray',
               };
             @endphp
-            <span class="det-pill {{ $payTone }}"><i class="fa-solid fa-circle"></i> {{ $paymentLabel }}</span>
+            <span class="det-pill {{ $payTone }}"><x-hi icon="fa-circle" /> {{ $paymentLabel }}</span>
             @if ($registration->payment_amount)
-              <div class="det-status-line"><i class="fa-solid fa-wallet"></i><span>Jumlah: <b>Rp {{ number_format($registration->payment_amount, 0, ',', '.') }}</b></span></div>
+              <div class="det-status-line"><x-hi icon="fa-wallet" /><span>Jumlah: <b>Rp {{ number_format($registration->payment_amount, 0, ',', '.') }}</b></span></div>
             @endif
             @php
               $trackNameForPay = $registration->registrationTrack->name ?? '';
@@ -506,7 +506,7 @@
             @endphp
             @if ($payLocked)
               <div class="det-alert amber" style="margin-top:14px">
-                <i class="fa-solid fa-lock det-alert-ic"></i>
+                <x-hi icon="fa-lock" class="det-alert-ic" />
                 <div class="det-alert-body">
                   <p class="det-alert-t">Pembayaran belum tersedia</p>
                   <p class="det-alert-p">Pembayaran terbuka setelah seluruh berkas kamu <strong>Terverifikasi</strong> oleh panitia. Nominal biaya akan muncul di sini.</p>
@@ -520,7 +520,7 @@
       @if ($registration->notes)
       <section class="det-sec">
         <div class="det-sec-head">
-          <div class="det-sec-ic amber"><i class="fa-solid fa-note-sticky"></i></div>
+          <div class="det-sec-ic amber"><x-hi icon="fa-note-sticky" /></div>
           <div>
             <p class="det-sec-ttl">Catatan</p>
             <p class="det-sec-desc">Catatan dari panitia untuk pendaftaran ini.</p>
@@ -532,7 +532,7 @@
 
       @if($docsComplete && $registration->payment_status === 'paid' && !in_array($registration->status, ['accepted', 're_registration_complete']))
         <div class="det-alert info" style="margin-top:20px">
-          <i class="fa-solid fa-circle-check det-alert-ic"></i>
+          <x-hi icon="fa-circle-check" class="det-alert-ic" />
           <div class="det-alert-body">
             <p class="det-alert-t">Dokumen dan Pembayaran Lengkap</p>
             <p class="det-alert-p">Menunggu verifikasi panitia — setelah diverifikasi akan muncul instruksi cetak kartu daftar ulang.</p>
@@ -543,7 +543,7 @@
       {{-- ===== UPLOAD DOKUMEN ===== --}}
       <section class="det-sec" id="upload-section">
         <div class="det-sec-head">
-          <div class="det-sec-ic coral"><i class="fa-solid fa-folder-open"></i></div>
+          <div class="det-sec-ic coral"><x-hi icon="fa-folder-open" /></div>
           <div>
             <p class="det-sec-ttl">Upload Dokumen</p>
             <p class="det-sec-desc">Unggah berkas persyaratan. Klik atau seret file pada area yang tersedia.</p>
@@ -552,7 +552,7 @@
 
         @if($isWithdrawn)
           <div class="det-alert amber" style="margin-top:0">
-            <i class="fa-solid fa-lock det-alert-ic"></i>
+            <x-hi icon="fa-lock" class="det-alert-ic" />
             <div class="det-alert-body">
               <p class="det-alert-t">Upload dokumen dikunci — Anda telah mengundurkan diri.</p>
               <p class="det-alert-p">Status semua dokumen diubah menjadi <strong>Ditolak</strong> (Pendaftar mengundurkan diri). Tidak dapat menambah atau mengganti dokumen.</p>
@@ -632,16 +632,16 @@
                 @if($docsOfType->count() > 0)
                   @foreach($docsOfType as $doc)
                     <div class="det-file-row">
-                      <span class="det-file-ic"><i class="fa-solid fa-file-lines"></i></span>
+                      <span class="det-file-ic"><x-hi icon="fa-file-lines" /></span>
                       <div class="det-file-info">
                         <button type="button" onclick="showFileModal('{{ route('registration.documents.download', [$registration, $doc]) }}', '{{ $doc->file_name }}')" class="det-file-name">{{ $doc->file_name }}</button>
                         <p class="det-file-status">
                           @if($doc->verified_at)
-                            <span class="det-pill green"><i class="fa-solid fa-circle-check"></i> Terverifikasi</span>
+                            <span class="det-pill green"><x-hi icon="fa-circle-check" /> Terverifikasi</span>
                           @elseif($doc->verification_notes)
-                            <span class="det-pill red"><i class="fa-solid fa-circle-xmark"></i> Ditolak</span>
+                            <span class="det-pill red"><x-hi icon="fa-circle-xmark" /> Ditolak</span>
                           @else
-                            <span class="det-pill amber"><i class="fa-solid fa-clock"></i> Menunggu Verifikasi</span>
+                            <span class="det-pill amber"><x-hi icon="fa-clock" /> Menunggu Verifikasi</span>
                           @endif
                         </p>
                         @if($doc->verification_notes)
@@ -650,10 +650,10 @@
                       </div>
                       <div class="det-file-actions">
                         @if(isset($isAdmin) && $isAdmin && !$doc->verified_at)
-                          <button type="button" onclick="submitDocAction('{{ route('admin.documents.verify', $doc) }}', 'PATCH')" class="det-mini green"><i class="fa-solid fa-check"></i> Verifikasi</button>
-                          <button type="button" onclick="openRejectModal({{ $doc->id }})" class="det-mini red"><i class="fa-solid fa-xmark"></i> Tolak</button>
+                          <button type="button" onclick="submitDocAction('{{ route('admin.documents.verify', $doc) }}', 'PATCH')" class="det-mini green"><x-hi icon="fa-check" /> Verifikasi</button>
+                          <button type="button" onclick="openRejectModal({{ $doc->id }})" class="det-mini red"><x-hi icon="fa-xmark" /> Tolak</button>
                         @elseif($isStudentView && !$isWithdrawn)
-                          <button type="button" onclick="submitDocAction('{{ route('registration.documents.delete', [$registration, $doc]) }}', 'DELETE')" class="det-mini red"><i class="fa-solid fa-trash"></i> Hapus</button>
+                          <button type="button" onclick="submitDocAction('{{ route('registration.documents.delete', [$registration, $doc]) }}', 'DELETE')" class="det-mini red"><x-hi icon="fa-trash" /> Hapus</button>
                         @endif
                       </div>
                     </div>
@@ -678,28 +678,28 @@
                     <input type="file" name="documents[{{ $type }}]{{ in_array($type, $multi) ? '[]' : '' }}" {{ in_array($type, $multi) ? 'multiple' : '' }}
                         accept=".pdf,.jpg,.jpeg,.png" class="det-file" id="det-input-{{ $type }}" data-type="{{ $type }}">
                     <span class="det-drop-inner">
-                      <span class="det-drop-ic"><i class="fa-solid fa-cloud-arrow-up"></i></span>
+                      <span class="det-drop-ic"><x-hi icon="fa-cloud-arrow-up" /></span>
                       <span class="det-drop-t">Klik atau seret file ke sini</span>
                       <span class="det-drop-p">PDF, JPG, PNG · maks 2MB{{ in_array($type, $multi) ? ' · bisa pilih beberapa file' : '' }}</span>
                     </span>
                   </label>
                   <div class="det-picked" id="det-picked-{{ $type }}" style="display:none">
-                    <span class="det-picked-ic"><i class="fa-solid fa-file"></i></span>
+                    <span class="det-picked-ic"><x-hi icon="fa-file" /></span>
                     <div class="det-picked-info">
                       <p class="det-picked-name" id="det-picked-name-{{ $type }}"></p>
                       <p class="det-picked-size" id="det-picked-size-{{ $type }}"></p>
                     </div>
                     <div class="det-picked-actions">
-                      <button type="button" class="det-mini ghost" data-ganti data-type="{{ $type }}"><i class="fa-solid fa-rotate"></i> Ganti</button>
-                      <button type="button" class="det-mini red" data-hapus data-type="{{ $type }}"><i class="fa-solid fa-trash"></i> Hapus</button>
+                      <button type="button" class="det-mini ghost" data-ganti data-type="{{ $type }}"><x-hi icon="fa-rotate" /> Ganti</button>
+                      <button type="button" class="det-mini red" data-hapus data-type="{{ $type }}"><x-hi icon="fa-trash" /> Hapus</button>
                     </div>
                   </div>
                   @else
-                    <p class="det-doc-sub" style="margin-top:12px;color:var(--green);font-weight:600"><i class="fa-solid fa-circle-check"></i> Sudah terupload — menunggu verifikasi. Jika ditolak, opsi revisi akan muncul di sini.</p>
+                    <p class="det-doc-sub" style="margin-top:12px;color:var(--green);font-weight:600"><x-hi icon="fa-circle-check" /> Sudah terupload — menunggu verifikasi. Jika ditolak, opsi revisi akan muncul di sini.</p>
                   @endif
                 @elseif($isWithdrawn)
                   <div style="margin-top:12px">
-                    <span class="det-pill red"><i class="fa-solid fa-lock"></i> Terkunci</span>
+                    <span class="det-pill red"><x-hi icon="fa-lock" /> Terkunci</span>
                   </div>
                 @endif
               </div>
@@ -714,12 +714,12 @@
             @endphp
             @if($isStudentView && !$isWithdrawn && $anyNeedsUpload)
               <div style="margin-top:22px;padding-top:20px;border-top:1px solid var(--divider)">
-                <button type="submit" class="det-btn coral"><i class="fa-solid fa-cloud-arrow-up"></i> Upload Semua Dokumen</button>
+                <button type="submit" class="det-btn coral"><x-hi icon="fa-cloud-arrow-up" /> Upload Semua Dokumen</button>
                 <p class="det-doc-sub" style="margin-top:10px">PDF, JPG, PNG (max 2MB). Pilih file pada area upload, sekali klik akan mengunggah semua; dokumen yang sudah ada ditimpa.</p>
               </div>
             @elseif($isStudentView && !$isWithdrawn && !$anyNeedsUpload)
               <div style="margin-top:22px;padding-top:20px;border-top:1px solid var(--divider)">
-                <p class="det-doc-sub" style="color:var(--green);font-weight:600"><i class="fa-solid fa-circle-check"></i> Semua dokumen telah terupload — menunggu verifikasi panitia.</p>
+                <p class="det-doc-sub" style="color:var(--green);font-weight:600"><x-hi icon="fa-circle-check" /> Semua dokumen telah terupload — menunggu verifikasi panitia.</p>
               </div>
             @endif
           </form>
@@ -744,7 +744,7 @@
       @endphp
       <section class="det-sec">
         <div class="det-sec-head">
-          <div class="det-sec-ic blue"><i class="fa-solid fa-credit-card"></i></div>
+          <div class="det-sec-ic blue"><x-hi icon="fa-credit-card" /></div>
           <div>
             <p class="det-sec-ttl">Pembayaran</p>
             <p class="det-sec-desc">Lengkapi pembayaran biaya pendaftaran kamu.</p>
@@ -753,7 +753,7 @@
 
         @if($isWithdrawnPay)
           <div class="det-alert red" style="margin-top:0">
-            <i class="fa-solid fa-circle-xmark det-alert-ic"></i>
+            <x-hi icon="fa-circle-xmark" class="det-alert-ic" />
             <div class="det-alert-body">
               <p class="det-alert-t">Pembayaran dibatalkan — Anda telah mengundurkan diri</p>
               <p class="det-alert-p">Pendaftaran <strong>{{ $registration->registration_number }}</strong> dibatalkan pada {{ $registration->withdrawn_at?->format('d M Y H:i') }}. Status dokumen telah diubah menjadi <strong>Ditolak</strong> dan pembayaran tidak dapat dilanjutkan.</p>
@@ -761,7 +761,7 @@
           </div>
         @elseif($payLocked)
           <div class="det-alert amber" style="margin-top:0">
-            <i class="fa-solid fa-lock det-alert-ic"></i>
+            <x-hi icon="fa-lock" class="det-alert-ic" />
             <div class="det-alert-body">
               <p class="det-alert-t">Pembayaran jalur {{ $trackNameForPay }} belum tersedia</p>
               <p class="det-alert-p">Lengkapi berkas lalu tunggu panitia memverifikasi. Setelah status berkas <strong>Terverifikasi</strong>, nominal biaya akan muncul di sini.</p>
@@ -791,7 +791,7 @@
               <input type="hidden" name="amount" value="{{ $paymentAmount }}">
               <input type="hidden" name="payment_method" value="online">
               <button type="submit" class="det-btn coral" style="width:100%">
-                <i class="fa-solid fa-credit-card"></i> Bayar Online via Xendit
+                <x-hi icon="fa-credit-card" /> Bayar Online via Xendit
               </button>
               <p class="det-doc-sub" style="text-align:center;margin-top:8px">Transfer Bank, E-Wallet, Retail Store</p>
             </form>
@@ -825,26 +825,26 @@
                   <label class="det-drop" id="det-drop-proof" for="det-input-proof">
                     <input type="file" name="proof_file" accept=".pdf,.jpg,.jpeg,.png" required class="det-file" id="det-input-proof" data-type="proof">
                     <span class="det-drop-inner">
-                      <span class="det-drop-ic"><i class="fa-solid fa-cloud-arrow-up"></i></span>
+                      <span class="det-drop-ic"><x-hi icon="fa-cloud-arrow-up" /></span>
                       <span class="det-drop-t">Klik atau seret file ke sini</span>
                       <span class="det-drop-p">PDF, JPG, PNG · maks 2MB</span>
                     </span>
                   </label>
                   <div class="det-picked" id="det-picked-proof" style="display:none">
-                    <span class="det-picked-ic"><i class="fa-solid fa-file"></i></span>
+                    <span class="det-picked-ic"><x-hi icon="fa-file" /></span>
                     <div class="det-picked-info">
                       <p class="det-picked-name" id="det-picked-name-proof"></p>
                       <p class="det-picked-size" id="det-picked-size-proof"></p>
                     </div>
                     <div class="det-picked-actions">
-                      <button type="button" class="det-mini ghost" data-ganti data-type="proof"><i class="fa-solid fa-rotate"></i> Ganti</button>
-                      <button type="button" class="det-mini red" data-hapus data-type="proof"><i class="fa-solid fa-trash"></i> Hapus</button>
+                      <button type="button" class="det-mini ghost" data-ganti data-type="proof"><x-hi icon="fa-rotate" /> Ganti</button>
+                      <button type="button" class="det-mini red" data-hapus data-type="proof"><x-hi icon="fa-trash" /> Hapus</button>
                     </div>
                   </div>
                   <p class="det-doc-sub" style="margin-top:6px">PDF, JPG, PNG (max 2MB)</p>
                 </div>
 
-                <button type="submit" class="det-btn green"><i class="fa-solid fa-cloud-arrow-up"></i> Upload Bukti Transfer</button>
+                <button type="submit" class="det-btn green"><x-hi icon="fa-cloud-arrow-up" /> Upload Bukti Transfer</button>
               </form>
             </div>
           </div>
@@ -860,7 +860,7 @@
       @if($payments->count() > 0)
       <section class="det-sec">
         <div class="det-sec-head">
-          <div class="det-sec-ic green"><i class="fa-solid fa-clock-rotate-left"></i></div>
+          <div class="det-sec-ic green"><x-hi icon="fa-clock-rotate-left" /></div>
           <div>
             <p class="det-sec-ttl">Riwayat Pembayaran</p>
             <p class="det-sec-desc">Daftar transaksi pembayaran pada pendaftaran ini.</p>
@@ -869,7 +869,7 @@
         <div>
           @foreach($payments as $payment)
             <div class="det-file-row">
-              <span class="det-file-ic"><i class="fa-solid fa-receipt"></i></span>
+              <span class="det-file-ic"><x-hi icon="fa-receipt" /></span>
               <div class="det-file-info">
                 <p class="det-doc-label" style="font-size:13px">
                   @if($payment->payment_method === 'online')
@@ -920,7 +920,7 @@
           $reReg = $registration->reRegistration;
         @endphp
         <div class="det-notice">
-          <i class="fa-solid fa-circle-check det-notice-ic"></i>
+          <x-hi icon="fa-circle-check" class="det-notice-ic" />
           <div>
             <p class="det-notice-t">Anda telah diterima sebagai siswa {{ $registration->school->name }}</p>
             @if($registration->finalMajor)
@@ -932,7 +932,7 @@
 
             @if($registration->status === 're_registration_complete')
               <p class="det-notice-p">Daftar ulang selesai — silakan unduh kartu daftar ulang.</p>
-              <a href="{{ route('registration.proof', $registration) }}" target="_blank" class="det-btn green"><i class="fa-solid fa-download"></i> Unduh Kartu Daftar Ulang</a>
+              <a href="{{ route('registration.proof', $registration) }}" target="_blank" class="det-btn green"><x-hi icon="fa-download" /> Unduh Kartu Daftar Ulang</a>
             @else
               @php
                 $rrLevelId = $registration->registrationPeriod->school_level_id ?? null;
@@ -952,7 +952,7 @@
                   @endif
                 </p>
               @endif
-              <a href="{{ route('registration.proof', $registration) }}" target="_blank" class="det-btn green"><i class="fa-solid fa-download"></i> Unduh Kartu Daftar Ulang</a>
+              <a href="{{ route('registration.proof', $registration) }}" target="_blank" class="det-btn green"><x-hi icon="fa-download" /> Unduh Kartu Daftar Ulang</a>
               @if($reReg && $reReg->verification_code)
                 <p class="det-notice-p">Kode verifikasi: <strong style="font-family:ui-monospace,monospace;letter-spacing:.08em">{{ $reReg->verification_code }}</strong> — tunjukkan kepada panitia di sekolah.</p>
               @endif
@@ -985,23 +985,23 @@
                       <label class="det-drop" id="det-drop-proof_rr" for="det-input-proof_rr">
                         <input type="file" name="proof_file" accept=".pdf,.jpg,.jpeg,.png" required class="det-file" id="det-input-proof_rr" data-type="proof_rr">
                         <span class="det-drop-inner">
-                          <span class="det-drop-ic"><i class="fa-solid fa-cloud-arrow-up"></i></span>
+                          <span class="det-drop-ic"><x-hi icon="fa-cloud-arrow-up" /></span>
                           <span class="det-drop-t">Klik atau seret file ke sini</span>
                           <span class="det-drop-p">PDF, JPG, PNG · maks 2MB</span>
                         </span>
                       </label>
                       <div class="det-picked" id="det-picked-proof_rr" style="display:none">
-                        <span class="det-picked-ic"><i class="fa-solid fa-file"></i></span>
+                        <span class="det-picked-ic"><x-hi icon="fa-file" /></span>
                         <div class="det-picked-info">
                           <p class="det-picked-name" id="det-picked-name-proof_rr"></p>
                           <p class="det-picked-size" id="det-picked-size-proof_rr"></p>
                         </div>
                         <div class="det-picked-actions">
-                          <button type="button" class="det-mini ghost" data-ganti data-type="proof_rr"><i class="fa-solid fa-rotate"></i> Ganti</button>
-                          <button type="button" class="det-mini red" data-hapus data-type="proof_rr"><i class="fa-solid fa-trash"></i> Hapus</button>
+                          <button type="button" class="det-mini ghost" data-ganti data-type="proof_rr"><x-hi icon="fa-rotate" /> Ganti</button>
+                          <button type="button" class="det-mini red" data-hapus data-type="proof_rr"><x-hi icon="fa-trash" /> Hapus</button>
                         </div>
                       </div>
-                      <button type="submit" class="det-btn green" style="margin-top:10px"><i class="fa-solid fa-cloud-arrow-up"></i> Upload Bukti Bayar Daftar Ulang</button>
+                      <button type="submit" class="det-btn green" style="margin-top:10px"><x-hi icon="fa-cloud-arrow-up" /> Upload Bukti Bayar Daftar Ulang</button>
                     </form>
                   @endif
                 </div>
@@ -1021,7 +1021,7 @@
         <div id="withdraw-modal-1" class="det-modal-backdrop">
           <div class="det-modal" role="dialog" aria-modal="true">
             <div class="det-modal-body">
-              <div class="det-modal-ic amber"><i class="fa-solid fa-triangle-exclamation"></i></div>
+              <div class="det-modal-ic amber"><x-hi icon="fa-triangle-exclamation" /></div>
               <div>
                 <p class="det-modal-t">Yakin ingin mengundurkan diri?</p>
                 <p class="det-modal-p">Pendaftaran <strong>{{ $registration->registration_number }}</strong> akan dibatalkan.</p>
@@ -1030,9 +1030,9 @@
             <div class="det-modal-list">
               <p>Yang akan terjadi:</p>
               <ul>
-                <li><i class="fa-solid fa-check"></i> Status pendaftaran menjadi <strong>Mundur Diri</strong></li>
-                <li><i class="fa-solid fa-check"></i> Semua dokumen diubah menjadi <strong>Ditolak</strong></li>
-                <li><i class="fa-solid fa-check"></i> Upload dokumen &amp; pembayaran akan <strong>terkunci</strong></li>
+                <li><x-hi icon="fa-check" /> Status pendaftaran menjadi <strong>Mundur Diri</strong></li>
+                <li><x-hi icon="fa-check" /> Semua dokumen diubah menjadi <strong>Ditolak</strong></li>
+                <li><x-hi icon="fa-check" /> Upload dokumen &amp; pembayaran akan <strong>terkunci</strong></li>
               </ul>
             </div>
             <div class="det-modal-foot">
@@ -1046,7 +1046,7 @@
         <div id="withdraw-modal-2" class="det-modal-backdrop">
           <div class="det-modal" role="dialog" aria-modal="true">
             <div class="det-modal-body">
-              <div class="det-modal-ic red"><i class="fa-solid fa-circle-xmark"></i></div>
+              <div class="det-modal-ic red"><x-hi icon="fa-circle-xmark" /></div>
               <div>
                 <p class="det-modal-t">Konfirmasi Terakhir</p>
                 <p class="det-modal-p" style="color:var(--red);font-weight:600">Tindakan ini tidak dapat dibatalkan!</p>
@@ -1055,7 +1055,7 @@
             <div class="det-modal-list" style="background:var(--red-soft)">
               <p style="color:var(--red)">Perhatian</p>
               <ul>
-                <li style="color:#B91C1C"><i class="fa-solid fa-circle-info"></i> Setelah mengundurkan diri, pendaftaran ini <strong>tidak bisa dipulihkan</strong>. Jika ingin mendaftar lagi, Anda harus membuat pendaftaran baru selama periode masih dibuka.</li>
+                <li style="color:#B91C1C"><x-hi icon="fa-circle-info" /> Setelah mengundurkan diri, pendaftaran ini <strong>tidak bisa dipulihkan</strong>. Jika ingin mendaftar lagi, Anda harus membuat pendaftaran baru selama periode masih dibuka.</li>
               </ul>
             </div>
             <label class="det-modal-ack">
@@ -1075,7 +1075,7 @@
         <div id="reject-modal" class="det-modal-backdrop">
           <div class="det-modal" role="dialog" aria-modal="true">
             <div class="det-modal-body">
-              <div class="det-modal-ic red"><i class="fa-solid fa-circle-xmark"></i></div>
+              <div class="det-modal-ic red"><x-hi icon="fa-circle-xmark" /></div>
               <div>
                 <p class="det-modal-t">Tolak Dokumen</p>
                 <p class="det-modal-p">Masukkan alasan penolakan. Alasan ini akan ditampilkan kepada siswa.</p>
@@ -1084,7 +1084,7 @@
             <textarea id="reject-notes" class="det-input-box" rows="3" placeholder="Alasan penolakan..."></textarea>
             <div class="det-modal-foot">
               <button type="button" class="det-btn ghost sm" onclick="closeRejectModal()">Batal</button>
-              <button type="button" class="det-btn red sm" onclick="confirmReject()"><i class="fa-solid fa-xmark"></i> Tolak Dokumen</button>
+              <button type="button" class="det-btn red sm" onclick="confirmReject()"><x-hi icon="fa-xmark" /> Tolak Dokumen</button>
             </div>
           </div>
         </div>
@@ -1098,11 +1098,11 @@
   <div class="det-bar">
     <div class="det-bar-inner">
       <a href="{{ route('registration.index') }}" class="det-btn ghost">
-        <i class="fa-solid fa-arrow-left"></i> Kembali
+        <x-hi icon="fa-arrow-left" /> Kembali
       </a>
       @if ((!isset($isAdmin) || !$isAdmin) && $registration->status === 'pending')
         <button type="button" onclick="openWithdrawModal1()" class="det-btn red">
-          <i class="fa-solid fa-arrow-right-from-bracket"></i> Mundur dari Pendaftaran
+          <x-hi icon="fa-arrow-right-from-bracket" /> Mundur dari Pendaftaran
         </button>
         <form id="withdraw-form" method="POST" action="{{ route('registration.withdraw', $registration) }}" class="hidden">
           @csrf

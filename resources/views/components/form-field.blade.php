@@ -11,6 +11,7 @@
     $controlId = $for ?? $attributes->get('name');
     $errorId = $controlId ? $controlId . '-error' : null;
     $hintId = $controlId ? $controlId . '-hint' : null;
+    $errorIcon = 'alert-02';
 @endphp
 
 <div class="form-field">
@@ -29,7 +30,7 @@
 
     @if ($error)
         <p id="{{ $errorId }}" class="mt-1.5 flex items-start gap-1.5 text-xs text-eggplore-danger">
-            <i class="fa-solid fa-circle-exclamation mt-0.5 text-[11px]"></i>
+            <x-hi :name="$errorIcon" class="mt-0.5 text-[11px]" />
             <span>{{ $error }}</span>
         </p>
     @endif

@@ -25,6 +25,22 @@
                 });
             }
         </script>
+        <script>
+            // === Ikon HugeIcons (JS) — konsisten dengan dashboard admin ===
+            window.__HI = @json(\App\Support\Hi::all());
+            window.__HI_MAP = @json(config('hugeicons'));
+            function hiSvg(name, attr) {
+                var key = name || '';
+                if (!(key in (window.__HI || {}))) {
+                    key = (window.__HI_MAP || {})[key] || '';
+                }
+                var body = (window.__HI || {})[key] || '';
+                if (!body) return '';
+                var a = attr ? ' ' + attr : '';
+                return '<svg class="hi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"' + a + '>' + body + '</svg>';
+            }
+            function hiHtml(name, attr) { return hiSvg(name, attr); }
+        </script>
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-eggplore-neutral-100">

@@ -137,28 +137,28 @@
   }
   .rre .r-tabs a.r-tab:hover, .rre .r-tabs a.doc-tab:hover { color: var(--ink); }
   .rre .r-tabs a.r-tab.active, .rre .r-tabs a.doc-tab.active { color: var(--coral); border-bottom-color: var(--coral); }
-  .rre .r-tabs a .badge { background: var(--coral-soft); color: var(--coral); border-radius: 20px; padding: 1px 8px; font-size: 10.5px; font-weight: 700; }
-  .rre .r-tabs a.active .badge { background: var(--coral); color: #fff; }
+  .rre .r-tabs a .badge { background: transparent; border: 1px solid currentColor; color: var(--coral); border-radius: 20px; padding: 1px 8px; font-size: 10.5px; font-weight: 700; }
+  .rre .r-tabs a.active .badge { background: transparent; border: 1px solid currentColor; color: #fff; }
   .rre .r-tabs-spacer { flex: 1; }
 
   /* ---------- list rows (no card, divider) ---------- */
   .rre .r-list { display: flex; flex-direction: column; }
   .rre .r-row { display: flex; align-items: center; gap: 15px; padding: 16px 4px; border-bottom: 1px solid var(--divider); }
   .rre .r-row:last-child { border-bottom: none; }
-  .rre .r-ic { flex: 0 0 auto; width: 46px; height: 46px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 17px; }
-  .rre .r-ic.amber  { background: var(--amber-soft);  color: #b45309; }
-  .rre .r-ic.green  { background: var(--green-soft);  color: var(--green); }
-  .rre .r-ic.red    { background: var(--red-soft);    color: var(--red); }
-  .rre .r-ic.coral  { background: var(--coral-soft);  color: var(--coral); }
+  .rre .r-ic { flex: 0 0 auto; width: auto; height: auto; display: inline-flex; align-items: center; justify-content: center; font-size: 22px; line-height: 1; background: none; border-radius: 0; }
+  .rre .r-ic.amber  { color: #b45309; }
+  .rre .r-ic.green  { color: var(--green); }
+  .rre .r-ic.red    { color: var(--red); }
+  .rre .r-ic.coral  { color: var(--coral); }
   .rre .r-body { flex: 1; min-width: 0; }
   .rre .r-name { font-size: 14px; font-weight: 600; color: var(--ink); }
   .rre .r-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
 
   /* ---------- pills ---------- */
   .rre .r-pill { display: inline-flex; align-items: center; gap: 6px; padding: 4px 11px; border-radius: 20px; font-size: 11.5px; font-weight: 700; white-space: nowrap; }
-  .rre .r-pill.green  { background: var(--green-soft);  color: var(--green); }
-  .rre .r-pill.amber  { background: var(--amber-soft);  color: #b45309; }
-  .rre .r-pill.red    { background: var(--red-soft);    color: var(--red); }
+  .rre .r-pill.green  { background: transparent; border: 1px solid currentColor;  color: var(--green); }
+  .rre .r-pill.amber  { background: transparent; border: 1px solid currentColor;  color: #b45309; }
+  .rre .r-pill.red    { background: transparent; border: 1px solid currentColor;    color: var(--red); }
 
   /* ---------- buttons ---------- */
   .rre .r-act { display: inline-flex; align-items: center; gap: 6px; border: none; cursor: pointer; border-radius: 9px; padding: 7px 13px; font-size: 11.5px; font-weight: 700; transition: transform .15s ease, filter .15s ease, background-color .15s ease, color .15s ease; }
@@ -208,20 +208,20 @@
   <p class="r-meta">Kelola pengajuan daftar ulang siswa</p>
 
   @if (session('success'))
-    <div class="r-alert success"><i class="fa-solid fa-circle-check"></i><span>{{ session('success') }}</span></div>
+    <div class="r-alert success"><x-hi name="checkmark-circle-02" /><span>{{ session('success') }}</span></div>
   @endif
   @if (session('error'))
-    <div class="r-alert error"><i class="fa-solid fa-circle-exclamation"></i><span>{{ session('error') }}</span></div>
+    <div class="r-alert error"><x-hi name="alert-02" /><span>{{ session('error') }}</span></div>
   @endif
 
   <form id="filterForm" method="GET" action="{{ route('admin.re-registrations.index') }}">
     <div class="r-toolbar">
       <div class="r-search">
-        <i class="fa-solid fa-magnifying-glass"></i>
+        <x-hi name="search-01" />
         <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari nomor registrasi atau nama siswa...">
       </div>
-      <button type="button" class="r-fbtn" onclick="toggleFilterPanel()"><i class="fa-solid fa-filter"></i> Filter</button>
-      <button type="submit" class="r-gobtn"><i class="fa-solid fa-magnifying-glass"></i> Cari</button>
+      <button type="button" class="r-fbtn" onclick="toggleFilterPanel()"><x-hi name="filter" /> Filter</button>
+      <button type="submit" class="r-gobtn"><x-hi name="search-01" /> Cari</button>
     </div>
 
     <div id="filterPanel" class="r-filters" style="{{ request('level') ? 'display:flex' : 'display:none' }}">
@@ -229,8 +229,8 @@
         <label>Jenjang</label>
         <button type="button" class="r-pick" data-picker="level" aria-haspopup="listbox" aria-expanded="false">
           <span class="pick-label is-placeholder">Pilih jenjang…</span>
-          <span class="pick-clear" data-clear="level" role="button" tabindex="0" aria-label="Bersihkan"><i class="fa-solid fa-xmark"></i></span>
-          <i class="fa-solid fa-chevron-down pick-caret"></i>
+          <span class="pick-clear" data-clear="level" role="button" tabindex="0" aria-label="Bersihkan"><x-hi name="cancel-01" /></span>
+          <x-hi name="arrow-down-01" />
         </button>
         <input type="hidden" name="level" data-picker-input="level" value="{{ request('level') }}">
       </div>
@@ -244,32 +244,32 @@
   </div>
 
   @if ($reRegistrations->isEmpty())
-    <div class="r-empty"><i class="fa-regular fa-folder-open"></i>Tidak ada data daftar ulang</div>
+    <div class="r-empty"><x-hi name="folder-open" />Tidak ada data daftar ulang</div>
   @else
     <div class="r-list">
       @foreach ($reRegistrations as $reReg)
         @php
           $reg = $reReg->registration;
           $ic = $reReg->status === 'completed' ? 'green' : ($reReg->status === 'rejected' ? 'red' : 'amber');
-          $icIcon = $reReg->status === 'completed' ? 'fa-clipboard-check' : ($reReg->status === 'rejected' ? 'fa-clipboard-xmark' : 'fa-hourglass-half');
+          $icIcon = $reReg->status === 'completed' ? 'task-done-01' : ($reReg->status === 'rejected' ? 'file-remove' : 'hourglass');
           $pill = $reReg->status === 'completed' ? 'green' : ($reReg->status === 'rejected' ? 'red' : 'amber');
           $pillLabel = $reReg->status === 'completed' ? 'Selesai' : ($reReg->status === 'rejected' ? 'Ditolak' : 'Pending');
         @endphp
         <div class="r-row">
-          <span class="r-ic {{ $ic }}"><i class="fa-solid {{ $icIcon }}"></i></span>
+          <span class="r-ic {{ $ic }}"><x-hi :name="$icIcon" /></span>
           <div class="r-body">
             <div class="r-name">{{ $reg->applicant->full_name }}</div>
             <div class="r-sub">{{ $reg->registration_number }} · {{ $reg->applicant->user->email }}</div>
             <div class="r-sub" style="margin-top:3px">
-              <i class="fa-regular fa-calendar"></i> {{ $reReg->submitted_at ? $reReg->submitted_at->format('d M Y H:i') : '-' }}
+              <x-hi name="calendar-01" /> {{ $reReg->submitted_at ? $reReg->submitted_at->format('d M Y H:i') : '-' }}
             </div>
           </div>
           <span class="r-pill {{ $pill }}">{{ $pillLabel }}</span>
           <div class="r-actions" style="display:flex;gap:6px;">
-            <a href="{{ route('admin.re-registrations.show', $reReg) }}" class="r-act detail"><i class="fa-solid fa-eye"></i> Detail</a>
+            <a href="{{ route('admin.re-registrations.show', $reReg) }}" class="r-act detail"><x-hi name="view" /> Detail</a>
             @if ($reReg->status === 'pending')
-              <button type="button" onclick="openReRegVerify({{ $reReg->id }}, '{{ $reg->registration_number }}')" class="r-act verify"><i class="fa-solid fa-check"></i> Verifikasi</button>
-              <button type="button" onclick="showReRegRejectModal({{ $reReg->id }})" class="r-act reject"><i class="fa-solid fa-xmark"></i> Tolak</button>
+              <button type="button" onclick="openReRegVerify({{ $reReg->id }}, '{{ $reg->registration_number }}')" class="r-act verify"><x-hi name="checkmark" /> Verifikasi</button>
+              <button type="button" onclick="showReRegRejectModal({{ $reReg->id }})" class="r-act reject"><x-hi name="cancel-01" /> Tolak</button>
             @endif
           </div>
         </div>
@@ -288,15 +288,15 @@
     <div class="picker-panel" role="dialog" aria-modal="true" aria-labelledby="pickerTitle">
       <div class="picker-head">
         <div class="picker-title" id="pickerTitle">Pilih item</div>
-        <button type="button" class="picker-close" onclick="closePicker()" aria-label="Tutup"><i class="fa-solid fa-xmark"></i></button>
+        <button type="button" class="picker-close" onclick="closePicker()" aria-label="Tutup"><x-hi name="cancel-01" /></button>
       </div>
       <div class="picker-search">
-        <i class="fa-solid fa-magnifying-glass"></i>
+        <x-hi name="search-01" />
         <input id="pickerSearch" type="search" placeholder="Cari…" autocomplete="off">
       </div>
       <div class="picker-list" id="pickerList" role="listbox"></div>
       <div class="picker-foot">
-        <button type="button" class="picker-clear-all" onclick="clearCurrentPicker()"><i class="fa-solid fa-eraser"></i> Bersihkan</button>
+        <button type="button" class="picker-clear-all" onclick="clearCurrentPicker()"><x-hi name="eraser-01" /> Bersihkan</button>
         <button type="button" class="picker-done" onclick="closePicker()">Selesai</button>
       </div>
     </div>
@@ -316,14 +316,14 @@
   {{-- Modal Tolak Daftar Ulang (Bringova) --}}
   <div id="reRegRejectModal" class="r-modal-backdrop" style="display:none">
     <div class="r-modal" role="dialog" aria-modal="true">
-      <div class="r-modal-title"><i class="fa-solid fa-circle-exclamation"></i> Tolak Daftar Ulang</div>
+      <div class="r-modal-title"><x-hi name="alert-02" /> Tolak Daftar Ulang</div>
       <form id="reRegRejectForm" method="POST">
         @csrf
         <label>Catatan / Alasan Penolakan</label>
         <textarea name="notes" rows="4" placeholder="Alasan penolakan (wajib)" required></textarea>
         <div class="r-modal-foot">
           <button type="button" onclick="hideReRegRejectModal()" class="r-act detail">Batal</button>
-          <button type="submit" class="r-act reject"><i class="fa-solid fa-xmark"></i> Tolak</button>
+          <button type="submit" class="r-act reject"><x-hi name="cancel-01" /> Tolak</button>
         </div>
       </form>
     </div>
@@ -332,14 +332,14 @@
   {{-- Modal Konfirmasi Verifikasi (Bringova) --}}
   <div id="reRegVerifyModal" class="r-modal-backdrop" style="display:none">
     <div class="r-modal" role="dialog" aria-modal="true">
-      <div class="r-modal-title" style="color:var(--green)"><i class="fa-solid fa-circle-check"></i> Verifikasi Daftar Ulang</div>
+      <div class="r-modal-title" style="color:var(--green)"><x-hi name="checkmark-circle-02" /> Verifikasi Daftar Ulang</div>
       <p style="font-size:13px;color:var(--muted);line-height:1.6">Verifikasi daftar ulang <b id="reRegVerifyNumber" style="color:var(--ink)"></b>? Pendaftaran akan ditandai <b style="color:var(--ink)">Daftar Ulang Selesai</b>.</p>
       <form id="reRegVerifyForm" method="POST" style="margin-top:0">
         @csrf
       </form>
       <div class="r-modal-foot">
         <button type="button" onclick="closeReRegVerify()" class="r-act detail">Batal</button>
-        <button type="button" onclick="submitReRegVerify()" class="r-act verify"><i class="fa-solid fa-check"></i> Ya, Verifikasi</button>
+        <button type="button" onclick="submitReRegVerify()" class="r-act verify"><x-hi name="checkmark" /> Ya, Verifikasi</button>
       </div>
     </div>
   </div>
