@@ -83,7 +83,7 @@
   /* ---------- toolbar: search + filter ---------- */
   .rkp .k-toolbar { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin: 18px 0 16px; }
   .rkp .k-search { position: relative; flex: 1; min-width: 200px; }
-  .rkp .k-search i { position: absolute; left: 13px; top: 50%; transform: translateY(-50%); color: var(--muted); font-size: 13px; pointer-events: none; }
+  .rkp .k-search .hi { position: absolute; left: 13px; top: 50%; transform: translateY(-50%); color: var(--muted); width: 16px; height: 16px; pointer-events: none; }
   .rkp .k-search input { width: 100%; padding: 11px 14px 11px 38px; border: 1px solid rgba(26,26,46,0.14); border-radius: 12px; font-size: 13.5px; color: var(--ink); background: rgba(255,255,255,0.55); transition: border-color .18s ease, box-shadow .18s ease, background-color .18s ease; }
   .rkp .k-search input::placeholder { color: var(--muted); }
   .rkp .k-search input:focus { outline: none; border-color: var(--coral); box-shadow: 0 0 0 4px rgba(255,107,107,0.14); background: #fff; }
@@ -137,7 +137,7 @@
   .rkp .picker-head .picker-close { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; border-radius: 8px; border: none; background: transparent; color: var(--muted); cursor: pointer; font-size: 12px; transition: background-color .15s ease, color .15s ease; }
   .rkp .picker-head .picker-close:hover { background: var(--gray-soft); color: var(--ink); }
   .rkp .picker-search { position: relative; padding: 10px 14px; border-bottom: 1px solid var(--divider); }
-  .rkp .picker-search i { position: absolute; left: 24px; top: 50%; transform: translateY(-50%); color: var(--muted); font-size: 12px; pointer-events: none; }
+  .rkp .picker-search .hi { position: absolute; left: 24px; top: 50%; transform: translateY(-50%); color: var(--muted); width: 16px; height: 16px; pointer-events: none; }
   .rkp .picker-search input { width: 100%; padding: 9px 12px 9px 32px; border: 1px solid rgba(26,26,46,0.14); border-radius: 10px; font-size: 13px; color: var(--ink); background: rgba(255,255,255,0.7); transition: border-color .18s ease, box-shadow .18s ease, background-color .18s ease; }
   .rkp .picker-search input:focus { outline: none; border-color: var(--coral); background: #fff; box-shadow: 0 0 0 3px rgba(255,107,107,0.12); }
   .rkp .picker-list { flex: 1; overflow-y: auto; padding: 6px 8px; }

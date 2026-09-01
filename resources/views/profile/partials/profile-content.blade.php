@@ -165,12 +165,6 @@
   .prfa .prfa-sec-name { font-size:12.5px; font-weight:600; color:var(--ink); }
   .prfa .prfa-sec-val { font-size:11.5px; color:var(--muted); margin-top:1px; line-height:1.4; }
 
-  /* --- 2FA toggle switch --- */
-  .prfa-2fa { flex:0 0 auto; position:relative; width:40px; height:23px; border-radius:9999px; background:#d1d5db; border:none; cursor:pointer; transition:background .2s; }
-  .prfa-2fa .prfa-2fa-knob { position:absolute; top:2px; left:2px; width:19px; height:19px; border-radius:50%; background:#fff; box-shadow:0 1px 3px rgba(0,0,0,.25); transition:left .2s; }
-  .prfa-2fa.on { background:var(--green); }
-  .prfa-2fa.on .prfa-2fa-knob { left:19px; }
-
   /* --- Quick support widget --- */
   .prfa .prfa-support-item { display:flex; align-items:flex-start; gap:10px; padding:9px 0; border-bottom:1px solid var(--divider); }
   .prfa .prfa-support-item:last-child { border-bottom:none; padding-bottom:2px; }
@@ -289,17 +283,6 @@
         </div>
 
         <div class="prfa-sec-row">
-          <span class="prfa-sec-ic {{ $user->two_factor_enabled ? 'green' : 'gray' }}"><x-hi icon="fa-mobile-screen" /></span>
-          <div class="prfa-sec-body">
-            <div class="prfa-sec-name">Autentikasi Dua Faktor (2FA)</div>
-            <div class="prfa-sec-val">{{ $user->two_factor_enabled ? 'Aktif — lapisan keamanan tambahan menyala' : 'Nonaktif — disarankan untuk diaktifkan' }}</div>
-          </div>
-          <button type="button" class="prfa-2fa {{ $user->two_factor_enabled ? 'on' : '' }}" data-prfa-2fa data-url="{{ route('profile.two-factor') }}" role="switch" aria-checked="{{ $user->two_factor_enabled ? 'true' : 'false' }}" aria-label="Alihkan autentikasi dua faktor">
-            <span class="prfa-2fa-knob"></span>
-          </button>
-        </div>
-
-        <div class="prfa-sec-row">
           <span class="prfa-sec-ic blue"><x-hi icon="fa-envelope-circle-check" /></span>
           <div class="prfa-sec-body">
             <div class="prfa-sec-name">Email Terverifikasi</div>
@@ -349,10 +332,6 @@
         <div class="prfa-support-item">
           <span class="prfa-support-ic"><x-hi icon="fa-lock" /></span>
           <div><div class="prfa-support-q">Lupa kata sandi?</div><div class="prfa-support-a">Gunakan menu "Keamanan" untuk mengubah kata sandi — Anda perlu memasukkan kata sandi lama terlebih dahulu.</div></div>
-        </div>
-        <div class="prfa-support-item">
-          <span class="prfa-support-ic"><x-hi icon="fa-shield-halved" /></span>
-          <div><div class="prfa-support-q">Apakah 2FA wajib?</div><div class="prfa-support-a">Opsional, tetapi sangat disarankan untuk melindungi akun admin dari akses tidak sah.</div></div>
         </div>
         <div class="prfa-support-foot">
           <a href="#" data-support-contact><x-hi icon="fa-headset" style="margin-right:5px" /> Hubungi Panitia SPMB</a>
@@ -451,39 +430,6 @@
     .catch(function(){
       if(btn){ btn.disabled = false; btn.innerHTML = hiSvg('fa-camera') + ' Unggah Foto Profil Baru'; }
       input.value = '';
-      if(window.showToast) window.showToast('Gagal terhubung ke server');
-    });
-  });
-
-  // --- Toggle 2FA (AJAX) ---
-  document.addEventListener('click', function(e){
-    var t = e.target.closest('[data-prfa-2fa]');
-    if(!t) return;
-    var url = t.getAttribute('data-url');
-    var prev = t.classList.contains('on');
-    // optimistic
-    t.classList.toggle('on', !prev);
-    t.setAttribute('aria-checked', prev ? 'false' : 'true');
-    fetch(url, {
-      method: 'POST',
-      headers: { 'X-Requested-With': 'XMLHttpRequest', 'X-CSRF-TOKEN': CSRF() }
-    })
-    .then(function(r){ return r.json(); })
-    .then(function(d){
-      if(d && d.success){
-        var on = !!d.two_factor_enabled;
-        t.classList.toggle('on', on);
-        t.setAttribute('aria-checked', on ? 'true' : 'false');
-        if(window.showToast) window.showToast(d.message);
-      } else {
-        t.classList.toggle('on', prev);
-        t.setAttribute('aria-checked', prev ? 'true' : 'false');
-        if(window.showToast) window.showToast('Gagal mengubah pengaturan 2FA');
-      }
-    })
-    .catch(function(){
-      t.classList.toggle('on', prev);
-      t.setAttribute('aria-checked', prev ? 'true' : 'false');
       if(window.showToast) window.showToast('Gagal terhubung ke server');
     });
   });

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
 <meta charset="UTF-8">
@@ -136,8 +136,8 @@
   /* toast */
   #stToast { position: fixed; top: 24px; left: 50%; transform: translateX(-50%); background: var(--ink); color: #fff; padding: 12px 22px; border-radius: 12px; font-size: 13px; font-weight: 600; z-index: 999; box-shadow: 0 20px 40px rgba(0,0,0,.2); display: none; }
 
-  .pv-wm{position:fixed;inset:0;z-index:9998;pointer-events:none;overflow:hidden}
-  .pv-wm span{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-18deg);font-size:clamp(18px,4.5vw,42px);font-weight:800;color:#FF6B6B;opacity:.13;white-space:nowrap;letter-spacing:.08em;text-transform:uppercase;border:3px solid currentColor;padding:10px 22px;border-radius:14px;background:rgba(255,255,255,.55);backdrop-filter:blur(1px)}
+  .pv-wm{position:fixed;right:16px;bottom:14px;z-index:9998;font-family:'Inter',system-ui,sans-serif;font-size:12px;font-weight:800;color:#fff;background:linear-gradient(135deg,#FF6B6B,#FF8E6E);border:none;padding:8px 14px;border-radius:20px;text-decoration:none;letter-spacing:.02em;box-shadow:0 6px 16px -6px rgba(255,107,107,.7);transition:transform .15s,filter .15s}
+  .pv-wm:hover{transform:translateY(-1px);filter:brightness(1.06)}
   /* responsive */
   @media (max-width: 720px) {
     .st-top-in { padding: 0 14px; }
@@ -197,7 +197,7 @@
   </div>
 </header>
 
-@if(($_pv['blur'] ?? false))<div class="pv-wm" aria-hidden="true"><span>Belum Berlisensi — Hubungi Admin</span></div>@endif
+@if(($_pv['blur'] ?? false))<a class="pv-wm" href="https://github.com/rry69/Sekolahin" target="_blank" rel="noopener" title="Proyek Sekolahin">Dev by Harry</a>@endif
 <main class="st-main">
   {{ $slot }}
 </main>

@@ -38,7 +38,7 @@
   .prd .prd-summary strong { color: var(--ink); font-weight: 700; }
   .prd .prd-toolbar { display: flex; gap: 12px; align-items: flex-end; flex-wrap: wrap; margin-bottom: 16px; }
   .prd .prd-search { position: relative; flex: 1; min-width: 200px; }
-  .prd .prd-search i { position: absolute; left: 13px; top: 50%; transform: translateY(-50%); color: var(--muted); font-size: 12px; pointer-events: none; }
+  .prd .prd-search .hi { position: absolute; left: 13px; top: 50%; transform: translateY(-50%); color: var(--muted); width: 16px; height: 16px; pointer-events: none; }
   .prd .prd-search input { width: 100%; padding: 10px 14px 10px 36px; border: 1px solid rgba(26,26,46,0.14); border-radius: 11px; font-size: 13px; color: var(--ink); background: rgba(255,255,255,0.55); box-sizing: border-box; transition: border-color .18s ease, box-shadow .18s ease, background-color .18s ease; }
   .prd .prd-search input::placeholder { color: var(--muted); }
   .prd .prd-search input:focus { outline: none; border-color: var(--coral); box-shadow: 0 0 0 4px rgba(255,107,107,0.14); background: #fff; }
@@ -64,7 +64,7 @@
   .prd .picker-head .picker-close { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; border-radius: 8px; border: none; background: transparent; color: var(--muted); cursor: pointer; font-size: 12px; transition: background-color .15s ease, color .15s ease; }
   .prd .picker-head .picker-close:hover { background: var(--gray-soft); color: var(--ink); }
   .prd .picker-search { position: relative; padding: 10px 14px; border-bottom: 1px solid var(--divider); }
-  .prd .picker-search i { position: absolute; left: 24px; top: 50%; transform: translateY(-50%); color: var(--muted); font-size: 12px; pointer-events: none; }
+  .prd .picker-search .hi { position: absolute; left: 24px; top: 50%; transform: translateY(-50%); color: var(--muted); width: 16px; height: 16px; pointer-events: none; }
   .prd .picker-search input { width: 100%; padding: 9px 12px 9px 32px; border: 1px solid rgba(26,26,46,0.14); border-radius: 10px; font-size: 13px; color: var(--ink); background: rgba(255,255,255,0.7); transition: border-color .18s ease, box-shadow .18s ease, background-color .18s ease; }
   .prd .picker-search input:focus { outline: none; border-color: var(--coral); background: #fff; box-shadow: 0 0 0 3px rgba(255,107,107,0.12); }
   .prd .picker-list { flex: 1; overflow-y: auto; padding: 6px 8px; }

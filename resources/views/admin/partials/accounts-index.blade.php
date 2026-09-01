@@ -44,7 +44,7 @@
   /* toolbar search + filter */
   .acc .acc-toolbar { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 12px; }
   .acc .acc-search { position: relative; flex: 1; min-width: 200px; }
-  .acc .acc-search i { position: absolute; left: 13px; top: 50%; transform: translateY(-50%); color: var(--muted); font-size: 12px; pointer-events: none; }
+  .acc .acc-search .hi { position: absolute; left: 13px; top: 50%; transform: translateY(-50%); color: var(--muted); width: 16px; height: 16px; pointer-events: none; }
   .acc .acc-search input { width: 100%; padding: 10px 14px 10px 36px; border: 1px solid rgba(26,26,46,0.14); border-radius: 11px; font-size: 13px; color: var(--ink); background: rgba(255,255,255,0.55); box-sizing: border-box; transition: border-color .18s, box-shadow .18s, background .18s; }
   .acc .acc-search input::placeholder { color: var(--muted); }
   .acc .acc-search input:focus { outline: none; border-color: var(--coral); box-shadow: 0 0 0 4px rgba(255,107,107,0.14); background: #fff; }
@@ -76,7 +76,7 @@
   .acc .picker-head .picker-close { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; border-radius: 8px; border: none; background: transparent; color: var(--muted); cursor: pointer; font-size: 12px; transition: background-color .15s, color .15s; }
   .acc .picker-head .picker-close:hover { background: var(--gray-soft); color: var(--ink); }
   .acc .picker-search { position: relative; padding: 10px 14px; border-bottom: 1px solid var(--divider); }
-  .acc .picker-search i { position: absolute; left: 24px; top: 50%; transform: translateY(-50%); color: var(--muted); font-size: 12px; pointer-events: none; }
+  .acc .picker-search .hi { position: absolute; left: 24px; top: 50%; transform: translateY(-50%); color: var(--muted); width: 16px; height: 16px; pointer-events: none; }
   .acc .picker-search input { width: 100%; padding: 9px 12px 9px 32px; border: 1px solid rgba(26,26,46,0.14); border-radius: 10px; font-size: 13px; color: var(--ink); background: rgba(255,255,255,0.7); transition: border-color .18s, box-shadow .18s, background .18s; }
   .acc .picker-search input:focus { outline: none; border-color: var(--coral); background: #fff; box-shadow: 0 0 0 3px rgba(255,107,107,0.12); }
   .acc .picker-list { flex: 1; overflow-y: auto; padding: 6px 8px; }

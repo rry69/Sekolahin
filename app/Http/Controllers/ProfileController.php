@@ -59,21 +59,6 @@ class ProfileController extends Controller
     }
 
     /**
-     * Toggle two-factor authentication status.
-     */
-    public function toggleTwoFactor(Request $request)
-    {
-        $user = $request->user();
-        $user->forceFill(['two_factor_enabled' => ! $user->two_factor_enabled])->save();
-
-        return response()->json([
-            'success' => true,
-            'message' => $user->two_factor_enabled ? 'Autentikasi dua faktor diaktifkan.' : 'Autentikasi dua faktor dinonaktifkan.',
-            'two_factor_enabled' => $user->two_factor_enabled,
-        ]);
-    }
-
-    /**
      * Update the user's profile information.
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
