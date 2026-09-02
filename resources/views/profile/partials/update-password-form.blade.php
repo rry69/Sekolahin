@@ -1,6 +1,6 @@
 <section>
     @php $pl = !($_pv['licensed'] ?? true) && ($isAdminUser ?? ($user->role?->name ?? '') === 'Admin'); @endphp
-    <div class="prf-sec-label">Ubah Kata Sandi @if($pl) <span class="pl-pro-badge"><x-hi name="lock" /> Fitur PRO</span> @endif</div>
+    <div class="prf-sec-label">Ubah Kata Sandi @if($pl) <a href="https://shop.hrry.win" target="_blank" rel="noopener" class="pl-pro-badge" style="text-decoration:none"><x-hi name="lock" /> Akses Terbatas</a> @endif</div>
     <p class="prf-sec-desc">Pastikan akun Anda menggunakan kata sandi yang panjang dan acak agar tetap aman.</p>
 
     @if($pl)
@@ -38,9 +38,9 @@
     </form>
     @if($pl)
       </div>
-      <div class="pl-lock-shade" role="button" tabindex="0" aria-label="Buka info fitur PRO" data-pro-msg="Mengubah kata sandi Admin adalah fitur PRO. <b>Aktifkan lisensi</b> untuk mengubahnya.">
-        <span class="pl-lock-chip"><x-hi name="lock" /> Fitur <b>PRO</b> Terkunci — klik untuk info</span>
-      </div>
+      <a href="https://shop.hrry.win" target="_blank" rel="noopener" class="pl-lock-shade" role="button" tabindex="0" aria-label="Buka info Akses Terbatas" data-pro-msg="Mengubah kata sandi Admin adalah Akses Terbatas. <b>Aktifkan lisensi</b> untuk mengubahnya.">
+        <span class="pl-lock-chip"><x-hi name="lock" /> <b>Akses Terbatas</b> — klik untuk info</span>
+      </a>
     </div>
     @endif
 </section>

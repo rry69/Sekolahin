@@ -9,3 +9,4 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote');
 
 Schedule::command('registrations:cancel-expired')->hourly();
+Schedule::command('storage:purge-generated --older-than=2')->everyMinute();

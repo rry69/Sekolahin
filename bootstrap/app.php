@@ -19,5 +19,16 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        //
+        $exceptions->render(function (Throwable $e, $request) {
+            if ($request->expectsJson()) return null;
+            $code = $e instanceof \Symfony\Component\HttpKernel\Exception\HttpException ? $e->getStatusCode() : 500;
+            if ($code < 400) $code = 500;
+            // Hanya tangani HTTP error yang punya view; biarkan debug detail jika perlu
+            if (in_array($code, [400,401,403,404,419,422,429,500,503]) || $code >= 400) {
+                if (view()->exists('errors.error')) {
+                    return response()->view('errors.error', ['exception' => $e, 'code' => $code], $code);
+                }
+            }
+            return null;
+        });
     })->create();

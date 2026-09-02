@@ -228,14 +228,15 @@ class PaymentController extends Controller
     {
         $this->authorizePaymentAccess($payment);
 
+        // Ephemeral: invoice auto-hapus 2 menit setelah generate (InvoiceService + sweep).
+        // Jika sudah terhapus, regenerate on-demand agar download tetap bisa.
+        if (!$payment->invoice_pdf) {
+            try { app(\App\Services\InvoiceService::class)->issue($payment); $payment->refresh(); } catch (\Throwable $e) { report($e); }
+        }
         if (!$payment->invoice_pdf) {
             abort(404, 'Invoice belum tersedia');
         }
-
         // Render ulang PDF dengan status TERBARU sebelum diunduh.
-        // PDF disimpan sebagai file statis saat issue(); tanpa ini, invoice yang
-        // dibuat saat MENUNGGU akan tetap bertuliskan MENUNGGU walau sudah LUNAS.
-        // (issue() idempotent — hanya memperbarui file + nomor jika kosong.)
         try {
             app(\App\Services\InvoiceService::class)->issue($payment);
             $payment->refresh();

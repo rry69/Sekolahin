@@ -1,4 +1,4 @@
-@extends('layouts.dashboard')
+﻿@extends('layouts.dashboard')
 @section('title', 'Tambah Jurusan')
 @section('content')
 
@@ -155,7 +155,7 @@
   <div class="s-head">
     <div>
       <h1 class="s-title">Tambah Jurusan
-        @if($proLocked) <span class="pl-pro-badge"><x-hi name="lock" /> Fitur PRO</span> @endif
+        @if($proLocked) <a href="https://shop.hrry.win" target="_blank" rel="noopener" class="pl-pro-badge" style="text-decoration:none"><x-hi name="lock" /> Akses Terbatas</a> @endif
       </h1>
       <p class="s-meta">Tambahkan jurusan baru beserta kuota per jalur.</p>
     </div>
@@ -315,9 +315,9 @@
 
     @if($proLocked)
       </div>
-      <div class="pl-lock-shade" role="button" tabindex="0" aria-label="Buka info fitur PRO" data-pro-msg="Menambah jurusan adalah fitur PRO. <b>Aktifkan lisensi</b> untuk menambahkan jurusan baru.">
-        <span class="pl-lock-chip"><x-hi name="lock" /> Fitur <b>PRO</b> Terkunci — klik untuk info</span>
-      </div>
+      <a href="https://shop.hrry.win" target="_blank" rel="noopener" class="pl-lock-shade" role="button" tabindex="0" aria-label="Buka info Akses Terbatas" data-pro-msg="Menambah jurusan adalah Akses Terbatas. <b>Aktifkan lisensi</b> untuk menambahkan jurusan baru.">
+        <span class="pl-lock-chip"><x-hi name="lock" /> <b>Akses Terbatas</b> — klik untuk info</span>
+      </a>
     </div>
     @endif
   </form>
@@ -329,7 +329,7 @@
     <div class="picker-head"><div class="picker-title" id="pickerTitle"></div>
       <button class="picker-close" onclick="closePicker()"><i class="fa-solid fa-xmark"></i></button></div>
     <div class="picker-search"><i class="fa-solid fa-magnifying-glass"></i>
-      <input id="pickerSearch" type="search" placeholder="Cari…" autocomplete="off"></div>
+      <input id="pickerSearch" type="search" placeholder="Cariâ€¦" autocomplete="off"></div>
     <div class="picker-list" id="pickerList" role="listbox"></div>
     <div class="picker-foot"><button class="picker-clear-all" onclick="clearCurrentPicker()">Bersihkan</button>
       <button class="picker-done" onclick="closePicker()">Selesai</button></div>

@@ -671,7 +671,7 @@ function toggleFilterForm() {
   if (f) f.style.display = f.style.display === 'none' ? 'block' : 'none';
 }
 
-// === Fitur PRO Terkunci (modal global) ===
+// === Akses Terbatas (modal global) ===
 var __plPendingTrigger = null;
 function openProLockModal(message) {
   var msg = document.getElementById('plProMsg');
@@ -695,13 +695,36 @@ function wireProLockShades(container) {
   root.querySelectorAll('.pl-lock-shade').forEach(function (shade) {
     if (shade.__plBound) return;
     shade.__plBound = true;
+    // Jika shade sudah berupa <a href="https://shop.hrry.win"> biarkan navigasi langsung (sesuai request: wajib ke shop)
+    if (shade.tagName === 'A' && shade.getAttribute('href') && shade.getAttribute('href').indexOf('shop.hrry.win') !== -1) return;
     shade.addEventListener('click', function (e) {
       e.preventDefault();
       e.stopPropagation();
-      openProLockModal(shade.getAttribute('data-pro-msg') || 'Fitur ini hanya tersedia untuk lisensi PRO. Aktifkan lisensi untuk menggunakannya.');
+      openProLockModal(shade.getAttribute('data-pro-msg') || 'Fitur ini Akses Terbatas. Aktifkan lisensi untuk menggunakannya.');
+    });
+    shade.addEventListener('keydown', function(e){
+      if(e.key==='Enter'||e.key===' '){ e.preventDefault(); shade.click(); }
     });
   });
 }
+// DELEGATED fallback — hanya untuk element non-anchor (anchor ke shop dibiarkan navigasi)
+document.addEventListener('click', function(e){
+  var shade = e.target.closest('.pl-lock-shade');
+  if(shade){
+    if (shade.tagName === 'A' && shade.getAttribute('href') && shade.getAttribute('href').indexOf('shop.hrry.win') !== -1) return;
+    e.preventDefault(); e.stopPropagation();
+    openProLockModal(shade.getAttribute('data-pro-msg') || 'Fitur ini Akses Terbatas. Aktifkan lisensi untuk menggunakannya.');
+    return;
+  }
+  var badge = e.target.closest('.pl-pro-badge');
+  if(badge){
+    if (badge.tagName === 'A' && badge.getAttribute('href') && badge.getAttribute('href').indexOf('shop.hrry.win') !== -1) return;
+    var box = badge.closest('.skl, .sed, .emjr, .mjr, section, .prf, .ste, .sch') || document;
+    var s = box.querySelector ? box.querySelector('.pl-lock-shade') : null;
+    var msg = s ? s.getAttribute('data-pro-msg') : null;
+    openProLockModal(msg || 'Fitur ini Akses Terbatas. Aktifkan lisensi untuk menggunakannya.');
+  }
+});
 if (typeof window.__proLockKeyBound === 'undefined') {
   window.__proLockKeyBound = true;
   document.addEventListener('keydown', function (e) {

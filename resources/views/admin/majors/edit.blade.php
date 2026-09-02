@@ -1,4 +1,4 @@
-@extends('layouts.dashboard')
+﻿@extends('layouts.dashboard')
 @section('title', 'Edit Jurusan')
 @section('content')
 
@@ -113,7 +113,7 @@
 
   <div class="e-head">
     <div>
-      <h1 class="e-title">Edit Jurusan @if($proLocked) <span class="pl-pro-badge"><x-hi name="lock" /> Fitur PRO</span> @endif</h1>
+      <h1 class="e-title">Edit Jurusan @if($proLocked) <a href="https://shop.hrry.win" target="_blank" rel="noopener" class="pl-pro-badge" style="text-decoration:none"><x-hi name="lock" /> Akses Terbatas</a> @endif</h1>
       <p class="e-meta">Perbarui data jurusan dan kuota per jalur.</p>
     </div>
     <a href="{{ route('admin.majors.index') }}" class="e-btn ghost"><x-hi name="arrow-left-01" style="font-size:11px;color:var(--coral);" /> Kembali</a>
@@ -234,9 +234,9 @@
 
     @if($proLocked)
       </div>
-      <div class="pl-lock-shade" role="button" tabindex="0" aria-label="Buka info fitur PRO" data-pro-msg="Mengubah jurusan adalah fitur PRO. <b>Aktifkan lisensi</b> untuk mengubah jurusan.">
-        <span class="pl-lock-chip"><x-hi name="lock" /> Fitur <b>PRO</b> Terkunci — klik untuk info</span>
-      </div>
+      <a href="https://shop.hrry.win" target="_blank" rel="noopener" class="pl-lock-shade" role="button" tabindex="0" aria-label="Buka info Akses Terbatas" data-pro-msg="Mengubah jurusan adalah Akses Terbatas. <b>Aktifkan lisensi</b> untuk mengubah jurusan.">
+        <span class="pl-lock-chip"><x-hi name="lock" /> <b>Akses Terbatas</b> — klik untuk info</span>
+      </a>
     </div>
     @endif
   </form>

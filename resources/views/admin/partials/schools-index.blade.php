@@ -206,6 +206,8 @@
   }
 </style>
 
+@php $proLocked = ! ($_pv['licensed'] ?? true); @endphp
+
 <div class="sch">
   <div class="s-inner">
   <div class="s-crumb">
@@ -216,10 +218,10 @@
 
   <div class="s-head">
     <div>
-      <h1 class="s-title">Data Sekolah</h1>
+      <h1 class="s-title">Data Sekolah @if($proLocked) <a href="https://shop.hrry.win" target="_blank" rel="noopener" class="pl-pro-badge" style="text-decoration:none"><x-hi name="lock" /> Akses Terbatas</a> @endif</h1>
       <p class="s-meta">Kelola daftar sekolah berdasarkan jenjang pendidikan</p>
     </div>
-    <a href="{{ route('admin.schools.create') }}" class="s-btn coral"><x-hi name="plus-sign" /> Tambah Sekolah</a>
+    @if($proLocked)<a href="https://shop.hrry.win" target="_blank" rel="noopener" class="s-btn coral"><x-hi name="lock" /> Akses Terbatas</a>@else<a href="{{ route('admin.schools.create') }}" class="s-btn coral"><x-hi name="plus-sign" /> Tambah Sekolah</a>@endif
   </div>
 
   @if (session('success'))
@@ -229,6 +231,10 @@
     <div class="s-alert error"><x-hi name="alert-02" /><span>{{ session('error') }}</span></div>
   @endif
 
+  @if($proLocked)
+  <div class="pl-lock-box">
+    <div class="pl-lock-fields">
+  @endif
   @forelse ($levels as $level)
     @php $levelSchools = $grouped->get($level->id, collect()); @endphp
     <div class="s-sec">
@@ -291,6 +297,13 @@
   @empty
     <div class="s-empty"><x-hi name="school" style="display:block;font-size:20px;margin-bottom:6px;color:#d3d6de" />Tidak ada data jenjang</div>
   @endforelse
+  @if($proLocked)
+    </div>
+    <a href="https://shop.hrry.win" target="_blank" rel="noopener" class="pl-lock-shade" role="button" tabindex="0" aria-label="Buka info Akses Terbatas" data-pro-msg="Kelola sekolah adalah Akses Terbatas. <b>Aktifkan lisensi</b> untuk mengelola sekolah.">
+      <span class="pl-lock-chip"><x-hi name="lock" /> <b>Akses Terbatas</b> — klik untuk info</span>
+    </a>
+  </div>
+  @endif
 
   @php $levelCount = \App\Models\SchoolLevel::count(); @endphp
   @if ($levelCount > 0)
@@ -321,6 +334,8 @@
   </div>
 </div>
 </div>
+
+@include('partials.pro-lock-modal')
 
 <script>
 (function () {

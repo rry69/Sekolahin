@@ -1,4 +1,4 @@
-{{-- Modal & CSS Fitur PRO Terkunci (reusable, include sekali per halaman di dalam scope wrapper) --}}
+{{-- Modal & CSS Akses Terbatas (reusable, include sekali per halaman di dalam scope wrapper) --}}
 <style>
   .pl-pro-badge { display:inline-flex; align-items:center; gap:5px; margin-left:auto; padding:4px 11px; border-radius:20px; font:700 11px; background:#FEF3C7; color:#B45309; white-space:nowrap; }
   .pl-lock-box { position:relative; border-radius:14px; }
@@ -29,13 +29,13 @@
     <div class="pl-modal-body">
       <div class="pl-modal-ic"><x-hi name="lock"></x-hi></div>
       <div>
-        <h3>Fitur PRO Terkunci</h3>
+        <h3>Akses Terbatas</h3>
         <p id="plProMsg" class="pl-modal-msg"></p>
       </div>
     </div>
     <div class="pl-modal-foot">
       <button type="button" class="pl-btn ghost" onclick="closeProLockModal()">Tutup</button>
-      <a href="https://wa.me/" target="_blank" class="pl-btn amber"><x-hi name="comment-01"></x-hi> Hubungi Admin</a>
+      <a href="https://shop.hrry.win" target="_blank" class="pl-btn amber"><x-hi name="comment-01"></x-hi> Kunjungi Toko</a>
     </div>
   </div>
 </div>

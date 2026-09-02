@@ -101,33 +101,20 @@ class ActivityLogController extends Controller
     public function exportCsv(Request $request)
     {
         $logs = $this->buildQuery($request)->get();
-
         $filename = 'log-aktivitas-' . now()->format('Ymd-His') . '.csv';
-
+        // CSV streaming tidak menyisakan file di storage — tidak perlu auto-hapus.
         return new StreamedResponse(function () use ($logs) {
             $out = fopen('php://output', 'w');
-            // BOM agar UTF-8 terbaca Excel Windows.
             fwrite($out, "\xEF\xBB\xBF");
-
-            fputcsv($out, [
-                'Waktu', 'Aksi', 'Label', 'Kategori', 'Deskripsi',
-                'User', 'Email', 'IP', 'Properties',
-            ]);
-
+            fputcsv($out, ['Waktu', 'Aksi', 'Label', 'Kategori', 'Deskripsi', 'User', 'Email', 'IP', 'Properties']);
             foreach ($logs as $log) {
                 fputcsv($out, [
                     $log->created_at ? $log->created_at->format('d/m/Y H:i:s') : '',
-                    $log->action,
-                    $log->label(),
-                    $log->category(),
-                    $log->description ?? '',
-                    $log->userName(),
-                    $log->user?->email ?? '',
-                    $log->ip_address ?? '',
+                    $log->action, $log->label(), $log->category(), $log->description ?? '',
+                    $log->userName(), $log->user?->email ?? '', $log->ip_address ?? '',
                     $log->properties ? json_encode($log->properties, JSON_UNESCAPED_UNICODE) : '',
                 ]);
             }
-
             fclose($out);
         }, 200, [
             'Content-Type'        => 'text/csv; charset=UTF-8',
@@ -135,13 +122,12 @@ class ActivityLogController extends Controller
         ]);
     }
 
-    /**
-     * Export Excel (XLSX) melalui Maatwebsite — menghormati filter aktif.
-     */
     public function exportXlsx(Request $request)
     {
         $logs = $this->buildQuery($request)->get();
-
-        return Excel::download(new ActivityLogExport($logs), 'log-aktivitas-' . now()->format('Ymd-His') . '.xlsx');
+        $path = 'exports/log-aktivitas-' . now()->format('Ymd-His') . '-' . \Illuminate\Support\Str::random(6) . '.xlsx';
+        Excel::store(new ActivityLogExport($logs), $path, 'private');
+        \App\Jobs\DeleteGeneratedFile::dispatch('private', $path)->delay(now()->addMinutes(2));
+        return \Illuminate\Support\Facades\Storage::disk('private')->download($path, 'log-aktivitas-' . now()->format('Ymd-His') . '.xlsx');
     }
 }

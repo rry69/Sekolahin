@@ -58,6 +58,12 @@ class InvoiceService
             'invoice_issued_at' => now(),
         ]);
 
+        // Ephemeral: hapus file 2 menit setelah generate (boros jika dibiarkan).
+        // Fallback sweep ada di Schedule storage:purge-generated --older-than=2 (jika queue mati).
+        try {
+            \App\Jobs\DeleteGeneratedFile::dispatch('private', $path, $payment->id)->delay(now()->addMinutes(2));
+        } catch (\Throwable $e) { report($e); }
+
         return $path;
     }
 

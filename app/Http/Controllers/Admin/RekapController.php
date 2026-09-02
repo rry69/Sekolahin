@@ -75,19 +75,22 @@ class RekapController extends Controller
     public function exportXlsx(Request $request)
     {
         $registrations = $this->buildQuery($request)->latest()->get();
-
-        return Excel::download(new RekapExport($registrations), 'rekap-siswa-diterima.xlsx');
+        $path = 'exports/rekap-' . now()->format('Ymd-His') . '-' . \Illuminate\Support\Str::random(6) . '.xlsx';
+        Excel::store(new RekapExport($registrations), $path, 'private');
+        \App\Jobs\DeleteGeneratedFile::dispatch('private', $path)->delay(now()->addMinutes(2));
+        return \Illuminate\Support\Facades\Storage::disk('private')->download($path, 'rekap-siswa-diterima.xlsx');
     }
 
     public function exportPdf(Request $request)
     {
         $registrations = $this->buildQuery($request)->latest()->get();
-
         $pdf = Pdf::loadView('pdf.rekap', [
             'registrations' => $registrations,
             'exportedAt' => now(),
         ])->setPaper('a4', 'landscape');
-
-        return $pdf->download('rekap-siswa-diterima.pdf');
+        $path = 'exports/rekap-' . now()->format('Ymd-His') . '-' . \Illuminate\Support\Str::random(6) . '.pdf';
+        \Illuminate\Support\Facades\Storage::disk('private')->put($path, $pdf->output());
+        \App\Jobs\DeleteGeneratedFile::dispatch('private', $path)->delay(now()->addMinutes(2));
+        return \Illuminate\Support\Facades\Storage::disk('private')->download($path, 'rekap-siswa-diterima.pdf');
     }
 }

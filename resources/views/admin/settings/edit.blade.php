@@ -1,4 +1,4 @@
-@extends('layouts.dashboard')
+﻿@extends('layouts.dashboard')
 @section('title', 'Pengaturan')
 @php
     $pvLicensed = $_pv['licensed'] ?? true;
@@ -262,7 +262,7 @@
           <p class="ste-sec-desc">Rekening manual yang ditampilkan kepada siswa saat instruksi pembayaran.</p>
         </div>
         @if($proLocked)
-          <span class="ste-pro-badge"><x-hi name="lock" /> Fitur PRO</span>
+          <a href="https://shop.hrry.win" target="_blank" rel="noopener" class="ste-pro-badge" style="text-decoration:none"><x-hi name="lock" /> Akses Terbatas</a>
         @endif
       </div>
       @if($proLocked)
@@ -294,13 +294,13 @@
       </div>
       @if($proLocked)
         </div>
-        <div class="ste-lock-shade" role="button" tabindex="0" aria-label="Buka info fitur PRO" onclick="openSteProModal('Rekening pembayaran adalah fitur PRO. <b>Aktifkan lisensi</b> untuk mengubah nama bank, nomor rekening, atas nama, dan catatan pembayaran.')">
-          <span class="ste-lock-chip"><x-hi name="lock" /> Fitur <b>PRO</b> Terkunci — klik untuk info</span>
-        </div>
+        <a href="https://shop.hrry.win" target="_blank" rel="noopener" class="ste-lock-shade" role="button" tabindex="0" aria-label="Buka info Akses Terbatas">
+          <span class="ste-lock-chip"><x-hi name="lock" /> <b>Akses Terbatas</b> — klik untuk info</span>
+        </a>
       </div>
       @endif
       <div class="ste-foot">
-        <button type="button" class="ste-btn coral btn-save-tab {{ $proLocked ? 'btn-locked' : '' }}" data-save-msg="Simpan rekening pembayaran?" data-locked-msg="Rekening pembayaran adalah fitur PRO. Aktifkan lisensi untuk mengubahnya."><x-hi name="save" /> Simpan Pembayaran</button>
+        <button type="button" class="ste-btn coral btn-save-tab {{ $proLocked ? 'btn-locked' : '' }}" data-save-msg="Simpan rekening pembayaran?" data-locked-msg="Rekening pembayaran adalah Akses Terbatas. Aktifkan lisensi untuk mengubahnya."><x-hi name="save" /> Simpan Pembayaran</button>
       </div>
     </div>
 
@@ -387,7 +387,7 @@
             <input type="number" min="1" max="720" name="registration_deadline_hours" value="{{ old('registration_deadline_hours', App\Models\Setting::get('registration_deadline_hours', '72')) }}" class="ste-input-line" placeholder="72" style="font-size:18px;font-weight:800;text-align:center;">
             @error('registration_deadline_hours')<p style="color:var(--red);font-size:12px;">{{ $message }}</p>@enderror
             <span class="ste-hint" style="text-align:center;">Default: 72 jam (3 hari)</span>
-          </div>
+          </a>
         </div>
         <div class="ste-dl-card">
           <div class="ste-dl-head">
@@ -402,7 +402,7 @@
             <input type="number" min="1" max="720" name="payment_deadline_hours" value="{{ old('payment_deadline_hours', App\Models\Setting::get('payment_deadline_hours', '72')) }}" class="ste-input-line" placeholder="72" style="font-size:18px;font-weight:800;text-align:center;">
             @error('payment_deadline_hours')<p style="color:var(--red);font-size:12px;">{{ $message }}</p>@enderror
             <span class="ste-hint" style="text-align:center;">Default: 72 jam (3 hari)</span>
-          </div>
+          </a>
         </div>
       </div>
       <input type="hidden" name="re_registration_type" value="offline">
@@ -432,7 +432,7 @@
           <div class="ste-rereg-card">
             <span class="ste-rereg-ic"><x-hi name="school" /></span>
             <div class="ste-rereg-body">
-              <div class="ste-rereg-name">{{ $level->name }} <span style="font-weight:500;color:var(--muted);font-size:11.5px;">— {{ $level->description }}</span></div>
+              <div class="ste-rereg-name">{{ $level->name }} <span style="font-weight:500;color:var(--muted);font-size:11.5px;">— {{ $level->description }}</span></a>
               @if($periodEndLabel)<div class="ste-rereg-sub"><x-hi name="clock-01" style="font-size:10px;" /> Periode berakhir {{ $periodEndLabel }} @if($reRegMin)· paling awal {{ $reRegMin }}@endif</div>@elseif($reRegMin)<div class="ste-rereg-sub">Paling awal {{ $reRegMin }}</div>@endif
               <div class="ste-rereg-dates">
                 <div class="ste-field">
@@ -472,7 +472,7 @@
             <textarea name="rereg_notif_body" rows="3" class="ste-input-box" placeholder="Halo! Kamu sudah diterima...">{{ old('rereg_notif_body', App\Models\Setting::get('rereg_notif_body', 'Halo! Kabar baik — kamu sudah diterima sebagai calon siswa. Daftar ulang akan dibuka pada {tanggal} dan berlangsung hingga {tanggal_selesai}, jadi persiapkan berkas asli dan diri kamu untuk hadir ke sekolah.')) }}</textarea>
             @error('rereg_notif_body')<p style="color:var(--red);font-size:12px;">{{ $message }}</p>@enderror
             <span class="ste-hint">Maks 3–4 kalimat. Gunakan {tanggal} dan {tanggal_selesai}.</span>
-          </div>
+          </a>
           <div class="ste-grid2">
             <div class="ste-field">
               <label class="ste-label">Teks Tombol (CTA)</label>
@@ -484,7 +484,7 @@
               <input type="number" name="rereg_notif_h2" min="1" max="14" value="{{ old('rereg_notif_h2', App\Models\Setting::get('rereg_notif_h2', '2')) }}" class="ste-input-line" placeholder="2">
               @error('rereg_notif_h2')<p style="color:var(--red);font-size:12px;">{{ $message }}</p>@enderror
               <span class="ste-hint">Mulai tampil H-<span id="rereg_notif_h2_label">2</span> sebelum tanggal mulai.</span>
-            </div>
+            </a>
           </div>
         </div>
       </div>
@@ -511,7 +511,7 @@
             <input type="number" min="0" max="30" name="age_min[{{ $level->id }}]" value="{{ $val }}" placeholder="—" class="ste-input-line ste-age-input" style="border-bottom-style:dashed;">
             @error("age_min.{$level->id}")<p style="color:var(--red);font-size:12px;">{{ $message }}</p>@enderror
             <span class="ste-hint">tahun</span>
-          </div>
+          </a>
         @endforeach
       </div>
 
@@ -568,13 +568,13 @@
       <div class="ste-modal-body" style="display:flex; gap:13px; margin-bottom:16px;">
         <div class="ste-pro-ic" style="flex:0 0 auto; width:42px; height:42px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:17px; background:var(--amber-soft); color:#b45309;"><x-hi name="lock" /></div>
         <div>
-          <h3 style="margin:0 0 6px;">Fitur PRO Terkunci</h3>
+          <h3 style="margin:0 0 6px;">Akses Terbatas</h3>
           <p id="steProMsg" style="margin:0; font-size:13px; color:var(--muted); line-height:1.5;"></p>
         </div>
       </div>
       <div class="ste-modal-foot">
         <button type="button" class="ste-btn ghost sm" onclick="closeSteProModal()">Tutup</button>
-        <a href="https://wa.me/" target="_blank" class="ste-btn amber sm" style="text-decoration:none;"><x-hi name="comment-01" /> Hubungi Admin</a>
+        <a href="https://shop.hrry.win" target="_blank" class="ste-btn amber sm" style="text-decoration:none;"><x-hi name="comment-01" /> Kunjungi Toko</a>
       </div>
     </div>
   </div>

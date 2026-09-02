@@ -1,4 +1,4 @@
-@extends('layouts.dashboard')
+﻿@extends('layouts.dashboard')
 
 @section('title', 'Edit Sekolah')
 
@@ -138,7 +138,7 @@
 
   <div class="s-head">
     <div>
-      <h1 class="s-title">Edit Sekolah @if($proLocked) <span class="pl-pro-badge"><x-hi name="lock" /> Fitur PRO</span> @endif</h1>
+      <h1 class="s-title">Edit Sekolah @if($proLocked) <a href="https://shop.hrry.win" target="_blank" rel="noopener" class="pl-pro-badge" style="text-decoration:none"><x-hi name="lock" /> Akses Terbatas</a> @endif</h1>
       <p class="s-meta">Kelola profil sekolah yang ditampilkan pada form pendaftaran siswa.</p>
     </div>
     <a href="{{ route('admin.schools.index') }}" class="s-btn ghost sm"><x-hi name="arrow-left-01" style="font-size:10px;" /> Kembali</a>
@@ -343,9 +343,9 @@
 
     @if($proLocked)
       </div>
-      <div class="pl-lock-shade" role="button" tabindex="0" aria-label="Buka info fitur PRO" data-pro-msg="Mengubah data sekolah adalah fitur PRO. <b>Aktifkan lisensi</b> untuk mengubah sekolah.">
-        <span class="pl-lock-chip"><x-hi name="lock" /> Fitur <b>PRO</b> Terkunci — klik untuk info</span>
-      </div>
+      <a href="https://shop.hrry.win" target="_blank" rel="noopener" class="pl-lock-shade" role="button" tabindex="0" aria-label="Buka info Akses Terbatas" data-pro-msg="Mengubah data sekolah adalah Akses Terbatas. <b>Aktifkan lisensi</b> untuk mengubah sekolah.">
+        <span class="pl-lock-chip"><x-hi name="lock" /> <b>Akses Terbatas</b> — klik untuk info</span>
+      </a>
     </div>
     @endif
   </form>
@@ -359,7 +359,7 @@
     </div>
     <div class="picker-search">
       <x-hi name="search-01" />
-      <input id="pickerSearch" type="search" placeholder="Cari…" autocomplete="off">
+      <input id="pickerSearch" type="search" placeholder="Cariâ€¦" autocomplete="off">
     </div>
     <div class="picker-list" id="pickerList" role="listbox"></div>
     <div class="picker-foot">
