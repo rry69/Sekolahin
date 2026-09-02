@@ -295,6 +295,8 @@ Akses aplikasi di **http://localhost:8000**.
 
 ### 💳 Pembayaran Online (Xendit)
 
+> Opsional — tanpa Xendit, pembayaran **manual** tetap jalan. Isi bagian ini hanya jika ingin pembayaran online.
+
 Tambahkan di `.env`:
 
 ```env
@@ -302,12 +304,14 @@ XENDIT_API_KEY=xnd_development_...
 XENDIT_WEBHOOK_TOKEN=<callback token dari dashboard Xendit>
 ```
 
-1. Daftar di [dashboard.xendit.co](https://dashboard.xendit.co), salin **API Key** (sekretariat → *Settings → API Keys*).
-2. Aktifkan mode **TEST** untuk development.
-3. Buat **Webhook** dengan event **Invoice**, URL `https://domain-anda.com/webhooks/xendit`, aktifkan, lalu salin **Callback Token**.
-4. Tempel token ke `XENDIT_WEBHOOK_TOKEN`.
+Webhook **fail-closed**: `XENDIT_WEBHOOK_TOKEN` kosong → callback ditolak. URL webhook harus **publik & HTTPS** (lokal bisa pakai ngrok/cloudflared).
 
-Webhook **fail-closed**: token kosong → callback ditolak. URL webhook harus **publik & HTTPS** (bisa pakai ngrok/cloudflared saat lokal).
+#### Jika belum punya API Key & Webhook Token
+
+1. Daftar/login di [dashboard.xendit.co](https://dashboard.xendit.co) → aktifkan mode **TEST** (toggle Test/Live).
+2. Buat API Key: **Settings → Developers → API Keys → Create secret key** → isi Name mis. `SPMB Dev` → pada tabel **Permissions**, centang **Read** dan **Write** saja, selebihnya pilih **None** (sesuai foto — hanya product yang dipakai Read+Write, sisanya None) → **Create** → salin `xnd_development_...` → tempel ke `XENDIT_API_KEY`.
+3. Buat Webhook: **Settings → Developers → Webhooks → Create webhook** → URL `https://domain-anda.com/webhooks/xendit` → centang event **Invoice** (`invoice.paid`, `invoice.expired` / Payment) → **Create/Activate** → salin **Callback Verification Token** → tempel ke `XENDIT_WEBHOOK_TOKEN`.
+4. Uji: buat pembayaran online dari aplikasi → cek status `pending` → bayar via link invoice Xendit (mode Test) → webhook akan update jadi `verified` otomatis. Jika `401/403` di log, cek token webhook tidak cocok.
 
 ### 📱 Notifikasi WhatsApp
 
